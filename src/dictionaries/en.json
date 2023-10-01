@@ -1,0 +1,25 @@
+{
+    "General": {
+        "Pages": {
+            "monitoring": "Monitoring",
+            "clients": "Clients",
+            "management": "Management",
+            "settings": "Settings"
+        },
+        "cancel": "Cancel",
+        "logout": "Log out",
+        "logoutMessage": "You are going to log out. Are you sure?"
+    },
+    "Monitoring": {
+        "title": "Monitoring"
+    },
+    "Clients": {
+        "title": "Clients"
+    },
+    "Management": {
+        "title": "Management"
+    },
+    "Settings": {
+        "title": "Settings"
+    }
+}

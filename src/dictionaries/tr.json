@@ -1,0 +1,25 @@
+{
+    "General": {
+        "Pages": {
+            "monitoring": "İzleme",
+            "clients": "Müşteriler",
+            "management": "Yönetim",
+            "settings": "Ayarlar"
+        },
+        "cancel": "İptal",
+        "logout": "Çıkış Yap",
+        "logoutMessage": "Kullanıcı çıkışı yapılcak. Devam edilsin mi?"
+    },
+    "Monitoring": {
+        "title": "İzleme"
+    },
+    "Clients": {
+        "title": "Müşteriler"
+    },
+    "Management": {
+        "title": "Yönetim"
+    },
+    "Settings": {
+        "title": "Ayarlar"
+    }
+}
