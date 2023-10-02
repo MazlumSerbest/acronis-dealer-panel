@@ -1,24 +1,24 @@
-import { BiPulse, BiBuildingHouse, BiSlider, BiCog } from "react-icons/bi";
+import { BiCollection, BiBuildingHouse, BiSlider, BiCog } from "react-icons/bi";
 
 export const paths = [
     {
-        path: "/panel/clients",
-        key: "clients",
-        icon: <BiBuildingHouse className="text-2xl text-zinc-500" />,
+        path: "/panel",
+        key: "dashboard",
+        icon: <BiCollection className="text-2xl text-zinc-500" aria-label="Dashboard"/>,
     },
     {
-        path: "/panel/monitoring",
-        key: "monitoring",
-        icon: <BiPulse className="text-2xl text-zinc-500" aria-label="Monitoring"/>,
+        path: "/panel/clients",
+        key: "clients",
+        icon: <BiBuildingHouse className="text-2xl text-zinc-500" aria-label="Clients Page"/>,
     },
     {
         path: "/panel/management",
         key: "management",
-        icon: <BiSlider className="text-2xl text-zinc-500" />,
+        icon: <BiSlider className="text-2xl text-zinc-500"  aria-label="Management Page"/>,
     },
     {
         path: "/panel/settings",
         key: "settings",
-        icon: <BiCog className="text-2xl text-zinc-500" />,
+        icon: <BiCog className="text-2xl text-zinc-500"  aria-label="Settings Page"/>,
     },
 ]

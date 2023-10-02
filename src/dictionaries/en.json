@@ -1,7 +1,7 @@
 {
     "General": {
         "Pages": {
-            "monitoring": "Monitoring",
+            "dashboard": "Panel",
             "clients": "Clients",
             "management": "Management",
             "settings": "Settings"
@@ -10,8 +10,8 @@
         "logout": "Log out",
         "logoutMessage": "You are going to log out. Are you sure?"
     },
-    "Monitoring": {
-        "title": "Monitoring"
+    "Dashboard": {
+        "title": "Dashboard"
     },
     "Clients": {
         "title": "Clients"

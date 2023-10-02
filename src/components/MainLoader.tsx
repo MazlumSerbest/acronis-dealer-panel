@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export default function MainLoader() {
     return(
-        <div className="flex w-screen h-screen items-center justify-center">
+        <div className="flex animate-pulse w-screen h-screen items-center justify-center">
             <Image
                 src="/images/dcube.png"
                 width={120}

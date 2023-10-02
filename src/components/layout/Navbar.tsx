@@ -18,7 +18,7 @@ export default function Navbar(props: { onMenuButtonClick(): void }) {
                 src="/images/dcube.png"
                 width={32}
                 height={36}
-                alt="Step Mühendislik"
+                alt="Dcube"
             />
         </nav>
     );

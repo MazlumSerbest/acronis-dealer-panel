@@ -1,7 +1,7 @@
 {
     "General": {
         "Pages": {
-            "monitoring": "İzleme",
+            "dashboard": "Panel",
             "clients": "Müşteriler",
             "management": "Yönetim",
             "settings": "Ayarlar"
@@ -10,8 +10,8 @@
         "logout": "Çıkış Yap",
         "logoutMessage": "Kullanıcı çıkışı yapılcak. Devam edilsin mi?"
     },
-    "Monitoring": {
-        "title": "İzleme"
+    "Dashboard": {
+        "title": "Panel"
     },
     "Clients": {
         "title": "Müşteriler"

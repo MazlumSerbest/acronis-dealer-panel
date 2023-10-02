@@ -2,8 +2,8 @@ import { useRef } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import NextLink from "next/link";
-import { useTranslations } from "next-intl";
 
+import { useTranslations } from "next-intl";
 import { useOnClickOutside } from "usehooks-ts";
 
 import UserCard from "./UserCard";
@@ -35,8 +35,7 @@ export default async function Sidebar(props: {
                     src="/images/dcube.png"
                     width={46}
                     height={64}
-                    alt="StepEng"
-                    className=""
+                    alt="Dcube"
                 />
             </div>
             <Divider />
