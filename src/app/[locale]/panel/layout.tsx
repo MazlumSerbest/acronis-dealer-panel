@@ -1,4 +1,4 @@
-import NavLayout from "@/components/layout/NavLayout";
+import NavLayout from "@/components/navigation/NavLayout";
 
 export default function PanelLayout({
     children,
