@@ -3,6 +3,8 @@
         "Pages": {
             "dashboard": "Panel",
             "clients": "Clients",
+            "licenses": "Licenses",
+            "alerts": "Alerts",
             "management": "Management",
             "settings": "Settings"
         },
@@ -15,6 +17,12 @@
     },
     "Clients": {
         "title": "Clients"
+    },
+    "Licenses": {
+        "title": "Licenses"
+    },
+    "Alerts": {
+        "title": "Alerts"
     },
     "Management": {
         "title": "Management"

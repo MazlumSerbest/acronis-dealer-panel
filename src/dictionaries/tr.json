@@ -3,6 +3,8 @@
         "Pages": {
             "dashboard": "Panel",
             "clients": "Müşteriler",
+            "licenses": "Lisanslar",
+            "alerts": "Hata Mesajları",
             "management": "Yönetim",
             "settings": "Ayarlar"
         },
@@ -15,6 +17,12 @@
     },
     "Clients": {
         "title": "Müşteriler"
+    },
+    "Licenses": {
+        "title": "Lisanslar"
+    },
+    "Alerts": {
+        "title": "Hata Mesajları"
     },
     "Management": {
         "title": "Yönetim"

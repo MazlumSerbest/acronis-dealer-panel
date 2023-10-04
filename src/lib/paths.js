@@ -1,4 +1,4 @@
-import { BiCollection, BiBuildingHouse, BiSlider, BiCog } from "react-icons/bi";
+import { BiCollection, BiBuildingHouse, BiShield, BiError, BiSlider, BiCog } from "react-icons/bi";
 
 export const paths = [
     {
@@ -10,6 +10,16 @@ export const paths = [
         path: "/panel/clients",
         key: "clients",
         icon: <BiBuildingHouse className="text-2xl text-zinc-500" aria-label="Clients Page"/>,
+    },
+    {
+        path: "/panel/licenses",
+        key: "licenses",
+        icon: <BiShield className="text-2xl text-zinc-500" aria-label="Licenses Page"/>,
+    },
+    {
+        path: "/panel/alerts",
+        key: "alerts",
+        icon: <BiError className="text-2xl text-zinc-500" aria-label="Alerts Page"/>,
     },
     {
         path: "/panel/management",

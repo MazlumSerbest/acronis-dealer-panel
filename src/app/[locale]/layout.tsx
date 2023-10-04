@@ -1,4 +1,3 @@
-import "./globals.css";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "./providers";
@@ -15,7 +14,7 @@ export const metadata: Metadata = {
     description: "Dcube Acronis Dealer Panel",
 };
 
-export default function RootLayout({
+export default function LocaleLayout({
     children,
     params: { locale },
 }: any) {
