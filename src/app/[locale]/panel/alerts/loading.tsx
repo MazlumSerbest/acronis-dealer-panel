@@ -1,5 +1,9 @@
-import Loader from "@/components/Loader";
+import Skeleton from "@/components/loader/Skeleton";
 
 export default function AlertsLoading() {
-    return <Loader />;
+    return (
+        <Skeleton>
+            <div>Test</div>
+        </Skeleton>
+    );
 }
