@@ -17,7 +17,7 @@ export default function ClientsPage() {
 
     return (
         <div>
-            {data.children.items.map((t: Tenant) => {
+            {data.children?.items.map((t: Tenant) => {
                 return (<p className="text-zinc-900 truncate" key={t.id}>{t.name}</p>)
             })}
         </div>

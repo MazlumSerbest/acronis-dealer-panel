@@ -19,8 +19,43 @@ interface Tenant {
     deleted_at: Date;
 }
 
-interface TenantContact {
+interface TenantUser{
+    id: string;
+    tenant_id: string;
+    login: string;
+    activated: boolean;
+    enabled: boolean;
+    mfa_status: string;
+    language: string;
+    contact: TenantContact;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date;
+} 
 
+interface TenantContact {
+    id: string;
+    title: string;
+    aan: string;
+    address1: string;
+    address2: string;
+    city: string;
+    country: string;
+    state: string;
+    zipcode: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    email_confirmed: string;
+    phone: string;
+    fax: string;
+    website: string;
+    language: string;
+    industry: string;
+    organization_size: string;
+    created_at: Date;
+    updated_at: Date;
+    deleted_at: Date;
 }
 
 // V1

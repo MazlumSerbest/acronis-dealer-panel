@@ -20,17 +20,17 @@ export async function GET(
             });
             const res = await fetch(
                 `${process.env.ACRONIS_API_V2_URL}/tenants?${params}`,
+                // `${process.env.ACRONIS_API_V2_URL}/tenants/${parentId}/children`,
                 {
                     method: "GET",
                     headers: headers,
                 },
-            )
+            );
 
             if (res.ok) {
                 const children = await res.json();
                 return await NextResponse.json({ children });
-            } else
-                return await NextResponse.json({ message: "Failed!" });
+            } else return await NextResponse.json({ message: "Failed!" });
         } else return NextResponse.json({ message: "Authentication failed!" });
     } catch (error) {
         return NextResponse.json({ message: error });
