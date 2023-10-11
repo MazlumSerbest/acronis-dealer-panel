@@ -8,7 +8,7 @@ export default function ManagementLayout({
 }) {
     const t = useTranslations("General.Pages");
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col">
             <PageHeader title={t("management")} />
             {children}
         </div>

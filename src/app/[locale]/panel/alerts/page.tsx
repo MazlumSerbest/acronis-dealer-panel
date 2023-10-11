@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import Loader from "@/components/loader/LoaderSpinner";
+import LoaderSpinner from "@/components/loader/LoaderSpinner";
 
 export default function AlertsPage() {
     const t = useTranslations("Alerts");
@@ -13,7 +13,7 @@ export default function AlertsPage() {
     );
 
     if (error) return <div>failed to load</div>;
-    if (!data) return <Loader />;
+    if (!data) return <LoaderSpinner />;
 
     return(
         <>

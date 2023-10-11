@@ -8,7 +8,7 @@ export default function SettingsLayout({
 }) {
     const t = useTranslations("General.Pages");
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col">
             <PageHeader title={t("settings")} />
             {children}
         </div>

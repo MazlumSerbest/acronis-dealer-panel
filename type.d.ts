@@ -8,12 +8,17 @@ interface Path {
 // V2
 interface Tenant {
     id: string;
+    parent_id: string;
     enabled: boolean;
     name: string;
     kind: string;
-    parent_id: string;
+    language: string;
+    customer_id: string;
+    customer_type: string;
     contact: TenantContact;
     contacts: TenantContact[];
+    pricing_mode: string;
+    has_children: boolean;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;

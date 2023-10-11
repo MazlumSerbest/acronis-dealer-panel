@@ -1,5 +1,5 @@
-import Loader from "@/components/loader/LoaderSpinner";
+import LoaderSpinner from "@/components/loader/LoaderSpinner";
 
 export default function SettingsLoading() {
-    return <Loader />;
+    return <LoaderSpinner />;
 }

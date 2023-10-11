@@ -25,7 +25,9 @@
         "title": "Alerts"
     },
     "Management": {
-        "title": "Management"
+        "title": "Management",
+        "profile": "Profile",
+        "users": "Users"
     },
     "Settings": {
         "title": "Settings"

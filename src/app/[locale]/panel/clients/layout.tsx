@@ -8,7 +8,7 @@ export default function ClientsLayout({
 }) {
     const t = useTranslations("General.Pages");
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col gap-4">
             <PageHeader title={t("clients")} />
             {children}
         </div>
