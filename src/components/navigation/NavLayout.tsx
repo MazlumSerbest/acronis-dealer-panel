@@ -38,6 +38,7 @@ export default function NavLayout() {
                     isIconOnly
                     variant="light"
                     onClick={() => setShowSidebar(true)}
+                    onTouchEnd={() => setShowSidebar(true)}
                 >
                     <BiMenu className="text-2xl text-zinc-500" />
                 </Button>
@@ -80,6 +81,7 @@ export default function NavLayout() {
                                         className="absolute inset-0 outline-none"
                                         href={p.path}
                                         onClick={() => setShowSidebar(false)}
+                                        onTouchEnd={() => setShowSidebar(false)}
                                     />
                                     {t(p.key)}
                                 </ListboxItem>

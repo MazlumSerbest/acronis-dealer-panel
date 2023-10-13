@@ -14,10 +14,7 @@ export const metadata: Metadata = {
     description: "Dcube Acronis Dealer Panel",
 };
 
-export default function LocaleLayout({
-    children,
-    params: { locale },
-}: any) {
+export default function LocaleLayout({ children, params: { locale } }: any) {
     const messages = useMessages();
     const isValidLocale = locales.some((cur) => cur === locale);
     if (!isValidLocale) notFound();
@@ -27,7 +24,13 @@ export default function LocaleLayout({
             <body className={inter.className}>
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>{children}</Providers>
-                    <ToastContainer />
+                    <ToastContainer
+                        limit={5}
+                        autoClose={5000}
+                        hideProgressBar={true}
+                        draggable
+                        pauseOnHover
+                    />
                 </NextIntlClientProvider>
             </body>
         </html>

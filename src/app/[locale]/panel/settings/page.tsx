@@ -1,13 +1,13 @@
 "use client";
 import useSWR from "swr";
-import LoaderSpinner from "@/components/loader/LoaderSpinner";
+import Loader from "@/components/loader/Loader";
 
 export default function SettingsPage() {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());
     const { data, error } = useSWR("/api/acronis/authorization", fetcher);
 
     if (error) return <div>failed to load</div>;
-    if (!data) return <LoaderSpinner />;
+    if (!data) return <Loader />;
     
     return (
         <div>

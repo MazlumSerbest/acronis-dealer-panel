@@ -14,6 +14,7 @@ export default async function getToken() {
             grant_type: "client_credentials",
         }),
         next: { revalidate: 5400 },
+        // next: { revalidate: 0 },
     });
     
     const auth = await res.json();

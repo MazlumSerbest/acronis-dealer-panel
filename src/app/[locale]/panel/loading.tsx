@@ -1,5 +1,5 @@
-import LoaderSpinner from "@/components/loader/LoaderSpinner";
+import Loader from "@/components/loader/Loader";
 
 export default function PanelLoading() {
-    return <LoaderSpinner />;
+    return <Loader />;
 }
