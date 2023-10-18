@@ -24,7 +24,7 @@ interface Tenant {
     deleted_at: Date;
 }
 
-interface TenantUser{
+interface TenantUser {
     id: string;
     tenant_id: string;
     login: string;
@@ -36,11 +36,10 @@ interface TenantUser{
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
-} 
+}
 
 interface TenantContact {
     id: string;
-    title: string;
     aan: string;
     address1: string;
     address2: string;
@@ -50,6 +49,7 @@ interface TenantContact {
     zipcode: string;
     firstname: string;
     lastname: string;
+    fullname: string;
     email: string;
     email_confirmed: string;
     phone: string;
@@ -58,9 +58,13 @@ interface TenantContact {
     language: string;
     industry: string;
     organization_size: string;
+    title: string;
     created_at: Date;
     updated_at: Date;
     deleted_at: Date;
+    types: Array["legal" | "billing" | "technical" | "business"];
+    tenant_id: string;
+    user_id: string;
 }
 
 // V1
@@ -73,7 +77,7 @@ interface Alert {
     tenant: {
         id: number;
         uuid: string;
-    }
+    };
     createdAt: Date;
     receivedAt: Date;
     updatedAt: Date;
