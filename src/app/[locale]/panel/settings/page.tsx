@@ -1,6 +1,6 @@
 "use client";
 import useSWR from "swr";
-import Loader from "@/components/loader/Loader";
+import Loader from "@/components/loaders/Loader";
 
 export default function SettingsPage() {
     const fetcher = (url: string) => fetch(url).then((res) => res.json());

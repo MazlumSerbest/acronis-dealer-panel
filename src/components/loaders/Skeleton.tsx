@@ -8,8 +8,10 @@ export default function Skeleton({ children }: { children: React.ReactNode }) {
     );
 }
 
-export function TableSkeleton(){
-    return(
-        <div className="rounded-xl bg-slate-200 w-full h-96"></div>
-    )
+export function TableSkeleton() {
+    return <div className="rounded-xl bg-slate-200 w-full h-96"></div>;
+}
+
+export function DefaultSkeleton() {
+    return <div className="rounded-xl bg-slate-200 w-full h-[30rem]"></div>;
 }

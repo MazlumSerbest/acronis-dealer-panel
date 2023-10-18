@@ -1,4 +1,4 @@
-import Loader from "@/components/loader/Loader";
+import Loader from "@/components/loaders/Loader";
 
 export default function ManagementLoading() {
     return <Loader />;

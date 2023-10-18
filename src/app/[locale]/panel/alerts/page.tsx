@@ -1,7 +1,7 @@
 "use client";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import Loader from "@/components/loader/Loader";
+import Loader from "@/components/loaders/Loader";
 
 export default function AlertsPage() {
     const t = useTranslations("Alerts");

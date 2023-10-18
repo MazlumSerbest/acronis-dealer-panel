@@ -1,4 +1,4 @@
-import Skeleton, { TableSkeleton } from "@/components/loader/Skeleton";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
 export default function ClientsLoading() {
     return (
