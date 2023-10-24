@@ -1,6 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 import ProfileTab from "./tabs/Profile";
+import ContactsTab from "./tabs/Contacts";
 import UsersTab from "./tabs/Users";
 import { Tabs, Tab } from "@nextui-org/tabs";
 
@@ -15,8 +16,11 @@ export default function ManagementPage() {
                 key="management"
                 aria-label="Management Tabs"
             >
-                <Tab key="general" title={t("profile")}>
+                <Tab key="profile" title={t("profile")} className="w-full">
                     {ProfileTab()}
+                </Tab>
+                <Tab key="contacts" title={t("contacts")} className="w-full">
+                    {ContactsTab()}
                 </Tab>
                 <Tab key="users" title={t("users")} className="w-full">
                     {UsersTab()}
