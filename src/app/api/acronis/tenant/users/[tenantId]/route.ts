@@ -24,7 +24,7 @@ export async function GET(
 
             if (userRes.ok) {
                 const userIds = await userRes.json();
-                if(!userIds.items.length) return await NextResponse.json({ users: {} })
+                if(!userIds.items.length) return await NextResponse.json({ users: { items: [] } })
 
                 const params = new URLSearchParams({
                     uuids: userIds.items.join(),

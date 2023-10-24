@@ -16,7 +16,7 @@ export async function GET(
             };
             const params = new URLSearchParams({
                 parent_id: parentId,
-                lod: "basic",
+                // lod: "basic",
             });
             const res = await fetch(
                 `${process.env.ACRONIS_API_V2_URL}/tenants?${params}`,

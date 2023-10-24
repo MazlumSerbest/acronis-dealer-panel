@@ -24,7 +24,7 @@ export async function GET(
 
             if (contactRes.ok) {
                 const contactIds = await contactRes.json();
-                if(!contactIds.items.length) return await NextResponse.json({ users: {} })
+                if(!contactIds.items.length) return await NextResponse.json({ contacts: { items: [] } })
 
                 const params = new URLSearchParams({
                     uuids: contactIds.items.join(),
