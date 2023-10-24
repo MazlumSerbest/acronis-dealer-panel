@@ -14,7 +14,7 @@ export async function GET(
             const headers = {
                 Authorization: `Bearer ${token}`,
             };
-                        const res = await fetch(
+            const res = await fetch(
                 `${process.env.ACRONIS_API_V2_URL}/tenants/${tenantId}`,
                 {
                     method: "GET",
