@@ -1,7 +1,8 @@
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardHeader, CardBody } from "@nextui-org/card";
 import { CircularProgress, Progress } from "@nextui-org/progress";
 import { BiDesktop, BiShield, BiData } from "react-icons/bi";
 import PanelCard from "@/components/PanelCard";
+import { LineChart } from "@/components/charts/LineChart";
 
 export default function PanelPage() {
     return (
@@ -82,6 +83,35 @@ export default function PanelPage() {
                     />
                 </CardBody>
             </Card>
+            <Card className="col-span-1 md:col-span-2 row-span-2 border-b-4 border-zinc-300">
+                <CardBody className="flex p-6 pt-4 items-center gap-2">
+                    <h6 className="text-sm uppercase font-bold text-blue-400">
+                        Daily Error Count
+                    </h6>
+                    <LineChart />
+                </CardBody>
+            </Card>
+            <PanelCard
+                header="Total Usage"
+                content={
+                    <CircularProgress
+                        value={120}
+                        maxValue={500}
+                        showValueLabel={true}
+                        size="lg"
+                        strokeWidth={10}
+                        formatOptions={{
+                            style: "unit",
+                            unit: "gigabyte",
+                        }}
+                        classNames={{
+                            svg: "w-32 h-32 drop-shadow-md",
+                            indicator: "text-green-400",
+                            value: "text-2xl font-semibold text-green-400",
+                        }}
+                    />
+                }
+            />
         </div>
     );
 }
