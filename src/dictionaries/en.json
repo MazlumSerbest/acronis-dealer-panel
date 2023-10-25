@@ -1,5 +1,6 @@
 {
     "General": {
+        "": "Test",
         "Pages": {
             "dashboard": "Panel",
             "clients": "Clients",
@@ -14,10 +15,25 @@
         "name": "Name",
         "id": "Id",
         "kind": "Kind",
+        "mfaStatus": "2FA",
         "enabled": "Enabled",
+        "disabled": "Disabled",
+        "usage": "Usage",
         "emptyContent": "There is no data!",
         "partner": "Partner",
-        "customer": "Customer"
+        "customer": "Customer",
+        "production": "Production",
+        "trial": "Trial",
+        "suspended": "suspended",
+        "twoFactorAuth": "Two-Factor Authentication",
+        "usersCount": "Users Count",
+        "mode": "Mode",
+        "currency": "Currency",
+        "companyName": "Company Name",
+        "serviceName": "Service Name",
+        "platformTermsUrl": "Platform Terms",
+        "termsUrl": "Terms",
+        "privacyPolicyUrl": "Privacy Policy"
     },
     "Dashboard": {
         "title": "Dashboard"
@@ -38,6 +54,14 @@
         "users": "Users"
     },
     "Settings": {
-        "title": "Settings"
+        "title": "Settings",
+        "general": "General",
+        "locations": "Locations",
+        "security": "Security",
+        "securitySubtitle": "Security settings can only changed from Acronis Cloud Platform",
+        "pricing": "Pricing",
+        "pricingSubtitle": "Pricing settings are just for information",
+        "branding": "Branding",
+        "brandingSubtitle": "Branding settings can only changed from Acronis Cloud Platform"
     }
 }

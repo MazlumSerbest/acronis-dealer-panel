@@ -1,7 +1,7 @@
 import useSWR from "swr";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { useTranslations } from "next-intl";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import { Card, CardBody, CardHeader } from "@nextui-org/card";
 import { BiEdit } from "react-icons/bi";
 
 export default function ProfileTab() {

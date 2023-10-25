@@ -1,17 +1,27 @@
-"use client";
-import useSWR from "swr";
-import Loader from "@/components/loaders/Loader";
+"use client"
+import { useTranslations } from "next-intl";
+import GeneralTab from "./tabs/General";
+import LocationsTab from "./tabs/Locations";
+import { Tabs, Tab } from "@nextui-org/tabs";
 
 export default function SettingsPage() {
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
-    const { data, error } = useSWR("/api/acronis/authorization", fetcher);
+    const t = useTranslations("Settings");
 
-    if (error) return <div>failed to load</div>;
-    if (!data) return <Loader />;
-    
     return (
-        <div>
-            <p className="text-zinc-900">Token: {data.auth.access_token}</p>
+        <div className="flex flex-col w-full items-center mt-4">
+            <Tabs
+                size="lg"
+                color="default"
+                key="management"
+                aria-label="Management Tabs"
+            >
+                <Tab key="general" title={t("general")} className="w-full">
+                    {GeneralTab()}
+                </Tab>
+                <Tab key="locations" title={t("locations")} className="w-full">
+                    {LocationsTab()}
+                </Tab>
+            </Tabs>
         </div>
     );
 }
