@@ -2,7 +2,8 @@
 import React from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import LoaderSpinner from "@/components/loader/LoaderSpinner";
+import Loader from "@/components/loaders/Loader";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import {
     Table,
     TableHeader,
@@ -11,105 +12,86 @@ import {
     TableRow,
     TableCell,
 } from "@nextui-org/table";
+import { Tooltip } from "@nextui-org/tooltip";
 import { Input } from "@nextui-org/input";
-import { Chip } from "@nextui-org/chip";
 import { Pagination } from "@nextui-org/pagination";
 import BoolChip from "@/components/BoolChip";
-
-const columns = [
-    {
-        key: "id",
-        label: "ID",
-        width: 200,
-    },
-    {
-        key: "name",
-        label: "Name",
-        width: 200,
-    },
-    {
-        key: "kind",
-        label: "Kind",
-        width: 200,
-    },
-    {
-        key: "enabled",
-        label: "Enabled",
-        width: 100,
-    },
-    // {
-    //     key: "actions",
-    //     label: "Actions",
-    //     width: 150,
-    // },
-];
+import { BiEdit, BiLinkExternal } from "react-icons/bi";
 
 export default function ClientsPage() {
     const t = useTranslations("Clients");
+    const g = useTranslations("General");
+
+    const columns = [
+        {
+            key: "name",
+            label: g("name"),
+            width: 200,
+        },
+        {
+            key: "kind",
+            label: g("kind"),
+            width: 200,
+        },
+        {
+            key: "mfa_status",
+            label: g("mfaStatus"),
+            width: 75,
+        },
+        {
+            key: "enabled",
+            label: g("enabled"),
+            width: 75,
+        },
+        {
+            key: "usage",
+            label: g("usage"),
+            width: 100,
+        },
+        {
+            key: "actions",
+            label: "Actions",
+            width: 150,
+        },
+    ];
 
     const renderCell = React.useCallback(
-        (user: TenantUser, columnKey: React.Key) => {
-            const cellValue: any = user[columnKey as keyof typeof user];
+        (client: Tenant, columnKey: React.Key) => {
+            const cellValue: any = client[columnKey as keyof typeof client];
 
             switch (columnKey) {
-                case "id":
-                    return (
-                        <h6 className="truncate">
-                            {/* {cellValue.length > 28
-                                ? cellValue.substring(0, 28) + "..."
-                                : cellValue} */}
-                            {cellValue}
-                        </h6>
-                    );
-                case "name":
-                    return (
-                        <h6 className="text-clip">
-                            {cellValue.length > 30
-                                ? cellValue.substring(0, 30) + "..."
-                                : cellValue}
-                        </h6>
-                    );
                 case "kind":
                     return (
-                        <h6 className="">
+                        <h6>
                             {cellValue
                                 ? cellValue == "partner"
-                                    ? "Partner"
-                                    : "Customer"
+                                    ? g("partner")
+                                    : g("customer")
                                 : "-"}
                         </h6>
                     );
+                case "mfa_status":
+                    return <BoolChip value={cellValue == "enabled"} />;
                 case "enabled":
                     return <BoolChip value={cellValue} />;
-                // case "actions":
-                //     return (
-                //         <div className="relative flex justify-start items-center gap-2">
-                //             <Tooltip key={user.id} content="Copy Id">
-                //                 <span className="text-xl text-blue-400 active:opacity-50">
-                //                     <BiCopy
-                //                         onClick={() =>
-                //                             navigator.clipboard.writeText(
-                //                                 user.id,
-                //                             )
-                //                         }
-                //                     />
-                //                 </span>
-                //             </Tooltip>
-                //             <Tooltip key={user.id} content="Edit User">
-                //                 <span className="text-xl text-green-600 active:opacity-50">
-                //                     <BiEdit
-                //                         onClick={() => {}}
-                //                         onDoubleClick={() => {}}
-                //                     />
-                //                 </span>
-                //             </Tooltip>
-                //             <Tooltip key={user.id} content="Delete User">
-                //                 <span className="text-xl text-red-500 active:opacity-50">
-                //                     <BiTrash onClick={() => {}} />
-                //                 </span>
-                //             </Tooltip>
-                //         </div>
-                //     );
+                case "actions":
+                    return (
+                        <div className="relative flex justify-start items-center gap-2">
+                            <Tooltip key={client.id} content="Edit Client">
+                                <span className="text-xl text-green-600 active:opacity-50">
+                                    <BiEdit
+                                        onClick={() => {}}
+                                        onDoubleClick={() => {}}
+                                    />
+                                </span>
+                            </Tooltip>
+                            <Tooltip key={client.id} content="Open Detail">
+                                <span className="text-xl text-blue-400 active:opacity-50">
+                                    <BiLinkExternal onClick={() => {}} />
+                                </span>
+                            </Tooltip>
+                        </div>
+                    );
                 default:
                     return cellValue;
             }
@@ -139,50 +121,53 @@ export default function ClientsPage() {
     );
 
     if (error) return <div>failed to load</div>;
-    if (!data) return <LoaderSpinner />;
+    if (!data)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
 
     return (
-            <Table
-                isStriped
-                isCompact
-                fullWidth
-                selectionMode="single"
-                color="primary"
-                // topContent={topContent}
-                // topContentPlacement="outside"
-                // bottomContent={bottomContent}
-                aria-label="Client Table"
+        <Table
+            isStriped
+            isCompact
+            fullWidth
+            selectionMode="single"
+            color="primary"
+            // topContent={topContent}
+            // topContentPlacement="outside"
+            // bottomContent={bottomContent}
+            aria-label="Client Table"
+        >
+            <TableHeader columns={columns}>
+                {(column) => (
+                    <TableColumn
+                        key={column.key}
+                        width={column.width ? column.width : null}
+                        align="center"
+                    >
+                        {column.label}
+                    </TableColumn>
+                )}
+            </TableHeader>
+            <TableBody
+                items={data.children.items}
+                emptyContent={g("emptyContent")}
+                loadingContent={<Loader />}
             >
-                <TableHeader columns={columns}>
-                    {(column) => (
-                        <TableColumn
-                            key={column.key}
-                            width={column.width ? column.width : null}
-                            align="center"
-                        >
-                            {column.label}
-                        </TableColumn>
-                    )}
-                </TableHeader>
-                <TableBody
-                    items={data.children.items}
-                    emptyContent={<>There is no client</>}
-                    loadingContent={<>Test</>}
-                >
-                    {(item: TenantUser) => (
-                        <TableRow
-                            key={item.id}
-                            className="cursor-pointer"
-                            onDoubleClick={() => {}}
-                        >
-                            {(columnKey) => (
-                                <TableCell>
-                                    {renderCell(item, columnKey)}
-                                </TableCell>
-                            )}
-                        </TableRow>
-                    )}
-                </TableBody>
-            </Table>
+                {(item: Tenant) => (
+                    <TableRow
+                        key={item.id}
+                        className="cursor-pointer"
+                        onDoubleClick={() => {}}
+                    >
+                        {(columnKey) => (
+                            <TableCell>{renderCell(item, columnKey)}</TableCell>
+                        )}
+                    </TableRow>
+                )}
+            </TableBody>
+        </Table>
     );
 }

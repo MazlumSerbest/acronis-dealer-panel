@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest ,NextResponse } from "next/server";
 import getToken from "@/lib/getToken";
 
 export async function GET(
-    request: Request,
+    request: NextRequest,
     { params }: { params: { id: string } },
 ) {
     try {
