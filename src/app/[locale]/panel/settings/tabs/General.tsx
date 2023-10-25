@@ -40,7 +40,7 @@ export default function GeneralTab() {
                 title={t("security")}
                 subtitle={t("securitySubtitle")}
                 startContent={
-                    <BiCheckShield className="text-4xl text-yellow-500/60" />
+                    <BiCheckShield className="text-4xl text-green-500/60" />
                 }
             >
                 <div className="flex flex-col divide-y p-0">
@@ -50,10 +50,10 @@ export default function GeneralTab() {
                         </dt>
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
+                                showText
                                 value={
                                     data.tenantInfo.mfa.mfa_status == "enabled"
                                 }
-                                showText
                             />
                         </dd>
                     </div>
@@ -73,7 +73,7 @@ export default function GeneralTab() {
                 title={t("pricing")}
                 subtitle={t("pricingSubtitle")}
                 startContent={
-                    <BiPurchaseTag className="text-4xl text-green-500/60" />
+                    <BiPurchaseTag className="text-4xl text-yellow-500/60" />
                 }
             >
                 <div className="flex flex-col divide-y p-0">
