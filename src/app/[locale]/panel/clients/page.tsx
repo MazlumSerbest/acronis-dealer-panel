@@ -16,7 +16,7 @@ import {
 import { Tooltip } from "@nextui-org/tooltip";
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
-import { Select, SelectSection, SelectItem } from "@nextui-org/select";
+import { Select, SelectItem } from "@nextui-org/select";
 import { Pagination } from "@nextui-org/pagination";
 import { BiLinkExternal, BiPlus, BiSearch } from "react-icons/bi";
 import BoolChip from "@/components/BoolChip";
