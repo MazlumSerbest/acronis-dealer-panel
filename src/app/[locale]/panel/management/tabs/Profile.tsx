@@ -7,10 +7,9 @@ import { BiEdit } from "react-icons/bi";
 export default function ProfileTab() {
     const t = useTranslations("Management");
 
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
+    //#region Fetch Data
     const { data, error } = useSWR(
         "/api/acronis/tenant/28a5db46-58eb-4a61-b064-122f07ddac6a",
-        fetcher,
     );
 
     if (error) return <div>failed to load</div>;
@@ -20,7 +19,8 @@ export default function ProfileTab() {
                 <DefaultSkeleton />
             </Skeleton>
         );
-
+    //#endregion
+    
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">

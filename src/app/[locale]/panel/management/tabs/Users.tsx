@@ -20,6 +20,7 @@ import BoolChip from "@/components/BoolChip";
 export default function UsersTab() {
     const t = useTranslations("Management");
 
+    //#region Table Design
     const columns = [
         {
             key: "login",
@@ -78,7 +79,23 @@ export default function UsersTab() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
+    //#endregion
 
+    //#region Fetch Data
+    const { data, error } = useSWR(
+        "/api/acronis/tenant/users/28a5db46-58eb-4a61-b064-122f07ddac6a",
+    );
+
+    if (error) return <div>failed to load</div>;
+    if (!data)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
+    //#endregion
+
+    //#region Table Content
     const topContent = (
         <div className="flex justify-between items-end gap-3">
             <Input
@@ -91,20 +108,7 @@ export default function UsersTab() {
             {/* <AddUser /> */}
         </div>
     );
-
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
-    const { data, error } = useSWR(
-        "/api/acronis/tenant/users/28a5db46-58eb-4a61-b064-122f07ddac6a",
-        fetcher,
-    );
-
-    if (error) return <div>failed to load</div>;
-    if (!data)
-        return (
-            <Skeleton>
-                <TableSkeleton />
-            </Skeleton>
-        );
+    //#endregion
 
     return (
         <Table
@@ -115,7 +119,7 @@ export default function UsersTab() {
             topContent={topContent}
             topContentPlacement="outside"
             // bottomContent={bottomContent}
-            aria-label="User table"
+            aria-label="User Table"
         >
             <TableHeader columns={columns}>
                 {(column) => (
