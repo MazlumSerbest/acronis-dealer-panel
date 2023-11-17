@@ -16,11 +16,12 @@ import { Divider } from "@nextui-org/divider";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 import { BiMenu } from "react-icons/bi";
+import useAcronisStore from "@/app/store/acronis";
 
 export default function NavLayout() {
-    const [showSidebar, setShowSidebar] = useState(false);
-
     const t = useTranslations("General.Pages");
+    const [showSidebar, setShowSidebar] = useState(false);
+    const { userTenant } = useAcronisStore();
 
     const sidebarPaths = paths;
     const pathName = usePathname();
@@ -40,9 +41,20 @@ export default function NavLayout() {
                     onClick={() => setShowSidebar(true)}
                     onTouchEnd={() => setShowSidebar(true)}
                 >
-                    <BiMenu className="text-2xl text-zinc-500" />
+                    <BiMenu className="text-3xl text-zinc-500" />
                 </Button>
-                <span className="flex-1" />
+                <div className="flex flex-1 w-1/2 items-center justify-center">
+                    <h1 className="font-semibold text-blue-400 truncate">DCube</h1>
+                </div>
+                {/* {userTenant ? (
+                    <div className="flex flex-1 w-1/2 items-center justify-center">
+                        <h1 className="font-semibold text-blue-400 truncate">
+                            {userTenant.name}
+                        </h1>
+                    </div>
+                ) : (
+                    <span className="flex-1" />
+                )} */}
                 <Logo width={32} height={36} />
             </nav>
             {/* Sidebar */}
@@ -55,6 +67,16 @@ export default function NavLayout() {
             >
                 <Logo width={46} height={64} />
                 <Divider />
+                <div className="flex items-center w-52">
+                    <h1 className="font-semibold text-blue-400">DCube</h1>
+                </div>
+                {userTenant ? (
+                    <div className="flex items-center w-52">
+                        <h1 className="font-semibold text-blue-400">
+                            {userTenant.name}
+                        </h1>
+                    </div>
+                ) : null}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0">
                     <Listbox
                         variant="bordered"
@@ -72,7 +94,8 @@ export default function NavLayout() {
                                     startContent={p.icon}
                                     className={
                                         "font-semibold" +
-                                        (withoutLocale == p.path
+                                        (withoutLocale.includes(p.path) &&
+                                        p.path != "/panel"
                                             ? " bg-blue-100"
                                             : "")
                                     }

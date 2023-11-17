@@ -24,11 +24,12 @@ export async function GET(
                 {
                     method: "GET",
                     headers: headers,
+                    next: { revalidate: 0 },
                 },
             );
 
             if (res.ok) {
-                const children = await res.json();
+                const children = await res.json() || [];
                 return await NextResponse.json({ children });
             } else return await NextResponse.json({ message: "Failed!" });
         } else return NextResponse.json({ message: "Authentication failed!" });

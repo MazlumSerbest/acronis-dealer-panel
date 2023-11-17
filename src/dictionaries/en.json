@@ -9,12 +9,15 @@
             "management": "Management",
             "settings": "Settings"
         },
+        "yes": "Yes",
+        "no": "No",
         "logout": "Log out",
         "logoutMessage": "You are going to log out. Are you sure?",
         "cancel": "Cancel",
         "name": "Name",
         "id": "Id",
         "kind": "Kind",
+        "actions": "Actions",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "disabled": "Disabled",
@@ -33,7 +36,12 @@
         "serviceName": "Service Name",
         "platformTermsUrl": "Platform Terms",
         "termsUrl": "Terms",
-        "privacyPolicyUrl": "Privacy Policy"
+        "privacyPolicyUrl": "Privacy Policy",
+        "openDetail": "Open Detail",
+        "search": "Search",
+        "general": "General",
+        "clients": "Clients",
+        "licenses": "Licenses"
     },
     "Dashboard": {
         "title": "Dashboard"
