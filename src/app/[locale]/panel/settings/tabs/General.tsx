@@ -8,12 +8,10 @@ import { BiCheckShield, BiCopyright, BiPurchaseTag } from "react-icons/bi";
 
 export default function GeneralTab() {
     const t = useTranslations("Settings");
-    const g = useTranslations("General");
+    const t = useTranslations("General");
 
-    const fetcher = (url: string) => fetch(url).then((res) => res.json());
     const { data, error } = useSWR(
         "/api/acronis/tenant/info/28a5db46-58eb-4a61-b064-122f07ddac6a",
-        fetcher,
     );
 
     if (error) return <div>failed to load</div>;
@@ -46,7 +44,7 @@ export default function GeneralTab() {
                 <div className="flex flex-col divide-y p-0">
                     <div className="grid grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("twoFactorAuth")}
+                            {t("twoFactorAuth")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
@@ -59,7 +57,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("usersCount")}
+                            {t("usersCount")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.mfa.users_count}
@@ -78,14 +76,14 @@ export default function GeneralTab() {
             >
                 <div className="flex flex-col divide-y p-0">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">{g("mode")}</dt>
+                        <dt className="font-medium leading-6">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {g(data.tenantInfo.pricing.mode)}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("currency")}
+                            {t("currency")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.pricing.currency || "-"}
@@ -105,7 +103,7 @@ export default function GeneralTab() {
                 <div className="flex flex-col divide-y p-0">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("companyName")}
+                            {t("companyName")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.branding.company_name || "-"}
@@ -113,7 +111,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("serviceName")}
+                            {t("serviceName")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.branding.service_name || "-"}
@@ -121,7 +119,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("platformTermsUrl")}
+                            {t("platformTermsUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.branding.platform_terms_url ? (
@@ -145,7 +143,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("termsUrl")}
+                            {t("termsUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.branding.terms_url ? (
@@ -166,7 +164,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
-                            {g("privacyPolicyUrl")}
+                            {t("privacyPolicyUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo.branding.privacy_policy_url ? (
