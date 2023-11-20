@@ -23,7 +23,7 @@ export async function GET(
             );
 
             if (res.ok) {
-                const tenant = await res.json();
+                const tenant = await res.json() || [];
                 return await NextResponse.json({ tenant });
             } else return await NextResponse.json({ message: "Failed!" });
         } else return NextResponse.json({ message: "Authentication failed!" });

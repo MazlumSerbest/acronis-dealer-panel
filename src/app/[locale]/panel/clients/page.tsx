@@ -49,11 +49,6 @@ export default function ClientsPage() {
             width: 75,
         },
         {
-            key: "usage",
-            label: t("usage"),
-            width: 100,
-        },
-        {
             key: "actions",
             label: t("actions"),
             width: 75,
@@ -231,7 +226,7 @@ export default function ClientsPage() {
                     )}
                 </TableHeader>
                 <TableBody
-                    items={data.children.items || []}
+                    items={data?.children?.items ?? []}
                     emptyContent={t("emptyContent")}
                     loadingContent={<Loader />}
                 >
@@ -240,7 +235,7 @@ export default function ClientsPage() {
                             key={client.id}
                             className="cursor-pointer"
                             onDoubleClick={() => {
-                                router.push("clients/" + client.id);
+                                router.push("clients/" + client?.id);
                             }}
                         >
                             {(columnKey) => (

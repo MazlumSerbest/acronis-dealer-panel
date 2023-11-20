@@ -1,5 +1,4 @@
 import { useTranslations } from "next-intl";
-import PageHeader from "@/components/PageHeader";
 
 export default function ClientsLayout({
     children,
@@ -7,9 +6,9 @@ export default function ClientsLayout({
     children: React.ReactNode;
 }) {
     const t = useTranslations("General.Pages");
+
     return (
-        <div className="flex flex-col gap-4">
-            <PageHeader title={t("clients")} />
+        <div className="flex flex-col">
             {children}
         </div>
     );
