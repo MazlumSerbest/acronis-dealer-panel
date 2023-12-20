@@ -7,7 +7,7 @@ import { Link } from "@nextui-org/link";
 import { BiCheckShield, BiCopyright, BiPurchaseTag } from "react-icons/bi";
 
 export default function GeneralTab() {
-    const t = useTranslations("Settings");
+    // const t = useTranslations("Settings");
     const t = useTranslations("General");
 
     const { data, error } = useSWR(

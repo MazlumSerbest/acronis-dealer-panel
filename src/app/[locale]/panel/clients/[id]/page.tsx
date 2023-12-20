@@ -14,9 +14,9 @@ import Skeleton, {
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
-import ClientsTab from "./tabs/Clients";
-import GeneralTab from "./tabs/General";
-import LicensesTab from "./tabs/Licenses";
+import ClientsTab from "./_tabs/Clients";
+import GeneralTab from "./_tabs/General";
+import LicensesTab from "./_tabs/Licenses";
 import toast from "react-hot-toast";
 import { useEffectOnce } from "usehooks-ts";
 
