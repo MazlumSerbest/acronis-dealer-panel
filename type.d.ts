@@ -1,10 +1,40 @@
-interface Path {
+type Entity = {
+    id: number;
+    active: boolean;
+    createdBy: string;
+    createdAt: string;
+    updatedBy?: string;
+    updatedAt?: string;
+};
+
+type Path = {
     path: string;
     key: string;
     icon: React.ReactNode;
-}
+};
 
-// ACRONIS
+//#region COMPONENTS
+type ListBoxItem = {
+    id: number;
+    name: string;
+};
+
+// DataTable
+type Column = {
+    name: string;
+    key: string;
+    width?: number;
+    sortable?: boolean;
+    searchable?: boolean;
+};
+
+type ActiveOption = {
+    name: string;
+    key: string;
+};
+//#endregion
+
+//#region ACRONIS
 // V2
 interface Tenant {
     id: string;
@@ -90,3 +120,4 @@ interface AlertDetail {
     resourceId: string;
     resourceName: string;
 }
+//#endregion
