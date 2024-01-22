@@ -68,7 +68,7 @@ export default function DataTable(props: Props) {
     });
     const [page, setPage] = React.useState(1);
 
-    const pages = Math.ceil(data.length / rowsPerPage);
+    // const pages = Math.ceil(data.length / rowsPerPage);
 
     const hasSearchFilter = Boolean(filterValue);
 
@@ -115,22 +115,34 @@ export default function DataTable(props: Props) {
         columns,
     ]);
 
-    const items = React.useMemo(() => {
+    // const items = React.useMemo(() => {
+    const pages = Math.ceil(filteredItems.length / rowsPerPage);
+
+    const sortedItems = React.useMemo(() => {
         const start = (page - 1) * rowsPerPage;
         const end = start + rowsPerPage;
 
-        return filteredItems.slice(start, end);
-    }, [page, filteredItems, rowsPerPage]);
+        //     return filteredItems.slice(start, end);
+        // }, [page, filteredItems, rowsPerPage]);
 
-    const sortedItems = React.useMemo(() => {
-        return [...items].sort((a: DataType, b: DataType) => {
-            const first = a[sortDescriptor.column as keyof DataType] as number;
-            const second = b[sortDescriptor.column as keyof DataType] as number;
-            const cmp = first < second ? -1 : first > second ? 1 : 0;
+        // const sortedItems = React.useMemo(() => {
+        //     return [...items].sort((a: DataType, b: DataType) => {
+        return [...filteredItems]
+            .sort((a: DataType, b: DataType) => {
+                const first = a[
+                    sortDescriptor.column as keyof DataType
+                ] as number;
+                const second = b[
+                    sortDescriptor.column as keyof DataType
+                ] as number;
+                const cmp = first < second ? -1 : first > second ? 1 : 0;
 
-            return sortDescriptor.direction === "descending" ? -cmp : cmp;
-        });
-    }, [sortDescriptor, items]);
+                return sortDescriptor.direction === "descending" ? -cmp : cmp;
+                // });
+                // }, [sortDescriptor, items]);
+            })
+            .slice(start, end);
+    }, [sortDescriptor, page, filteredItems, rowsPerPage]);
 
     const onRowsPerPageChange = React.useCallback(
         (e: React.ChangeEvent<HTMLSelectElement>) => {
