@@ -49,9 +49,9 @@ interface Tenant {
     contacts: TenantContact[];
     pricing_mode: string;
     has_children: boolean;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at: Date;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
 }
 
 interface TenantUser {
@@ -63,9 +63,9 @@ interface TenantUser {
     mfa_status: string;
     language: string;
     contact: TenantContact;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at: Date;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
 }
 
 interface TenantContact {
@@ -89,9 +89,9 @@ interface TenantContact {
     industry: string;
     organization_size: string;
     title: string;
-    created_at: Date;
-    updated_at: Date;
-    deleted_at: Date;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
     types: Array["legal" | "billing" | "technical" | "business"];
     tenant_id: string;
     user_id: string;
@@ -108,9 +108,9 @@ interface Alert {
         id: number;
         uuid: string;
     };
-    createdAt: Date;
-    receivedAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    receivedAt: string;
+    updatedAt: string;
 }
 
 interface AlertDetail {
