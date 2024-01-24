@@ -1,4 +1,6 @@
 import React, { Key, ReactNode } from "react";
+import { useTranslations } from "next-intl";
+
 import {
     Table,
     TableHeader,
@@ -18,8 +20,9 @@ import {
 import { Input } from "@nextui-org/input";
 import { Button } from "@nextui-org/button";
 import { Pagination } from "@nextui-org/pagination";
-import { BiPlus, BiSearch, BiChevronDown } from "react-icons/bi";
+
 import Loader from "./loaders/Loader";
+import { BiPlus, BiSearch, BiChevronDown } from "react-icons/bi";
 
 type Props = {
     columns: Column[];
@@ -38,6 +41,8 @@ type Props = {
 };
 
 export default function DataTable(props: Props) {
+    const t = useTranslations("Components");
+
     const {
         columns,
         data,
@@ -175,7 +180,7 @@ export default function DataTable(props: Props) {
                             clearButton: "text-xl text-zinc-500",
                             input: "placeholder:italic placeholder:text-zinc-400",
                         }}
-                        placeholder="Arama Yap..."
+                        placeholder={t("search") + "..."}
                         size="sm"
                         startContent={
                             <BiSearch className="text-2xl text-zinc-300" />
@@ -196,7 +201,7 @@ export default function DataTable(props: Props) {
                                         size="sm"
                                         variant="flat"
                                     >
-                                        Aktif
+                                        {t("active")}
                                     </Button>
                                 </DropdownTrigger>
                                 <DropdownMenu
@@ -229,7 +234,7 @@ export default function DataTable(props: Props) {
                                     size="sm"
                                     variant="flat"
                                 >
-                                    Kolonlar
+                                    {t("columns")}
                                 </Button>
                             </DropdownTrigger>
                             <DropdownMenu
@@ -258,7 +263,7 @@ export default function DataTable(props: Props) {
                                 size="sm"
                                 onPress={onAddNew}
                             >
-                                Ekle
+                                {t("add")}
                             </Button>
                         ) : (
                             <></>
@@ -267,10 +272,10 @@ export default function DataTable(props: Props) {
                 </div>
                 <div className="flex justify-between items-center">
                     <span className="text-zinc-400 text-sm">
-                        Toplam satır: {data.length}
+                        {t("totalRows") + ": " + data.length}
                     </span>
                     <label className="flex items-center text-zinc-400 text-sm">
-                        Sayfa satır sayısı:
+                        {t("rowsPerPage") + ": "}
                         <select
                             className="bg-transparent outline-none text-zinc-400 text-sm ml-2"
                             onChange={onRowsPerPageChange}
@@ -309,6 +314,7 @@ export default function DataTable(props: Props) {
         onAddNew,
         data.length,
         defaultRowsPerPage,
+        t,
     ]);
     //#endregion
 
@@ -324,7 +330,7 @@ export default function DataTable(props: Props) {
                         cursor: "bg-sky-500 text-white",
                     }}
                     color="default"
-                    isDisabled={hasSearchFilter}
+                    // isDisabled={hasSearchFilter}
                     page={page}
                     total={pages}
                     onChange={setPage}
@@ -336,7 +342,7 @@ export default function DataTable(props: Props) {
                 </span> */}
             </div>
         );
-    }, [, /*selectedKeys*/ page, pages, hasSearchFilter]);
+    }, [, /*selectedKeys*/ page, pages]);
     //#endregion
 
     return (
