@@ -6,7 +6,6 @@
 //         const token = await getToken();
 
 //         if (token) {
-//             console.log(token);
 //             const headers = {
 //                 Authorization: `Bearer ${token}`,
 //             };
