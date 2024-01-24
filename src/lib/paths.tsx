@@ -39,16 +39,16 @@ export const paths: Path[] = [
             />
         ),
     },
-    {
-        path: "/panel/alerts",
-        key: "alerts",
-        icon: (
-            <BiError
-                className="text-2xl text-zinc-500"
-                aria-label="Alerts Page"
-            />
-        ),
-    },
+    // {
+    //     path: "/panel/alerts",
+    //     key: "alerts",
+    //     icon: (
+    //         <BiError
+    //             className="text-2xl text-zinc-500"
+    //             aria-label="Alerts Page"
+    //         />
+    //     ),
+    // },
     {
         path: "/panel/management",
         key: "management",
