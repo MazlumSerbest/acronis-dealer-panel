@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import { useTranslations } from "next-intl";
-import GeneralTab from "./_tabs/General";
-import LocationsTab from "./_tabs/Locations";
+import GeneralTab from "./(tabs)/General";
+import LocationsTab from "./(tabs)/Locations";
 import { Tabs, Tab } from "@nextui-org/tabs";
 
 export default function SettingsPage() {

@@ -1,13 +1,16 @@
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import BoolChip from "@/components/BoolChip";
-import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+
 import { Accordion, AccordionItem } from "@nextui-org/accordion";
 import { Link } from "@nextui-org/link";
+
+import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import BoolChip from "@/components/BoolChip";
+
 import { BiCheckShield, BiCopyright, BiPurchaseTag } from "react-icons/bi";
 
 export default function GeneralTab() {
-    // const t = useTranslations("Settings");
+    const ts = useTranslations("Settings");
     const t = useTranslations("General");
 
     const { data, error } = useSWR(
@@ -21,7 +24,6 @@ export default function GeneralTab() {
                 <DefaultSkeleton />
             </Skeleton>
         );
-
     return (
         <Accordion
             selectionMode="multiple"
@@ -35,8 +37,8 @@ export default function GeneralTab() {
             <AccordionItem
                 key="security"
                 aria-label="Security"
-                title={t("security")}
-                subtitle={t("securitySubtitle")}
+                title={ts("security")}
+                subtitle={ts("securitySubtitle")}
                 startContent={
                     <BiCheckShield className="text-4xl text-green-500/60" />
                 }
@@ -68,8 +70,8 @@ export default function GeneralTab() {
             <AccordionItem
                 key="pricing"
                 aria-label="Pricing"
-                title={t("pricing")}
-                subtitle={t("pricingSubtitle")}
+                title={ts("pricing")}
+                subtitle={ts("pricingSubtitle")}
                 startContent={
                     <BiPurchaseTag className="text-4xl text-yellow-500/60" />
                 }
@@ -78,7 +80,7 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
                         <dt className="font-medium leading-6">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {g(data.tenantInfo.pricing.mode)}
+                            {t(data.tenantInfo.pricing.mode)}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
@@ -94,8 +96,8 @@ export default function GeneralTab() {
             <AccordionItem
                 key="branding"
                 aria-label="Branding"
-                title={t("branding")}
-                subtitle={t("brandingSubtitle")}
+                title={ts("branding")}
+                subtitle={ts("brandingSubtitle")}
                 startContent={
                     <BiCopyright className="text-4xl text-blue-400/60" />
                 }
