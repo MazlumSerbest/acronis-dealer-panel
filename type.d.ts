@@ -36,8 +36,14 @@ type ActiveOption = {
 
 //#region ACRONIS
 // V2
-interface Tenant {
+type AcronisEntity = {
     id: string;
+    created_at: string;
+    updated_at: string;
+    deleted_at: string;
+};
+
+type Tenant = AcronisEntity & {
     parent_id: string;
     enabled: boolean;
     name: string;
@@ -49,13 +55,9 @@ interface Tenant {
     contacts: TenantContact[];
     pricing_mode: string;
     has_children: boolean;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
 }
 
-interface TenantUser {
-    id: string;
+type TenantUser = AcronisEntity & {
     tenant_id: string;
     login: string;
     activated: boolean;
@@ -63,13 +65,9 @@ interface TenantUser {
     mfa_status: string;
     language: string;
     contact: TenantContact;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
 }
 
-interface TenantContact {
-    id: string;
+type TenantContact = AcronisEntity & {
     aan: string;
     address1: string;
     address2: string;
@@ -89,16 +87,19 @@ interface TenantContact {
     industry: string;
     organization_size: string;
     title: string;
-    created_at: string;
-    updated_at: string;
-    deleted_at: string;
     types: Array["legal" | "billing" | "technical" | "business"];
     tenant_id: string;
     user_id: string;
 }
 
+type Location = AcronisEntity & {
+    owner_tenant_id: string;
+    platform_owned: boolean;
+    name: string;
+};
+
 // V1
-interface Alert {
+type Alert = {
     id: string;
     type: string;
     severity: string;
@@ -111,13 +112,13 @@ interface Alert {
     createdAt: string;
     receivedAt: string;
     updatedAt: string;
-}
+};
 
-interface AlertDetail {
+type AlertDetail = {
     actionTaken: string;
     planId: string;
     planName: string;
     resourceId: string;
     resourceName: string;
-}
+};
 //#endregion
