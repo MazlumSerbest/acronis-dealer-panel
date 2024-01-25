@@ -176,7 +176,7 @@ export default function DataTable(props: Props) {
                         classNames={{
                             base: "w-full sm:max-w-[44%]",
                             inputWrapper:
-                                "border-0 ring-1 ring-inset ring-zinc-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-sky-500",
+                                "border-0 ring-1 ring-inset ring-zinc-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500",
                             clearButton: "text-xl text-zinc-500",
                             input: "placeholder:italic placeholder:text-zinc-400",
                         }}
@@ -258,7 +258,7 @@ export default function DataTable(props: Props) {
                         {onAddNew ? (
                             <Button
                                 color="primary"
-                                className="bg-sky-500"
+                                className="bg-blue-500"
                                 endContent={<BiPlus />}
                                 size="sm"
                                 onPress={onAddNew}
@@ -327,7 +327,7 @@ export default function DataTable(props: Props) {
                     showControls
                     showShadow
                     classNames={{
-                        cursor: "bg-sky-500 text-white",
+                        cursor: "bg-blue-500 text-white",
                     }}
                     color="default"
                     // isDisabled={hasSearchFilter}
