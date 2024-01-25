@@ -1,5 +1,9 @@
 import Loader from "@/components/loaders/Loader";
 
 export default function ManagementLoading() {
-    return <Loader />;
+    return (
+        <div className="h-80">
+            <Loader />
+        </div>
+    );
 }
