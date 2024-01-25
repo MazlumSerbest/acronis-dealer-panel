@@ -1,58 +1,72 @@
 import React from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import Loader from "@/components/loaders/Loader";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import {
-    Table,
-    TableHeader,
-    TableBody,
-    TableColumn,
-    TableRow,
-    TableCell,
-} from "@nextui-org/table";
 import { Tooltip } from "@nextui-org/tooltip";
 import BoolChip from "@/components/BoolChip";
 import { BiEdit, BiTrash } from "react-icons/bi";
+import { SortDescriptor } from "@nextui-org/table";
+import DataTable from "@/components/DataTable";
 
 export default function ContactsTab() {
     const t = useTranslations("General");
+    const [contacts, setContacts] = React.useState<TenantContact[]>([]);
 
-    //#region Table Content
-    const columns = [
+    //#region Table
+    const visibleColumns = [
+        "fullname",
+        "email",
+        "phone",
+        "title",
+        "types",
+        "user",
+    ];
+
+    const sort: SortDescriptor = {
+        column: "created_at",
+        direction: "descending",
+    };
+
+    const columns: Column[] = [
         {
             key: "fullname",
-            label: "Name",
+            name: t("fullName"),
             width: 200,
+            searchable: true,
+            sortable: true,
         },
         {
             key: "email",
-            label: "Email",
+            name: t("email"),
             width: 200,
+            searchable: true,
         },
         {
             key: "phone",
-            label: "Phone",
+            name: t("phone"),
             width: 150,
+            searchable: true,
         },
         {
             key: "title",
-            label: "Job Title",
+            name: t("jobTitle"),
             width: 150,
+            searchable: true,
         },
         {
             key: "types",
-            label: "Types",
+            name: t("types"),
         },
         {
             key: "user",
-            label: "User",
+            name: t("user"),
+            searchable: true,
         },
-        {
-            key: "actions",
-            label: "Actions",
-            width: 150,
-        },
+        // {
+        //     key: "actions",
+        //     label: t("actions"),
+        //     width: 150,
+        // },
     ];
 
     const renderCell = React.useCallback(
@@ -100,9 +114,18 @@ export default function ContactsTab() {
     );
     //#endregion
 
-    //#region Data Fetch
     const { data, error } = useSWR(
         "/api/acronis/tenant/contacts/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        null,
+        {
+            onSuccess: (data) => {
+                setContacts(
+                    data.contacts.items.filter(
+                        (c: TenantContact) => !c.types.includes("legal"),
+                    ),
+                );
+            },
+        },
     );
 
     if (error) return <div>failed to load</div>;
@@ -112,53 +135,21 @@ export default function ContactsTab() {
                 <TableSkeleton />
             </Skeleton>
         );
-    //#endregion
-
     return (
-        <Table
-            // isStriped
-            fullWidth
-            selectionMode="single"
-            color="primary"
-            aria-label="Contact Table"
-        >
-            <TableHeader columns={columns}>
-                {(column) => (
-                    <TableColumn
-                        key={column.key}
-                        minWidth={column.width ? column.width : null}
-                        // align={
-                        //     column.align &&
-                        //     (column.align === "center" ||
-                        //         column.align === "start" ||
-                        //         column.align === "end")
-                        //         ? column.align
-                        //         : "start"
-                        // }
-                    >
-                        {column.label}
-                    </TableColumn>
-                )}
-            </TableHeader>
-            <TableBody
-                items={data.contacts.items.filter(
-                    (c: TenantContact) => !c.types.includes("legal"),
-                )}
-                emptyContent={t("emptyContent")}
-                loadingContent={<Loader />}
-            >
-                {(item: TenantContact) => (
-                    <TableRow
-                        key={item.id}
-                        className="cursor-pointer"
-                        onDoubleClick={() => {}}
-                    >
-                        {(columnKey) => (
-                            <TableCell>{renderCell(item, columnKey)}</TableCell>
-                        )}
-                    </TableRow>
-                )}
-            </TableBody>
-        </Table>
+        <DataTable
+            isCompact={false}
+            isStriped
+            data={contacts ?? []}
+            columns={columns}
+            renderCell={renderCell}
+            defaultRowsPerPage={10}
+            emptyContent={t("emptyContent")}
+            sortOption={sort}
+            initialVisibleColumNames={visibleColumns}
+            activeOptions={[]}
+            // onDoubleClick={(item) => {
+            //     router.push("/panel/licenses/" + item.id);
+            // }}
+        />
     );
 }

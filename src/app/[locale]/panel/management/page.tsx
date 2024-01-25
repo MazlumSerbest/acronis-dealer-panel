@@ -1,8 +1,8 @@
 "use client";
 import { useTranslations } from "next-intl";
-import ProfileTab from "./_tabs/Profile";
-import ContactsTab from "./_tabs/Contacts";
-import UsersTab from "./_tabs/Users";
+import ProfileTab from "./(tabs)/Profile";
+import ContactsTab from "./(tabs)/Contacts";
+import UsersTab from "./(tabs)/Users";
 import { Tabs, Tab } from "@nextui-org/tabs";
 
 export default function ManagementPage() {
