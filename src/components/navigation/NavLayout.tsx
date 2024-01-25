@@ -16,7 +16,7 @@ import { Divider } from "@nextui-org/divider";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
 
 import { BiMenu } from "react-icons/bi";
-import useAcronisStore from "@/app/store/acronis";
+import useAcronisStore from "@/store/acronis";
 
 export default function NavLayout() {
     const t = useTranslations("General.Pages");

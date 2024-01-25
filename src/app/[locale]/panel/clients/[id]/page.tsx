@@ -4,7 +4,7 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import useAcronisStore from "@/app/store/acronis";
+import useAcronisStore from "@/store/acronis";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { Tooltip } from "@nextui-org/tooltip";
 
