@@ -1,4 +1,4 @@
-// import { NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 // import getToken from "@/lib/getToken";
 
 // export async function GET() {
@@ -30,14 +30,12 @@
 //     }
 // }
 
-export async function POST() {
-    
+export async function GET() {
+    return await NextResponse.json({ data: [{ id: "1", name: "test" }] });
 }
 
-export async function DELETE() {
-    
-}
+// export async function POST() {}
 
-export async function PUT() {
-    
-}
+// export async function DELETE() {}
+
+// export async function PUT() {}
