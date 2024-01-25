@@ -13,7 +13,7 @@ export function MainLoader() {
     return (
         <div className="flex animate-pulse w-screen h-screen items-center justify-center">
             <Image
-                src="/images/dcube.png"
+                src="/images/logo.png"
                 width={120}
                 height={50}
                 alt="Dcube"

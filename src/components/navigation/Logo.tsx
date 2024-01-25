@@ -8,7 +8,7 @@ interface Props {
 export default function Logo(props: Props) {
     return (
         <div className="flex justify-center">
-            <Image src="/images/dcube.png" width={props.width} height={props.height} alt="Dcube Logo" />
+            <Image src="/images/logo.png" width={props.width} height={props.height} alt="Dcube Logo" />
         </div>
     );
 }
