@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
@@ -7,18 +7,17 @@ import { useTranslations } from "next-intl";
 import useAcronisStore from "@/app/store/acronis";
 import { Tab, Tabs } from "@nextui-org/tabs";
 import { Tooltip } from "@nextui-org/tooltip";
-import { Input } from "@nextui-org/input";
+
 import { BiX, BiLinkExternal } from "react-icons/bi";
 import Skeleton, {
     DefaultSkeleton,
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
-import ClientsTab from "./_tabs/Clients";
-import GeneralTab from "./_tabs/General";
-import LicensesTab from "./_tabs/Licenses";
-import toast from "react-hot-toast";
-import { useEffectOnce } from "usehooks-ts";
+import ClientsTab from "./(tabs)/Clients";
+import GeneralTab from "./(tabs)/General";
+import LicensesTab from "./(tabs)/Licenses";
+import { DateTimeFormat } from "@/utils/date";
 
 export default function ClientDetail({ params }: { params: { id: string } }) {
     const t = useTranslations("General");
@@ -45,6 +44,10 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                     return <BoolChip value={cellValue == "enabled"} />;
                 case "enabled":
                     return <BoolChip value={cellValue} />;
+                case "created_at":
+                    return <p>{DateTimeFormat(cellValue)}</p>;
+                case "updated_at":
+                    return <p>{DateTimeFormat(cellValue)}</p>;
                 case "actions":
                     return (
                         <div className="relative flex justify-start items-center">
@@ -63,8 +66,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                     return cellValue;
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
+        [router, t],
     );
 
     //#region Fetch Data
@@ -129,7 +131,15 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                     }}
                 >
                     <Tab key="general" title={t("general")}>
-                        {GeneralTab(t, data?.tenant)}
+                        <Suspense
+                            fallback={
+                                <Skeleton>
+                                    <DefaultSkeleton />
+                                </Skeleton>
+                            }
+                        >
+                            {GeneralTab(t, data?.tenant)}
+                        </Suspense>
                     </Tab>
                     <Tab key="clients" title={t("clients")}>
                         {!isMutating && children
@@ -137,7 +147,15 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                             : clientTableLoading}
                     </Tab>
                     <Tab key="licenses" title={t("licenses")}>
-                        {LicensesTab(t, data?.tenant)}
+                        <Suspense
+                            fallback={
+                                <Skeleton>
+                                    <DefaultSkeleton />
+                                </Skeleton>
+                            }
+                        >
+                            {LicensesTab(t, renderCell, data?.tenant)}
+                        </Suspense>
                     </Tab>
                 </Tabs>
             </div>
