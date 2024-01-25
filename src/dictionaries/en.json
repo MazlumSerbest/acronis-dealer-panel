@@ -15,12 +15,17 @@
         "logoutMessage": "You are going to log out. Are you sure?",
         "cancel": "Cancel",
         "name": "Name",
+        "username": "Username",
         "id": "Id",
         "kind": "Kind",
         "actions": "Actions",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "disabled": "Disabled",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "email": "Email",
+        "customerType": "Customer Type",
         "usage": "Usage",
         "emptyContent": "There is no data!",
         "partner": "Partner",
@@ -38,10 +43,22 @@
         "termsUrl": "Terms",
         "privacyPolicyUrl": "Privacy Policy",
         "openDetail": "Open Detail",
-        "search": "Search",
         "general": "General",
         "clients": "Clients",
-        "licenses": "Licenses"
+        "licenses": "Licenses",
+        "serialNo": "Serial No",
+        "duration": "Duration",
+        "quota": "Quota",
+        "type": "Type",
+        "platformOwned": "Platform Owned"
+    },
+    "Components": {
+        "search": "Search",
+        "active": "Active",
+        "columns": "Columns",
+        "add": "Add",
+        "totalRows": "Total Rows",
+        "rowsPerPage": "Rows Per Page"
     },
     "Dashboard": {
         "title": "Dashboard"
