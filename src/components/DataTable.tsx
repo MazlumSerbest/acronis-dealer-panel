@@ -351,6 +351,23 @@ export default function DataTable(props: Props) {
             isStriped={isStriped}
             aria-label="Table component with custom cells, pagination and sorting"
             className={className ?? ""}
+            classNames={{
+                tr: "hover:!bg-blue-300",
+                td: [
+                    "data-[selected=true]:before:!bg-blue-200",
+                    // changing the rows border radius
+                    // first
+                    "group-data-[first=true]:first:before:rounded-none",
+                    "group-data-[first=true]:last:before:rounded-none",
+                    // middle
+                    "group-data-[middle=true]:before:rounded-none",
+                    // last
+                    "group-data-[last=true]:first:before:rounded-none",
+                    "group-data-[last=true]:last:before:rounded-none",
+                ],
+                // tr: "hover:bg-blue-300 data-[selected=true]:bg-blue-300 rounded-lg",
+                // td: "data-[selected=true]:bg-transparent",
+            }}
             topContent={topContent}
             topContentPlacement="outside"
             bottomContent={data.length > rowsPerPage ? bottomContent : <></>}

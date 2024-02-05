@@ -30,7 +30,7 @@ export default function GeneralTab() {
             variant="splitted"
             defaultExpandedKeys={["security"]}
             itemClasses={{
-                title: "text-zinc-700",
+                title: "text-zinc-600",
                 base: "flex flex-col divide-y p-0",
             }}
         >
@@ -43,8 +43,8 @@ export default function GeneralTab() {
                     <BiCheckShield className="text-4xl text-green-500/60" />
                 }
             >
-                <div className="flex flex-col divide-y p-0">
-                    <div className="grid grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                <div className="flex flex-col divide-y text-sm p-0">
+                    <div className="grid grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("twoFactorAuth")}
                         </dt>
@@ -57,7 +57,7 @@ export default function GeneralTab() {
                             />
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("usersCount")}
                         </dt>
@@ -76,14 +76,14 @@ export default function GeneralTab() {
                     <BiPurchaseTag className="text-4xl text-yellow-500/60" />
                 }
             >
-                <div className="flex flex-col divide-y p-0">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                <div className="flex flex-col divide-y text-sm p-0">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {t(data.tenantInfo.pricing.mode)}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("currency")}
                         </dt>
@@ -102,8 +102,8 @@ export default function GeneralTab() {
                     <BiCopyright className="text-4xl text-blue-400/60" />
                 }
             >
-                <div className="flex flex-col divide-y p-0">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                <div className="flex flex-col divide-y text-sm p-0">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("companyName")}
                         </dt>
@@ -111,7 +111,7 @@ export default function GeneralTab() {
                             {data.tenantInfo.branding.company_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("serviceName")}
                         </dt>
@@ -119,7 +119,7 @@ export default function GeneralTab() {
                             {data.tenantInfo.branding.service_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("platformTermsUrl")}
                         </dt>
@@ -127,6 +127,7 @@ export default function GeneralTab() {
                             {data.tenantInfo.branding.platform_terms_url ? (
                                 <Link
                                     isExternal
+                                    className="text-sm"
                                     href={
                                         data.tenantInfo.branding
                                             .platform_terms_url
@@ -143,7 +144,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("termsUrl")}
                         </dt>
@@ -151,6 +152,7 @@ export default function GeneralTab() {
                             {data.tenantInfo.branding.terms_url ? (
                                 <Link
                                     isExternal
+                                    className="text-sm"
                                     href={data.tenantInfo.branding.terms_url}
                                 >
                                     {
@@ -164,7 +166,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-base text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium leading-6">
                             {t("privacyPolicyUrl")}
                         </dt>
@@ -172,6 +174,7 @@ export default function GeneralTab() {
                             {data.tenantInfo.branding.privacy_policy_url ? (
                                 <Link
                                     isExternal
+                                    className="text-sm"
                                     href={
                                         data.tenantInfo.branding
                                             .privacy_policy_url

@@ -11,9 +11,13 @@ export default function SettingsPage() {
         <div className="flex flex-col w-full items-center mt-4">
             <Tabs
                 size="lg"
-                color="default"
+                color="primary"
                 key="management"
                 aria-label="Management Tabs"
+                classNames={{
+                    cursor: "w-full bg-blue-400",
+                    tab: "px-10",
+                }}
             >
                 <Tab key="general" title={t("general")} className="w-full">
                     {GeneralTab()}
