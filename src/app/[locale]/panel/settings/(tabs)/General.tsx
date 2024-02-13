@@ -31,7 +31,7 @@ export default function GeneralTab() {
             defaultExpandedKeys={["security"]}
             itemClasses={{
                 title: "text-zinc-600",
-                base: "flex flex-col divide-y p-0",
+                base: "flex flex-col p-0",
             }}
         >
             <AccordionItem
@@ -43,9 +43,9 @@ export default function GeneralTab() {
                     <BiCheckShield className="text-4xl text-green-500/60" />
                 }
             >
-                <div className="flex flex-col divide-y text-sm p-0">
+                <div className="flex flex-col divide-y text-sm leading-6 p-0">
                     <div className="grid grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("twoFactorAuth")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2">
@@ -58,7 +58,7 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("usersCount")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -76,15 +76,15 @@ export default function GeneralTab() {
                     <BiPurchaseTag className="text-4xl text-yellow-500/60" />
                 }
             >
-                <div className="flex flex-col divide-y text-sm p-0">
+                <div className="flex flex-col divide-y text-sm leading-6 p-0">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">{t("mode")}</dt>
+                        <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {t(data.tenantInfo.pricing.mode)}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("currency")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -102,9 +102,9 @@ export default function GeneralTab() {
                     <BiCopyright className="text-4xl text-blue-400/60" />
                 }
             >
-                <div className="flex flex-col divide-y text-sm p-0">
+                <div className="flex flex-col divide-y text-sm leading-6 p-0">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("companyName")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -112,7 +112,7 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("serviceName")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -120,7 +120,7 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("platformTermsUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -145,7 +145,7 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("termsUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -167,7 +167,7 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             {t("privacyPolicyUrl")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">

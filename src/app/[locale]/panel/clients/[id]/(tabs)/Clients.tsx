@@ -44,6 +44,18 @@ export default function GeneralTab(
             width: 75,
         },
         {
+            key: "created_at",
+            name: t("createdAt"),
+            width: 150,
+            sortable: true,
+        },
+        {
+            key: "updated_at",
+            name: t("updatedAt"),
+            width: 150,
+            sortable: true,
+        },
+        {
             key: "actions",
             name: t("actions"),
             width: 75,

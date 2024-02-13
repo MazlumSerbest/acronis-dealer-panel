@@ -24,14 +24,14 @@ export default function ProfileTab() {
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">
-                <CardBody className="flex flex-col divide-y text-zinc-500 text-sm p-0 pb-2">
+                <CardBody className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-0 pb-2">
                     <div className="flex w-full p-4">
                         <h2 className="flex-none font-medium text-lg text-zinc-600">
                             Company Information
                         </h2>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
-                        <dt className="font-medium leading-6">
+                        <dt className="font-medium">
                             Legal Company Name
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
