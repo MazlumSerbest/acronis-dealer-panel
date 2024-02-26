@@ -29,8 +29,9 @@ export default function AutoComplete(props: Props) {
                     <Combobox.Input
                         className="w-full border-none text-sm text-zinc-700 outline-none"
                         displayValue={(item: ListBoxItem) =>
-                            data.find((e) => e.id.toString() == item?.toString())
-                                ?.name || ""
+                            data.find(
+                                (e) => e.id.toString() == item?.toString(),
+                            )?.name || ""
                         }
                         onChange={(event) => setQuery(event.target.value)}
                     />
@@ -49,35 +50,44 @@ export default function AutoComplete(props: Props) {
                     afterLeave={() => setQuery("")}
                 >
                     <Combobox.Options className="absolute z-50 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-zinc/5 focus:outline-none sm:text-sm">
-                        {(!data.length || (filteredData?.length === 0 && query !== "")) ? (
+                        {!data.length ||
+                        (filteredData?.length === 0 && query !== "") ? (
                             <div className="relative cursor-default select-none px-4 py-2 text-zinc-700">
                                 Herhangi bir kayıt bulunamadı.
                             </div>
                         ) : (
-                            filteredData?.map((item: ListBoxItem) => (
+                            <>
                                 <Combobox.Option
-                                    key={item.id}
-                                    value={item.id}
-                                    className={({ active }) =>
-                                        `relative cursor-default select-none px-3.5 py-1 ${
-                                            active
-                                                ? "bg-blue-600 text-white"
-                                                : "text-zinc-700"
-                                        }`
-                                    }
+                                    key="null"
+                                    value={null}
+                                    className="relative italic cursor-default select-none px-3.5 py-1"
                                 >
-                                    {({ selected }) => (
-                                        <>
-                                            <span
-                                                className={`block truncate ${
-                                                    selected
-                                                        ? "font-bold"
-                                                        : "font-normal"
-                                                }`}
-                                            >
-                                                {item.name}
-                                            </span>
-                                            {/* {selected ? (
+                                    Seçimi Temizle
+                                </Combobox.Option>
+                                {filteredData?.map((item: ListBoxItem) => (
+                                    <Combobox.Option
+                                        key={item.id}
+                                        value={item.id}
+                                        className={({ active }) =>
+                                            `relative cursor-default select-none px-3.5 py-1 ${
+                                                active
+                                                    ? "bg-blue-600 text-white"
+                                                    : "text-zinc-700"
+                                            }`
+                                        }
+                                    >
+                                        {({ selected }) => (
+                                            <>
+                                                <span
+                                                    className={`block truncate ${
+                                                        selected
+                                                            ? "font-bold"
+                                                            : "font-normal"
+                                                    }`}
+                                                >
+                                                    {item.name}
+                                                </span>
+                                                {/* {selected ? (
                           <span
                             className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
                               active ? 'text-white' : 'text-blue-600'
@@ -86,10 +96,11 @@ export default function AutoComplete(props: Props) {
                             <BiCheck className="h-5 w-5" aria-hidden="true" />
                           </span>
                         ) : null} */}
-                                        </>
-                                    )}
-                                </Combobox.Option>
-                            ))
+                                            </>
+                                        )}
+                                    </Combobox.Option>
+                                ))}
+                            </>
                         )}
                     </Combobox.Options>
                 </Transition>
