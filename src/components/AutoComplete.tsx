@@ -10,20 +10,20 @@ type Props = {
 
 export default function AutoComplete(props: Props) {
     const [query, setQuery] = useState("");
-    const data = props.data;
+    const { data, onChange, value } = props;
 
     const filteredData =
         query === ""
             ? data
-            : data.filter((data) =>
-                  data.name
+            : data.filter((d) =>
+                  d.name
                       .toLowerCase()
                       .replace(/\s+/g, "")
                       .includes(query.toLowerCase().replace(/\s+/g, "")),
               ) || [];
 
     return (
-        <Combobox onChange={props.onChange} value={props.value}>
+        <Combobox onChange={onChange} value={value}>
             <div className="relative">
                 <div className="block w-full rounded-md border-0 px-3.5 py-2 text-zinc-700 shadow-sm ring-1 ring-inset ring-zinc-300 placeholder:text-zinc-400  focus-within:ring-2 focus-within:ring-inset focus-within:ring-blue-500 sm:text-sm sm:leading-6 outline-none">
                     <Combobox.Input

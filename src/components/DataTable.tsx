@@ -35,6 +35,7 @@ type Props = {
     activeOptions?: ActiveOption[];
     renderCell: (item: any, columnKey: Key) => ReactNode;
     sortOption: SortDescriptor;
+    searchValue?: string;
     initialVisibleColumNames: string[];
     onDoubleClick?: (item: any) => any;
     onAddNew?: () => void;
@@ -52,24 +53,29 @@ export default function DataTable(props: Props) {
         isStriped,
         className,
         activeOptions,
+        renderCell,
+        sortOption,
+        searchValue,
+        initialVisibleColumNames,
+        onDoubleClick,
         onAddNew,
     } = props;
 
-    type DataType = (typeof props.data)[0];
-    const [filterValue, setFilterValue] = React.useState("");
+    type DataType = (typeof data)[0];
+    const [filterValue, setFilterValue] = React.useState(searchValue ?? "");
     // const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     //     new Set([]),
     // );
     const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
-        new Set(props.initialVisibleColumNames),
+        new Set(initialVisibleColumNames),
     );
     const [activeFilter, setActiveFilter] = React.useState<Selection>("all");
     const [rowsPerPage, setRowsPerPage] = React.useState<number>(
         defaultRowsPerPage || 10,
     );
     const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
-        column: props.sortOption.column,
-        direction: props.sortOption.direction,
+        column: sortOption.column,
+        direction: sortOption.direction,
     });
     const [page, setPage] = React.useState(1);
 
@@ -402,16 +408,16 @@ export default function DataTable(props: Props) {
                 {(item) => (
                     <TableRow
                         key={item.id}
-                        className={props.onDoubleClick ? "cursor-pointer" : ""}
+                        className={onDoubleClick ? "cursor-pointer" : ""}
                         onDoubleClick={() =>
-                            props.onDoubleClick
-                                ? props.onDoubleClick(item)
+                            onDoubleClick
+                                ? onDoubleClick(item)
                                 : undefined
                         }
                     >
                         {(columnKey) => (
                             <TableCell>
-                                {props.renderCell(item, columnKey)}
+                                {renderCell(item, columnKey)}
                             </TableCell>
                         )}
                     </TableRow>
