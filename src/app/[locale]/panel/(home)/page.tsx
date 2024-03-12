@@ -42,7 +42,6 @@ export default function PanelPage() {
                         maxValue={500}
                         showValueLabel={true}
                         size="lg"
-                        strokeWidth={10}
                         formatOptions={{
                             style: "unit",
                             unit: "gigabyte",
@@ -99,7 +98,6 @@ export default function PanelPage() {
                         maxValue={500}
                         showValueLabel={true}
                         size="lg"
-                        strokeWidth={10}
                         formatOptions={{
                             style: "unit",
                             unit: "gigabyte",

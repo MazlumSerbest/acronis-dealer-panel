@@ -187,7 +187,7 @@ export default function DataTable(props: Props) {
                             input: "placeholder:italic placeholder:text-zinc-400",
                         }}
                         placeholder={t("search") + "..."}
-                        size="sm"
+                        size="md"
                         startContent={
                             <BiSearch className="text-2xl text-zinc-300" />
                         }
@@ -204,7 +204,7 @@ export default function DataTable(props: Props) {
                                         endContent={
                                             <BiChevronDown className="text-sm" />
                                         }
-                                        size="sm"
+                                        size="md"
                                         variant="flat"
                                     >
                                         {t("active")}
@@ -237,7 +237,7 @@ export default function DataTable(props: Props) {
                                     endContent={
                                         <BiChevronDown className="text-sm" />
                                     }
-                                    size="sm"
+                                    size="md"
                                     variant="flat"
                                 >
                                     {t("columns")}
@@ -266,7 +266,7 @@ export default function DataTable(props: Props) {
                                 color="primary"
                                 className="bg-blue-500"
                                 endContent={<BiPlus />}
-                                size="sm"
+                                size="md"
                                 onPress={onAddNew}
                             >
                                 {t("add")}
