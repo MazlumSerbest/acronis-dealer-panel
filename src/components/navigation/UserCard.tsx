@@ -1,24 +1,41 @@
-// import { useSession, signOut } from "next-auth/react";
+"use client";
+import { useEffect } from "react";
 
 import { useDisclosure } from "@nextui-org/react";
 import { Avatar, AvatarIcon } from "@nextui-org/avatar";
 import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
 import { Button } from "@nextui-org/button";
-import { useTranslations } from "next-intl";
 
+import { useTranslations } from "next-intl";
+// import { useSession, signOut } from "next-auth/react";
 import { BiLogOut } from "react-icons/bi";
+import useUserStore from "@/store/user";
 
 export default function UserCard() {
     const { isOpen, onClose, onOpenChange } = useDisclosure();
     const t = useTranslations("General");
+    const { updateUser } = useUserStore();
     // const { data: session } = useSession();
+
     const session = {
         user: {
             name: "Administrator",
             email: "test@gmail.com",
         },
     };
-    
+
+    useEffect(() => {
+        updateUser({
+            id: 1,
+            active: true,
+            username: "admin",
+            name: "Administrator",
+            acronisUUID: "9894ccb9-8db6-40dd-b83d-bbf358464783",
+            createdAt: new Date().toISOString(),
+            createdBy: "admin",
+        });
+    }, [updateUser]);
+
     return (
         <>
             {session?.user ? (

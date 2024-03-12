@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
@@ -13,10 +13,12 @@ import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
 import { BiLinkExternal } from "react-icons/bi";
 import { DateTimeFormat } from "@/utils/date";
+import useUserStore from "@/store/user";
 
 export default function ClientsPage() {
     const t = useTranslations("General");
     const router = useRouter();
+    const { user: currUser } = useUserStore();
 
     //#region Table
     const visibleColumns = ["name", "kind", "mfa_status", "enabled", "actions"];
@@ -39,6 +41,7 @@ export default function ClientsPage() {
             name: t("name"),
             width: 200,
             searchable: true,
+            sortable: true,
         },
         {
             key: "kind",
@@ -115,13 +118,15 @@ export default function ClientsPage() {
                     return cellValue;
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
+        [router, t],
     );
     //#endregion
 
+    // const { data, error } = useSWR(
+    //     "/api/acronis/tenant/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
+    // );
     const { data, error } = useSWR(
-        "/api/acronis/tenant/children/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        "/api/acronis/tenant/children/" + currUser?.acronisUUID,
     );
 
     if (error) return <div>failed to load</div>;

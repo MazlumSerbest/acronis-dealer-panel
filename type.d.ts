@@ -13,6 +13,12 @@ type Path = {
     icon: React.ReactNode;
 };
 
+type User = Entity & {
+    username: string;
+    name: string;
+    acronisUUID: string;
+};
+
 //#region COMPONENTS
 type ListBoxItem = {
     id: number;

@@ -16,7 +16,7 @@ export default async function getToken() {
         next: { revalidate: 5400 },
         // next: { revalidate: 0 },
     });
-    
     const auth = await res.json();
+    console.log(auth?.access_token);
     return await auth.access_token;
 }
