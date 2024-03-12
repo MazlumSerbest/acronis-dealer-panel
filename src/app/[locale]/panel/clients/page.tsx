@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
@@ -13,10 +13,12 @@ import PageHeader from "@/components/PageHeader";
 import DataTable from "@/components/DataTable";
 import { BiLinkExternal } from "react-icons/bi";
 import { DateTimeFormat } from "@/utils/date";
+import useUserStore from "@/store/user";
 
 export default function ClientsPage() {
     const t = useTranslations("General");
     const router = useRouter();
+    const { user: currentUser } = useUserStore();
 
     //#region Table
     const visibleColumns = ["name", "kind", "mfa_status", "enabled", "actions"];
@@ -74,7 +76,7 @@ export default function ClientsPage() {
         },
     ];
 
-    const renderCell = React.useCallback(
+    const renderCell = useCallback(
         (client: Tenant, columnKey: React.Key) => {
             const cellValue: any = client[columnKey as keyof typeof client];
 
@@ -121,7 +123,7 @@ export default function ClientsPage() {
     //#endregion
 
     const { data, error } = useSWR(
-        "/api/acronis/tenant/children/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        `/api/acronis/tenant/children/${currentUser?.acronisUUID}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -140,7 +142,7 @@ export default function ClientsPage() {
             <DataTable
                 isCompact
                 isStriped
-                data={data?.children?.items ?? []}
+                data={data?.children?.items || []}
                 columns={columns}
                 renderCell={renderCell}
                 defaultRowsPerPage={20}

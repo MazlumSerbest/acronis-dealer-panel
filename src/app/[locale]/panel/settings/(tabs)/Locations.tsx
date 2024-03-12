@@ -1,17 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import { useState, useCallback } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
 import { SortDescriptor } from "@nextui-org/table";
-import { Tooltip } from "@nextui-org/tooltip";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import DataTable from "@/components/DataTable";
 import BoolChip from "@/components/BoolChip";
+import useUserStore from "@/store/user";
 
 export default function LocationsTab() {
     const t = useTranslations("General");
+    const { user: currentUser } = useUserStore();
     const [locations, setLocations] = useState([]);
 
     //#region Table
@@ -37,7 +38,7 @@ export default function LocationsTab() {
         },
     ];
 
-    const renderCell = React.useCallback(
+    const renderCell = useCallback(
         (user: TenantUser, columnKey: React.Key) => {
             const cellValue: any = user[columnKey as keyof typeof user];
 
@@ -79,7 +80,7 @@ export default function LocationsTab() {
     //#endregion
 
     const { data, error } = useSWR(
-        "/api/acronis/locations/tenant/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        `/api/acronis/locations/tenant/${currentUser?.acronisUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -99,7 +100,7 @@ export default function LocationsTab() {
         <DataTable
             isCompact={false}
             isStriped
-            data={locations ?? []}
+            data={locations || []}
             columns={columns}
             renderCell={renderCell}
             defaultRowsPerPage={10}

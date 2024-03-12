@@ -8,13 +8,15 @@ import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 
 import { BiCheckShield, BiCopyright, BiPurchaseTag } from "react-icons/bi";
+import useUserStore from "@/store/user";
 
 export default function GeneralTab() {
     const ts = useTranslations("Settings");
     const t = useTranslations("General");
+    const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        "/api/acronis/tenant/info/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        `/api/acronis/tenant/info/${currentUser?.acronisUUID}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -45,24 +47,21 @@ export default function GeneralTab() {
             >
                 <div className="flex flex-col divide-y text-sm leading-6 p-0">
                     <div className="grid grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("twoFactorAuth")}
-                        </dt>
+                        <dt className="font-medium">{t("twoFactorAuth")}</dt>
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
                                 showText
                                 value={
-                                    data.tenantInfo.mfa.mfa_status == "enabled"
+                                    data.tenantInfo?.mfa?.mfa_status ==
+                                    "enabled"
                                 }
                             />
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("usersCount")}
-                        </dt>
+                        <dt className="font-medium">{t("usersCount")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.mfa.users_count}
+                            {data.tenantInfo?.mfa?.users_count}
                         </dd>
                     </div>
                 </div>
@@ -80,15 +79,13 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {t(data.tenantInfo.pricing.mode)}
+                            {t(data.tenantInfo?.pricing.mode || "")}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("currency")}
-                        </dt>
+                        <dt className="font-medium">{t("currency")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.pricing.currency || "-"}
+                            {data.tenantInfo?.pricing?.currency || "-"}
                         </dd>
                     </div>
                 </div>
@@ -104,37 +101,31 @@ export default function GeneralTab() {
             >
                 <div className="flex flex-col divide-y text-sm leading-6 p-0">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("companyName")}
-                        </dt>
+                        <dt className="font-medium">{t("companyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.branding.company_name || "-"}
+                            {data.tenantInfo?.branding?.company_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("serviceName")}
-                        </dt>
+                        <dt className="font-medium">{t("serviceName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.branding.service_name || "-"}
+                            {data.tenantInfo?.branding?.service_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("platformTermsUrl")}
-                        </dt>
+                        <dt className="font-medium">{t("platformTermsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.branding.platform_terms_url ? (
+                            {data.tenantInfo?.branding?.platform_terms_url ? (
                                 <Link
                                     isExternal
                                     className="text-sm"
                                     href={
-                                        data.tenantInfo.branding
-                                            .platform_terms_url
+                                        data.tenantInfo?.branding
+                                            ?.platform_terms_url
                                     }
                                 >
                                     {
-                                        data.tenantInfo.branding.platform_terms_url.split(
+                                        data.tenantInfo?.branding?.platform_terms_url?.split(
                                             "?",
                                         )[0]
                                     }
@@ -145,18 +136,16 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("termsUrl")}
-                        </dt>
+                        <dt className="font-medium">{t("termsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.branding.terms_url ? (
+                            {data.tenantInfo?.branding?.terms_url ? (
                                 <Link
                                     isExternal
                                     className="text-sm"
-                                    href={data.tenantInfo.branding.terms_url}
+                                    href={data.tenantInfo?.branding?.terms_url}
                                 >
                                     {
-                                        data.tenantInfo.branding.terms_url.split(
+                                        data.tenantInfo?.branding?.terms_url?.split(
                                             "?",
                                         )[0]
                                     }
@@ -167,22 +156,20 @@ export default function GeneralTab() {
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
-                        <dt className="font-medium">
-                            {t("privacyPolicyUrl")}
-                        </dt>
+                        <dt className="font-medium">{t("privacyPolicyUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.tenantInfo.branding.privacy_policy_url ? (
+                            {data.tenantInfo?.branding?.privacy_policy_url ? (
                                 <Link
                                     isExternal
                                     className="text-sm"
                                     href={
-                                        data.tenantInfo.branding
-                                            .privacy_policy_url
+                                        data.tenantInfo?.branding
+                                            ?.privacy_policy_url
                                     }
                                 >
                                     {
-                                        data.tenantInfo.branding
-                                            .privacy_policy_url
+                                        data.tenantInfo?.branding
+                                            ?.privacy_policy_url
                                     }
                                 </Link>
                             ) : (

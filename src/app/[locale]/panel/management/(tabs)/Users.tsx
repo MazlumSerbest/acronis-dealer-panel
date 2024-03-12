@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useCallback } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
@@ -7,10 +7,12 @@ import { BiSearch, BiEdit, BiTrash } from "react-icons/bi";
 import BoolChip from "@/components/BoolChip";
 import { SortDescriptor } from "@nextui-org/table";
 import DataTable from "@/components/DataTable";
+import useUserStore from "@/store/user";
 
 export default function UsersTab() {
     const t = useTranslations("General");
-    const [users, setUsers] = React.useState<TenantUser[]>([]);
+    const { user: currentUser } = useUserStore();
+    const [users, setUsers] = useState<TenantUser[]>([]);
 
     //#region Table
     const visibleColumns = ["login", "enabled", "actions"];
@@ -40,49 +42,46 @@ export default function UsersTab() {
         },
     ];
 
-    const renderCell = React.useCallback(
-        (user: TenantUser, columnKey: React.Key) => {
-            const cellValue: any = user[columnKey as keyof typeof user];
+    const renderCell = useCallback((user: TenantUser, columnKey: React.Key) => {
+        const cellValue: any = user[columnKey as keyof typeof user];
 
-            switch (columnKey) {
-                case "login":
-                    return (
-                        <h6 className="text-clip">
-                            {cellValue.length > 30
-                                ? cellValue.substring(0, 30) + "..."
-                                : cellValue}
-                        </h6>
-                    );
-                case "enabled":
-                    return <BoolChip value={cellValue} />;
-                case "actions":
-                    return (
-                        <div className="relative flex justify-start items-center gap-2">
-                            <Tooltip key={user.id} content="Edit User">
-                                <span className="text-xl text-green-600 active:opacity-50 cursor-pointer">
-                                    <BiEdit
-                                        onClick={() => {}}
-                                        onDoubleClick={() => {}}
-                                    />
-                                </span>
-                            </Tooltip>
-                            <Tooltip key={user.id} content="Delete User">
-                                <span className="text-xl text-red-500 active:opacity-50 cursor-pointer">
-                                    <BiTrash onClick={() => {}} />
-                                </span>
-                            </Tooltip>
-                        </div>
-                    );
-                default:
-                    return cellValue;
-            }
-        },
-        [],
-    );
+        switch (columnKey) {
+            case "login":
+                return (
+                    <h6 className="text-clip">
+                        {cellValue.length > 30
+                            ? cellValue.substring(0, 30) + "..."
+                            : cellValue}
+                    </h6>
+                );
+            case "enabled":
+                return <BoolChip value={cellValue} />;
+            case "actions":
+                return (
+                    <div className="relative flex justify-start items-center gap-2">
+                        <Tooltip key={user.id} content="Edit User">
+                            <span className="text-xl text-green-600 active:opacity-50 cursor-pointer">
+                                <BiEdit
+                                    onClick={() => {}}
+                                    onDoubleClick={() => {}}
+                                />
+                            </span>
+                        </Tooltip>
+                        <Tooltip key={user.id} content="Delete User">
+                            <span className="text-xl text-red-500 active:opacity-50 cursor-pointer">
+                                <BiTrash onClick={() => {}} />
+                            </span>
+                        </Tooltip>
+                    </div>
+                );
+            default:
+                return cellValue;
+        }
+    }, []);
     //#endregion
 
     const { data, error } = useSWR(
-        "/api/acronis/tenant/users/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        `/api/acronis/tenant/users/${currentUser?.acronisUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -102,7 +101,7 @@ export default function UsersTab() {
         <DataTable
             isCompact={false}
             isStriped
-            data={users ?? []}
+            data={users || []}
             columns={columns}
             renderCell={renderCell}
             defaultRowsPerPage={10}

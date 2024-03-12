@@ -68,7 +68,7 @@ export default function GeneralTab(
             <DataTable
                 isCompact
                 isStriped
-                data={children ?? []}
+                data={children || []}
                 columns={columns}
                 renderCell={renderCell}
                 defaultRowsPerPage={20}

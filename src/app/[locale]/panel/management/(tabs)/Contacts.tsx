@@ -1,4 +1,4 @@
-import React from "react";
+import { useState, useCallback } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
@@ -7,10 +7,12 @@ import BoolChip from "@/components/BoolChip";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import { SortDescriptor } from "@nextui-org/table";
 import DataTable from "@/components/DataTable";
+import useUserStore from "@/store/user";
 
 export default function ContactsTab() {
     const t = useTranslations("General");
-    const [contacts, setContacts] = React.useState<TenantContact[]>([]);
+    const { user: currentUser } = useUserStore();
+    const [contacts, setContacts] = useState<TenantContact[]>([]);
 
     //#region Table
     const visibleColumns = [
@@ -69,7 +71,7 @@ export default function ContactsTab() {
         // },
     ];
 
-    const renderCell = React.useCallback(
+    const renderCell = useCallback(
         (contact: TenantContact, columnKey: React.Key) => {
             let cellValue: any = contact[columnKey as keyof typeof contact];
 
@@ -109,13 +111,12 @@ export default function ContactsTab() {
                     return cellValue;
             }
         },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
         [],
     );
     //#endregion
 
     const { data, error } = useSWR(
-        "/api/acronis/tenant/contacts/28a5db46-58eb-4a61-b064-122f07ddac6a",
+        `/api/acronis/tenant/contacts/${currentUser?.acronisUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -139,7 +140,7 @@ export default function ContactsTab() {
         <DataTable
             isCompact={false}
             isStriped
-            data={contacts ?? []}
+            data={contacts || []}
             columns={columns}
             renderCell={renderCell}
             defaultRowsPerPage={10}

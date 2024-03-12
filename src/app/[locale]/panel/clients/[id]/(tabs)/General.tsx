@@ -14,13 +14,13 @@ export default function GeneralTab(t: Function, tenant: Tenant) {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("id")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.id}
+                            {tenant?.id || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("kind")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {t(tenant.kind)}
+                            {t(tenant?.kind || "")}
                         </dd>
                     </div>
 
@@ -29,20 +29,20 @@ export default function GeneralTab(t: Function, tenant: Tenant) {
                             {t("customerType")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.customer_type}
+                            {tenant?.customer_type || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("email")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.contact.email}
+                            {tenant?.contact?.email || "-"}
                         </dd>
                     </div>
 
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("createdAt")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {DateTimeFormat(tenant.created_at)}
+                            {DateTimeFormat(tenant?.created_at || "")}
                         </dd>
                     </div>
                     {/* <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
