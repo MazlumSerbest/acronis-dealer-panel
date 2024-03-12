@@ -1,35 +1,67 @@
+import { useState, useEffect } from "react";
 // import { useSession, signOut } from "next-auth/react";
 
 import { useDisclosure } from "@nextui-org/react";
-import { Avatar, AvatarIcon } from "@nextui-org/avatar";
-import { Popover, PopoverTrigger, PopoverContent } from "@nextui-org/popover";
-import { Button } from "@nextui-org/button";
-import { useTranslations } from "next-intl";
+import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "../ui/dialog";
+import { Button } from "../ui/button";
 
+import { useTranslations } from "next-intl";
 import { BiLogOut } from "react-icons/bi";
+import useUserStore from "@/store/user";
 
 export default function UserCard() {
+    const [open, setOpen] = useState(false);
     const { isOpen, onClose, onOpenChange } = useDisclosure();
     const t = useTranslations("General");
+    const { updateUser } = useUserStore();
     // const { data: session } = useSession();
+
     const session = {
         user: {
             name: "Administrator",
             email: "test@gmail.com",
         },
     };
-    
+
+    useEffect(() => {
+        updateUser({
+            id: 1,
+            active: true,
+            username: "admin",
+            name: "Administrator",
+            acronisUUID: "9894ccb9-8db6-40dd-b83d-bbf358464783",
+            createdAt: new Date().toISOString(),
+            createdBy: "admin",
+        });
+    }, [updateUser]);
+
     return (
         <>
             {session?.user ? (
                 <div className="flex gap-2 items-center">
-                    <Avatar
+                    <Avatar>
+                        <AvatarImage />
+                        <AvatarFallback className="bg-blue-100 text-blue-400">
+                            A
+                        </AvatarFallback>
+                    </Avatar>
+                    {/* <Avatar
                         icon={<AvatarIcon />}
                         classNames={{
-                            base: "bg-blue-200",
+                            base: "bg-blue-200",,,0,
                             icon: "text-blue-400",
                         }}
-                    />
+                    /> */}
                     <div className="flex-1 min-w-0">
                         <p className="truncate text-sm font-bold text-blue-400">
                             {session?.user?.name}
@@ -38,42 +70,35 @@ export default function UserCard() {
                             {session?.user?.email}
                         </p>
                     </div>
-                    <Popover
-                        placement="top"
-                        isOpen={isOpen}
-                        onOpenChange={onOpenChange}
-                    >
-                        <PopoverTrigger>
-                            <Button isIconOnly variant="light">
-                                <BiLogOut className="text-2xl text-zinc-500" />
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="ghost" size="icon">
+                                <BiLogOut className="size-6 text-zinc-500" />
                             </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="flex flex-col gap-2 p-3">
-                            <h2 className="text-lg font-semibold text-zinc-600">
-                                {t("logout")}
-                            </h2>
-                            <p className="text-sm text-zinc-500 pb-2">
-                                {t("logoutMessage")}
-                            </p>
-                            <div className="flex gap-2">
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                            <DialogHeader>
+                                <DialogTitle>{t("logout")}</DialogTitle>
+                                <DialogDescription>
+                                    {t("logoutMessage")}
+                                </DialogDescription>
+                            </DialogHeader>
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="secondary">
+                                        {t("cancel")}
+                                    </Button>
+                                </DialogClose>
                                 <Button
-                                    variant="bordered"
-                                    color="default"
-                                    onPress={onClose}
-                                >
-                                    {t("cancel")}
-                                </Button>
-                                <Button
-                                    variant="solid"
-                                    color="danger"
-                                    className="bg-red-600"
+                                    variant="destructive"
+                                    className="bg-red-600 hover:bg-red-600/80"
                                     // onClick={() => signOut()}
                                 >
                                     {t("logout")}
                                 </Button>
-                            </div>
-                        </PopoverContent>
-                    </Popover>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                 </div>
             ) : (
                 <div className="animate-pulse flex gap-2 items-center">

@@ -12,39 +12,24 @@ export const paths: Path[] = [
     {
         path: "/panel",
         key: "dashboard",
-        icon: (
-            <BiCollection
-                className="text-2xl text-zinc-500"
-                aria-label="Dashboard"
-            />
-        ),
+        icon: <BiCollection className="size-6 group-hover:text-blue-400" aria-label="Dashboard" />,
     },
     {
         path: "/panel/clients",
         key: "clients",
-        icon: (
-            <BiBuildingHouse
-                className="text-2xl text-zinc-500"
-                aria-label="Clients Page"
-            />
-        ),
+        icon: <BiBuildingHouse className="size-6 group-hover:text-blue-400" aria-label="Clients Page" />,
     },
     {
         path: "/panel/licenses",
         key: "licenses",
-        icon: (
-            <BiShieldQuarter
-                className="text-2xl text-zinc-500"
-                aria-label="Licenses Page"
-            />
-        ),
+        icon: <BiShieldQuarter className="size-6 group-hover:text-blue-400" aria-label="Licenses Page" />,
     },
     // {
     //     path: "/panel/alerts",
     //     key: "alerts",
     //     icon: (
     //         <BiError
-    //             className="text-2xl text-zinc-500"
+    //             className="size-6 group-hover:text-blue-400"
     //             aria-label="Alerts Page"
     //         />
     //     ),
@@ -52,21 +37,11 @@ export const paths: Path[] = [
     {
         path: "/panel/management",
         key: "management",
-        icon: (
-            <BiSlider
-                className="text-2xl text-zinc-500"
-                aria-label="Management Page"
-            />
-        ),
+        icon: <BiSlider className="size-6 group-hover:text-blue-400" aria-label="Management Page" />,
     },
     {
         path: "/panel/settings",
         key: "settings",
-        icon: (
-            <BiCog
-                className="text-2xl text-zinc-500"
-                aria-label="Settings Page"
-            />
-        ),
+        icon: <BiCog className="size-6 group-hover:text-blue-400" aria-label="Settings Page" />,
     },
 ];

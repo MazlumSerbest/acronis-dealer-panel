@@ -1,19 +1,28 @@
 "use client";
 import { useState, useRef } from "react";
-
-import NextLink from "next/link";
+import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
-
 import { useOnClickOutside } from "usehooks-ts";
 
 import UserCard from "./UserCard";
 import Logo from "./Logo";
 import { paths } from "@/lib/paths";
 
-import { Button } from "@nextui-org/button";
-import { Divider } from "@nextui-org/divider";
+import { Button } from "../ui/button";
 import { Listbox, ListboxItem } from "@nextui-org/listbox";
+import {
+    Command,
+    CommandDialog,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
+    CommandSeparator,
+    CommandShortcut,
+} from "@/components/ui/command";
+import { Separator } from "../ui/separator";
 
 import { BiMenu } from "react-icons/bi";
 import useAcronisStore from "@/store/acronis";
@@ -36,15 +45,17 @@ export default function NavLayout() {
             {/* Navbar */}
             <nav className="flex md:hidden bg-white shadow z-[47] items-center fixed top-0 w-screen h-min py-2 px-4 gap-2">
                 <Button
-                    isIconOnly
-                    variant="light"
+                    variant="ghost"
+                    size="icon"
                     onClick={() => setShowSidebar(true)}
                     onTouchEnd={() => setShowSidebar(true)}
                 >
-                    <BiMenu className="text-3xl text-zinc-500" />
+                    <BiMenu className="size-7 text-zinc-500" />
                 </Button>
                 <div className="flex flex-1 w-1/2 items-center justify-center">
-                    <h1 className="font-semibold text-blue-400 truncate">DCube</h1>
+                    <h1 className="font-semibold text-blue-400 truncate">
+                        DCube
+                    </h1>
                 </div>
                 {/* {userTenant ? (
                     <div className="flex flex-1 w-1/2 items-center justify-center">
@@ -66,7 +77,9 @@ export default function NavLayout() {
                 }
             >
                 <Logo width={46} height={64} />
-                <Divider />
+
+                <Separator />
+
                 <div className="flex items-center w-52">
                     <h1 className="font-semibold text-blue-400">DCube</h1>
                 </div>
@@ -77,42 +90,46 @@ export default function NavLayout() {
                         </h1>
                     </div>
                 ) : null}
-                <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0">
-                    <Listbox
-                        variant="bordered"
-                        // color="primary"
-                        className="gap-1 text-md text-zinc-600"
-                        aria-label="Menu listbox"
-                    >
-                        {sidebarPaths.map((p, index) => {
-                            let withoutLocale = pathName.substring(
-                                pathName.indexOf("/panel"),
-                            );
-                            return (
-                                <ListboxItem
-                                    key={p.key}
-                                    startContent={p.icon}
+                <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
+                    {sidebarPaths.map((p, index) => {
+                        let withoutLocale = pathName.substring(
+                            pathName.indexOf("/panel"),
+                        );
+                        return (
+                            <Button
+                                variant={
+                                    withoutLocale.includes(p.path) &&
+                                    p.path != "/panel"
+                                        ? "secondary"
+                                        : "ghost"
+                                }
+                                key={p.key}
+                                asChild
+                            >
+                                <Link
+                                    href={p.path}
+                                    onClick={() => setShowSidebar(false)}
+                                    onTouchEnd={() => setShowSidebar(false)}
                                     className={
-                                        "font-semibold" +
+                                        "group flex flex-row w-full justify-items-start gap-2 " +
                                         (withoutLocale.includes(p.path) &&
                                         p.path != "/panel"
-                                            ? " bg-blue-100"
-                                            : "")
+                                            ? "*:text-blue-400"
+                                            : "*:text-zinc-500")
                                     }
                                 >
-                                    <NextLink
-                                        className="absolute inset-0 outline-none"
-                                        href={p.path}
-                                        onClick={() => setShowSidebar(false)}
-                                        onTouchEnd={() => setShowSidebar(false)}
-                                    />
-                                    {t(p.key)}
-                                </ListboxItem>
-                            );
-                        })}
-                    </Listbox>
+                                    {p.icon}
+                                    <span className="w-full group-hover:text-blue-400">
+                                        {t(p.key)}
+                                    </span>
+                                </Link>
+                            </Button>
+                        );
+                    })}
                 </div>
-                <Divider />
+
+                <Separator />
+
                 <UserCard />
             </div>
         </>
