@@ -1,18 +1,18 @@
 import { useState, useEffect } from "react";
 // import { useSession, signOut } from "next-auth/react";
 
-import { useDisclosure } from "@nextui-org/react";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "../ui/dialog";
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
 
 import { useTranslations } from "next-intl";
@@ -20,8 +20,6 @@ import { BiLogOut } from "react-icons/bi";
 import useUserStore from "@/store/user";
 
 export default function UserCard() {
-    const [open, setOpen] = useState(false);
-    const { isOpen, onClose, onOpenChange } = useDisclosure();
     const t = useTranslations("General");
     const { updateUser } = useUserStore();
     // const { data: session } = useSession();
@@ -70,35 +68,39 @@ export default function UserCard() {
                             {session?.user?.email}
                         </p>
                     </div>
-                    <Dialog>
-                        <DialogTrigger asChild>
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
                             <Button variant="ghost" size="icon">
                                 <BiLogOut className="size-6 text-zinc-500" />
                             </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[425px]">
-                            <DialogHeader>
-                                <DialogTitle>{t("logout")}</DialogTitle>
-                                <DialogDescription>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="sm:max-w-[425px]">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>
+                                    {t("logout")}
+                                </AlertDialogTitle>
+                                <AlertDialogDescription>
                                     {t("logoutMessage")}
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                                <DialogClose asChild>
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel asChild>
                                     <Button variant="secondary">
                                         {t("cancel")}
                                     </Button>
-                                </DialogClose>
-                                <Button
-                                    variant="destructive"
-                                    className="bg-red-600 hover:bg-red-600/80"
-                                    // onClick={() => signOut()}
-                                >
-                                    {t("logout")}
-                                </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>
+                                </AlertDialogCancel>
+                                <AlertDialogAction asChild>
+                                    <Button
+                                        variant="destructive"
+                                        className="bg-red-600 hover:bg-red-600/80"
+                                        // onClick={() => signOut()}
+                                    >
+                                        {t("logout")}
+                                    </Button>
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </div>
             ) : (
                 <div className="animate-pulse flex gap-2 items-center">

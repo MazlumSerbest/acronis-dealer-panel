@@ -5,7 +5,7 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAcronisStore from "@/store/acronis";
-import { Tab, Tabs } from "@nextui-org/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip } from "@nextui-org/tooltip";
 
 import { BiX, BiLinkExternal } from "react-icons/bi";
@@ -100,7 +100,6 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
             <TableSkeleton />
         </Skeleton>
     );
-
     //#endregion
 
     return (
@@ -116,10 +115,51 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                     }}
                 />
             </div>
-            <div className="flex w-full flex-col">
-                <Tabs
+            <div className="w-full">
+                <Tabs defaultValue="general" className="flex flex-col w-full">
+                    <TabsList className="mx-auto *:w-[200px] mb-2">
+                        <TabsTrigger value="general" className="">
+                            {t("general")}
+                        </TabsTrigger>
+                        {currentTenant?.kind == "partner" && (
+                            <TabsTrigger value="clients" className="w-full">
+                                {t("clients")}
+                            </TabsTrigger>
+                        )}
+                        <TabsTrigger value="licenses" className="w-full">
+                            {t("licenses")}
+                        </TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="general">
+                        <Suspense
+                            fallback={
+                                <Skeleton>
+                                    <DefaultSkeleton />
+                                </Skeleton>
+                            }
+                        >
+                            {GeneralTab(t, data?.tenant)}
+                        </Suspense>
+                    </TabsContent>
+                    <TabsContent value="clients">
+                        {!isMutating && children
+                            ? ClientsTab(t, renderCell, children)
+                            : clientTableLoading}
+                    </TabsContent>
+                    <TabsContent value="licenses">
+                        <Suspense
+                            fallback={
+                                <Skeleton>
+                                    <DefaultSkeleton />
+                                </Skeleton>
+                            }
+                        >
+                            {LicensesTab(t, renderCell, data?.tenant)}
+                        </Suspense>
+                    </TabsContent>
+                </Tabs>
+                {/* <Tabs
                     aria-label="Tenant Tab"
-                    variant="underlined"
                     color="primary"
                     size="lg"
                     classNames={{
@@ -130,34 +170,8 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                         tabContent: "group-data-[selected=true]:text-blue-400",
                     }}
                 >
-                    <Tab key="general" title={t("general")}>
-                        <Suspense
-                            fallback={
-                                <Skeleton>
-                                    <DefaultSkeleton />
-                                </Skeleton>
-                            }
-                        >
-                            {GeneralTab(t, data?.tenant)}
-                        </Suspense>
-                    </Tab>
-                    <Tab key="clients" title={t("clients")}>
-                        {!isMutating && children
-                            ? ClientsTab(t, renderCell, children)
-                            : clientTableLoading}
-                    </Tab>
-                    <Tab key="licenses" title={t("licenses")}>
-                        <Suspense
-                            fallback={
-                                <Skeleton>
-                                    <DefaultSkeleton />
-                                </Skeleton>
-                            }
-                        >
-                            {LicensesTab(t, renderCell, data?.tenant)}
-                        </Suspense>
-                    </Tab>
-                </Tabs>
+                    
+                </Tabs> */}
             </div>
         </div>
     );
