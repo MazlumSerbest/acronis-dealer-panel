@@ -10,18 +10,6 @@ import Logo from "./Logo";
 import { paths } from "@/lib/paths";
 
 import { Button } from "../ui/button";
-import { Listbox, ListboxItem } from "@nextui-org/listbox";
-import {
-    Command,
-    CommandDialog,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
-    CommandSeparator,
-    CommandShortcut,
-} from "@/components/ui/command";
 import { Separator } from "../ui/separator";
 
 import { BiMenu } from "react-icons/bi";

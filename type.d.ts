@@ -45,8 +45,8 @@ type ActiveOption = {
 type AcronisEntity = {
     id: string;
     created_at: string;
-    updated_at: string;
-    deleted_at: string;
+    updated_at?: string;
+    deleted_at?: string;
 };
 
 type Tenant = AcronisEntity & {
@@ -98,7 +98,7 @@ type TenantContact = AcronisEntity & {
     user_id: string;
 }
 
-type Location = AcronisEntity & {
+type TenantLocation = AcronisEntity & {
     owner_tenant_id: string;
     platform_owned: boolean;
     name: string;

@@ -27,7 +27,7 @@
         "email": "Email",
         "customerType": "Customer Type",
         "usage": "Usage",
-        "emptyContent": "There is no data!",
+        "emptyContent": "No results.",
         "partner": "Partner",
         "customer": "Customer",
         "production": "Production",
