@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardContent } from "./ui/card";
 
 interface Props {
     content: React.ReactNode;
@@ -11,8 +11,8 @@ export default function PanelCard(props: Props) {
     const { content, header, icon, color } = props;
 
     return (
-        <Card className="border-b-4 border-blue-400">
-            <CardBody className="flex flex-row p-6 pt-4 items-center">
+        <Card className="border-0 border-b-4 border-blue-400">
+            <CardContent className="flex flex-row p-6 pt-4 items-center">
                 {icon}
                 <div className="flex flex-col flex-1 gap-2 items-center">
                     <h6 className="text-sm uppercase font-bold text-blue-400">
@@ -22,7 +22,7 @@ export default function PanelCard(props: Props) {
                         {content}
                     </div>
                 </div>
-            </CardBody>
+            </CardContent>
         </Card>
     );
 }
