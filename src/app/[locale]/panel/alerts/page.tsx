@@ -9,7 +9,7 @@ export default function AlertsPage() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/acronis/alert/${currentUser?.acronisUUID}`,
+        `/api/acronis/alert/${currentUser?.acronisTenantUUID}`,
     );
 
     if (error) return <div>failed to load</div>;

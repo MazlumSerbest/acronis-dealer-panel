@@ -16,7 +16,7 @@ export default function ProfileTab() {
 
     //#region Fetch Data
     const { data, error } = useSWR(
-        `/api/acronis/tenant/${currentUser?.acronisUUID}`,
+        `/api/acronis/tenant/${currentUser?.acronisTenantUUID}`,
     );
 
     if (error) return <div>failed to load</div>;
