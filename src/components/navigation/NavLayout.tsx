@@ -12,7 +12,7 @@ import { paths } from "@/lib/paths";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-import { BiMenu } from "react-icons/bi";
+import { LuMenu } from "react-icons/lu";
 import useAcronisStore from "@/store/acronis";
 
 export default function NavLayout() {
@@ -38,7 +38,7 @@ export default function NavLayout() {
                     onClick={() => setShowSidebar(true)}
                     onTouchEnd={() => setShowSidebar(true)}
                 >
-                    <BiMenu className="size-7 text-zinc-500" />
+                    <LuMenu className="size-7 text-zinc-500" />
                 </Button>
                 {userTenant ? (
                     <div className="flex flex-1 w-1/2 items-center justify-center">

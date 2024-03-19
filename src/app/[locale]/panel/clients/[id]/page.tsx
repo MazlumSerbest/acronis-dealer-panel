@@ -5,9 +5,11 @@ import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAcronisStore from "@/store/acronis";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { BiX, BiLinkExternal } from "react-icons/bi";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+
+import { LuX } from "react-icons/lu";
 import Skeleton, {
     DefaultSkeleton,
     TableSkeleton,
@@ -56,12 +58,15 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                 <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2">
                     {currentTenant?.name || ""}
                 </h1>
-                <BiX
-                    className="text-3xl text-zinc-500 cursor-pointer"
+                <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => {
                         router.back();
                     }}
-                />
+                >
+                    <LuX className="text-3xl text-zinc-500" />
+                </Button>
             </div>
             <div className="w-full">
                 <Tabs defaultValue="general" className="flex flex-col w-full">

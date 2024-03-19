@@ -1,7 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { BiX } from "react-icons/bi";
+import { LuX } from "react-icons/lu";
 import { Separator } from "./ui/separator";
+import { Button } from "./ui/button";
 
 interface Props {
     title: string;
@@ -21,10 +22,13 @@ export default function PageHeader(props: Props) {
                 </h1>
                 <div className="flex-1"></div>
                 {close ? (
-                    <BiX
-                        className="text-3xl text-zinc-500 cursor-pointer m-auto mr-4"
+                    <Button
+                        variant="ghost"
+                        size="icon"
                         onClick={() => router.back()}
-                    />
+                    >
+                        <LuX className="text-3xl text-zinc-500 m-auto mr-4" />
+                    </Button>
                 ) : null}
             </div>
             <Separator />

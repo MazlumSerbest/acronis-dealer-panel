@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 
-import { BiCheckShield, BiCopyright, BiPurchaseTag } from "react-icons/bi";
+import { LuFolderLock, LuCoins, LuTag } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 export default function GeneralTab() {
@@ -36,8 +36,8 @@ export default function GeneralTab() {
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-2 p-4">
-                    <BiCheckShield className="size-8 text-green-500/60" />
+                <CardHeader className="flex flex-row items-center gap-3 p-4">
+                    <LuFolderLock className="size-8 text-green-500/60" />
                     <div>
                         <CardTitle className="font-medium text-lg text-zinc-600">
                             {ts("security")}
@@ -71,8 +71,8 @@ export default function GeneralTab() {
             </Card>
 
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-2 p-4">
-                    <BiPurchaseTag className="size-8 text-yellow-500/60" />
+                <CardHeader className="flex flex-row items-center gap-3 p-4">
+                    <LuCoins className="size-8 text-yellow-500/60" />
                     <div>
                         <CardTitle className="font-medium text-lg text-zinc-600">
                             {ts("pricing")}
@@ -100,8 +100,8 @@ export default function GeneralTab() {
             </Card>
 
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-2 p-4">
-                    <BiCopyright className="size-8 text-blue-400/60" />
+                <CardHeader className="flex flex-row items-center gap-3 p-4">
+                    <LuTag className="size-8 text-blue-400/60" />
                     <div>
                         <CardTitle className="font-medium text-lg text-zinc-600">
                             {ts("branding")}

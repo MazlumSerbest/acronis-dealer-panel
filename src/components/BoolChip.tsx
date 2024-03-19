@@ -1,4 +1,4 @@
-import { BiCheckCircle, BiXCircle } from "react-icons/bi";
+import { LuCheckCircle2, LuXCircle } from "react-icons/lu";
 
 interface Props {
     value: boolean;
@@ -33,9 +33,9 @@ export default function BoolChip(props: Props) {
                 }
             >
                 {value ? (
-                    <BiCheckCircle className="text-xl text-green-600" />
+                    <LuCheckCircle2 className="text-xl text-green-600" />
                 ) : (
-                    <BiXCircle className="text-xl text-red-500" />
+                    <LuXCircle className="text-xl text-red-500" />
                 )}
                 {showText ? (
                     <p

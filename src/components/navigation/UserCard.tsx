@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 // import { useSession, signOut } from "next-auth/react";
 
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
@@ -17,12 +18,13 @@ import {
 import { Button } from "../ui/button";
 
 import { useTranslations } from "next-intl";
-import { BiLogOut } from "react-icons/bi";
+import { LuLogOut } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import useAcronisStore from "@/store/acronis";
 
 export default function UserCard() {
     const t = useTranslations("General");
+    const router = useRouter();
     const { user, updateUser } = useUserStore();
     const { updateMainTenant } = useAcronisStore();
     // const { data: session } = useSession();
@@ -103,7 +105,7 @@ export default function UserCard() {
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon">
-                        <BiLogOut className="size-6 text-zinc-500" />
+                        <LuLogOut className="size-6 text-zinc-500" />
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="sm:max-w-[425px]">
@@ -122,6 +124,7 @@ export default function UserCard() {
                                 variant="destructive"
                                 className="bg-red-600 hover:bg-red-600/80"
                                 // onClick={() => signOut()}
+                                onClick={() => router.push("/signin")}
                             >
                                 {t("logout")}
                             </Button>
