@@ -11,8 +11,8 @@ const locales = ["tr", "en"];
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Dcube",
-    description: "Dcube Acronis Dealer Panel",
+    title: "DBackup Dealer Panel",
+    description: "DBackup Acronis Dealer Panel",
 };
 
 export default function LocaleLayout({

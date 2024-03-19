@@ -16,7 +16,10 @@
         "cancel": "Cancel",
         "name": "Name",
         "username": "Username",
+        "login": "Login",
+        "fullName": "Full Name",
         "id": "Id",
+        "user": "User",
         "kind": "Kind",
         "actions": "Actions",
         "mfaStatus": "2FA",
@@ -25,6 +28,8 @@
         "createdAt": "Created At",
         "updatedAt": "Updated At",
         "email": "Email",
+        "phone": "Phone",
+        "address": "Address",
         "customerType": "Customer Type",
         "usage": "Usage",
         "emptyContent": "No results.",
@@ -50,7 +55,9 @@
         "duration": "Duration",
         "quota": "Quota",
         "type": "Type",
-        "platformOwned": "Platform Owned"
+        "types": "Types",
+        "platformOwned": "Platform Owned",
+        "title": "Title"
     },
     "Components": {
         "search": "Search",
