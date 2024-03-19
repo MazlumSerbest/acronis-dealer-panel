@@ -119,7 +119,7 @@ export default function DataTable<TData, TValue>({
                                         row.getIsSelected() && "selected"
                                     }
                                     className={`${
-                                        zebra ? "odd:bg-blue-50/50" : ""
+                                        zebra ? "odd:bg-zinc-100/50" : ""
                                     } ${onDoubleClick ? "cursor-pointer" : ""}`}
                                     onDoubleClick={() =>
                                         onDoubleClick

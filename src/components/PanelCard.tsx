@@ -11,7 +11,7 @@ export default function PanelCard(props: Props) {
     const { content, header, icon, color } = props;
 
     return (
-        <Card className="border-0 border-b-4 border-blue-400">
+        <Card className="border-b-4 border-blue-400">
             <CardContent className="flex flex-row p-6 pt-4 items-center">
                 {icon}
                 <div className="flex flex-col flex-1 gap-2 items-center">
