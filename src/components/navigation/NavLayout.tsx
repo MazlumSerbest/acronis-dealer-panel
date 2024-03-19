@@ -40,12 +40,7 @@ export default function NavLayout() {
                 >
                     <BiMenu className="size-7 text-zinc-500" />
                 </Button>
-                <div className="flex flex-1 w-1/2 items-center justify-center">
-                    <h1 className="font-semibold text-blue-400 truncate">
-                        DCube
-                    </h1>
-                </div>
-                {/* {userTenant ? (
+                {userTenant ? (
                     <div className="flex flex-1 w-1/2 items-center justify-center">
                         <h1 className="font-semibold text-blue-400 truncate">
                             {userTenant.name}
@@ -53,7 +48,7 @@ export default function NavLayout() {
                     </div>
                 ) : (
                     <span className="flex-1" />
-                )} */}
+                )}
                 <Logo width={32} height={36} />
             </nav>
             {/* Sidebar */}
@@ -68,9 +63,6 @@ export default function NavLayout() {
 
                 <Separator />
 
-                <div className="flex items-center w-52">
-                    <h1 className="font-semibold text-blue-400">DCube</h1>
-                </div>
                 {userTenant ? (
                     <div className="flex items-center w-52">
                         <h1 className="font-semibold text-blue-400">

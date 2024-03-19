@@ -16,7 +16,8 @@ type Path = {
 type User = Entity & {
     username: string;
     name: string;
-    acronisUUID: string;
+    email: string;
+    acronisTenantUUID: string;
 };
 
 //#region COMPONENTS
