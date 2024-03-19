@@ -1,12 +1,14 @@
 import { useState, useCallback } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { Tooltip } from "@nextui-org/tooltip";
 import BoolChip from "@/components/BoolChip";
-import { BiEdit, BiTrash } from "react-icons/bi";
-import { SortDescriptor } from "@nextui-org/table";
-import DataTable from "@/components/DataTable";
+import { LuChevronsUpDown } from "react-icons/lu";
+import DataTable from "@/components/table/DataTable";
 import useUserStore from "@/store/user";
 
 export default function ContactsTab() {
@@ -15,108 +17,71 @@ export default function ContactsTab() {
     const [contacts, setContacts] = useState<TenantContact[]>([]);
 
     //#region Table
-    const visibleColumns = [
-        "fullname",
-        "email",
-        "phone",
-        "title",
-        "types",
-        "user",
+    const columns: ColumnDef<TenantContact, any>[] = [
+        {
+            accessorKey: "fullName",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("fullName")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const fullName: string = (
+                    row.original.firstname +
+                    " " +
+                    row.original.lastname
+                ).trim();
+
+                return <div>{fullName || "-"}</div>;
+            },
+        },
+        {
+            accessorKey: "email",
+            header: t("email"),
+        },
+        {
+            accessorKey: "phone",
+            header: t("phone"),
+            enableGlobalFilter: false,
+        },
+        {
+            accessorKey: "title",
+            header: t("title"),
+        },
+        {
+            accessorKey: "types",
+            header: t("types"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: [] = row.getValue("types");
+
+                return data.join(", ");
+            },
+        },
+        {
+            accessorKey: "user",
+            header: t("user"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("user");
+
+                return <BoolChip value={data} />;
+            },
+        },
     ];
-
-    const sort: SortDescriptor = {
-        column: "created_at",
-        direction: "descending",
-    };
-
-    const columns: Column[] = [
-        {
-            key: "fullname",
-            name: t("fullName"),
-            width: 200,
-            searchable: true,
-            sortable: true,
-        },
-        {
-            key: "email",
-            name: t("email"),
-            width: 200,
-            searchable: true,
-        },
-        {
-            key: "phone",
-            name: t("phone"),
-            width: 150,
-            searchable: true,
-        },
-        {
-            key: "title",
-            name: t("jobTitle"),
-            width: 150,
-            searchable: true,
-        },
-        {
-            key: "types",
-            name: t("types"),
-        },
-        {
-            key: "user",
-            name: t("user"),
-            searchable: true,
-        },
-        // {
-        //     key: "actions",
-        //     label: t("actions"),
-        //     width: 150,
-        // },
-    ];
-
-    const renderCell = useCallback(
-        (contact: TenantContact, columnKey: React.Key) => {
-            let cellValue: any = contact[columnKey as keyof typeof contact];
-
-            switch (columnKey) {
-                case "fullname":
-                    return (
-                        <h6>
-                            {
-                                (cellValue =
-                                    contact.firstname + " " + contact.lastname)
-                            }
-                        </h6>
-                    );
-                case "types":
-                    return <h6>{(cellValue = contact.types.join(", "))}</h6>;
-                case "user":
-                    return <BoolChip value={!cellValue} />;
-                case "actions":
-                    return (
-                        <div className="relative flex justify-start items-center gap-2">
-                            <Tooltip key={contact.id} content="Edit Contact">
-                                <span className="text-xl text-green-600 active:opacity-50">
-                                    <BiEdit
-                                        onClick={() => {}}
-                                        onDoubleClick={() => {}}
-                                    />
-                                </span>
-                            </Tooltip>
-                            <Tooltip key={contact.id} content="Delete Contact">
-                                <span className="text-xl text-red-500 active:opacity-50">
-                                    <BiTrash onClick={() => {}} />
-                                </span>
-                            </Tooltip>
-                        </div>
-                    );
-                default:
-                    return cellValue;
-            }
-        },
-        [],
-    );
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/contacts/${currentUser?.acronisUUID}`,
+        `/api/acronis/tenant/contacts/${currentUser?.acronisTenantUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -136,21 +101,5 @@ export default function ContactsTab() {
                 <TableSkeleton />
             </Skeleton>
         );
-    return (
-        <DataTable
-            isCompact={false}
-            isStriped
-            data={contacts || []}
-            columns={columns}
-            renderCell={renderCell}
-            defaultRowsPerPage={10}
-            emptyContent={t("emptyContent")}
-            sortOption={sort}
-            initialVisibleColumNames={visibleColumns}
-            activeOptions={[]}
-            // onDoubleClick={(item) => {
-            //     router.push("/panel/licenses/" + item.id);
-            // }}
-        />
-    );
+    return <DataTable columns={columns} data={contacts} />;
 }

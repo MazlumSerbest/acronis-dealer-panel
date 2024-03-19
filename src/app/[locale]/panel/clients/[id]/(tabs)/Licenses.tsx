@@ -1,73 +1,88 @@
 import React, { Key, ReactNode, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { SortDescriptor } from "@nextui-org/table";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/table/DataTable";
+import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function LicensesTab(
-    t: Function,
-    renderCell: (item: any, columnKey: Key) => ReactNode,
-    tenant: Tenant,
-) {
+export default function LicensesTab(t: Function, tenant: Tenant) {
     const router = useRouter();
 
     //#region Table
-    const visibleColumns = ["name", "serialNo", "duration", "quota", "type", "actions"];
-
-    const sort: SortDescriptor = {
-        column: "createdAt",
-        direction: "descending",
+    const visibleColumns = {
+        "": false,
     };
 
-    const columns: Column[] = [
+    const columns: ColumnDef<any, any>[] = [
         {
-            key: "name",
-            name: t("name"),
-            width: 200,
-            searchable: true,
-            sortable: true,
+            accessorKey: "name",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("name")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("name");
+
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "serialNo",
-            name: t("serialNo"),
-            width: 200,
+            accessorKey: "serialNo",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("serialNo")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("serialNo");
+
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "duration",
-            name: t("duration"),
-            width: 75,
+            accessorKey: "duration",
+            header: t("duration"),
+            enableGlobalFilter: false,
         },
         {
-            key: "quota",
-            name: t("quota"),
-            width: 75,
+            accessorKey: "quota",
+            header: t("quota"),
+            enableGlobalFilter: false,
         },
         {
-            key: "type",
-            name: t("type"),
-            width: 75,
-        },
-        {
-            key: "actions",
-            name: t("actions"),
-            width: 75,
+            accessorKey: "type",
+            header: t("type"),
+            enableGlobalFilter: false,
         },
     ];
     //#endregion
 
     return (
         <DataTable
-            isCompact={false}
-            isStriped
+            zebra
             data={[]}
             columns={columns}
-            renderCell={renderCell}
-            defaultRowsPerPage={20}
-            emptyContent={t("emptyContent")}
-            sortOption={sort}
-            initialVisibleColumNames={visibleColumns}
-            activeOptions={[]}
             onDoubleClick={(item) => {
                 router.push("/panel/licenses/" + item.id);
             }}

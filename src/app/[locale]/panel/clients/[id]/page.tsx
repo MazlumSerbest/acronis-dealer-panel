@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAcronisStore from "@/store/acronis";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip } from "@nextui-org/tooltip";
 
 import { BiX, BiLinkExternal } from "react-icons/bi";
 import Skeleton, {
@@ -25,50 +24,6 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
     const router = useRouter();
     const [children, setChildren] = useState(undefined);
 
-    const renderCell = React.useCallback(
-        (client: Tenant, columnKey: React.Key) => {
-            const cellValue: any = client[columnKey as keyof typeof client];
-
-            switch (columnKey) {
-                case "kind":
-                    return (
-                        <h6>
-                            {cellValue
-                                ? cellValue == "partner"
-                                    ? t("partner")
-                                    : t("customer")
-                                : "-"}
-                        </h6>
-                    );
-                case "mfa_status":
-                    return <BoolChip value={cellValue == "enabled"} />;
-                case "enabled":
-                    return <BoolChip value={cellValue} />;
-                case "created_at":
-                    return <p>{DateTimeFormat(cellValue)}</p>;
-                case "updated_at":
-                    return <p>{DateTimeFormat(cellValue)}</p>;
-                case "actions":
-                    return (
-                        <div className="relative flex justify-start items-center">
-                            <Tooltip key={client.id} content={t("openDetail")}>
-                                <span className="text-xl text-blue-400 active:opacity-50">
-                                    <BiLinkExternal
-                                        onClick={() =>
-                                            router.push("clients/" + client.id)
-                                        }
-                                    />
-                                </span>
-                            </Tooltip>
-                        </div>
-                    );
-                default:
-                    return cellValue;
-            }
-        },
-        [router, t],
-    );
-
     //#region Fetch Data
     const { data, error } = useSWR(`/api/acronis/tenant/${params.id}`, null, {
         onSuccess: (data) => {
@@ -86,6 +41,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
             },
         },
     );
+    //#endregion
 
     if (error) return <div>{error}</div>;
     if (!data)
@@ -94,14 +50,6 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                 <DefaultSkeleton />
             </Skeleton>
         );
-
-    let clientTableLoading = (
-        <Skeleton>
-            <TableSkeleton />
-        </Skeleton>
-    );
-    //#endregion
-
     return (
         <div className="flex flex-col gap-2">
             <div className="flex w-full items-end">
@@ -142,9 +90,13 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                         </Suspense>
                     </TabsContent>
                     <TabsContent value="clients">
-                        {!isMutating && children
-                            ? ClientsTab(t, renderCell, children)
-                            : clientTableLoading}
+                        {!isMutating && children ? (
+                            ClientsTab(t, children)
+                        ) : (
+                            <Skeleton>
+                                <TableSkeleton />
+                            </Skeleton>
+                        )}
                     </TabsContent>
                     <TabsContent value="licenses">
                         <Suspense
@@ -154,7 +106,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                                 </Skeleton>
                             }
                         >
-                            {LicensesTab(t, renderCell, data?.tenant)}
+                            {LicensesTab(t, data?.tenant)}
                         </Suspense>
                     </TabsContent>
                 </Tabs>

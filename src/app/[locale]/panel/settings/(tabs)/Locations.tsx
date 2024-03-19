@@ -1,14 +1,16 @@
 "use client";
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
-import { SortDescriptor } from "@nextui-org/table";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import useUserStore from "@/store/user";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function LocationsTab() {
     const t = useTranslations("General");
@@ -16,71 +18,44 @@ export default function LocationsTab() {
     const [locations, setLocations] = useState([]);
 
     //#region Table
-    const visibleColumns = ["name", "platform_owned"];
-
-    const sort: SortDescriptor = {
-        column: "created_at",
-        direction: "descending",
-    };
-
-    const columns: Column[] = [
+    const columns: ColumnDef<TenantLocation>[] = [
         {
-            key: "name",
-            name: t("name"),
-            width: 200,
-            searchable: true,
-            sortable: true,
+            accessorKey: "name",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("name")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("name");
+
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "platform_owned",
-            name: t("platformOwned"),
-            width: 150,
+            accessorKey: "platform_owned",
+            header: t("platformOwned"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("platform_owned");
+
+                return <BoolChip value={data} />;
+            },
         },
     ];
-
-    const renderCell = useCallback(
-        (user: TenantUser, columnKey: React.Key) => {
-            const cellValue: any = user[columnKey as keyof typeof user];
-
-            switch (columnKey) {
-                // case "login":
-                //     return (
-                //         <h6 className="text-clip">
-                //             {cellValue.length > 30
-                //                 ? cellValue.substring(0, 30) + "..."
-                //                 : cellValue}
-                //         </h6>
-                //     );
-                case "platform_owned":
-                    return <BoolChip value={cellValue} />;
-                // case "actions":
-                //     return (
-                //         <div className="relative flex justify-start items-center gap-2">
-                //             <Tooltip key={user.id} content="Edit User">
-                //                 <span className="text-xl text-green-600 active:opacity-50 cursor-pointer">
-                //                     <BiEdit
-                //                         onClick={() => {}}
-                //                         onDoubleClick={() => {}}
-                //                     />
-                //                 </span>
-                //             </Tooltip>
-                //             <Tooltip key={user.id} content="Delete User">
-                //                 <span className="text-xl text-red-500 active:opacity-50 cursor-pointer">
-                //                     <BiTrash onClick={() => {}} />
-                //                 </span>
-                //             </Tooltip>
-                //         </div>
-                //     );
-                default:
-                    return cellValue;
-            }
-        },
-        [],
-    );
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/locations/tenant/${currentUser?.acronisUUID}`,
+        `/api/acronis/locations/tenant/${currentUser?.acronisTenantUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -90,7 +65,7 @@ export default function LocationsTab() {
     );
 
     if (error) return <div>failed to load</div>;
-    if (!data)
+    if (!locations)
         return (
             <Skeleton>
                 <DefaultSkeleton />
@@ -98,19 +73,8 @@ export default function LocationsTab() {
         );
     return (
         <DataTable
-            isCompact={false}
-            isStriped
-            data={locations || []}
             columns={columns}
-            renderCell={renderCell}
-            defaultRowsPerPage={10}
-            emptyContent={t("emptyContent")}
-            sortOption={sort}
-            initialVisibleColumNames={visibleColumns}
-            activeOptions={[]}
-            // onDoubleClick={(item) => {
-            //     router.push("/panel/licenses/" + item.id);
-            // }}
+            data={locations}
         />
     );
 }

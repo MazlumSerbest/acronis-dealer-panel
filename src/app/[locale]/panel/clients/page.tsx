@@ -1,19 +1,18 @@
 "use client";
-import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
-import { SortDescriptor } from "@nextui-org/table";
-import { Tooltip } from "@nextui-org/tooltip";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import DataTable from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
-import DataTable from "@/components/DataTable";
-import { BiLinkExternal } from "react-icons/bi";
 import { DateTimeFormat } from "@/utils/date";
 import useUserStore from "@/store/user";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function ClientsPage() {
     const t = useTranslations("General");
@@ -21,140 +20,115 @@ export default function ClientsPage() {
     const { user: currentUser } = useUserStore();
 
     //#region Table
-    const visibleColumns = ["name", "kind", "mfa_status", "enabled", "actions"];
+    const visibleColumns = { created_at: false, updated_at: false };
 
-    const sort: SortDescriptor = {
-        column: "createdAt",
-        direction: "descending",
-    };
+    const columns: ColumnDef<any, any>[] = [
+        {
+            accessorKey: "name",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("name")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("name");
 
-    const columns: Column[] = [
-        {
-            key: "id",
-            name: t("id"),
-            width: 200,
-            searchable: true,
-            sortable: true,
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "name",
-            name: t("name"),
-            width: 200,
-            searchable: true,
+            accessorKey: "kind",
+            header: t("kind"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("kind");
+
+                return (
+                    <h6>
+                        {data
+                            ? data == "partner"
+                                ? t("partner")
+                                : t("customer")
+                            : "-"}
+                    </h6>
+                );
+            },
         },
         {
-            key: "kind",
-            name: t("kind"),
-            width: 200,
+            accessorKey: "mfa_status",
+            header: t("mfaStatus"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("mfa_status");
+
+                return <BoolChip value={data == "enabled"} />;
+            },
         },
         {
-            key: "mfa_status",
-            name: t("mfaStatus"),
-            width: 75,
+            accessorKey: "enabled",
+            header: t("enabled"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("enabled");
+
+                return <BoolChip value={data} />;
+            },
         },
         {
-            key: "enabled",
-            name: t("enabled"),
-            width: 75,
+            accessorKey: "created_at",
+            header: t("createdAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("created_at");
+
+                return <p>{DateTimeFormat(data)}</p>;
+            },
         },
         {
-            key: "created_at",
-            name: t("createdAt"),
-            width: 150,
-            sortable: true,
-        },
-        {
-            key: "updated_at",
-            name: t("updatedAt"),
-            width: 150,
-            sortable: true,
-        },
-        {
-            key: "actions",
-            name: t("actions"),
-            width: 75,
+            accessorKey: "updated_at",
+            header: t("updatedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updated_at");
+
+                return <p>{DateTimeFormat(data)}</p>;
+            },
         },
     ];
-
-    const renderCell = useCallback(
-        (client: Tenant, columnKey: React.Key) => {
-            const cellValue: any = client[columnKey as keyof typeof client];
-
-            switch (columnKey) {
-                case "kind":
-                    return (
-                        <h6>
-                            {cellValue
-                                ? cellValue == "partner"
-                                    ? t("partner")
-                                    : t("customer")
-                                : "-"}
-                        </h6>
-                    );
-                case "mfa_status":
-                    return <BoolChip value={cellValue == "enabled"} />;
-                case "enabled":
-                    return <BoolChip value={cellValue} />;
-                case "created_at":
-                    return <p>{DateTimeFormat(cellValue)}</p>;
-                case "updated_at":
-                    return <p>{DateTimeFormat(cellValue)}</p>;
-                case "actions":
-                    return (
-                        <div className="relative flex justify-start items-center">
-                            <Tooltip key={client.id} content={t("openDetail")}>
-                                <span className="text-xl text-blue-400 active:opacity-50">
-                                    <BiLinkExternal
-                                        onClick={() =>
-                                            router.push("clients/" + client.id)
-                                        }
-                                    />
-                                </span>
-                            </Tooltip>
-                        </div>
-                    );
-                default:
-                    return cellValue;
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [],
-    );
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/children/${currentUser?.acronisUUID}`,
+        `/api/acronis/tenant/children/${currentUser?.acronisTenantUUID}`,
     );
 
     if (error) return <div>failed to load</div>;
-    if (!data)
-        return (
-            <div className="flex flex-col gap-4">
-                <PageHeader title={t("clients")} />
-                <Skeleton>
-                    <TableSkeleton />
-                </Skeleton>
-            </div>
-        );
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("clients")} />
-            <DataTable
-                isCompact
-                isStriped
-                data={data?.children?.items || []}
-                columns={columns}
-                renderCell={renderCell}
-                defaultRowsPerPage={20}
-                emptyContent={t("emptyContent")}
-                sortOption={sort}
-                initialVisibleColumNames={visibleColumns}
-                activeOptions={[]}
-                // onAddNew={}
-                onDoubleClick={(item) => {
-                    router.push("clients/" + item?.id);
-                }}
-            />
+            {!data ? (
+                <Skeleton>
+                    <TableSkeleton />
+                </Skeleton>
+            ) : (
+                <DataTable
+                    zebra
+                    data={data?.children?.items || []}
+                    columns={columns}
+                    visibleColumns={visibleColumns}
+                    onDoubleClick={(item) => {
+                        router.push("clients/" + item?.id);
+                    }}
+                />
+            )}
         </div>
     );
 }

@@ -1,13 +1,15 @@
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
+
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
+
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { Tooltip } from "@nextui-org/tooltip";
-import { BiSearch, BiEdit, BiTrash } from "react-icons/bi";
 import BoolChip from "@/components/BoolChip";
-import { SortDescriptor } from "@nextui-org/table";
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/table/DataTable";
 import useUserStore from "@/store/user";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function UsersTab() {
     const t = useTranslations("General");
@@ -15,73 +17,44 @@ export default function UsersTab() {
     const [users, setUsers] = useState<TenantUser[]>([]);
 
     //#region Table
-    const visibleColumns = ["login", "enabled", "actions"];
-
-    const sort: SortDescriptor = {
-        column: "created_at",
-        direction: "descending",
-    };
-
-    const columns: Column[] = [
+    const columns: ColumnDef<TenantUser, any>[] = [
         {
-            key: "login",
-            name: t("username"),
-            width: 200,
-            searchable: true,
-            sortable: true,
+            accessorKey: "login",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("login")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("login");
+
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "enabled",
-            name: t("enabled"),
-            width: 150,
-        },
-        {
-            key: "actions",
-            name: t("actions"),
-            width: 150,
+            accessorKey: "enabled",
+            header: t("enabled"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("enabled");
+
+                return <BoolChip value={data} />;
+            },
         },
     ];
-
-    const renderCell = useCallback((user: TenantUser, columnKey: React.Key) => {
-        const cellValue: any = user[columnKey as keyof typeof user];
-
-        switch (columnKey) {
-            case "login":
-                return (
-                    <h6 className="text-clip">
-                        {cellValue.length > 30
-                            ? cellValue.substring(0, 30) + "..."
-                            : cellValue}
-                    </h6>
-                );
-            case "enabled":
-                return <BoolChip value={cellValue} />;
-            case "actions":
-                return (
-                    <div className="relative flex justify-start items-center gap-2">
-                        <Tooltip key={user.id} content="Edit User">
-                            <span className="text-xl text-green-600 active:opacity-50 cursor-pointer">
-                                <BiEdit
-                                    onClick={() => {}}
-                                    onDoubleClick={() => {}}
-                                />
-                            </span>
-                        </Tooltip>
-                        <Tooltip key={user.id} content="Delete User">
-                            <span className="text-xl text-red-500 active:opacity-50 cursor-pointer">
-                                <BiTrash onClick={() => {}} />
-                            </span>
-                        </Tooltip>
-                    </div>
-                );
-            default:
-                return cellValue;
-        }
-    }, []);
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/users/${currentUser?.acronisUUID}`,
+        `/api/acronis/tenant/users/${currentUser?.acronisTenantUUID}`,
         null,
         {
             onSuccess: (data) => {
@@ -97,21 +70,5 @@ export default function UsersTab() {
                 <TableSkeleton />
             </Skeleton>
         );
-    return (
-        <DataTable
-            isCompact={false}
-            isStriped
-            data={users || []}
-            columns={columns}
-            renderCell={renderCell}
-            defaultRowsPerPage={10}
-            emptyContent={t("emptyContent")}
-            sortOption={sort}
-            initialVisibleColumNames={visibleColumns}
-            activeOptions={[]}
-            // onDoubleClick={(item) => {
-            //     router.push("/panel/licenses/" + item.id);
-            // }}
-        />
-    );
+    return <DataTable columns={columns} data={users} />;
 }

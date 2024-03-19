@@ -1,85 +1,113 @@
-import React, { Key, ReactNode } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 
-import { SortDescriptor } from "@nextui-org/table";
+import { ColumnDef } from "@tanstack/react-table";
+import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/DataTable";
+import DataTable from "@/components/table/DataTable";
+import BoolChip from "@/components/BoolChip";
+import { DateTimeFormat } from "@/utils/date";
+import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function GeneralTab(
-    t: Function,
-    renderCell: (item: any, columnKey: Key) => ReactNode,
-    children: Tenant[],
-) {
+export default function GeneralTab(t: Function, children: Tenant[]) {
     const router = useRouter();
 
     //#region Table
-    const visibleColumns = ["name", "kind", "mfa_status", "enabled", "actions"];
+    const visibleColumns = { created_at: false, updated_at: false };
 
-    const sort: SortDescriptor = {
-        column: "createdAt",
-        direction: "descending",
-    };
+    const columns: ColumnDef<any, any>[] = [
+        {
+            accessorKey: "name",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("name")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("name");
 
-    const columns: Column[] = [
-        {
-            key: "name",
-            name: t("name"),
-            width: 200,
-            searchable: true,
-            sortable: true,
+                return <div className="font-medium">{data || "-"}</div>;
+            },
         },
         {
-            key: "kind",
-            name: t("kind"),
-            width: 200,
+            accessorKey: "kind",
+            header: t("kind"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("kind");
+
+                return (
+                    <h6>
+                        {data
+                            ? data == "partner"
+                                ? t("partner")
+                                : t("customer")
+                            : "-"}
+                    </h6>
+                );
+            },
         },
         {
-            key: "mfa_status",
-            name: t("mfaStatus"),
-            width: 75,
+            accessorKey: "mfa_status",
+            header: t("mfaStatus"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("mfa_status");
+
+                return <BoolChip value={data == "enabled"} />;
+            },
         },
         {
-            key: "enabled",
-            name: t("enabled"),
-            width: 75,
+            accessorKey: "enabled",
+            header: t("enabled"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("enabled");
+
+                return <BoolChip value={data} />;
+            },
         },
         {
-            key: "created_at",
-            name: t("createdAt"),
-            width: 150,
-            sortable: true,
+            accessorKey: "created_at",
+            header: t("createdAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("created_at");
+
+                return <p>{DateTimeFormat(data)}</p>;
+            },
         },
         {
-            key: "updated_at",
-            name: t("updatedAt"),
-            width: 150,
-            sortable: true,
-        },
-        {
-            key: "actions",
-            name: t("actions"),
-            width: 75,
+            accessorKey: "updated_at",
+            header: t("updatedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updated_at");
+
+                return <p>{DateTimeFormat(data)}</p>;
+            },
         },
     ];
     //#endregion
 
     return (
-        <>
-            <DataTable
-                isCompact
-                isStriped
-                data={children || []}
-                columns={columns}
-                renderCell={renderCell}
-                defaultRowsPerPage={20}
-                emptyContent={t("emptyContent")}
-                sortOption={sort}
-                initialVisibleColumNames={visibleColumns}
-                activeOptions={[]}
-                onDoubleClick={(item) => {
-                    router.push("/panel/clients/" + item.id);
-                }}
-            />
-        </>
+        <DataTable
+            zebra
+            data={children || []}
+            columns={columns}
+            visibleColumns={visibleColumns}
+            onDoubleClick={(item) => {
+                router.push("/panel/clients/" + item.id);
+            }}
+        />
     );
 }
