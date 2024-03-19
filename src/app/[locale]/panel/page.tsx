@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { CircularProgress, Progress } from "@nextui-org/progress";
 import { BiDesktop, BiShield, BiData } from "react-icons/bi";
 import PanelCard from "@/components/PanelCard";
 import { LineChart } from "@/components/charts/LineChart";
@@ -34,7 +33,7 @@ export default function PanelPage() {
                     <BiData className="text-5xl md:text-6xl text-blue-400/50" />
                 }
             />
-            <PanelCard
+            {/* <PanelCard
                 header="Total Usage"
                 content={
                     <CircularProgress
@@ -54,10 +53,10 @@ export default function PanelPage() {
                         }}
                     />
                 }
-            />
+            /> */}
             <Card className="col-span-1 md:col-span-2 border-b-4 border-zinc-300">
                 <CardContent className="flex flex-col gap-2 pt-6">
-                    <Progress
+                    {/* <Progress
                         label="Total"
                         showValueLabel={true}
                         value={90}
@@ -80,7 +79,7 @@ export default function PanelPage() {
                             indicator: "bg-red-400",
                             value: "text-zinc-500",
                         }}
-                    />
+                    /> */}
                 </CardContent>
             </Card>
             <Card className="col-span-1 md:col-span-2 row-span-2 border-b-4 border-zinc-300">
@@ -91,7 +90,7 @@ export default function PanelPage() {
                     <LineChart />
                 </CardContent>
             </Card>
-            <PanelCard
+            {/* <PanelCard
                 header="Total Usage"
                 content={
                     <CircularProgress
@@ -111,7 +110,7 @@ export default function PanelPage() {
                         }}
                     />
                 }
-            />
+            /> */}
         </div>
     );
 }
