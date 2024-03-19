@@ -1,10 +1,9 @@
 "use client";
-import { NextUIProvider } from "@nextui-org/react";
 import { SWRConfig } from "swr";
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
-        <NextUIProvider>
+        <>
             <SWRConfig
                 value={{
                     // refreshInterval: 3000,
@@ -13,6 +12,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
             >
                 {children}
             </SWRConfig>
-        </NextUIProvider>
+        </>
     );
 }

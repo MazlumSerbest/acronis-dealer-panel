@@ -3,32 +3,28 @@ import { useTranslations } from "next-intl";
 import ProfileTab from "./(tabs)/Profile";
 import ContactsTab from "./(tabs)/Contacts";
 import UsersTab from "./(tabs)/Users";
-import { Tabs, Tab } from "@nextui-org/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function ManagementPage() {
     const t = useTranslations("Management");
 
     return (
         <div className="flex flex-col w-full items-center mt-4">
-            <Tabs
-                size="lg"
-                color="primary"
-                key="management"
-                aria-label="Management Tabs"
-                classNames={{
-                    cursor: "w-full bg-blue-400",
-                    tab: "px-10",
-                }}
-            >
-                <Tab key="profile" title={t("profile")} className="w-full">
-                    {ProfileTab()}
-                </Tab>
-                <Tab key="contacts" title={t("contacts")} className="w-full">
-                    {ContactsTab()}
-                </Tab>
-                <Tab key="users" title={t("users")} className="w-full">
-                    {UsersTab()}
-                </Tab>
+            <Tabs defaultValue="profile" className="flex flex-col w-full">
+                <TabsList className="mx-auto *:w-[200px] mb-2">
+                    <TabsTrigger value="profile">
+                        <h5>{t("profile")}</h5>
+                    </TabsTrigger>
+                    <TabsTrigger value="contacts">
+                        {t("contacts")}
+                    </TabsTrigger>
+                    <TabsTrigger value="users">
+                        {t("users")}
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value="profile">{ProfileTab()}</TabsContent>
+                <TabsContent value="contacts">{ContactsTab()}</TabsContent>
+                <TabsContent value="users">{UsersTab()}</TabsContent>
             </Tabs>
         </div>
     );

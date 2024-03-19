@@ -1,48 +1,51 @@
 import { DateTimeFormat } from "@/utils/date";
-import { Card, CardBody } from "@nextui-org/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 
 export default function GeneralTab(t: Function, tenant: Tenant) {
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">
-                <CardBody className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-0 pb-2">
-                    <div className="flex w-full p-4">
+                <CardHeader className="py-4">
+                    <CardTitle>
                         <h2 className="flex-none font-medium text-lg text-zinc-600">
                             Tenant Information
                         </h2>
-                    </div>
+                    </CardTitle>
+                    {/* <CardDescription>Card Description</CardDescription> */}
+                </CardHeader>
+                <Separator />
+                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 py-2">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("id")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.id}
+                            {tenant?.id || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("kind")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {t(tenant.kind)}
+                            {t(tenant?.kind || "")}
                         </dd>
                     </div>
 
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
-                        <dt className="font-medium">
-                            {t("customerType")}
-                        </dt>
+                        <dt className="font-medium">{t("customerType")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.customer_type}
+                            {tenant?.customer_type || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("email")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {tenant.contact.email}
+                            {tenant?.contact?.email || "-"}
                         </dd>
                     </div>
 
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
                         <dt className="font-medium">{t("createdAt")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {DateTimeFormat(tenant.created_at)}
+                            {DateTimeFormat(tenant?.created_at || "")}
                         </dd>
                     </div>
                     {/* <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
@@ -53,7 +56,7 @@ export default function GeneralTab(t: Function, tenant: Tenant) {
                             {data.tenantInfo.pricing.currency || "-"}
                         </dd>
                     </div> */}
-                </CardBody>
+                </CardContent>
             </Card>
         </div>
     );

@@ -1,5 +1,4 @@
-import { Card, CardHeader, CardBody } from "@nextui-org/card";
-import { CircularProgress, Progress } from "@nextui-org/progress";
+import { Card, CardContent } from "@/components/ui/card";
 import { BiDesktop, BiShield, BiData } from "react-icons/bi";
 import PanelCard from "@/components/PanelCard";
 import { LineChart } from "@/components/charts/LineChart";
@@ -34,7 +33,7 @@ export default function PanelPage() {
                     <BiData className="text-5xl md:text-6xl text-blue-400/50" />
                 }
             />
-            <PanelCard
+            {/* <PanelCard
                 header="Total Usage"
                 content={
                     <CircularProgress
@@ -53,10 +52,10 @@ export default function PanelPage() {
                         }}
                     />
                 }
-            />
+            /> */}
             <Card className="col-span-1 md:col-span-2 border-b-4 border-zinc-300">
-                <CardBody className="gap-2 justify-around">
-                    <Progress
+                <CardContent className="flex flex-col gap-2 pt-6">
+                    {/* <Progress
                         label="Total"
                         showValueLabel={true}
                         value={90}
@@ -79,18 +78,18 @@ export default function PanelPage() {
                             indicator: "bg-red-400",
                             value: "text-zinc-500",
                         }}
-                    />
-                </CardBody>
+                    /> */}
+                </CardContent>
             </Card>
             <Card className="col-span-1 md:col-span-2 row-span-2 border-b-4 border-zinc-300">
-                <CardBody className="flex p-6 pt-4 items-center gap-2">
+                <CardContent className="flex flex-col p-6 pt-4 items-center gap-2">
                     <h6 className="text-sm uppercase font-bold text-blue-400">
                         Daily Error Count
                     </h6>
                     <LineChart />
-                </CardBody>
+                </CardContent>
             </Card>
-            <PanelCard
+            {/* <PanelCard
                 header="Total Usage"
                 content={
                     <CircularProgress
@@ -109,7 +108,7 @@ export default function PanelPage() {
                         }}
                     />
                 }
-            />
+            /> */}
         </div>
     );
 }

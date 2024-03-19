@@ -1,16 +1,22 @@
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
-import { Card, CardBody, CardHeader } from "@nextui-org/card";
+import {
+    Card,
+    CardContent,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import useUserStore from "@/store/user";
+import { Separator } from "@/components/ui/separator";
 
 export default function ProfileTab() {
     const t = useTranslations("Management");
-    const { user: currUser } = useUserStore();
+    const { user: currentUser } = useUserStore();
 
     //#region Fetch Data
     const { data, error } = useSWR(
-        "/api/acronis/tenant/children/" + currUser?.acronisUUID,
+        `/api/acronis/tenant/${currentUser?.acronisTenantUUID}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -20,20 +26,23 @@ export default function ProfileTab() {
                 <DefaultSkeleton />
             </Skeleton>
         );
-    //#endregion    
+    //#endregion
+
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">
-                <CardBody className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-0 pb-2">
-                    <div className="flex w-full p-4">
+                <CardHeader className="py-4">
+                    <CardTitle>
                         <h2 className="flex-none font-medium text-lg text-zinc-600">
                             Company Information
                         </h2>
-                    </div>
+                    </CardTitle>
+                    {/* <CardDescription>Card Description</CardDescription> */}
+                </CardHeader>
+                <Separator />
+                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 py-2">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
-                        <dt className="font-medium">
-                            Legal Company Name
-                        </dt>
+                        <dt className="font-medium">Legal Company Name</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenant?.name || "-"}
                         </dd>
@@ -87,7 +96,7 @@ export default function ProfileTab() {
                             {data.tenant?.contact?.website || "-"}
                         </dd>
                     </div>
-                </CardBody>
+                </CardContent>
             </Card>
         </div>
     );

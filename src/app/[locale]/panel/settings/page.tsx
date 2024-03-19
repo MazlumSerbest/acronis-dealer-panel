@@ -2,29 +2,24 @@
 import { useTranslations } from "next-intl";
 import GeneralTab from "./(tabs)/General";
 import LocationsTab from "./(tabs)/Locations";
-import { Tabs, Tab } from "@nextui-org/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function SettingsPage() {
     const t = useTranslations("Settings");
 
     return (
-        <div className="flex flex-col w-full items-center mt-4">
-            <Tabs
-                size="lg"
-                color="primary"
-                key="management"
-                aria-label="Management Tabs"
-                classNames={{
-                    cursor: "w-full bg-blue-400",
-                    tab: "px-10",
-                }}
-            >
-                <Tab key="general" title={t("general")} className="w-full">
-                    {GeneralTab()}
-                </Tab>
-                <Tab key="locations" title={t("locations")} className="w-full">
-                    {LocationsTab()}
-                </Tab>
+        <div className="flex w-full mt-4">
+            <Tabs defaultValue="general" className="flex flex-col w-full">
+                <TabsList className="mx-auto *:w-[200px] mb-2">
+                    <TabsTrigger value="general">
+                        <h5 className="">{t("general")}</h5>
+                    </TabsTrigger>
+                    <TabsTrigger value="locations">
+                        {t("locations")}
+                    </TabsTrigger>
+                </TabsList>
+                <TabsContent value="general">{GeneralTab()}</TabsContent>
+                <TabsContent value="locations">{LocationsTab()}</TabsContent>
             </Tabs>
         </div>
     );

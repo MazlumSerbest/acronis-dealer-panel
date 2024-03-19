@@ -1,7 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { Divider } from "@nextui-org/divider";
 import { BiX } from "react-icons/bi";
+import { Separator } from "./ui/separator";
 
 interface Props {
     title: string;
@@ -27,7 +27,7 @@ export default function PageHeader(props: Props) {
                     />
                 ) : null}
             </div>
-            <Divider />
+            <Separator />
         </div>
     );
 }

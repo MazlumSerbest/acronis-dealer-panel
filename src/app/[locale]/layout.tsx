@@ -4,14 +4,15 @@ import { Providers } from "./providers";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { notFound } from "next/navigation";
 import { Toaster } from "react-hot-toast";
+import NextTopLoader from "nextjs-toploader";
 
 const locales = ["tr", "en"];
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    title: "Dcube",
-    description: "Dcube Acronis Dealer Panel",
+    title: "DBackup Dealer Panel",
+    description: "DBackup Acronis Dealer Panel",
 };
 
 export default function LocaleLayout({
@@ -28,6 +29,7 @@ export default function LocaleLayout({
     return (
         <html lang={locale} className="light">
             <body className={inter.className}>
+                <NextTopLoader color="rgb(96 165 250)" showSpinner={false} easing="ease" />
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>{children}</Providers>
                     <Toaster

@@ -1,4 +1,3 @@
-// import { Chip } from "@nextui-org/chip";
 import { BiCheckCircle, BiXCircle } from "react-icons/bi";
 
 interface Props {
