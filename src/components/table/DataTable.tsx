@@ -78,7 +78,7 @@ export default function DataTable<TData, TValue>({
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center">
+            <div className="flex items-center gap-2">
                 <Input
                     placeholder="Search..."
                     value={globalFilter ?? ""}
@@ -122,6 +122,11 @@ export default function DataTable<TData, TValue>({
                                         zebra ? "odd:bg-zinc-100/50" : ""
                                     } ${onDoubleClick ? "cursor-pointer" : ""}`}
                                     onDoubleClick={() =>
+                                        onDoubleClick
+                                            ? onDoubleClick(row)
+                                            : undefined
+                                    }
+                                    onTouchEnd={() =>
                                         onDoubleClick
                                             ? onDoubleClick(row)
                                             : undefined

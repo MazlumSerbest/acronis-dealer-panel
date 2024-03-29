@@ -55,8 +55,8 @@ const applicationFormSchema = z.object({
         .length(5, { message: "Must be exactly 5 characters long" }),
     city: z.number(),
     district: z.string(),
-    // file: z.instanceof(File),
-    // signature: z.instanceof(File),
+    file: z.instanceof(File),
+    signature: z.instanceof(File),
 });
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
