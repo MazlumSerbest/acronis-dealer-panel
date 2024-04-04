@@ -48,7 +48,7 @@ export default function GeneralTab() {
                     </div>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 py-2">
+                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
                     <div className="grid grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium">{t("twoFactorAuth")}</dt>
                         <dd className="col-span-1 md:col-span-2">
@@ -83,7 +83,7 @@ export default function GeneralTab() {
                     </div>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 py-2">
+                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -112,7 +112,7 @@ export default function GeneralTab() {
                     </div>
                 </CardHeader>
                 <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 py-2">
+                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium">{t("companyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -127,10 +127,10 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
                         <dt className="font-medium">{t("platformTermsUrl")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0 truncate">
                             {data.tenantInfo?.branding?.platform_terms_url ? (
                                 <Link
-                                    className="text-sm hover:underline"
+                                    className="text-sm hover:underline truncate"
                                     target="_blank"
                                     href={
                                         data.tenantInfo?.branding
@@ -153,7 +153,7 @@ export default function GeneralTab() {
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.terms_url ? (
                                 <Link
-                                    className="text-sm hover:underline"
+                                    className="text-sm hover:underline truncate"
                                     target="_blank"
                                     href={data.tenantInfo?.branding?.terms_url}
                                 >
@@ -173,7 +173,7 @@ export default function GeneralTab() {
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.privacy_policy_url ? (
                                 <Link
-                                    className="text-sm hover:underline"
+                                    className="text-sm hover:underline truncate"
                                     target="_blank"
                                     href={
                                         data.tenantInfo?.branding

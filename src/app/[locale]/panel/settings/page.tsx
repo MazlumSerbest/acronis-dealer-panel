@@ -10,7 +10,7 @@ export default function SettingsPage() {
     return (
         <div className="flex w-full mt-4">
             <Tabs defaultValue="general" className="flex flex-col w-full">
-                <TabsList className="mx-auto *:w-[200px] mb-2">
+                <TabsList className="mx-auto *:md:w-[200px] mb-2">
                     <TabsTrigger value="general">
                         <h5 className="">{t("general")}</h5>
                     </TabsTrigger>

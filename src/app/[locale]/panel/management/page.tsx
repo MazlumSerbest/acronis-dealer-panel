@@ -11,7 +11,7 @@ export default function ManagementPage() {
     return (
         <div className="flex flex-col w-full items-center mt-4">
             <Tabs defaultValue="profile" className="flex flex-col w-full">
-                <TabsList className="mx-auto *:w-[200px] mb-2">
+                <TabsList className="mx-auto *:md:w-[200px] mb-2">
                     <TabsTrigger value="profile">
                         <h5>{t("profile")}</h5>
                     </TabsTrigger>
