@@ -18,7 +18,6 @@ import BoolChip from "@/components/BoolChip";
 import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
-import { DateTimeFormat } from "@/utils/date";
 
 export default function ClientDetail({ params }: { params: { id: string } }) {
     const t = useTranslations("General");
@@ -55,7 +54,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
     return (
         <div className="flex flex-col gap-2">
             <div className="flex w-full items-end">
-                <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2">
+                <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2 truncate">
                     {currentTenant?.name || ""}
                 </h1>
                 <Button

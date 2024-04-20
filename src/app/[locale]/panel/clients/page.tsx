@@ -127,8 +127,8 @@ export default function ClientsPage() {
                     data={data?.children?.items || []}
                     columns={columns}
                     visibleColumns={visibleColumns}
-                    onDoubleClick={(item) => {
-                        router.push("clients/" + item?.id);
+                    onClick={(item) => {
+                        router.push("clients/" + item?.original?.id);
                     }}
                 />
             )}
