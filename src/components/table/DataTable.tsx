@@ -31,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import Pagination from "./Pagination";
 import ViewOptions from "./ViewOptions";
 import { cn } from "@/lib/utils";
+import Loader from "../loaders/Loader";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -38,6 +39,7 @@ interface DataTableProps<TData, TValue> {
     visibleColumns?: VisibilityState;
     basic?: boolean;
     zebra?: boolean;
+    isLoading?: boolean;
     onClick?: (item: any) => any;
     onDoubleClick?: (item: any) => any;
 }
@@ -48,6 +50,7 @@ export default function DataTable<TData, TValue>({
     visibleColumns = {},
     basic = false,
     zebra = false,
+    isLoading = true,
     onClick,
     onDoubleClick,
 }: DataTableProps<TData, TValue>) {
@@ -103,10 +106,10 @@ export default function DataTable<TData, TValue>({
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
-                                                    header.column.columnDef
-                                                        .header,
-                                                    header.getContext(),
-                                                )}
+                                                      header.column.columnDef
+                                                          .header,
+                                                      header.getContext(),
+                                                  )}
                                         </TableHead>
                                     );
                                 })}
@@ -114,46 +117,66 @@ export default function DataTable<TData, TValue>({
                         ))}
                     </TableHeader>
                     <TableBody>
-                        {table.getRowModel().rows?.length ? (
-                            table.getRowModel().rows.map((row) => (
-                                <TableRow
-                                    key={row.id}
-                                    data-state={
-                                        row.getIsSelected() && "selected"
-                                    }
-                                    className={cn(
-                                        "select-none",
-                                        zebra && "odd:bg-zinc-100/50",
-                                        (onClick || onDoubleClick) && "cursor-pointer",
-                                    )}
-                                    onClick={() => {
-                                        onClick ? onClick(row) : undefined;
-                                    }}
-                                    onDoubleClick={() =>
-                                        onDoubleClick
-                                            ? onDoubleClick(row)
-                                            : undefined
-                                    }
-                                >
-                                    {row.getVisibleCells().map((cell) => (
-                                        <TableCell key={cell.id}>
-                                            {flexRender(
-                                                cell.column.columnDef.cell,
-                                                cell.getContext(),
-                                            )}
-                                        </TableCell>
-                                    ))}
-                                </TableRow>
-                            ))
-                        ) : (
+                        {isLoading ? (
                             <TableRow>
                                 <TableCell
                                     colSpan={columns.length}
-                                    className="h-24 text-center"
+                                    className="h-24 justify-center"
                                 >
-                                    No results.
+                                    <Loader />
                                 </TableCell>
                             </TableRow>
+                        ) : (
+                            <>
+                                {table.getRowModel().rows?.length ? (
+                                    table.getRowModel().rows.map((row) => (
+                                        <TableRow
+                                            key={row.id}
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                "selected"
+                                            }
+                                            className={cn(
+                                                "select-none",
+                                                zebra && "odd:bg-zinc-100/50",
+                                                (onClick || onDoubleClick) &&
+                                                    "cursor-pointer",
+                                            )}
+                                            onClick={() => {
+                                                onClick
+                                                    ? onClick(row)
+                                                    : undefined;
+                                            }}
+                                            onDoubleClick={() =>
+                                                onDoubleClick
+                                                    ? onDoubleClick(row)
+                                                    : undefined
+                                            }
+                                        >
+                                            {row
+                                                .getVisibleCells()
+                                                .map((cell) => (
+                                                    <TableCell key={cell.id}>
+                                                        {flexRender(
+                                                            cell.column
+                                                                .columnDef.cell,
+                                                            cell.getContext(),
+                                                        )}
+                                                    </TableCell>
+                                                ))}
+                                        </TableRow>
+                                    ))
+                                ) : (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={columns.length}
+                                            className="h-24 text-center"
+                                        >
+                                            No results.
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </>
                         )}
                     </TableBody>
                 </Table>
