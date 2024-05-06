@@ -109,7 +109,7 @@ export default function ClientsPage() {
     // const { data, error } = useSWR(
     //     "/api/acronis/tenant/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
     // );
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/tenant/children/${currentUser?.acronisTenantUUID}`,
     );
 
@@ -127,6 +127,7 @@ export default function ClientsPage() {
                     data={data?.children?.items || []}
                     columns={columns}
                     visibleColumns={visibleColumns}
+                    isLoading={isLoading}
                     onClick={(item) => {
                         router.push("clients/" + item?.original?.id);
                     }}

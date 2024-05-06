@@ -50,7 +50,7 @@ export default function DataTable<TData, TValue>({
     visibleColumns = {},
     basic = false,
     zebra = false,
-    isLoading = true,
+    isLoading = false,
     onClick,
     onDoubleClick,
 }: DataTableProps<TData, TValue>) {

@@ -33,9 +33,9 @@ export default function BoolChip(props: Props) {
                 }
             >
                 {value ? (
-                    <LuCheckCircle2 className="text-xl text-green-600" />
+                    <LuCheckCircle2 className="size-5 text-green-600" />
                 ) : (
-                    <LuXCircle className="text-xl text-red-500" />
+                    <LuXCircle className="size-5 text-red-500" />
                 )}
                 {showText ? (
                     <p
