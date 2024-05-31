@@ -2,7 +2,14 @@ import { DateTimeFormat } from "@/utils/date";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 
-export default function GeneralTab(t: Function, tenant: Tenant) {
+type Props = {
+    t: Function;
+    tenant: Tenant;
+};
+
+export default function GeneralTab(props: Props) {
+    const { t, tenant } = props;
+
     return (
         <div className="flex flex-col gap-4">
             <Card className="w-full">

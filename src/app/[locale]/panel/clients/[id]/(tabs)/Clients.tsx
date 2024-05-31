@@ -9,7 +9,14 @@ import BoolChip from "@/components/BoolChip";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function GeneralTab(t: Function, children: Tenant[]) {
+type Props = {
+    t: Function;
+    clients: Tenant[];
+}
+
+export default function GeneralTab(props: Props) {
+    const { t, clients } = props;
+
     const router = useRouter();
 
     //#region Table
@@ -102,7 +109,7 @@ export default function GeneralTab(t: Function, children: Tenant[]) {
     return (
         <DataTable
             zebra
-            data={children || []}
+            data={clients || []}
             columns={columns}
             visibleColumns={visibleColumns}
             onDoubleClick={(item) => {

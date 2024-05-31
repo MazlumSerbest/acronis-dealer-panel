@@ -90,12 +90,12 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                                 </Skeleton>
                             }
                         >
-                            {GeneralTab(t, data?.tenant)}
+                            <GeneralTab t={t} tenant={data?.tenant} />
                         </Suspense>
                     </TabsContent>
                     <TabsContent value="clients">
                         {!isMutating && children ? (
-                            ClientsTab(t, children)
+                            <ClientsTab t={t} clients={children} />
                         ) : (
                             <Skeleton>
                                 <TableSkeleton />
@@ -110,7 +110,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                                 </Skeleton>
                             }
                         >
-                            {LicensesTab(t, data?.tenant)}
+                            <LicensesTab t={t} tenant={data?.tenant}/>
                         </Suspense>
                     </TabsContent>
                 </Tabs>

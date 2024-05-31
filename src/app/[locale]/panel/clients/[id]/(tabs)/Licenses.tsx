@@ -7,7 +7,14 @@ import { Button } from "@/components/ui/button";
 import DataTable from "@/components/table/DataTable";
 import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function LicensesTab(t: Function, tenant: Tenant) {
+type Props = {
+    t: Function;
+    tenant: Tenant;
+};
+
+export default function LicensesTab(props: Props) {
+    const { t, tenant } = props;
+    
     const router = useRouter();
 
     //#region Table
