@@ -24,10 +24,10 @@ import useAcronisStore from "@/store/acronis";
 
 export default function UserCard() {
     const t = useTranslations("General");
+    // const { data: session } = useSession();
     const router = useRouter();
     const { user, updateUser } = useUserStore();
     const { updateMainTenant } = useAcronisStore();
-    // const { data: session } = useSession();
 
     // const { data, error, mutate } = useSWR(
     //     `/api/acronis/tenant/${user?.acronisTenantUUID}`,
@@ -39,28 +39,26 @@ export default function UserCard() {
             email: "test@gmail.com",
         },
     };
-    
+
     useEffect(() => {
-        async function getTenant() {
-            await updateUser({
-                id: 1,
-                active: true,
-                username: "admin",
-                name: "Güngör Yılmaz",
-                email: "gungor.yilmaz@d3bilisim.com.tr",
-                acronisTenantUUID: "9894ccb9-8db6-40dd-b83d-bbf358464783",
-                createdAt: new Date().toISOString(),
-                createdBy: "admin",
-            });
+        // console.log(process.env.ACRONIS_MAIN_TENANT_ID)
+        updateUser({
+            id: 1,
+            active: true,
+            username: "admin",
+            name: "Güngör Yılmaz",
+            email: "gungor.yilmaz@d3bilisim.com.tr",
+            acronisTenantUUID:
+                process.env.ACRONIS_MAIN_TENANT_ID ||
+                "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
+            createdAt: new Date().toISOString(),
+            createdBy: "admin",
+        });
 
-            await fetch(`/api/acronis/tenant/${user?.acronisTenantUUID}`)
+        if (user?.acronisTenantUUID)
+            fetch(`/api/acronis/tenant/${user?.acronisTenantUUID}`)
                 .then((res) => res.json())
-                .then((data) => {
-                    updateMainTenant(data.tenant);
-                });
-        }
-
-        getTenant();
+                .then((data) => updateMainTenant(data?.tenant));
     }, [updateMainTenant, updateUser, user?.acronisTenantUUID]);
 
     // if (error) return <div>failed to load</div>;

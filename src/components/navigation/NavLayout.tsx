@@ -69,7 +69,11 @@ export default function NavLayout() {
                             {userTenant.name}
                         </h1>
                     </div>
-                ) : null}
+                ) : (
+                    <div className="animate-pulse flex items-center">
+                        <div className="w-full h-6 bg-slate-200 rounded"></div>
+                    </div>
+                )}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
                     {sidebarPaths.map((p, index) => {
                         let withoutLocale = pathName.substring(

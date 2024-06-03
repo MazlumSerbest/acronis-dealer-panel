@@ -11,8 +11,8 @@ type Action = {
 };
 
 const useAcronisStore = create<State & Action>((set) => ({
-    // userTenant: {},
-    // currentTenant: {},
+    userTenant: undefined,
+    currentTenant: undefined,
     updateMainTenant: (tenant) => set(() => ({ userTenant: tenant })),
     updateCurrentTenant: (tenant) => set(() => ({ currentTenant: tenant })),
 }));
