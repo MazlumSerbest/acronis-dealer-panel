@@ -20,6 +20,7 @@ export default function ContactsTab() {
     const columns: ColumnDef<TenantContact, any>[] = [
         {
             accessorKey: "fullName",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("fullName")}

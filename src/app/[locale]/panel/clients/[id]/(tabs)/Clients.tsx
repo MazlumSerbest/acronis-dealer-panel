@@ -25,6 +25,7 @@ export default function GeneralTab(props: Props) {
     const columns: ColumnDef<any, any>[] = [
         {
             accessorKey: "name",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}

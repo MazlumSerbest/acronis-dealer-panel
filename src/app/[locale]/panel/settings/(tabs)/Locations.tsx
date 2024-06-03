@@ -21,6 +21,7 @@ export default function LocationsTab() {
     const columns: ColumnDef<TenantLocation>[] = [
         {
             accessorKey: "name",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}

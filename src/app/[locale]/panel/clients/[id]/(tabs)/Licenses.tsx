@@ -25,6 +25,7 @@ export default function LicensesTab(props: Props) {
     const columns: ColumnDef<any, any>[] = [
         {
             accessorKey: "name",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}
@@ -47,6 +48,7 @@ export default function LicensesTab(props: Props) {
         },
         {
             accessorKey: "serialNo",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("serialNo")}

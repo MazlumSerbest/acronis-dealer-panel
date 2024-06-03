@@ -20,6 +20,7 @@ export default function UsersTab() {
     const columns: ColumnDef<TenantUser, any>[] = [
         {
             accessorKey: "login",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("login")}

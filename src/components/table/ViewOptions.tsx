@@ -48,7 +48,7 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
                                     column.toggleVisibility(!!value)
                                 }
                             >
-                                {column.id}
+                                {column.columnDef.header as string}
                             </DropdownMenuCheckboxItem>
                         );
                     })}
