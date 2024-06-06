@@ -160,36 +160,46 @@ export default function GeneralTab(props: Props) {
                         </CardHeader>
                         <Separator />
                         <CardContent className="p-6">
-                            <div className="flex flex-col font-light text-zinc-600">
+                            <div className="flex flex-col font-light text-zinc-600 divide-y">
                                 {data.usages.items
                                     .filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_workload",
                                     )
                                     .map((u: TenantUsage) => (
-                                        <p key={u.usage_name}>
-                                            {u.usage_name} -{" "}
-                                            {`${
-                                                u.measurement_unit == "bytes"
-                                                    ? formatBytes(u.value)
-                                                    : u.value
-                                            }${
-                                                u.offering_item
-                                                    ? " / " +
-                                                      (u.offering_item?.quota
-                                                          ?.value == null
-                                                          ? "Unlimited"
-                                                          : u.measurement_unit ==
-                                                            "bytes"
-                                                          ? formatBytes(
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value,
-                                                            )
-                                                          : u.value)
-                                                    : ""
-                                            }`}
-                                        </p>
+                                        <div
+                                            className="p-2"
+                                            key={u.usage_name}
+                                        >
+                                            <p>
+                                                {u.name} ({u.usage_name}) :{" "}
+                                            </p>
+                                            <p>
+                                                {`${
+                                                    u.measurement_unit ==
+                                                    "bytes"
+                                                        ? formatBytes(u.value)
+                                                        : u.value
+                                                }${
+                                                    u.offering_item
+                                                        ? " / " +
+                                                          (u.offering_item
+                                                              ?.quota?.value ==
+                                                          null
+                                                              ? "Unlimited"
+                                                              : u.measurement_unit ==
+                                                                "bytes"
+                                                              ? formatBytes(
+                                                                    u
+                                                                        .offering_item
+                                                                        ?.quota
+                                                                        ?.value,
+                                                                )
+                                                              : u.value)
+                                                        : ""
+                                                }`}
+                                            </p>
+                                        </div>
                                     ))}
                             </div>
                         </CardContent>
@@ -204,36 +214,46 @@ export default function GeneralTab(props: Props) {
                         </CardHeader>
                         <Separator />
                         <CardContent className="p-6">
-                            <div className="flex flex-col font-light text-zinc-600">
+                            <div className="flex flex-col font-light text-zinc-600 divide-y">
                                 {data.usages.items
                                     .filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_gigabyte",
                                     )
                                     .map((u: TenantUsage) => (
-                                        <p key={u.usage_name}>
-                                            {u.usage_name} -{" "}
-                                            {`${
-                                                u.measurement_unit == "bytes"
-                                                    ? formatBytes(u.value)
-                                                    : u.value
-                                            }${
-                                                u.offering_item
-                                                    ? " / " +
-                                                      (u.offering_item?.quota
-                                                          ?.value == null
-                                                          ? "Unlimited"
-                                                          : u.measurement_unit ==
-                                                            "bytes"
-                                                          ? formatBytes(
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value,
-                                                            )
-                                                          : u.value)
-                                                    : ""
-                                            }`}
-                                        </p>
+                                        <div
+                                            className="p-2"
+                                            key={u.usage_name}
+                                        >
+                                            <p>
+                                                {u.name} ({u.usage_name}) :
+                                            </p>
+                                            <p>
+                                                {`${
+                                                    u.measurement_unit ==
+                                                    "bytes"
+                                                        ? formatBytes(u.value)
+                                                        : u.value
+                                                }${
+                                                    u.offering_item
+                                                        ? " / " +
+                                                          (u.offering_item
+                                                              ?.quota?.value ==
+                                                          null
+                                                              ? "Unlimited"
+                                                              : u.measurement_unit ==
+                                                                "bytes"
+                                                              ? formatBytes(
+                                                                    u
+                                                                        .offering_item
+                                                                        ?.quota
+                                                                        ?.value,
+                                                                )
+                                                              : u.value)
+                                                        : ""
+                                                }`}
+                                            </p>
+                                        </div>
                                     ))}
                             </div>
                         </CardContent>
