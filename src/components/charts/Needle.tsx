@@ -16,9 +16,9 @@ export default function NeedleChart(props: Props) {
     const cx = 100;
     const cy = 100;
     const data = [
-        { name: "A", value: total * 0.6, color: "rgba(59, 130, 246, 0.8)" },
-        { name: "B", value: total * 0.25, color: "rgba(250, 204, 21, 0.8)" },
-        { name: "C", value: total * 0.15, color: "rgba(239, 68, 68, 0.8)" },
+        { name: "A", value: total * 0.7, color: "rgba(59, 130, 246, 0.8)" },
+        { name: "B", value: total * 0.20, color: "rgba(250, 204, 21, 0.8)" },
+        { name: "C", value: total * 0.10, color: "rgba(239, 68, 68, 0.8)" },
     ];
 
     const needle = (
