@@ -1,9 +1,14 @@
 import useSWR from "swr";
-import { DateTimeFormat } from "@/utils/date";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { formatBytes } from "@/utils/functions";
+
 import NeedleChart from "@/components/charts/Needle";
+import { formatBytes } from "@/utils/functions";
+import { DateTimeFormat } from "@/utils/date";
+import { cn } from "@/lib/utils";
+import { LuAlertTriangle } from "react-icons/lu";
 
 type Props = {
     t: Function;
@@ -15,12 +20,28 @@ export default function GeneralTab(props: Props) {
 
     const { data, error } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         onSuccess: (data) => {
-            console.log(data.usages.items.map((u: TenantUsage) => u.edition));
+            console.log(data.usages.items.map((u: TenantUsage) => u));
         },
     });
 
     return (
         <div className="grid grid-cols-3 gap-4">
+            {data?.usages?.items?.some(
+                (u: TenantUsage) =>
+                    u.offering_item?.quota?.value !== null &&
+                    u.offering_item?.quota?.value !== undefined &&
+                    u.value > u.offering_item.quota.value,
+            ) ? (
+                <Alert className="col-span-3" variant="destructive">
+                    <LuAlertTriangle className="size-4" />
+                    <AlertTitle>Limit Exceeded</AlertTitle>
+                    <AlertDescription>
+                        Some of this clients usages are exceeding the quota
+                        limit.
+                    </AlertDescription>
+                </Alert>
+            ) : null}
+
             <div className="col-span-2">
                 <Card>
                     <CardHeader className="py-4">
@@ -149,20 +170,19 @@ export default function GeneralTab(props: Props) {
             {!data ? (
                 <></>
             ) : (
-                <div className="col-span-3 grid grid-cols-2 gap-4">
-                    <h1 className="col-span-2 text-lg md:text-xl font-semibold pt-2">
-                        Usages
-                    </h1>
-                    <Card>
-                        <CardHeader className="py-4">
-                            <CardTitle>
-                                <h2 className="flex-none font-medium text-lg">
-                                    Per Workload
-                                </h2>
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <Separator /> */}
-                        <CardContent>
+                <Card className="col-span-3">
+                    <CardHeader className="py-4">
+                        <CardTitle>
+                            <h2 className="flex-none font-medium text-xl">
+                                Usages
+                            </h2>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent className="grid grid-cols-2 divide-x *:px-4">
+                        <div>
+                            <h2 className="flex-none font-medium text-lg text-center">
+                                Per Workload
+                            </h2>
                             <div className="flex flex-col font-light divide-y">
                                 {data.usages.items
                                     .filter(
@@ -174,46 +194,77 @@ export default function GeneralTab(props: Props) {
                                             <p className="font-medium">
                                                 {u.name} ({u.usage_name}) :
                                             </p>
-                                            <p className="text-zinc-600">
-                                                {`${
-                                                    u.measurement_unit ==
+                                            <p>
+                                                <span
+                                                    className={cn(
+                                                        "font-medium",
+                                                        u.offering_item?.quota
+                                                            ?.value !==
+                                                            undefined &&
+                                                            u.offering_item
+                                                                ?.quota
+                                                                ?.value !==
+                                                                null &&
+                                                            u.value >
+                                                                u.offering_item
+                                                                    ?.quota
+                                                                    ?.value
+                                                            ? "text-red-600"
+                                                            : u.offering_item
+                                                                  ?.quota
+                                                                  ?.value !==
+                                                                  undefined &&
+                                                              u.offering_item
+                                                                  ?.quota
+                                                                  ?.value !==
+                                                                  null &&
+                                                              u.value >=
+                                                                  u
+                                                                      .offering_item
+                                                                      ?.quota
+                                                                      ?.value *
+                                                                      0.7
+                                                            ? "text-yellow-500"
+                                                            : "",
+                                                    )}
+                                                >
+                                                    {u.measurement_unit ==
                                                     "bytes"
                                                         ? formatBytes(u.value)
-                                                        : u.value
-                                                }${
-                                                    u.offering_item
-                                                        ? " / " +
-                                                          (u.offering_item
-                                                              ?.quota?.value ==
-                                                          null
-                                                              ? "Unlimited"
-                                                              : u.measurement_unit ==
-                                                                "bytes"
-                                                              ? formatBytes(
-                                                                    u
-                                                                        .offering_item
-                                                                        ?.quota
-                                                                        ?.value,
-                                                                )
-                                                              : u.value)
-                                                        : ""
-                                                }`}
+                                                        : u.value}
+                                                </span>
+                                                {u.offering_item?.quota
+                                                    ?.value != undefined &&
+                                                u.offering_item.quota.value !=
+                                                    null ? (
+                                                    <span className="text-zinc-400">
+                                                        {` / ${
+                                                            u.offering_item
+                                                                ?.quota
+                                                                ?.value == null
+                                                                ? "Unlimited"
+                                                                : u.measurement_unit ==
+                                                                  "bytes"
+                                                                ? formatBytes(
+                                                                      u
+                                                                          .offering_item
+                                                                          ?.quota
+                                                                          ?.value,
+                                                                  )
+                                                                : u.value
+                                                        }`}
+                                                    </span>
+                                                ) : null}
                                             </p>
                                         </div>
                                     ))}
                             </div>
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader className="py-4">
-                            <CardTitle>
-                                <h2 className="flex-none font-medium text-lg">
-                                    Per Gigabyte
-                                </h2>
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <Separator /> */}
-                        <CardContent>
+                        </div>
+
+                        <div>
+                            <h2 className="flex-none font-medium text-lg text-center">
+                                Per Gigabyte
+                            </h2>
                             <div className="flex flex-col font-light divide-y">
                                 {data.usages.items
                                     .filter(
@@ -225,37 +276,77 @@ export default function GeneralTab(props: Props) {
                                             <p className="font-medium">
                                                 {u.name} ({u.usage_name}) :
                                             </p>
-                                            <p className="text-zinc-600">
-                                                {`${
-                                                    u.measurement_unit ==
+                                            <p>
+                                                <span
+                                                    className={cn(
+                                                        "font-medium",
+                                                        u.offering_item?.quota
+                                                            ?.value !==
+                                                            undefined &&
+                                                            u.offering_item
+                                                                ?.quota
+                                                                ?.value !==
+                                                                null &&
+                                                            u.value >
+                                                                u.offering_item
+                                                                    ?.quota
+                                                                    ?.value
+                                                            ? "text-red-600"
+                                                            : u.offering_item
+                                                                  ?.quota
+                                                                  ?.value !==
+                                                                  undefined &&
+                                                              u.offering_item
+                                                                  ?.quota
+                                                                  ?.value !==
+                                                                  null &&
+                                                              u.value >=
+                                                                  u
+                                                                      .offering_item
+                                                                      ?.quota
+                                                                      ?.value *
+                                                                      0.7
+                                                            ? "text-yellow-500"
+                                                            : "",
+                                                    )}
+                                                >
+                                                    {u.measurement_unit ==
                                                     "bytes"
                                                         ? formatBytes(u.value)
-                                                        : u.value
-                                                }${
-                                                    u.offering_item
-                                                        ? " / " +
-                                                          (u.offering_item
-                                                              ?.quota?.value ==
-                                                          null
-                                                              ? "Unlimited"
-                                                              : u.measurement_unit ==
-                                                                "bytes"
-                                                              ? formatBytes(
-                                                                    u
-                                                                        .offering_item
-                                                                        ?.quota
-                                                                        ?.value,
-                                                                )
-                                                              : u.value)
-                                                        : ""
-                                                }`}
+                                                        : u.value}
+                                                </span>
+                                                <span className="text-zinc-400">
+                                                    {u.offering_item?.quota
+                                                        ?.value != undefined &&
+                                                    u.offering_item.quota
+                                                        .value != null ? (
+                                                        <span className="text-zinc-400">
+                                                            {` / ${
+                                                                u.offering_item
+                                                                    ?.quota
+                                                                    ?.value ==
+                                                                null
+                                                                    ? "Unlimited"
+                                                                    : u.measurement_unit ==
+                                                                      "bytes"
+                                                                    ? formatBytes(
+                                                                          u
+                                                                              .offering_item
+                                                                              ?.quota
+                                                                              ?.value,
+                                                                      )
+                                                                    : u.value
+                                                            }`}
+                                                        </span>
+                                                    ) : null}
+                                                </span>
                                             </p>
                                         </div>
                                     ))}
                             </div>
-                        </CardContent>
-                    </Card>
-                </div>
+                        </div>
+                    </CardContent>
+                </Card>
             )}
         </div>
     );
