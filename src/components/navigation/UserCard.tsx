@@ -98,12 +98,12 @@ export default function UserCard() {
                 <p className="truncate text-sm font-bold text-blue-400">
                     {user?.name}
                 </p>
-                <p className="truncate text-xs text-zinc-500">{user?.email}</p>
+                <p className="truncate text-xs text-zinc-600">{user?.email}</p>
             </div>
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon">
-                        <LuLogOut className="size-6 text-zinc-500" />
+                        <LuLogOut className="size-6 text-zinc-600" />
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="sm:max-w-[425px]">

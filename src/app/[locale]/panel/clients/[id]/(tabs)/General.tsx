@@ -25,51 +25,51 @@ export default function GeneralTab(props: Props) {
                 <Card>
                     <CardHeader className="py-4">
                         <CardTitle>
-                            <h2 className="flex-none font-medium text-lg text-zinc-600">
-                                Tenant Information
+                            <h2 className="flex-none font-medium text-xl">
+                                Client Information
                             </h2>
                         </CardTitle>
                         {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
-                    <Separator />
-                    <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
-                        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                    {/* <Separator /> */}
+                    <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
+                        <div>
                             <dt className="font-medium">{t("id")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {tenant?.id || "-"}
                             </dd>
                         </div>
-                        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                        <div>
                             <dt className="font-medium">{t("kind")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {t(tenant?.kind || "")}
                             </dd>
                         </div>
 
-                        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                        <div>
                             <dt className="font-medium">{t("customerType")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {tenant?.customer_type || "-"}
                             </dd>
                         </div>
-                        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                        <div>
                             <dt className="font-medium">{t("email")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {tenant?.contact?.email || "-"}
                             </dd>
                         </div>
 
-                        <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                        <div>
                             <dt className="font-medium">{t("createdAt")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {DateTimeFormat(tenant?.created_at || "")}
                             </dd>
                         </div>
-                        {/* <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 px-4 py-2">
+                        {/* <div>
                         <dt className="font-medium">
                             {t("currency")}
                         </dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light mt-1 sm:mt-0">
                             {data.tenantInfo.pricing.currency || "-"}
                         </dd>
                     </div> */}
@@ -81,12 +81,12 @@ export default function GeneralTab(props: Props) {
                 <Card className="w-full">
                     <CardHeader className="py-4">
                         <CardTitle>
-                            <h2 className="flex-none font-medium text-lg text-center text-zinc-600">
+                            <h2 className="flex-none font-medium text-xl">
                                 Backup Storage
                             </h2>
                         </CardTitle>
                     </CardHeader>
-                    <Separator />
+                    {/* <Separator /> */}
                     <CardContent className="flex flex-col p-6 place-items-center">
                         <NeedleChart
                             value={
@@ -104,7 +104,7 @@ export default function GeneralTab(props: Props) {
                                 ).offering_item.quota.value
                             }
                         />
-                        <p className="text-center text-zinc-600">
+                        <p className="text-center">
                             {formatBytes(
                                 data?.usages?.items?.find(
                                     (u: TenantUsage) =>
@@ -128,7 +128,7 @@ export default function GeneralTab(props: Props) {
                 {/* <Card className="w-fit">
                     <CardHeader className="py-4">
                         <CardTitle>
-                            <h2 className="flex-none font-medium text-lg text-center text-zinc-600">
+                            <h2 className="flex-none font-medium text-lg text-center">
                                 Usages
                             </h2>
                         </CardTitle>
@@ -149,32 +149,32 @@ export default function GeneralTab(props: Props) {
             {!data ? (
                 <></>
             ) : (
-                <div className="col-span-3 grid grid-cols-2 gap-2">
+                <div className="col-span-3 grid grid-cols-2 gap-4">
+                    <h1 className="col-span-2 text-lg md:text-xl font-semibold pt-2">
+                        Usages
+                    </h1>
                     <Card>
                         <CardHeader className="py-4">
                             <CardTitle>
-                                <h2 className="flex-none font-medium text-lg text-zinc-600">
-                                    Usages Per Workload
+                                <h2 className="flex-none font-medium text-lg">
+                                    Per Workload
                                 </h2>
                             </CardTitle>
                         </CardHeader>
-                        <Separator />
-                        <CardContent className="p-6">
-                            <div className="flex flex-col font-light text-zinc-600 divide-y">
+                        {/* <Separator /> */}
+                        <CardContent>
+                            <div className="flex flex-col font-light divide-y">
                                 {data.usages.items
                                     .filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_workload",
                                     )
                                     .map((u: TenantUsage) => (
-                                        <div
-                                            className="p-2"
-                                            key={u.usage_name}
-                                        >
-                                            <p>
-                                                {u.name} ({u.usage_name}) :{" "}
+                                        <div className="p-2" key={u.usage_name}>
+                                            <p className="font-medium">
+                                                {u.name} ({u.usage_name}) :
                                             </p>
-                                            <p>
+                                            <p className="text-zinc-600">
                                                 {`${
                                                     u.measurement_unit ==
                                                     "bytes"
@@ -207,28 +207,25 @@ export default function GeneralTab(props: Props) {
                     <Card>
                         <CardHeader className="py-4">
                             <CardTitle>
-                                <h2 className="flex-none font-medium text-lg text-zinc-600">
-                                    Usages Per Gigabyte
+                                <h2 className="flex-none font-medium text-lg">
+                                    Per Gigabyte
                                 </h2>
                             </CardTitle>
                         </CardHeader>
-                        <Separator />
-                        <CardContent className="p-6">
-                            <div className="flex flex-col font-light text-zinc-600 divide-y">
+                        {/* <Separator /> */}
+                        <CardContent>
+                            <div className="flex flex-col font-light divide-y">
                                 {data.usages.items
                                     .filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_gigabyte",
                                     )
                                     .map((u: TenantUsage) => (
-                                        <div
-                                            className="p-2"
-                                            key={u.usage_name}
-                                        >
-                                            <p>
+                                        <div className="p-2" key={u.usage_name}>
+                                            <p className="font-medium">
                                                 {u.name} ({u.usage_name}) :
                                             </p>
-                                            <p>
+                                            <p className="text-zinc-600">
                                                 {`${
                                                     u.measurement_unit ==
                                                     "bytes"

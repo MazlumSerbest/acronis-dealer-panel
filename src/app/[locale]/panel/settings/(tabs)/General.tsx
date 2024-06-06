@@ -39,7 +39,7 @@ export default function GeneralTab() {
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuFolderLock className="size-8 text-green-500/60" />
                     <div>
-                        <CardTitle className="font-medium text-lg text-zinc-600">
+                        <CardTitle className="font-medium text-xl">
                             {ts("security")}
                         </CardTitle>
                         <CardDescription>
@@ -47,9 +47,8 @@ export default function GeneralTab() {
                         </CardDescription>
                     </div>
                 </CardHeader>
-                <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
-                    <div className="grid grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6">
+                    <div className="grid grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("twoFactorAuth")}</dt>
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
@@ -61,7 +60,7 @@ export default function GeneralTab() {
                             />
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("usersCount")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.mfa?.users_count}
@@ -74,7 +73,7 @@ export default function GeneralTab() {
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuCoins className="size-8 text-yellow-500/60" />
                     <div>
-                        <CardTitle className="font-medium text-lg text-zinc-600">
+                        <CardTitle className="font-medium text-xl">
                             {ts("pricing")}
                         </CardTitle>
                         <CardDescription>
@@ -82,15 +81,14 @@ export default function GeneralTab() {
                         </CardDescription>
                     </div>
                 </CardHeader>
-                <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {t(data.tenantInfo?.pricing.mode || "")}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("currency")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.pricing?.currency || "-"}
@@ -103,7 +101,7 @@ export default function GeneralTab() {
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuTag className="size-8 text-blue-400/60" />
                     <div>
-                        <CardTitle className="font-medium text-lg text-zinc-600">
+                        <CardTitle className="font-medium text-xl">
                             {ts("branding")}
                         </CardTitle>
                         <CardDescription>
@@ -111,21 +109,20 @@ export default function GeneralTab() {
                         </CardDescription>
                     </div>
                 </CardHeader>
-                <Separator />
-                <CardContent className="flex flex-col divide-y text-zinc-500 text-sm leading-6 p-2 md:px-5">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("companyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.company_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("serviceName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.service_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("platformTermsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0 truncate">
                             {data.tenantInfo?.branding?.platform_terms_url ? (
@@ -148,7 +145,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("termsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.terms_url ? (
@@ -168,7 +165,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full text-zinc-500 p-2">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("privacyPolicyUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.privacy_policy_url ? (

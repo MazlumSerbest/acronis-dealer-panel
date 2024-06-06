@@ -38,7 +38,7 @@ export default function NavLayout() {
                     onClick={() => setShowSidebar(true)}
                     onTouchEnd={() => setShowSidebar(true)}
                 >
-                    <LuMenu className="size-7 text-zinc-500" />
+                    <LuMenu className="size-7 text-zinc-600" />
                 </Button>
                 {userTenant ? (
                     <div className="flex flex-1 w-1/2 items-center justify-center">
@@ -99,7 +99,7 @@ export default function NavLayout() {
                                         (withoutLocale.includes(p.path) &&
                                         p.path != "/panel"
                                             ? "*:text-blue-400"
-                                            : "*:text-zinc-500")
+                                            : "*:text-zinc-600")
                                     }
                                 >
                                     {p.icon}
