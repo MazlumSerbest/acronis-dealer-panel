@@ -1226,7 +1226,14 @@ export const cities = [
     {
         name: "Uşak",
         code: 64,
-        districts: ["Banaz", "Eşme", "Karahallı", "Sivaslı", "Ulubey", "Merkez"],
+        districts: [
+            "Banaz",
+            "Eşme",
+            "Karahallı",
+            "Sivaslı",
+            "Ulubey",
+            "Merkez",
+        ],
     },
     {
         name: "Van",
@@ -1419,5 +1426,13 @@ export const cities = [
             "Gümüşova",
             "Kaynaşlı",
         ],
+    },
+];
+
+// Acronis
+export const usageNames = [
+    {
+        name: "Storage",
+        key: "storage",
     },
 ];

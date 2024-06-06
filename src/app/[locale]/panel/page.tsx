@@ -76,51 +76,51 @@ export default function PanelPage() {
                     }
                 />
                 {/* <PanelCard
-                header="Total Usage"
-                content={
-                    <CircularProgress
-                        value={120}
-                        maxValue={500}
-                        showValueLabel={true}
-                        size="lg"
-                        formatOptions={{
-                            style: "unit",
-                            unit: "gigabyte",
-                        }}
-                        classNames={{
-                            svg: "w-32 h-32 drop-shadow-md",
-                            indicator: "text-green-400",
-                            value: "text-2xl font-semibold text-green-400",
-                        }}
-                    />
-                }
-            /> */}
+                    header="Total Usage"
+                    content={
+                        <CircularProgress
+                            value={120}
+                            maxValue={500}
+                            showValueLabel={true}
+                            size="lg"
+                            formatOptions={{
+                                style: "unit",
+                                unit: "gigabyte",
+                            }}
+                            classNames={{
+                                svg: "w-32 h-32 drop-shadow-md",
+                                indicator: "text-green-400",
+                                value: "text-2xl font-semibold text-green-400",
+                            }}
+                        />
+                    }
+                />
                 <Card className="col-span-1 md:col-span-2 border-b-4 border-zinc-300">
                     <CardContent className="flex flex-col gap-2 pt-6">
-                        {/* <Progress
-                        label="Total"
-                        showValueLabel={true}
-                        value={90}
-                        classNames={{
-                            label: "text-zinc-500 font-semibold",
-                            indicator: "bg-blue-400",
-                            value: "text-zinc-500",
-                        }}
-                    />
-                    <Progress
-                        label="Expired Licenses"
-                        showValueLabel={true}
-                        value={500}
-                        maxValue={5000}
-                        formatOptions={{
-                            style: "decimal",
-                        }}
-                        classNames={{
-                            label: "text-zinc-500 font-semibold",
-                            indicator: "bg-red-400",
-                            value: "text-zinc-500",
-                        }}
-                    /> */}
+                        <Progress
+                            label="Total"
+                            showValueLabel={true}
+                            value={90}
+                            classNames={{
+                                label: "text-zinc-500 font-semibold",
+                                indicator: "bg-blue-400",
+                                value: "text-zinc-500",
+                            }}
+                        />
+                        <Progress
+                            label="Expired Licenses"
+                            showValueLabel={true}
+                            value={500}
+                            maxValue={5000}
+                            formatOptions={{
+                                style: "decimal",
+                            }}
+                            classNames={{
+                                label: "text-zinc-500 font-semibold",
+                                indicator: "bg-red-400",
+                                value: "text-zinc-500",
+                            }}
+                        />
                     </CardContent>
                 </Card>
                 <Card className="col-span-1 md:col-span-2 row-span-2 border-b-4 border-zinc-300">
@@ -131,29 +131,29 @@ export default function PanelPage() {
                         <div className="w-96 h-96">
                             <Needle />
                         </div>
-                        {/* <LineChart /> */}
+                        <LineChart />
                     </CardContent>
                 </Card>
-                {/* <PanelCard
-                header="Total Usage"
-                content={
-                    <CircularProgress
-                        value={120}
-                        maxValue={500}
-                        showValueLabel={true}
-                        size="lg"
-                        formatOptions={{
-                            style: "unit",
-                            unit: "gigabyte",
-                        }}
-                        classNames={{
-                            svg: "w-32 h-32 drop-shadow-md",
-                            indicator: "text-green-400",
-                            value: "text-2xl font-semibold text-green-400",
-                        }}
-                    />
-                }
-            /> */}
+                <PanelCard
+                    header="Total Usage"
+                    content={
+                        <CircularProgress
+                            value={120}
+                            maxValue={500}
+                            showValueLabel={true}
+                            size="lg"
+                            formatOptions={{
+                                style: "unit",
+                                unit: "gigabyte",
+                            }}
+                            classNames={{
+                                svg: "w-32 h-32 drop-shadow-md",
+                                indicator: "text-green-400",
+                                value: "text-2xl font-semibold text-green-400",
+                            }}
+                        />
+                    }
+                /> */}
             </div>
         </div>
     );

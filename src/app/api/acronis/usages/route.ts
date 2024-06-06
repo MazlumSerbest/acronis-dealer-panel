@@ -1,12 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import getToken from "@/lib/getToken";
 
-export async function GET(
-    request: NextRequest,
-) {
+export async function GET(request: NextRequest) {
     try {
         const tenantIds = request.nextUrl.searchParams.get("tenantIds");
-        const test = request.credentials
         const token = await getToken();
 
         if (token) {

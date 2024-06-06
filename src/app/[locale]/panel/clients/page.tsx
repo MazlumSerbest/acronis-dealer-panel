@@ -11,8 +11,8 @@ import DataTable from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
 import { DateTimeFormat } from "@/utils/date";
-import useUserStore from "@/store/user";
 import { LuChevronsUpDown } from "react-icons/lu";
+import useUserStore from "@/store/user";
 
 export default function ClientsPage() {
     const t = useTranslations("General");
@@ -25,6 +25,7 @@ export default function ClientsPage() {
     const columns: ColumnDef<any, any>[] = [
         {
             accessorKey: "name",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}
@@ -52,15 +53,11 @@ export default function ClientsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("kind");
 
-                return (
-                    <h6>
-                        {data
-                            ? data == "partner"
-                                ? t("partner")
-                                : t("customer")
-                            : "-"}
-                    </h6>
-                );
+                return data
+                    ? data == "partner"
+                        ? t("partner")
+                        : t("customer")
+                    : "-";
             },
         },
         {
@@ -84,13 +81,23 @@ export default function ClientsPage() {
             },
         },
         {
+            accessorKey: "usage",
+            header: t("usage"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("usage");
+
+                return data || "-";
+            },
+        },
+        {
             accessorKey: "created_at",
             header: t("createdAt"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: string = row.getValue("created_at");
 
-                return <p>{DateTimeFormat(data)}</p>;
+                return DateTimeFormat(data);
             },
         },
         {
@@ -100,7 +107,7 @@ export default function ClientsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("updated_at");
 
-                return <p>{DateTimeFormat(data)}</p>;
+                return DateTimeFormat(data);
             },
         },
     ];
