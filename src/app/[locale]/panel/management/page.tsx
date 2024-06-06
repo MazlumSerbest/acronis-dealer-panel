@@ -15,16 +15,18 @@ export default function ManagementPage() {
                     <TabsTrigger value="profile">
                         <h5>{t("profile")}</h5>
                     </TabsTrigger>
-                    <TabsTrigger value="contacts">
-                        {t("contacts")}
-                    </TabsTrigger>
-                    <TabsTrigger value="users">
-                        {t("users")}
-                    </TabsTrigger>
+                    <TabsTrigger value="contacts">{t("contacts")}</TabsTrigger>
+                    <TabsTrigger value="users">{t("users")}</TabsTrigger>
                 </TabsList>
-                <TabsContent value="profile">{ProfileTab()}</TabsContent>
-                <TabsContent value="contacts">{ContactsTab()}</TabsContent>
-                <TabsContent value="users">{UsersTab()}</TabsContent>
+                <TabsContent value="profile">
+                    <ProfileTab />
+                </TabsContent>
+                <TabsContent value="contacts">
+                    <ContactsTab />
+                </TabsContent>
+                <TabsContent value="users">
+                    <UsersTab />
+                </TabsContent>
             </Tabs>
         </div>
     );

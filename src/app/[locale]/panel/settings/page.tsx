@@ -18,8 +18,12 @@ export default function SettingsPage() {
                         {t("locations")}
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent value="general">{GeneralTab()}</TabsContent>
-                <TabsContent value="locations">{LocationsTab()}</TabsContent>
+                <TabsContent value="general">
+                    <GeneralTab />
+                </TabsContent>
+                <TabsContent value="locations">
+                    <LocationsTab />
+                </TabsContent>
             </Tabs>
         </div>
     );
