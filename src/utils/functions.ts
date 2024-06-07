@@ -1,8 +1,10 @@
-import toast from "react-hot-toast";
+import { useToast } from "@/components/ui/use-toast";
 
 export function CopyToClipboard(text: string, message?: string) {
+    const { toast } = useToast();
+
     navigator.clipboard.writeText(text);
-    toast.success(message ?? "Panoya Kopyalandı!");
+    toast({ title: message ?? "Panoya Kopyalandı!" });
 }
 
 export function formatBytes(a: any, b = 2) {

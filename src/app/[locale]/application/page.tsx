@@ -2,6 +2,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { useToast } from "@/components/ui/use-toast";
 
 import {
     Card,
@@ -27,7 +28,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 
 import Logo from "@/components/navigation/Logo";
-import toast from "react-hot-toast";
 import { cities } from "@/lib/constants";
 import { Combobox } from "@/components/Combobox";
 import { LuBuilding2, LuUser } from "react-icons/lu";
@@ -67,13 +67,18 @@ const defaultValues: Partial<ApplicationFormValues> = {
 };
 
 export default function Application() {
+    const { toast } = useToast();
+
     const form = useForm<ApplicationFormValues>({
         resolver: zodResolver(applicationFormSchema),
         defaultValues,
     });
 
     function onSubmit(data: ApplicationFormValues) {
-        toast.success(JSON.stringify(data, null, 2));
+        toast({
+            title: "Form Data",
+            description: JSON.stringify(data),
+        });
     }
 
     const citiesList: ListBoxItem[] = cities.map((city) => {
@@ -102,20 +107,18 @@ export default function Application() {
             <Card className="max-w-[800px] mt-8 mb-6">
                 <CardHeader className="flex flex-row">
                     <div className="flex-1">
-                        <CardTitle>
-                            <h1 className="text-3xl tracking-tight text-blue-400">
-                                Başvuru Formu
-                            </h1>
+                        <CardTitle className="text-3xl tracking-tight text-blue-400">
+                            Başvuru Formu
                         </CardTitle>
                         <CardDescription>
-                            <p className="text-sm">
-                                Bayi olmak için yapılması gerekenler.
-                            </p>
+                            Bayi olmak için yapılması gerekenler.
                         </CardDescription>
                     </div>
                     <Logo width={40} height={40} />
                 </CardHeader>
+                
                 <Separator />
+
                 <CardContent className="flex flex-col p-6 gap-4">
                     <ol className="list-decimal list-inside divide-y divide-zinc-200 text-sm text-justify *:py-2">
                         <li>
@@ -144,7 +147,9 @@ export default function Application() {
                         </li>
                     </ol>
                 </CardContent>
+
                 <Separator />
+
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <CardContent className="flex flex-col gap-6 p-6">
@@ -177,7 +182,10 @@ export default function Application() {
                                                             </CardHeader>
                                                             <Separator />
                                                             <CardContent className="flex flex-col py-2 px-4 gap-2">
-                                                                <p className="text-primary">Gerekli Belgeler</p>
+                                                                <p className="text-primary">
+                                                                    Gerekli
+                                                                    Belgeler
+                                                                </p>
                                                                 <ul className="list-disc list-inside text-sm text-muted-foreground">
                                                                     <li>
                                                                         Sözleşme
@@ -216,7 +224,10 @@ export default function Application() {
                                                             </CardHeader>
                                                             <Separator />
                                                             <CardContent className="flex flex-col py-2 px-4 gap-2">
-                                                                <p className="text-primary">Gerekli Belgeler</p>
+                                                                <p className="text-primary">
+                                                                    Gerekli
+                                                                    Belgeler
+                                                                </p>
                                                                 <ul className="list-disc list-inside text-sm text-muted-foreground">
                                                                     <li>
                                                                         Sözleşme

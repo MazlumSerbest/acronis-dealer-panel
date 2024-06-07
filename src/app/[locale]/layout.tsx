@@ -3,7 +3,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { notFound } from "next/navigation";
-import { Toaster } from "react-hot-toast";
+import { Toaster } from "@/components/ui/toaster"
 import NextTopLoader from "nextjs-toploader";
 
 const locales = ["tr", "en"];
@@ -36,13 +36,14 @@ export default function LocaleLayout({
                 />
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>{children}</Providers>
-                    <Toaster
+                    {/* <Toaster
                         position="bottom-center"
                         toastOptions={{
                             duration: 4000,
                             className: "text-blue-400",
                         }}
-                    />
+                    /> */}
+                    <Toaster />
                 </NextIntlClientProvider>
             </body>
         </html>
