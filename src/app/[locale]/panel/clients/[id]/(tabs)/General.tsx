@@ -9,6 +9,7 @@ import { formatBytes } from "@/utils/functions";
 import { DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
 import { LuAlertTriangle } from "react-icons/lu";
+import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 
 type Props = {
     t: Function;
@@ -18,11 +19,7 @@ type Props = {
 export default function GeneralTab(props: Props) {
     const { t, tenant } = props;
 
-    const { data, error } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
-        onSuccess: (data) => {
-            console.log(data.usages.items.map((u: TenantUsage) => u));
-        },
-    });
+    const { data, error } = useSWR(`/api/acronis/usages/${tenant?.id}`);
 
     return (
         <div className="grid grid-cols-3 gap-4">
@@ -98,60 +95,61 @@ export default function GeneralTab(props: Props) {
                 </Card>
             </div>
 
-            <div className="grid grid-cols-1 w-full gap-2">
-                <Card className="w-full">
-                    <CardHeader className="py-4">
-                        <CardTitle>
-                            <h2 className="flex-none font-medium text-xl">
+            {!data ? (
+                <Skeleton>
+                    <div className="h-full w-full rounded-xl bg-slate-200"></div>
+                </Skeleton>
+            ) : (
+                <div className="grid grid-cols-1 w-full gap-2">
+                    <Card className="w-full">
+                        <CardHeader className="py-4">
+                            <CardTitle className="font-medium text-xl">
                                 Backup Storage
-                            </h2>
-                        </CardTitle>
-                    </CardHeader>
-                    {/* <Separator /> */}
-                    <CardContent className="flex flex-col p-6 place-items-center">
-                        <NeedleChart
-                            value={
-                                data?.usages?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                ).value
-                            }
-                            total={
-                                data?.usages?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                ).offering_item.quota.value
-                            }
-                        />
-                        <p className="text-center">
-                            {formatBytes(
-                                data?.usages?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                ).value,
-                            )}
-                            <span className="text-zinc-400">
-                                {" / "}
+                            </CardTitle>
+                        </CardHeader>
+                        {/* <Separator /> */}
+                        <CardContent className="flex flex-col p-6 place-items-center">
+                            <NeedleChart
+                                value={
+                                    data?.usages?.items?.find(
+                                        (u: TenantUsage) =>
+                                            u.usage_name == "storage" &&
+                                            u.edition == "pck_per_workload",
+                                    ).value
+                                }
+                                total={
+                                    data?.usages?.items?.find(
+                                        (u: TenantUsage) =>
+                                            u.usage_name == "storage" &&
+                                            u.edition == "pck_per_workload",
+                                    ).offering_item.quota.value
+                                }
+                            />
+                            <p className="text-center">
                                 {formatBytes(
                                     data?.usages?.items?.find(
                                         (u: TenantUsage) =>
                                             u.usage_name == "storage" &&
                                             u.edition == "pck_per_workload",
-                                    )?.offering_item.quota.value,
+                                    ).value,
                                 )}
-                            </span>
-                        </p>
-                    </CardContent>
-                </Card>
-                {/* <Card className="w-fit">
+                                <span className="text-zinc-400">
+                                    {" / "}
+                                    {formatBytes(
+                                        data?.usages?.items?.find(
+                                            (u: TenantUsage) =>
+                                                u.usage_name == "storage" &&
+                                                u.edition == "pck_per_workload",
+                                        )?.offering_item.quota.value,
+                                    )}
+                                </span>
+                            </p>
+                        </CardContent>
+                    </Card>
+                    {/* <Card className="w-fit">
                     <CardHeader className="py-4">
-                        <CardTitle>
-                            <h2 className="flex-none font-medium text-lg text-center">
+                            <CardTitle className="font-medium text-xl">
                                 Usages
-                            </h2>
                         </CardTitle>
                     </CardHeader>
                     <Separator />
@@ -165,17 +163,20 @@ export default function GeneralTab(props: Props) {
                         />
                     </CardContent>
                 </Card> */}
-            </div>
+                </div>
+            )}
 
             {!data ? (
-                <></>
+                <div className="col-span-3">
+                    <Skeleton>
+                        <DefaultSkeleton />
+                    </Skeleton>
+                </div>
             ) : (
                 <Card className="col-span-3">
                     <CardHeader className="py-4">
-                        <CardTitle>
-                            <h2 className="flex-none font-medium text-xl">
-                                Usages
-                            </h2>
+                        <CardTitle className="font-medium text-xl">
+                            Usages
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 divide-x *:px-4">
@@ -197,7 +198,6 @@ export default function GeneralTab(props: Props) {
                                             <p>
                                                 <span
                                                     className={cn(
-                                                        "font-medium",
                                                         u.offering_item?.quota
                                                             ?.value !==
                                                             undefined &&
@@ -279,7 +279,6 @@ export default function GeneralTab(props: Props) {
                                             <p>
                                                 <span
                                                     className={cn(
-                                                        "font-medium",
                                                         u.offering_item?.quota
                                                             ?.value !==
                                                             undefined &&

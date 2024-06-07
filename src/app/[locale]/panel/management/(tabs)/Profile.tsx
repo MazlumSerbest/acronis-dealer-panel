@@ -1,12 +1,7 @@
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useUserStore from "@/store/user";
 import { Separator } from "@/components/ui/separator";
 
@@ -32,15 +27,13 @@ export default function ProfileTab() {
         <div className="flex flex-col gap-4">
             <Card className="w-full">
                 <CardHeader className="py-4">
-                    <CardTitle>
-                        <h2 className="flex-none font-medium text-xl">
-                            Company Information
-                        </h2>
+                    <CardTitle className="font-medium text-xl">
+                        Company Information
                     </CardTitle>
                     {/* <CardDescription>Card Description</CardDescription> */}
                 </CardHeader>
 
-                <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2" >
+                <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
                     <div>
                         <dt className="font-medium">Legal Company Name</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">

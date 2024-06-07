@@ -54,11 +54,12 @@ export default function SignIn() {
                                     autoCorrect="off"
                                 />
                             </div>
-                            <Button className="bg-blue-400 hover:bg-blue-300">
+                            <Button className="bg-blue-500 hover:bg-blue-500/80">
                                 Sign In with Email
                             </Button>
                         </div>
                     </form>
+
                     <div className="relative">
                         <div className="absolute inset-0 flex items-center">
                             <span className="w-full border-t" />
@@ -69,16 +70,20 @@ export default function SignIn() {
                             </span>
                         </div>
                     </div>
+
                     <Button variant="outline" type="button" asChild>
-                        <Link href="/application">Make A Dealer Application</Link>
+                        <Link href="/application">
+                            Make A Dealer Application
+                        </Link>
                     </Button>
                 </div>
-
+{/* 
                 <p className="text-center text-sm text-muted-foreground">
                     By clicking continue, you are going to redirected to
                     application page.
-                </p>
-                <p className="px-8 text-center text-sm text-muted-foreground">
+                </p> */}
+
+                <p className="text-center text-sm text-muted-foreground">
                     <Link
                         href="/terms"
                         className="underline underline-offset-4 hover:text-primary"
@@ -93,6 +98,15 @@ export default function SignIn() {
                         Privacy Policy
                     </Link>
                     .
+                </p>
+
+                <p className="text-center text-sm text-muted-foreground">
+                    <Link
+                        href="/activate"
+                        className="underline underline-offset-4 hover:text-primary"
+                    >
+                        Activate a License Key
+                    </Link>
                 </p>
             </div>
         </div>
