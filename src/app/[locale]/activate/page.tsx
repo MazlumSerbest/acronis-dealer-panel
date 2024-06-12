@@ -1,6 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -28,7 +28,9 @@ import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import Logo from "@/components/navigation/Logo";
-import { LuUser, LuUserPlus } from "react-icons/lu";
+import { LuMinus, LuUser, LuUserPlus } from "react-icons/lu";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 const applicationFormSchema = z.object({
     type: z.enum(["new", "exist"], {
@@ -36,13 +38,20 @@ const applicationFormSchema = z.object({
     }),
     name: z.string(),
     email: z.string().email(),
-    key: z.string(),
+    keys: z.array(
+        z.object({
+            value: z.string().min(10, {
+                message: "Lütfen geçerli bir lisans kodu giriniz.",
+            }),
+        }),
+    ),
 });
 
 type ActivateFormValues = z.infer<typeof applicationFormSchema>;
 
 const defaultValues: Partial<ActivateFormValues> = {
     type: "new",
+    keys: [{ value: "" }],
 };
 
 export default function Activate() {
@@ -51,6 +60,12 @@ export default function Activate() {
     const form = useForm<ActivateFormValues>({
         resolver: zodResolver(applicationFormSchema),
         defaultValues,
+        mode: "onChange",
+    });
+
+    const { fields, append, remove } = useFieldArray({
+        name: "keys",
+        control: form.control,
     });
 
     function onSubmit(data: ActivateFormValues) {
@@ -85,6 +100,11 @@ export default function Activate() {
                             building intellectual capital. Rapidiously fashion
                             cross-platform data whereas.
                         </li>
+                        <li>
+                            Distinctively incubate unique systems via team
+                            building intellectual capital. Rapidiously fashion
+                            cross-platform data whereas.
+                        </li>
                     </ol>
                 </CardContent>
 
@@ -98,7 +118,7 @@ export default function Activate() {
                                 name="type"
                                 render={({ field }) => (
                                     <FormItem className="space-y-2">
-                                        <FormLabel>Şirket Tipi</FormLabel>
+                                        {/* <FormLabel>Şirket Tipi</FormLabel> */}
                                         <FormControl>
                                             <RadioGroup
                                                 onValueChange={field.onChange}
@@ -173,48 +193,87 @@ export default function Activate() {
                                 />
                             )}
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem className="space-y-2">
-                                            <FormLabel>E-Posta</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="email"
-                                                    placeholder="Ör. info@dcube.com"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormDescription>
-                                                Kayıtlı olan mail adresiniz.
-                                            </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="key"
-                                    render={({ field }) => (
-                                        <FormItem className="space-y-2">
-                                            <FormLabel>Lisans Key</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="Ör. 1234567890"
-                                                    maxLength={11}
-                                                    minLength={10}
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            {/* <FormDescription>
-                                                Vergi no veya TC Kimlik No.
-                                            </FormDescription> */}
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-2">
+                                        <FormLabel>E-Posta</FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                type="email"
+                                                placeholder="Ör. info@dcube.com"
+                                                {...field}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            Kayıtlı olan mail adresiniz.
+                                        </FormDescription>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <div>
+                                {fields.map((field, index) => (
+                                    <FormField
+                                        control={form.control}
+                                        key={field.id}
+                                        name={`keys.${index}.value`}
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel
+                                                    className={cn(
+                                                        index !== 0 &&
+                                                            "sr-only",
+                                                    )}
+                                                >
+                                                    Lisans Kodu
+                                                </FormLabel>
+                                                <FormDescription
+                                                    className={cn(
+                                                        index !== 0 &&
+                                                            "sr-only",
+                                                    )}
+                                                >
+                                                    Aktive etmek
+                                                    istediğiniz lisans kodlarını
+                                                    aşağıya giriniz. Birden
+                                                    fazla kod girmek için{" "}
+                                                    <Badge variant="outline">Kod Ekle</Badge>{" "}
+                                                    butonuna tıklayınız.
+                                                </FormDescription>
+                                                <FormControl>
+                                                    <div className="flex flex-row gap-2">
+                                                        <Input {...field} />
+                                                        {index !== 0 && (
+                                                            <Button
+                                                                size="icon"
+                                                                variant="outline"
+                                                                onClick={() =>
+                                                                    remove(
+                                                                        index,
+                                                                    )
+                                                                }
+                                                            >
+                                                                <LuMinus className="size-4" />
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </FormControl>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
+                                    />
+                                ))}
+                                <Button
+                                    type="button"
+                                    variant="outline"
+                                    size="sm"
+                                    className="mt-2"
+                                    onClick={() => append({ value: "" })}
+                                >
+                                    Kod Ekle
+                                </Button>
                             </div>
                         </CardContent>
                         {/* <Separator /> */}
