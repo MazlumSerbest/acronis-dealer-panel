@@ -1,23 +1,35 @@
-"use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { redirect, useSearchParams } from "next/navigation";
+import { auth, signIn } from "@/auth";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Logo from "@/components/navigation/Logo";
 
-export default function SignIn() {
-    const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    async function onSubmit(event: React.SyntheticEvent) {
-        event.preventDefault();
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsLoading(false);
-        }, 3000);
+export default async function SignIn({
+    searchParams,
+}: {
+    searchParams: URLSearchParams;
+}) {
+    const search = new URLSearchParams(searchParams);
+    const session = await auth();
+    if (session) {
+        const url = "/en/panel";
+        return redirect(url);
     }
+
+    // const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    // async function onSubmit(event: React.SyntheticEvent) {
+    //     event.preventDefault();
+    //     setIsLoading(true);
+
+    //     setTimeout(() => {
+    //         setIsLoading(false);
+    //     }, 3000);
+    // }
 
     return (
         <div className="flex flex-col h-dvh pt-20">
@@ -39,7 +51,12 @@ export default function SignIn() {
                 </div>
 
                 <div className="grid gap-6">
-                    <form onSubmit={onSubmit}>
+                    <form
+                        action={async (formData) => {
+                            "use server";
+                            await signIn("sendgrid", formData);
+                        }}
+                    >
                         <div className="grid gap-2">
                             <div className="grid gap-1">
                                 <Label className="sr-only" htmlFor="email">
@@ -47,12 +64,18 @@ export default function SignIn() {
                                 </Label>
                                 <Input
                                     id="email"
+                                    name="email"
                                     placeholder="name@example.com"
                                     type="email"
                                     autoCapitalize="none"
                                     autoComplete="email"
                                     autoCorrect="off"
                                 />
+                                {search.has("error") && (
+                                    <p className="text-xs text-red-500 px-2">
+                                        {search.get("error") ?? "Error"}
+                                    </p>
+                                )}
                             </div>
                             <Button className="bg-blue-500 hover:bg-blue-500/80">
                                 Sign In with Email
@@ -77,7 +100,7 @@ export default function SignIn() {
                         </Link>
                     </Button>
                 </div>
-{/* 
+                {/* 
                 <p className="text-center text-sm text-muted-foreground">
                     By clicking continue, you are going to redirected to
                     application page.
@@ -100,14 +123,14 @@ export default function SignIn() {
                     .
                 </p>
 
-                <p className="text-center text-sm text-muted-foreground">
+                {/* <p className="text-center text-sm text-muted-foreground">
                     <Link
                         href="/activate"
                         className="underline underline-offset-4 hover:text-primary"
                     >
                         Activate a License Key
                     </Link>
-                </p>
+                </p> */}
             </div>
         </div>
     );
