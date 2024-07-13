@@ -14,7 +14,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         Sendgrid({
             from: process.env.EMAIL_FROM,
             apiKey: process.env.AUTH_SENDGRID_KEY,
-            maxAge: 3 * 60, // 3 minutes
+            maxAge: 5 * 60, // 5 minutes
         }),
     ],
     pages: {

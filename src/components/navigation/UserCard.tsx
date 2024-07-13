@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useSWR from "swr";
 import { useRouter } from "next/navigation";
-// import { useSession, signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import {
@@ -21,45 +21,45 @@ import { useTranslations } from "next-intl";
 import { LuLogOut } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import useAcronisStore from "@/store/acronis";
+import { getFullNameInitials } from "@/lib/utils";
 
 export default function UserCard() {
     const t = useTranslations("General");
-    // const { data: session } = useSession();
-    const router = useRouter();
+    const session = useSession();
     const { user, updateUser } = useUserStore();
     const { updateMainTenant } = useAcronisStore();
 
-    // const { data, error, mutate } = useSWR(
-    //     `/api/acronis/tenant/${user?.acronisTenantUUID}`,
-    // );
-
-    const session = {
-        user: {
-            name: "Administrator",
-            email: "test@gmail.com",
-        },
-    };
-
     useEffect(() => {
-        // console.log(process.env.ACRONIS_MAIN_TENANT_ID)
-        updateUser({
-            id: 1,
-            active: true,
-            username: "admin",
-            name: "Güngör Yılmaz",
-            email: "gungor.yilmaz@d3bilisim.com.tr",
-            acronisTenantUUID:
-                process.env.ACRONIS_MAIN_TENANT_ID ||
-                "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
-            createdAt: new Date().toISOString(),
-            createdBy: "admin",
-        });
+        if (session?.data?.user) {
+            fetch(`/api/user/${session?.data?.user?.email ?? ""}`)
+                .then((res) => res.json())
+                .then((data) => {
+                    updateUser({
+                        id: 1,
+                        active: true,
+                        // username: "admin",
+                        role: "admin",
+                        name: data?.name,
+                        email: data?.email,
+                        acronisTenantUUID:
+                            process.env.ACRONIS_MAIN_TENANT_ID ||
+                            "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
+                        createdAt: new Date().toISOString(),
+                        createdBy: "admin",
+                    });
+                });
+        }
 
         if (user?.acronisTenantUUID)
             fetch(`/api/acronis/tenant/${user?.acronisTenantUUID}`)
                 .then((res) => res.json())
                 .then((data) => updateMainTenant(data?.tenant));
-    }, [updateMainTenant, updateUser, user?.acronisTenantUUID]);
+    }, [
+        session?.data?.user,
+        updateMainTenant,
+        updateUser,
+        user?.acronisTenantUUID,
+    ]);
 
     // if (error) return <div>failed to load</div>;
     if (!user)
@@ -78,13 +78,7 @@ export default function UserCard() {
             <Avatar>
                 <AvatarImage />
                 <AvatarFallback className="bg-blue-100 text-blue-400">
-                    {(user?.name?.split(" ")?.at(0)?.charAt(0)?.toUpperCase() ||
-                        "?") +
-                        (user?.name
-                            ?.split(" ")
-                            ?.at(-1)
-                            ?.charAt(0)
-                            ?.toUpperCase() || "")}
+                    {getFullNameInitials(user?.name || "")}
                 </AvatarFallback>
             </Avatar>
             {/* <Avatar
@@ -122,7 +116,7 @@ export default function UserCard() {
                                 variant="destructive"
                                 className="bg-red-600 hover:bg-red-600/80"
                                 // onClick={() => signOut()}
-                                onClick={() => router.push("/signin")}
+                                onClick={() => signOut()}
                             >
                                 {t("logout")}
                             </Button>
