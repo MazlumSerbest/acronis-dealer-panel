@@ -122,7 +122,7 @@ export default function GeneralTab(props: Props) {
                                         (u: TenantUsage) =>
                                             u.usage_name == "storage" &&
                                             u.edition == "pck_per_workload",
-                                    ).offering_item.quota.value
+                                    ).offering_item.quota?.value
                                 }
                             />
                             <p className="text-center">
@@ -140,7 +140,7 @@ export default function GeneralTab(props: Props) {
                                             (u: TenantUsage) =>
                                                 u.usage_name == "storage" &&
                                                 u.edition == "pck_per_workload",
-                                        )?.offering_item.quota.value,
+                                        )?.offering_item?.quota?.value || 0,
                                     )}
                                 </span>
                             </p>
@@ -185,8 +185,8 @@ export default function GeneralTab(props: Props) {
                                 Per Workload
                             </h2>
                             <div className="flex flex-col font-light divide-y">
-                                {data.usages.items
-                                    .filter(
+                                {data?.usages?.items
+                                    ?.filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_workload",
                                     )
@@ -266,8 +266,8 @@ export default function GeneralTab(props: Props) {
                                 Per Gigabyte
                             </h2>
                             <div className="flex flex-col font-light divide-y">
-                                {data.usages.items
-                                    .filter(
+                                {data?.usages?.items
+                                    ?.filter(
                                         (u: TenantUsage) =>
                                             u.edition == "pck_per_gigabyte",
                                     )

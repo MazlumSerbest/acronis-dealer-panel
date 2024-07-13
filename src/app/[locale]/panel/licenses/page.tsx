@@ -90,6 +90,7 @@ export default function LicensesPage() {
             columns={columns}
             data={licenses}
             visibleColumns={visibleColumns}
+            onAddNew={() => null}
         />
     );
 }

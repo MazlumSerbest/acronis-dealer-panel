@@ -135,6 +135,7 @@ export default function ClientsPage() {
                     columns={columns}
                     visibleColumns={visibleColumns}
                     isLoading={isLoading}
+                    onAddNew={() => null}
                     onClick={(item) => {
                         router.push("clients/" + item?.original?.id);
                     }}
