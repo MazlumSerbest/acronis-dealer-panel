@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+
 import {
     ColumnDef,
     SortingState,
@@ -28,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+
 import Pagination from "./Pagination";
 import ViewOptions from "./ViewOptions";
 import { cn } from "@/lib/utils";
@@ -46,17 +48,21 @@ interface DataTableProps<TData, TValue> {
     onDoubleClick?: (item: any) => any;
 }
 
-export default function DataTable<TData, TValue>({
-    columns,
-    data,
-    visibleColumns = {},
-    basic = false,
-    zebra = false,
-    isLoading = false,
-    onAddNew,
-    onClick,
-    onDoubleClick,
-}: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>(
+    props: DataTableProps<TData, TValue>,
+) {
+    const {
+        columns,
+        data = [],
+        visibleColumns = {},
+        basic = false,
+        zebra = false,
+        isLoading = false,
+        onAddNew,
+        onClick,
+        onDoubleClick,
+    } = props;
+
     const [sorting, setSorting] = useState<SortingState>([]);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
@@ -87,7 +93,7 @@ export default function DataTable<TData, TValue>({
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 justify-between">
                 <Input
                     placeholder="Search..."
                     value={globalFilter ?? ""}
@@ -95,18 +101,20 @@ export default function DataTable<TData, TValue>({
                     className="max-w-sm"
                 />
 
-                <ViewOptions table={table} />
+                <div className="flex gap-2">
+                    <ViewOptions table={table} />
 
-                {onAddNew && (
-                    <Button
-                        size="sm"
-                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                        onClick={onAddNew}
-                    >
-                        <span className="sr-only lg:not-sr-only">Ekle</span>
-                        <LuPlus className="size-4" />
-                    </Button>
-                )}
+                    {onAddNew && (
+                        <Button
+                            size="sm"
+                            className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                            onClick={onAddNew}
+                        >
+                            <span className="sr-only lg:not-sr-only">Ekle</span>
+                            <LuPlus className="size-4" />
+                        </Button>
+                    )}
+                </div>
             </div>
 
             <div className="rounded-md border">
