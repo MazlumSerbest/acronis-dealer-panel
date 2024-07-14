@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
 import Link from "next/link";
-import { redirect, useSearchParams } from "next/navigation";
+import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
 
 import { Button } from "@/components/ui/button";
@@ -32,7 +31,7 @@ export default async function SignIn({
     // }
 
     return (
-        <div className="flex flex-col h-dvh pt-20">
+        <div className="flex flex-col h-dvh pt-12 sm:pt-20 px-4 sm:px-0">
             <div className="mx-auto flex flex-col w-full justify-center space-y-6 sm:w-[350px]">
                 {/* <div className="text-center mt-8">
                     <h1 className="text-2xl font-semibold tracking-tight text-blue-400">
@@ -77,7 +76,7 @@ export default async function SignIn({
                                     </p>
                                 )}
                             </div>
-                            <Button className="bg-blue-500 hover:bg-blue-500/80">
+                            <Button type="submit" className="bg-blue-500 hover:bg-blue-500/80">
                                 Sign In with Email
                             </Button>
                         </div>
