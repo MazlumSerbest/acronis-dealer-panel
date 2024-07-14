@@ -14,11 +14,13 @@ import { Separator } from "../ui/separator";
 
 import { LuMenu } from "react-icons/lu";
 import useAcronisStore from "@/store/acronis";
+import useUserStore from "@/store/user";
 
 export default function NavLayout() {
     const t = useTranslations("General.Pages");
     const [showSidebar, setShowSidebar] = useState(false);
     const { userTenant } = useAcronisStore();
+    const { user: currentUser } = useUserStore();
 
     const sidebarPaths = paths;
     const pathName = usePathname();
@@ -75,41 +77,45 @@ export default function NavLayout() {
                     </div>
                 )}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
-                    {sidebarPaths.map((p, index) => {
-                        let withoutLocale = pathName.substring(
-                            pathName.indexOf("/panel"),
-                        );
-                        return (
-                            <Button
-                                variant={
-                                    withoutLocale.includes(p.path) &&
-                                    p.path != "/panel"
-                                        ? "secondary"
-                                        : "ghost"
-                                }
-                                key={p.key}
-                                asChild
-                            >
-                                <Link
-                                    href={p.path}
-                                    onClick={() => setShowSidebar(false)}
-                                    onTouchEnd={() => setShowSidebar(false)}
-                                    className={
-                                        "group flex flex-row w-full justify-items-start gap-2 " +
-                                        (withoutLocale.includes(p.path) &&
+                    {sidebarPaths
+                        .filter((p) =>
+                            p?.roles?.includes(currentUser?.role ?? ""),
+                        )
+                        .map((p, index) => {
+                            let withoutLocale = pathName.substring(
+                                pathName.indexOf("/panel"),
+                            );
+                            return (
+                                <Button
+                                    variant={
+                                        withoutLocale.includes(p.path) &&
                                         p.path != "/panel"
-                                            ? "*:text-blue-400"
-                                            : "*:text-zinc-600")
+                                            ? "secondary"
+                                            : "ghost"
                                     }
+                                    key={p.key}
+                                    asChild
                                 >
-                                    {p.icon}
-                                    <span className="w-full group-hover:text-blue-400">
-                                        {t(p.key)}
-                                    </span>
-                                </Link>
-                            </Button>
-                        );
-                    })}
+                                    <Link
+                                        href={p.path}
+                                        onClick={() => setShowSidebar(false)}
+                                        onTouchEnd={() => setShowSidebar(false)}
+                                        className={
+                                            "group flex flex-row w-full justify-items-start gap-2 " +
+                                            (withoutLocale.includes(p.path) &&
+                                            p.path != "/panel"
+                                                ? "*:text-blue-400"
+                                                : "*:text-zinc-600")
+                                        }
+                                    >
+                                        {p.icon}
+                                        <span className="w-full group-hover:text-blue-400">
+                                            {t(p.key)}
+                                        </span>
+                                    </Link>
+                                </Button>
+                            );
+                        })}
                 </div>
 
                 <Separator />

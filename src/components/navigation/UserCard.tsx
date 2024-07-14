@@ -35,30 +35,27 @@ export default function UserCard() {
                 .then((res) => res.json())
                 .then((data) => {
                     updateUser({
-                        id: 1,
-                        active: true,
-                        // username: "admin",
-                        role: "admin",
+                        id: data?.id,
+                        active: data?.active,
+                        role: data?.role,
                         name: data?.name,
                         email: data?.email,
-                        acronisTenantUUID:
-                            process.env.ACRONIS_MAIN_TENANT_ID ||
-                            "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
-                        createdAt: new Date().toISOString(),
+                        acronisId: data?.acronisId,
+                        createdAt: data?.createdAt,
                         createdBy: "admin",
                     });
                 });
         }
 
-        if (user?.acronisTenantUUID)
-            fetch(`/api/acronis/tenant/${user?.acronisTenantUUID}`)
+        if (user?.acronisId)
+            fetch(`/api/acronis/tenant/${user?.acronisId}`)
                 .then((res) => res.json())
                 .then((data) => updateMainTenant(data?.tenant));
     }, [
         session?.data?.user,
         updateMainTenant,
         updateUser,
-        user?.acronisTenantUUID,
+        user?.acronisId,
     ]);
 
     // if (error) return <div>failed to load</div>;
@@ -81,13 +78,6 @@ export default function UserCard() {
                     {getFullNameInitials(user?.name || "")}
                 </AvatarFallback>
             </Avatar>
-            {/* <Avatar
-                        icon={<AvatarIcon />}
-                        classNames={{
-                            base: "bg-blue-200",,,0,
-                            icon: "text-blue-400",
-                        }}
-                    /> */}
             <div className="flex-1 min-w-0">
                 <p className="truncate text-sm font-bold text-blue-400">
                     {user?.name}
