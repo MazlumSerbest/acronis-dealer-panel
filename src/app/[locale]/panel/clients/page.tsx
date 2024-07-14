@@ -117,7 +117,7 @@ export default function ClientsPage() {
     //     "/api/acronis/tenant/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
     // );
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenant/children/${currentUser?.acronisTenantUUID}`,
+        `/api/acronis/tenant/children/${currentUser?.acronisId}`,
     );
 
     if (error) return <div>failed to load</div>;

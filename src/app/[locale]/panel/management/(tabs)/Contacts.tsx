@@ -82,7 +82,7 @@ export default function ContactsTab() {
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/contacts/${currentUser?.acronisTenantUUID}`,
+        `/api/acronis/tenant/contacts/${currentUser?.acronisId}`,
         null,
         {
             onSuccess: (data) => {

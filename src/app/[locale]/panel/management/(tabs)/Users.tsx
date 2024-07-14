@@ -55,7 +55,7 @@ export default function UsersTab() {
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/users/${currentUser?.acronisTenantUUID}`,
+        `/api/acronis/tenant/users/${currentUser?.acronisId}`,
         null,
         {
             onSuccess: (data) => {
