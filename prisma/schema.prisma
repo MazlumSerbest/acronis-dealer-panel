@@ -16,10 +16,13 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
+  active    Boolean @default(true)
   acronisId String?
   role      String?
 
+  createdBy String?
   createdAt DateTime @default(now())
+  updatedBy String?
   updatedAt DateTime @updatedAt
 }
 

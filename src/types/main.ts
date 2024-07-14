@@ -1,5 +1,5 @@
 type Entity = {
-    id: number;
+    id: string;
     active: boolean;
     createdBy: string;
     createdAt: string;
@@ -10,6 +10,7 @@ type Entity = {
 type Path = {
     path: string;
     key: string;
+    roles?: string[];
     icon: React.ReactNode;
 };
 
@@ -18,5 +19,5 @@ type User = Entity & {
     name: string;
     email: string;
     role: string;
-    acronisTenantUUID: string;
+    acronisId: string;
 };
