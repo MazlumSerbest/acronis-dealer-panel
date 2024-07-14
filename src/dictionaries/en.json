@@ -7,6 +7,7 @@
             "licenses": "Licenses",
             "alerts": "Alerts",
             "management": "Management",
+            "users": "Users",
             "settings": "Settings"
         },
         "yes": "Yes",
@@ -20,6 +21,7 @@
         "fullName": "Full Name",
         "id": "Id",
         "user": "User",
+        "role": "Role",
         "kind": "Kind",
         "actions": "Actions",
         "mfaStatus": "2FA",
@@ -57,7 +59,8 @@
         "type": "Type",
         "types": "Types",
         "platformOwned": "Platform Owned",
-        "title": "Title"
+        "title": "Title",
+        "acronisTenantId": "Acronis Tenant ID"
     },
     "Components": {
         "search": "Search",
