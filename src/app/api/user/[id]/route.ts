@@ -23,43 +23,43 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-// export const PUT = auth(async (req: any, { params }) => {
-//     try {
-//         if (!req.auth)
-//             return NextResponse.json({
-//                 message: "Authorization Needed!",
-//                 status: 401,
-//                 ok: false,
-//             });
+export const PUT = auth(async (req: any, { params }) => {
+    try {
+        if (!req.auth)
+            return NextResponse.json({
+                message: "Authorization Needed!",
+                status: 401,
+                ok: false,
+            });
 
-//         const user: User = await req.json();
-//         user.updatedAt = new Date().toISOString();
-//         user.updatedBy = req.auth.user.email;
+        const user: User = await req.json();
+        user.updatedAt = new Date().toISOString();
+        user.updatedBy = req.auth.user.email;
 
-//         const updatedUser = await prisma.user.update({
-//             data: user,
-//             where: {
-//                 id: params?.id as string,
-//             },
-//         });
+        const updatedUser = await prisma.user.update({
+            data: user,
+            where: {
+                id: params?.id as string,
+            },
+        });
 
-//         if (updatedUser.id) {
-//             return NextResponse.json({
-//                 message: "Kullanıcı başarıyla güncellendi!",
-//                 status: 200,
-//                 ok: true,
-//             });
-//         } else {
-//             return NextResponse.json({
-//                 message: "Kullanıcı güncellenemedi!",
-//                 status: 400,
-//                 ok: false,
-//             });
-//         }
-//     } catch (error) {
-//         return NextResponse.json({ message: error, status: 500, ok: false });
-//     }
-// });
+        if (updatedUser.id) {
+            return NextResponse.json({
+                message: "Kullanıcı başarıyla güncellendi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Kullanıcı güncellenemedi!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error) {
+        return NextResponse.json({ message: error, status: 500, ok: false });
+    }
+});
 
 export const DELETE = auth(async (req: any, { params }) => {
     try {

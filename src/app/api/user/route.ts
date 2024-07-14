@@ -17,9 +17,10 @@ export const GET = auth(async (req: any) => {
                 name: true,
                 email: true,
                 role: true,
-                // createdBy: true,
+                acronisId: true,
+                createdBy: true,
                 createdAt: true,
-                // updatedBy: true,
+                updatedBy: true,
                 updatedAt: true,
             },
             orderBy: {
