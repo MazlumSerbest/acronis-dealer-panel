@@ -48,7 +48,7 @@ export default function UserCard() {
         }
 
         if (user?.acronisId)
-            fetch(`/api/acronis/tenant/${user?.acronisId}`)
+            fetch(`/api/acronis/tenants/${user?.acronisId}`)
                 .then((res) => res.json())
                 .then((data) => updateMainTenant(data?.tenant));
     }, [

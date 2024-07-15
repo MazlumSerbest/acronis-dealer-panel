@@ -56,7 +56,7 @@ export default function LocationsTab() {
     //#endregion
 
     const { data, error } = useSWR(
-        `/api/acronis/locations/tenant/${currentUser?.acronisId}`,
+        `/api/acronis/locations/tenants/${currentUser?.acronisId}`,
         null,
         {
             onSuccess: (data) => {

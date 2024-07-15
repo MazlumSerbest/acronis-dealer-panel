@@ -23,7 +23,7 @@ export default function GeneralTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/acronis/tenant/info/${currentUser?.acronisId}`,
+        `/api/acronis/tenants/info/${currentUser?.acronisId}`,
     );
 
     if (error) return <div>failed to load</div>;

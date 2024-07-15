@@ -114,10 +114,10 @@ export default function ClientsPage() {
     //#endregion
 
     // const { data, error } = useSWR(
-    //     "/api/acronis/tenant/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
+    //     "/api/acronis/tenants/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
     // );
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenant/children/${currentUser?.acronisId}`,
+        `/api/acronis/tenants/children/${currentUser?.acronisId}`,
     );
 
     if (error) return <div>failed to load</div>;

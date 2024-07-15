@@ -26,7 +26,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
     const [children, setChildren] = useState(undefined);
 
     //#region Fetch Data
-    const { data, error } = useSWR(`/api/acronis/tenant/${params.id}`, null, {
+    const { data, error } = useSWR(`/api/acronis/tenants/${params.id}`, null, {
         onSuccess: (data) => {
             updateCurrentTenant(data.tenant);
             trigger();
@@ -34,7 +34,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
     });
 
     const { trigger, isMutating } = useSWRMutation(
-        () => `/api/acronis/tenant/children/${params.id}`,
+        () => `/api/acronis/tenants/children/${params.id}`,
         (url: string) => fetch(url).then((res) => res.json()),
         {
             onSuccess: (data) => {
@@ -110,7 +110,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
                                 </Skeleton>
                             }
                         >
-                            <LicensesTab t={t} tenant={data?.tenant}/>
+                            <LicensesTab t={t} tenant={data?.tenant} />
                         </Suspense>
                     </TabsContent>
                 </Tabs>
