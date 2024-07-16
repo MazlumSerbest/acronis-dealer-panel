@@ -92,7 +92,9 @@ export default function LicensesTab(props: Props) {
             zebra
             data={[]}
             columns={columns}
-            onDoubleClick={(item) => {
+            onAddNew={() => null}
+            onClick={(item) => {
+                // Müşterinin lisans sayfasına yönlendir
                 router.push("/panel/licenses/" + item.id);
             }}
         />

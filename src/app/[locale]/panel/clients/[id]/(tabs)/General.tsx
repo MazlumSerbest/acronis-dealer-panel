@@ -115,14 +115,14 @@ export default function GeneralTab(props: Props) {
                                         (u: TenantUsage) =>
                                             u.usage_name == "storage" &&
                                             u.edition == "pck_per_workload",
-                                    ).value
+                                    )?.value
                                 }
                                 total={
                                     data?.usages?.items?.find(
                                         (u: TenantUsage) =>
                                             u.usage_name == "storage" &&
                                             u.edition == "pck_per_workload",
-                                    ).offering_item.quota?.value
+                                    )?.offering_item.quota?.value
                                 }
                             />
                             <p className="text-center">
@@ -131,7 +131,7 @@ export default function GeneralTab(props: Props) {
                                         (u: TenantUsage) =>
                                             u.usage_name == "storage" &&
                                             u.edition == "pck_per_workload",
-                                    ).value,
+                                    )?.value,
                                 )}
                                 <span className="text-zinc-400">
                                     {" / "}

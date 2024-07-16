@@ -19,5 +19,5 @@ type User = Entity & {
     name: string;
     email: string;
     role: string;
-    acronisId: string;
+    acronisTenantId: string;
 };

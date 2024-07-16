@@ -117,7 +117,7 @@ export default function ClientsPage() {
     //     "/api/acronis/tenants/children/9894ccb9-8db6-40dd-b83d-bbf358464783",
     // );
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenants/children/${currentUser?.acronisId}`,
+        `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -135,7 +135,6 @@ export default function ClientsPage() {
                     columns={columns}
                     visibleColumns={visibleColumns}
                     isLoading={isLoading}
-                    onAddNew={() => null}
                     onClick={(item) => {
                         router.push("clients/" + item?.original?.id);
                     }}

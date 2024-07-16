@@ -6,7 +6,7 @@ export const GET = auth(async (req: any, { params }) => {
     try {
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: "authorizationNeeded",
                 status: 401,
                 ok: false,
             });
@@ -27,7 +27,7 @@ export const PUT = auth(async (req: any, { params }) => {
     try {
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: "authorizationNeeded",
                 status: 401,
                 ok: false,
             });
@@ -65,7 +65,7 @@ export const DELETE = auth(async (req: any, { params }) => {
     try {
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: "authorizationNeeded",
                 status: 401,
                 ok: false,
             });

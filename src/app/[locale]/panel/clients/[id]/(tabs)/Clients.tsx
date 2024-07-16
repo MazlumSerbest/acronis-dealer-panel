@@ -113,6 +113,7 @@ export default function GeneralTab(props: Props) {
             data={clients || []}
             columns={columns}
             visibleColumns={visibleColumns}
+            onAddNew={() => null}
             onClick={(item) => {
                 router.push("/panel/clients/" + item?.original?.id);
             }}

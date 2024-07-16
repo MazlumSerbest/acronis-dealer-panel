@@ -14,14 +14,21 @@ export const GET = auth(async (req: any) => {
         const data = await prisma.user.findMany({
             select: {
                 id: true,
+                active: true,
                 name: true,
                 email: true,
                 role: true,
-                acronisId: true,
+                partnerId: true,
+                acronisTenantId: true,
                 createdBy: true,
                 createdAt: true,
                 updatedBy: true,
                 updatedAt: true,
+                partner: {
+                    select: {
+                        acronisId: true,
+                    },
+                },
             },
             orderBy: {
                 createdAt: "asc",
