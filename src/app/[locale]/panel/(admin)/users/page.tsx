@@ -10,14 +10,13 @@ import { Button } from "@/components/ui/button";
 import DataTable from "@/components/table/DataTable";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import BoolChip from "@/components/BoolChip";
 
 export default function UsersPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error } = useSWR(
-        `/api/user`,
-    );
+    const { data, error, isLoading } = useSWR(`/api/user`);
 
     //#region Table
     const visibleColumns = {
@@ -75,12 +74,27 @@ export default function UsersPage() {
             accessorKey: "role",
             header: t("role"),
             enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("role");
+
+                return t(data) || "-";
+            },
         },
+        // {
+        //     accessorKey: "acronisTenantId",
+        //     header: t("acronisTenantId"),
+        //     enableGlobalFilter: false,
+        // },
         {
-            accessorKey: "acronisId",
-            header: t("acronisTenantId"),
+            accessorKey: "active",
+            header: t("active"),
             enableGlobalFilter: false,
-        },
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("active");
+
+                return <BoolChip value={data} />;
+            },
+        }
     ];
     //#endregion
 
@@ -91,6 +105,7 @@ export default function UsersPage() {
             columns={columns}
             data={data}
             visibleColumns={visibleColumns}
+            isLoading={isLoading}
             onAddNew={() => null}
         />
     );
