@@ -6,12 +6,13 @@ import {
     LuUnplug,
     LuSettings,
     LuUser2,
+    LuArchiveRestore,
 } from "react-icons/lu";
 
 export const paths: Path[] = [
     {
         path: "/panel",
-        key: "dashboard",
+        key: "panel",
         roles: ["admin", "dealer"],
         icon: (
             <LuLayoutDashboard
@@ -53,11 +54,11 @@ export const paths: Path[] = [
     //     ),
     // },
     {
-        path: "/panel/management",
-        key: "management",
-        roles: ["admin", "dealer"],
+        path: "/panel/applications",
+        key: "applications",
+        roles: ["admin"],
         icon: (
-            <LuUnplug
+            <LuArchiveRestore
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Management Page"
             />
@@ -69,6 +70,17 @@ export const paths: Path[] = [
         roles: ["admin"],
         icon: (
             <LuUser2
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Management Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/management",
+        key: "management",
+        roles: ["admin", "dealer"],
+        icon: (
+            <LuUnplug
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Management Page"
             />
