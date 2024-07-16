@@ -2,11 +2,12 @@
     "General": {
         "": "Test",
         "Pages": {
-            "dashboard": "Panel",
+            "panel": "Dashboard",
             "clients": "Clients",
             "licenses": "Licenses",
             "alerts": "Alerts",
             "management": "Management",
+            "applications": "Applications",
             "users": "Users",
             "settings": "Settings"
         },
@@ -26,6 +27,7 @@
         "actions": "Actions",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
+        "active": "Active",
         "disabled": "Disabled",
         "createdAt": "Created At",
         "updatedAt": "Updated At",
@@ -60,7 +62,18 @@
         "types": "Types",
         "platformOwned": "Platform Owned",
         "title": "Title",
-        "acronisTenantId": "Acronis Tenant ID"
+        "acronisTenantId": "Acronis Tenant ID",
+        "companyType": "Company Type",
+        "applicationDate": "Application Date",
+        "acceptanceDate": "Acceptance Date",
+        "acceptedBy": "Accepted By",
+        "status": "Status",
+        "admin": "Administrator",
+        "dealer": "Dealer",
+        "warning": "warning",
+        "language": "Language",
+        "editProfile": "Edit Profile",
+        "otherSettings": "Other Settings"
     },
     "Components": {
         "search": "Search",
@@ -93,10 +106,14 @@
         "general": "General",
         "locations": "Locations",
         "security": "Security",
-        "securitySubtitle": "Security settings can only changed from Acronis Cloud Platform",
+        "warningMessage": "These setting are only for information purposes and only can be changed at Acronis Cloud Platform.",
+        "securitySubtitle": "Security settings from Acronis Cloud Platform",
         "pricing": "Pricing",
-        "pricingSubtitle": "Pricing settings are just for information",
+        "pricingSubtitle": "Pricing settings from Acronis Cloud Platform",
         "branding": "Branding",
-        "brandingSubtitle": "Branding settings can only changed from Acronis Cloud Platform"
+        "brandingSubtitle": "Branding settings from Acronis Cloud Platform"
+    },
+    "Messages": {
+        "authorizationNeeded": "Authorization Needed!"
     }
 }

@@ -1,12 +1,13 @@
 {
     "General": {
         "Pages": {
-            "dashboard": "Panel",
+            "panel": "Panel",
             "clients": "Müşteriler",
             "licenses": "Lisanslar",
             "alerts": "Hata Mesajları",
             "management": "Yönetim",
             "users": "Kullanıcılar",
+            "applications": "Başvurular",
             "settings": "Ayarlar"
         },
         "cancel": "İptal",
