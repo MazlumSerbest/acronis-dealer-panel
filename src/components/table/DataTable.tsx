@@ -204,7 +204,9 @@ export default function DataTable<TData, TValue>(
                 </Table>
             </div>
 
-            {data.length < 10 ? null : <Pagination table={table} />}
+            {data.length < 10 || !data.length ? null : (
+                <Pagination table={table} />
+            )}
         </div>
     );
 }

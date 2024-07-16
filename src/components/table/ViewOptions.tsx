@@ -39,7 +39,7 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
                             </span>
                         </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="w-[150px]">
+                    <DropdownMenuContent align="end" className="max-w-[300px]">
                         {/* <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
             <DropdownMenuSeparator /> */}
                         {visibleColumns.map((column) => {
