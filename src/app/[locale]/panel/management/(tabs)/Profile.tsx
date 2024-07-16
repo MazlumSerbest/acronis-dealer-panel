@@ -4,6 +4,7 @@ import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useUserStore from "@/store/user";
 import { Separator } from "@/components/ui/separator";
+import AcronisWarning from "@/components/AcronisWarning";
 
 export default function ProfileTab() {
     const t = useTranslations("Management");
@@ -11,7 +12,7 @@ export default function ProfileTab() {
 
     //#region Fetch Data
     const { data, error } = useSWR(
-        `/api/acronis/tenants/${currentUser?.acronisId}`,
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -25,6 +26,7 @@ export default function ProfileTab() {
 
     return (
         <div className="flex flex-col gap-4">
+            <AcronisWarning />
             <Card className="w-full">
                 <CardHeader className="py-4">
                     <CardTitle className="font-medium text-xl">

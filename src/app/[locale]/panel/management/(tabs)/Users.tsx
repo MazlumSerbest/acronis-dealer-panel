@@ -5,9 +5,10 @@ import { useTranslations } from "next-intl";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
+import DataTable from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
-import DataTable from "@/components/table/DataTable";
+import AcronisWarning from "@/components/AcronisWarning";
 import useUserStore from "@/store/user";
 import { LuChevronsUpDown } from "react-icons/lu";
 
@@ -54,8 +55,8 @@ export default function UsersTab() {
     ];
     //#endregion
 
-    const { data, error } = useSWR(
-        `/api/acronis/tenants/users/${currentUser?.acronisId}`,
+    const { data, error, isLoading } = useSWR(
+        `/api/acronis/tenants/users/${currentUser?.acronisTenantId}`,
         null,
         {
             onSuccess: (data) => {
@@ -71,5 +72,10 @@ export default function UsersTab() {
                 <TableSkeleton />
             </Skeleton>
         );
-    return <DataTable columns={columns} data={users} />;
+    return (
+        <div className="flex flex-col gap-4">
+            <AcronisWarning />
+            <DataTable columns={columns} data={users} isLoading={isLoading} />
+        </div>
+    );
 }

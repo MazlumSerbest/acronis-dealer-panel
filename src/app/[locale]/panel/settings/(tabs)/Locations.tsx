@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import DataTable from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
+import AcronisWarning from "@/components/AcronisWarning";
 import useUserStore from "@/store/user";
 import { LuChevronsUpDown } from "react-icons/lu";
 
@@ -55,8 +56,8 @@ export default function LocationsTab() {
     ];
     //#endregion
 
-    const { data, error } = useSWR(
-        `/api/acronis/locations/tenants/${currentUser?.acronisId}`,
+    const { data, error, isLoading } = useSWR(
+        `/api/acronis/locations/tenant/${currentUser?.acronisTenantId}`,
         null,
         {
             onSuccess: (data) => {
@@ -73,9 +74,13 @@ export default function LocationsTab() {
             </Skeleton>
         );
     return (
-        <DataTable
-            columns={columns}
-            data={locations}
-        />
+        <div className="flex flex-col gap-4">
+            <AcronisWarning />
+            <DataTable
+                columns={columns}
+                data={locations}
+                isLoading={isLoading}
+            />
+        </div>
     );
 }

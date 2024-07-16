@@ -9,11 +9,11 @@ import {
     CardDescription,
     CardTitle,
 } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 
+import AcronisWarning from "@/components/AcronisWarning";
 import { LuFolderLock, LuCoins, LuTag } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -23,7 +23,7 @@ export default function GeneralTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/acronis/tenants/info/${currentUser?.acronisId}`,
+        `/api/acronis/tenants/info/${currentUser?.acronisTenantId}`,
     );
 
     if (error) return <div>failed to load</div>;
@@ -35,6 +35,7 @@ export default function GeneralTab() {
         );
     return (
         <div className="flex flex-col gap-4">
+            <AcronisWarning />
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuFolderLock className="size-8 text-green-500/60" />
