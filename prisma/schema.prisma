@@ -16,14 +16,18 @@ model User {
   accounts      Account[]
   sessions      Session[]
 
-  active    Boolean @default(true)
-  acronisId String?
-  role      String?
+  active          Boolean @default(true)
+  partnerId       String?
+  acronisTenantId String?
+  role            String?
+  language        String? @default("tr")
 
   createdBy String?
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
+
+  partner Partner? @relation(fields: [partnerId], references: [id])
 }
 
 model Account {
@@ -63,4 +67,68 @@ model VerificationToken {
   expires    DateTime
 
   @@id([identifier, token])
+}
+
+model Partner {
+  id        String  @id @default(cuid())
+  acronisId String? @unique
+
+  createdBy String?
+  createdAt DateTime  @default(now())
+  updatedBy String?
+  updatedAt DateTime  @updatedAt
+  clients   Client[]
+  licenses  License[]
+  users     User[]
+}
+
+model Client {
+  id          String    @id @default(cuid())
+  partnerId   String
+  acronisId   String?   @unique
+  billingDate DateTime?
+
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  partner Partner @relation(fields: [partnerId], references: [id])
+}
+
+model License {
+  id              String @id @default(cuid())
+  partnerId       String
+  key             String @unique
+  typeSerialNo    String
+  licenseSerialNo String @unique
+
+  // expiresAt DateTime?
+  boughtAt    DateTime?
+  activatedAt DateTime?
+
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  partner Partner @relation(fields: [partnerId], references: [id])
+}
+
+model Appliance {
+  id              String   @id @default(cuid())
+  companyType     String
+  name            String
+  taxNo           String
+  taxOffice       String
+  email           String
+  phone           String
+  mobile          String
+  address         String
+  city            String
+  district        String
+  postalCode      String
+  applicationDate DateTime
+  acceptedAt      DateTime
+  acceptedBy      String
 }
