@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
+import { useLocale } from "next-intl";
 
 import {
     Card,
@@ -27,6 +28,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 
+import { Turnstile } from "@marsidev/react-turnstile";
 import Logo from "@/components/navigation/Logo";
 import { cities } from "@/lib/constants";
 import { Combobox } from "@/components/Combobox";
@@ -36,7 +38,10 @@ const applicationFormSchema = z.object({
     type: z.enum(["business", "person"], {
         required_error: "Lütfen şirket tipi seçiniz.",
     }),
-    name: z.string(),
+    name: z.string({
+        required_error: "Name is required",
+        invalid_type_error: "Name must be a string",
+    }),
     taxNo: z
         .string({
             required_error: "Name is required",
@@ -57,6 +62,9 @@ const applicationFormSchema = z.object({
     district: z.string(),
     file: z.instanceof(File),
     signature: z.instanceof(File),
+    turnstile: z.literal<boolean>(true, {
+        errorMap: () => ({ message: "Lütfen Capthca'yı çözünüz." }),
+    }),
 });
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
@@ -68,6 +76,7 @@ const defaultValues: Partial<ApplicationFormValues> = {
 
 export default function Application() {
     const { toast } = useToast();
+    const locale = useLocale();
 
     const form = useForm<ApplicationFormValues>({
         resolver: zodResolver(applicationFormSchema),
@@ -116,7 +125,7 @@ export default function Application() {
                     </div>
                     <Logo width={40} height={40} />
                 </CardHeader>
-                
+
                 <Separator />
 
                 <CardContent className="flex flex-col p-6 gap-4">
@@ -632,9 +641,36 @@ export default function Application() {
                                     />
                                 )}
                             </div>
+
+                            <div className="flex place-items-end">
+                                <div className="flex-1"></div>
+                                <div className="grid gap-2">
+                                    <Turnstile
+                                        siteKey="0x4AAAAAAAfReA6N46PHA4HD"
+                                        options={{
+                                            action: "submit-form",
+                                            language: locale,
+                                        }}
+                                        onSuccess={() => {
+                                            form.setValue("turnstile", true);
+                                        }}
+                                        onError={() => {
+                                            form.setValue("turnstile", false);
+                                        }}
+                                    />
+                                    {form.formState.errors.turnstile && (
+                                        <p className="text-[0.8em] font-medium text-destructive">
+                                            {
+                                                form?.formState?.errors
+                                                    ?.turnstile?.message
+                                            }
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
                         </CardContent>
                         {/* <Separator /> */}
-                        <CardFooter className="flex flex-row">
+                        <CardFooter className="flex flex-row gap-2">
                             <div className="flex-1"></div>
                             <Button
                                 type="submit"
