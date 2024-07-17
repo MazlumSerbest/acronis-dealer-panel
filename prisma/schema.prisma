@@ -132,8 +132,8 @@ model Application {
   district        String
   postalCode      String
   applicationDate DateTime
-  approvedAt      DateTime
-  approvedBy      String
+  approvedAt      DateTime?
+  approvedBy      String?
 
   createdBy String?
   createdAt DateTime @default(now())
