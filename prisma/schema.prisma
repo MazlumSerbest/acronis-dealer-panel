@@ -73,13 +73,15 @@ model Partner {
   id        String  @id @default(cuid())
   acronisId String? @unique
 
-  createdBy String?
-  createdAt DateTime  @default(now())
-  updatedBy String?
-  updatedAt DateTime  @updatedAt
-  clients   Client[]
-  licenses  License[]
-  users     User[]
+  createdBy    String?
+  createdAt    DateTime      @default(now())
+  updatedBy    String?
+  updatedAt    DateTime      @updatedAt
+
+  clients      Client[]
+  licenses     License[]
+  users        User[]
+  applications Application[]
 }
 
 model Client {
@@ -115,8 +117,9 @@ model License {
   partner Partner @relation(fields: [partnerId], references: [id])
 }
 
-model Appliance {
+model Application {
   id              String   @id @default(cuid())
+  partnerId       String?
   companyType     String
   name            String
   taxNo           String
@@ -129,6 +132,13 @@ model Appliance {
   district        String
   postalCode      String
   applicationDate DateTime
-  acceptedAt      DateTime
-  acceptedBy      String
+  approvedAt      DateTime
+  approvedBy      String
+
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  partner Partner? @relation(fields: [partnerId], references: [id])
 }

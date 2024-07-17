@@ -32,12 +32,14 @@
         "createdAt": "Created At",
         "updatedAt": "Updated At",
         "email": "Email",
+        "emailVerified": "Email Verified",
         "phone": "Phone",
         "address": "Address",
         "customerType": "Customer Type",
         "usage": "Usage",
         "emptyContent": "No results.",
         "partner": "Partner",
+        "partnerId": "Partner ID",
         "customer": "Customer",
         "production": "Production",
         "trial": "Trial",
@@ -65,8 +67,8 @@
         "acronisTenantId": "Acronis Tenant ID",
         "companyType": "Company Type",
         "applicationDate": "Application Date",
-        "acceptanceDate": "Acceptance Date",
-        "acceptedBy": "Accepted By",
+        "approvedAt": "Approved At",
+        "approvedBy": "Approved By",
         "status": "Status",
         "admin": "Administrator",
         "dealer": "Dealer",
@@ -94,6 +96,12 @@
     },
     "Alerts": {
         "title": "Alerts"
+    },
+    "Applications": {
+        "title": "Applications",
+        "waiting": "Waiting",
+        "approved": "Approved",
+        "resolved": "Resolved"
     },
     "Management": {
         "title": "Management",

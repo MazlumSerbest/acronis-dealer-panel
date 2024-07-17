@@ -86,6 +86,17 @@ export default function UsersPage() {
         //     enableGlobalFilter: false,
         // },
         {
+            accessorKey: "emailVerified",
+            header: t("emailVerified"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("emailVerified");
+
+                const emailVerified: boolean = data.length > 0;
+                return <BoolChip value={emailVerified} />;
+            },
+        },
+        {
             accessorKey: "active",
             header: t("active"),
             enableGlobalFilter: false,
@@ -94,7 +105,7 @@ export default function UsersPage() {
 
                 return <BoolChip value={data} />;
             },
-        }
+        },
     ];
     //#endregion
 

@@ -78,7 +78,7 @@ export default function LocationsTab() {
             <AcronisWarning />
             <DataTable
                 columns={columns}
-                data={locations}
+                data={locations || []}
                 isLoading={isLoading}
             />
         </div>

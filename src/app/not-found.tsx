@@ -3,7 +3,7 @@ import Error from "next/error";
 
 export default function NotFound() {
     return (
-        <html lang="en">
+        <html>
             <body>
                 <Error statusCode={404} />
             </body>
