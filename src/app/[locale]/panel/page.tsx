@@ -76,7 +76,6 @@ export default function PanelPage() {
                     }
                 /> */}
 
-                
                 {/* <PanelCard
                     header="Total Usage"
                     content={

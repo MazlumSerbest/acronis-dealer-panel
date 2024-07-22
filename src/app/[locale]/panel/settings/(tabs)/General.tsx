@@ -26,7 +26,7 @@ export default function GeneralTab() {
         `/api/acronis/tenants/info/${currentUser?.acronisTenantId}`,
     );
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>

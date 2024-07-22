@@ -120,7 +120,7 @@ export default function ClientsPage() {
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
     );
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("clients")} />

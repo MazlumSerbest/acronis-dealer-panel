@@ -2,7 +2,6 @@ import useSWR from "swr";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
 import NeedleChart from "@/components/charts/Needle";
 import { formatBytes } from "@/utils/functions";

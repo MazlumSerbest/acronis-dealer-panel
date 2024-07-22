@@ -44,7 +44,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
     );
     //#endregion
 
-    if (error) return <div>{error}</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>

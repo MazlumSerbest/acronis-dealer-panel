@@ -8,9 +8,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import DataTable from "@/components/table/DataTable";
+import BoolChip from "@/components/BoolChip";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import BoolChip from "@/components/BoolChip";
 
 export default function UsersPage() {
     const t = useTranslations("General");
@@ -109,7 +110,13 @@ export default function UsersPage() {
     ];
     //#endregion
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
+    if (!data)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
     return (
         <DataTable
             zebra

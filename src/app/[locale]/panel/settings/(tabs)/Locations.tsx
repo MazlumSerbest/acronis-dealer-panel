@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import DataTable from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import AcronisWarning from "@/components/AcronisWarning";
@@ -66,11 +66,11 @@ export default function LocationsTab() {
         },
     );
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!locations)
         return (
             <Skeleton>
-                <DefaultSkeleton />
+                <TableSkeleton />
             </Skeleton>
         );
     return (

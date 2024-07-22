@@ -65,7 +65,7 @@ export default function UsersTab() {
         },
     );
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>

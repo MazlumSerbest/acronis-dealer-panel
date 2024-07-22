@@ -66,7 +66,7 @@ export default function ContactsTab() {
             cell: ({ row }) => {
                 const data: [] = row.getValue("types");
 
-                return data.join(", ");
+                return data.map(type => t(type)).join(", ");
             },
         },
         {
@@ -96,7 +96,7 @@ export default function ContactsTab() {
         },
     );
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>

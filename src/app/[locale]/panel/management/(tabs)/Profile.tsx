@@ -14,16 +14,15 @@ export default function ProfileTab() {
     const { data, error } = useSWR(
         `/api/acronis/tenants/${currentUser?.acronisTenantId}`,
     );
+    //#endregion
 
-    if (error) return <div>failed to load</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>
                 <DefaultSkeleton />
             </Skeleton>
         );
-    //#endregion
-
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
