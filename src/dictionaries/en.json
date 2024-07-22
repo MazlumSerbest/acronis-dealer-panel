@@ -13,6 +13,8 @@
         },
         "yes": "Yes",
         "no": "No",
+        "or": "or",
+        "and": "and",
         "logout": "Log out",
         "logoutMessage": "You are going to log out. Are you sure?",
         "cancel": "Cancel",
@@ -34,6 +36,7 @@
         "email": "Email",
         "emailVerified": "Email Verified",
         "phone": "Phone",
+        "mobile": "Mobile",
         "address": "Address",
         "customerType": "Customer Type",
         "usage": "Usage",
@@ -75,15 +78,41 @@
         "warning": "warning",
         "language": "Language",
         "editProfile": "Edit Profile",
-        "otherSettings": "Other Settings"
+        "otherSettings": "Other Settings",
+        "failedToLoad": "Failed to load",
+        "legal": "Legal",
+        "primary": "Primary",
+        "billing": "Billing",
+        "technical": "Technical",
+        "management": "Management",
+        "business": "Business",
+        "person": "Person",
+        "applicationInformation": "Application Information",
+        "taxNo": "Tax No",
+        "taxOffice": "Tax Office",
+        "city": "City",
+        "district": "District",
+        "postalCode": "Postal Code"
+    },
+    "SignIn": {
+        "signIn": "Sign In",
+        "signInDescription": "Enter your email below to sign in",
+        "signInWithEmail": "Sign In with Email",
+        "makeApplication": "Make A Dealer Application"
     },
     "Components": {
         "search": "Search",
-        "active": "Active",
         "columns": "Columns",
         "add": "Add",
-        "totalRows": "Total Rows",
-        "rowsPerPage": "Rows Per Page"
+        "rowsPerPage": "Rows per page",
+        "searchPlaceholder": "Search...",
+        "noResults": "No results.",
+        "page": "Page",
+        "goToFirstPage": "Go to first page",
+        "goToLastPage": "Go to last page",
+        "goToNextPage": "Go to next page",
+        "goToPreviousPage": "Go to previous page",
+        "clearSelection": "Clear Selection"
     },
     "Dashboard": {
         "title": "Dashboard"

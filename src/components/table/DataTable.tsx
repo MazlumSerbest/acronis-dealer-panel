@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import {
     ColumnDef,
@@ -63,6 +64,8 @@ export default function DataTable<TData, TValue>(
         onDoubleClick,
     } = props;
 
+    const tc = useTranslations("Components");
+
     const [sorting, setSorting] = useState<SortingState>([]);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
@@ -95,7 +98,7 @@ export default function DataTable<TData, TValue>(
         <div className="space-y-4">
             <div className="flex items-center gap-2 justify-between">
                 <Input
-                    placeholder="Search..."
+                    placeholder={tc("searchPlaceholder")}
                     value={globalFilter ?? ""}
                     onChange={(e) => setGlobalFilter(e.target.value)}
                     className="max-w-sm"
@@ -110,7 +113,7 @@ export default function DataTable<TData, TValue>(
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
                         >
-                            <span className="sr-only lg:not-sr-only">Ekle</span>
+                            <span className="sr-only lg:not-sr-only">{tc("add")}</span>
                             <LuPlus className="size-4" />
                         </Button>
                     )}
@@ -194,7 +197,7 @@ export default function DataTable<TData, TValue>(
                                             colSpan={columns.length}
                                             className="h-24 text-center"
                                         >
-                                            No results.
+                                            {tc("noResults")}
                                         </TableCell>
                                     </TableRow>
                                 )}

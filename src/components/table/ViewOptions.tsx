@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
@@ -16,6 +18,7 @@ interface ViewOptionsProps<TData> {
 }
 
 export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
+    const tc = useTranslations("Components");
     const visibleColumns = table
         .getAllColumns()
         .filter(
@@ -35,7 +38,7 @@ export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
                         >
                             <MixerHorizontalIcon className="size-4" />
                             <span className="sr-only lg:not-sr-only">
-                                Columns
+                                {tc("columns")}
                             </span>
                         </Button>
                     </DropdownMenuTrigger>
