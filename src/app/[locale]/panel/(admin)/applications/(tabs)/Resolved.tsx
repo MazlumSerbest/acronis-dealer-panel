@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import DataTable from "@/components/table/DataTable";
-import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
@@ -14,10 +14,12 @@ export default function ResolvedTab() {
     const router = useRouter();
     const t = useTranslations("General");
 
-    const { data, error, isLoading } = useSWR(`/api/application?status=resolved`);
+    const { data, error, isLoading } = useSWR(
+        "/api/application?status=resolved",
+    );
 
     //#region Table
-    const visibleColumns = { };
+    const visibleColumns = {};
 
     const columns: ColumnDef<any, any>[] = [
         {
@@ -50,11 +52,7 @@ export default function ResolvedTab() {
             cell: ({ row }) => {
                 const data: string = row.getValue("companyType");
 
-                return data
-                    ? data == "partner"
-                        ? t("partner")
-                        : t("customer")
-                    : "-";
+                return t(data) || "-";
             },
         },
         {
@@ -86,15 +84,17 @@ export default function ResolvedTab() {
             accessorKey: "partnerId",
             header: t("partnerId"),
             enableGlobalFilter: false,
-        }
+        },
     ];
     //#endregion
+
+    console.log(data);
 
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>
-                <DefaultSkeleton />
+                <TableSkeleton />
             </Skeleton>
         );
     return (
@@ -105,7 +105,7 @@ export default function ResolvedTab() {
             visibleColumns={visibleColumns}
             isLoading={isLoading}
             onClick={(item) => {
-                router.push("/panel/applications/" + item.id);
+                router.push("/panel/applications/" + item.original.id);
             }}
         />
     );

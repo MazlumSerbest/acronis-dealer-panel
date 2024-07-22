@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import DataTable from "@/components/table/DataTable";
-import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
@@ -54,11 +54,7 @@ export default function WaitingTab() {
             cell: ({ row }) => {
                 const data: string = row.getValue("companyType");
 
-                return data
-                    ? data == "partner"
-                        ? t("partner")
-                        : t("customer")
-                    : "-";
+                return t(data) || "-";
             },
         },
         {
@@ -78,7 +74,7 @@ export default function WaitingTab() {
     if (!data)
         return (
             <Skeleton>
-                <DefaultSkeleton />
+                <TableSkeleton />
             </Skeleton>
         );
     return (
@@ -89,7 +85,7 @@ export default function WaitingTab() {
             visibleColumns={visibleColumns}
             isLoading={isLoading}
             onClick={(item) => {
-                router.push("/panel/applications/" + item.id);
+                router.push("/panel/applications/" + item.original.id);
             }}
         />
     );

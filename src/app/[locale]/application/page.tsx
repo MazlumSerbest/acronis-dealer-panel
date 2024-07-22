@@ -33,6 +33,7 @@ import Logo from "@/components/navigation/Logo";
 import { cities } from "@/lib/constants";
 import { Combobox } from "@/components/Combobox";
 import { LuBuilding2, LuUser } from "react-icons/lu";
+import { cn } from "@/lib/utils";
 
 const applicationFormSchema = z.object({
     type: z.enum(["business", "person"], {
@@ -647,8 +648,12 @@ export default function Application() {
                                 <div className="grid gap-2">
                                     <Turnstile
                                         siteKey="0x4AAAAAAAfReA6N46PHA4HD"
+                                        className={cn(
+                                            form.formState.errors.turnstile
+                                                ? "ring-destructive ring-2"
+                                                : "",
+                                        )}
                                         options={{
-                                            action: "submit-form",
                                             language: locale,
                                         }}
                                         onSuccess={() => {
@@ -673,8 +678,9 @@ export default function Application() {
                         <CardFooter className="flex flex-row gap-2">
                             <div className="flex-1"></div>
                             <Button
+                                size="lg"
                                 type="submit"
-                                className="bg-green-600 hover:bg-green-500"
+                                className="bg-blue-400 hover:bg-blue-400/90"
                             >
                                 Başvuru Yap
                             </Button>

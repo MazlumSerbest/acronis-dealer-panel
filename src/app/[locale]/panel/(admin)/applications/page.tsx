@@ -6,7 +6,7 @@ import WaitingTab from "./(tabs)/Waiting";
 import ApprovedTab from "./(tabs)/Approved";
 import ResolvedTab from "./(tabs)/Resolved";
 
-export default function UsersPage() {
+export default function ApplicationsPage() {
     const ta = useTranslations("Applications");
 
     return (
