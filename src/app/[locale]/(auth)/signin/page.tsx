@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,8 @@ export default async function SignIn({
         const url = "/en/panel";
         return redirect(url);
     }
+    const t = await getTranslations("General");
+    const ts = await getTranslations("SignIn");
 
     // const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -42,10 +45,10 @@ export default async function SignIn({
 
                 <div className="flex flex-col space-y-2 text-center">
                     <h2 className="text-2xl font-semibold tracking-tight">
-                        Sign In
+                        {ts("signIn")}
                     </h2>
                     <p className="text-sm text-muted-foreground">
-                        Enter your email below to sign in
+                        {ts("signInDescription")}
                     </p>
                 </div>
 
@@ -59,7 +62,7 @@ export default async function SignIn({
                         <div className="grid gap-2">
                             <div className="grid gap-1">
                                 <Label className="sr-only" htmlFor="email">
-                                    Email
+                                    {t("email")}
                                 </Label>
                                 <Input
                                     id="email"
@@ -76,8 +79,11 @@ export default async function SignIn({
                                     </p>
                                 )}
                             </div>
-                            <Button type="submit" className="bg-blue-500 hover:bg-blue-500/80">
-                                Sign In with Email
+                            <Button
+                                type="submit"
+                                className="bg-blue-500 hover:bg-blue-500/80"
+                            >
+                                {ts("signInWithEmail")}
                             </Button>
                         </div>
                     </form>
@@ -88,15 +94,13 @@ export default async function SignIn({
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
                             <span className="bg-background px-2 text-muted-foreground">
-                                Or
+                                {t("or")}
                             </span>
                         </div>
                     </div>
 
                     <Button variant="outline" type="button" asChild>
-                        <Link href="/application">
-                            Make A Dealer Application
-                        </Link>
+                        <Link href="/application">{ts("makeApplication")}</Link>
                     </Button>
                 </div>
                 {/* 
@@ -110,14 +114,14 @@ export default async function SignIn({
                         href="/terms"
                         className="underline underline-offset-4 hover:text-primary"
                     >
-                        Terms of Service
-                    </Link>{" "}
-                    and{" "}
+                        {ts("termsOfService")}
+                    </Link>
+                    {` ${t("and")} `}
                     <Link
                         href="/privacy"
                         className="underline underline-offset-4 hover:text-primary"
                     >
-                        Privacy Policy
+                        {ts("privacyPolicy")}
                     </Link>
                     .
                 </p>

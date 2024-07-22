@@ -98,7 +98,11 @@
         "signIn": "Sign In",
         "signInDescription": "Enter your email below to sign in",
         "signInWithEmail": "Sign In with Email",
-        "makeApplication": "Make A Dealer Application"
+        "makeApplication": "Make A Dealer Application",
+        "termsOfService": "Terms of Service",
+        "privacyPolicy": "Privacy Policy",
+        "checkYourEmail": "Check Your Email",
+        "checkYourEmailDescription": "We have sent a magic link to your email address. Please follow the link to sign in to your account."
     },
     "Components": {
         "search": "Search",
