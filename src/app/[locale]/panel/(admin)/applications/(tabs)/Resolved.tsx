@@ -16,6 +16,10 @@ export default function ResolvedTab() {
 
     const { data, error, isLoading } = useSWR(
         "/api/application?status=resolved",
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
 
     //#region Table

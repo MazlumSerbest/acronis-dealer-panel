@@ -14,10 +14,16 @@ export default function ApprovedTab() {
     const router = useRouter();
     const t = useTranslations("General");
 
-    const { data, error, isLoading } = useSWR(`/api/application?status=approved`);
-    
+    const { data, error, isLoading } = useSWR(
+        `/api/application?status=approved`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
+
     //#region Table
-    const visibleColumns = { };
+    const visibleColumns = {};
 
     const columns: ColumnDef<any, any>[] = [
         {

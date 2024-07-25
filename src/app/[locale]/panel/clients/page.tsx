@@ -118,6 +118,10 @@ export default function ClientsPage() {
     // );
     const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
 
     if (error) return <div>{t("failedToLoad")}</div>;

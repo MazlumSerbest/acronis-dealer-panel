@@ -10,6 +10,10 @@ export default function AlertsPage() {
 
     const { data, error } = useSWR(
         `/api/acronis/alert/${currentUser?.acronisTenantId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
 
     if (error) return <div>failed to load</div>;

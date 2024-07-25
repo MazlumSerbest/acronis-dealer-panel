@@ -14,10 +14,16 @@ export default function WaitingTab() {
     const router = useRouter();
     const t = useTranslations("General");
 
-    const { data, error, isLoading } = useSWR(`/api/application?status=waiting`);
+    const { data, error, isLoading } = useSWR(
+        `/api/application?status=waiting`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
 
     //#region Table
-    const visibleColumns = { };
+    const visibleColumns = {};
 
     const columns: ColumnDef<any, any>[] = [
         {

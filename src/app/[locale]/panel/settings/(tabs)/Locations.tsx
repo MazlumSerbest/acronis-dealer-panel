@@ -60,6 +60,7 @@ export default function LocationsTab() {
         `/api/acronis/locations/tenant/${currentUser?.acronisTenantId}`,
         null,
         {
+            revalidateOnFocus: false,
             onSuccess: (data) => {
                 setLocations(data.locations?.items);
             },

@@ -18,7 +18,9 @@ type Props = {
 export default function GeneralTab(props: Props) {
     const { t, tenant } = props;
 
-    const { data, error } = useSWR(`/api/acronis/usages/${tenant?.id}`);
+    const { data, error } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
+        revalidateOnFocus: false,
+    });
 
     return (
         <div className="grid grid-cols-3 gap-4">

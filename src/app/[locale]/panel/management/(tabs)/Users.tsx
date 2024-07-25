@@ -59,6 +59,7 @@ export default function UsersTab() {
         `/api/acronis/tenants/users/${currentUser?.acronisTenantId}`,
         null,
         {
+            revalidateOnFocus: false,
             onSuccess: (data) => {
                 setUsers(data.users?.items);
             },

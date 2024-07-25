@@ -16,7 +16,9 @@ export default function ApplicationDetail({
 }) {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(`/api/application/${params.id}`);
+    const { data, error } = useSWR(`/api/application/${params.id}`, null, {
+        revalidateOnFocus: false,
+    });
 
     const citiesList: ListBoxItem[] = cities.map((city) => {
         return {

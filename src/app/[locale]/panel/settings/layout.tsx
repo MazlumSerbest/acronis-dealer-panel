@@ -7,6 +7,7 @@ export default function SettingsLayout({
     children: React.ReactNode;
 }) {
     const t = useTranslations("General.Pages");
+    
     return (
         <div className="flex flex-col">
             <PageHeader title={t("settings")} />

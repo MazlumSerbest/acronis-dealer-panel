@@ -112,7 +112,9 @@ export default function UserCard() {
                 </SheetTrigger>
                 <SheetContent>
                     <SheetHeader>
-                        <SheetTitle className="text-blue-400">{t("editProfile")}</SheetTitle>
+                        <SheetTitle className="text-blue-400">
+                            {t("editProfile")}
+                        </SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col gap-4 my-4">
                         <div className="grid gap-2">
@@ -137,7 +139,9 @@ export default function UserCard() {
                         </div>
                     </div>
                     <SheetHeader>
-                        <SheetTitle className="text-blue-400">{t("otherSettings")}</SheetTitle>
+                        <SheetTitle className="text-blue-400">
+                            {t("otherSettings")}
+                        </SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col mt-4">
                         <div className="grid grid-cols-2 items-center gap-4">
@@ -149,7 +153,8 @@ export default function UserCard() {
                                         `/${locale}/`,
                                         `/${v}/`,
                                     );
-                                    router.push(newPath);
+                                    router.replace(newPath);
+                                    router.refresh();
                                 }}
                             >
                                 <SelectTrigger>

@@ -7,6 +7,7 @@ export default function ApplicationsLayout({
     children: React.ReactNode;
 }) {
     const t = useTranslations("General.Pages");
+    
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("applications")} />

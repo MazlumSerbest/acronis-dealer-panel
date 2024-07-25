@@ -17,7 +17,9 @@ export default function UsersPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading } = useSWR(`/api/user`);
+    const { data, error, isLoading } = useSWR(`/api/user`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Table
     const visibleColumns = {

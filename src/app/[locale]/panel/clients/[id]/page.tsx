@@ -27,6 +27,7 @@ export default function ClientDetail({ params }: { params: { id: string } }) {
 
     //#region Fetch Data
     const { data, error } = useSWR(`/api/acronis/tenants/${params.id}`, null, {
+        revalidateOnFocus: false,
         onSuccess: (data) => {
             updateCurrentTenant(data.tenant);
             trigger();

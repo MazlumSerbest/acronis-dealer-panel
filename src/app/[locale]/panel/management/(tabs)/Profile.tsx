@@ -13,6 +13,10 @@ export default function ProfileTab() {
     //#region Fetch Data
     const { data, error } = useSWR(
         `/api/acronis/tenants/${currentUser?.acronisTenantId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
     //#endregion
 

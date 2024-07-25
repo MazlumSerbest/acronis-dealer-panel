@@ -24,6 +24,10 @@ export default function GeneralTab() {
 
     const { data, error } = useSWR(
         `/api/acronis/tenants/info/${currentUser?.acronisTenantId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
 
     if (error) return <div>{t("failedToLoad")}</div>;

@@ -86,6 +86,7 @@ export default function ContactsTab() {
         `/api/acronis/tenants/contacts/${currentUser?.acronisTenantId}`,
         null,
         {
+            revalidateOnFocus: false,
             onSuccess: (data) => {
                 setContacts(
                     data.contacts.items.filter(
