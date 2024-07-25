@@ -17,7 +17,7 @@ import useAcronisStore from "@/store/acronis";
 import useUserStore from "@/store/user";
 
 export default function NavLayout() {
-    const t = useTranslations("General.Pages");
+    const t = useTranslations("General");
     const [showSidebar, setShowSidebar] = useState(false);
     const { userTenant } = useAcronisStore();
     const { user: currentUser } = useUserStore();
@@ -78,8 +78,54 @@ export default function NavLayout() {
                 )}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
                     {sidebarPaths
-                        .filter((p) =>
-                            p?.roles?.includes(currentUser?.role ?? ""),
+                        .filter((p) => p?.roles?.includes("dealer"))
+                        .map((p, index) => {
+                            let withoutLocale = pathName.substring(
+                                pathName.indexOf("/panel"),
+                            );
+                            return (
+                                <Button
+                                    variant={
+                                        withoutLocale.includes(p.path) &&
+                                        p.path != "/panel"
+                                            ? "secondary"
+                                            : "ghost"
+                                    }
+                                    key={p.key}
+                                    asChild
+                                >
+                                    <Link
+                                        href={p.path}
+                                        onClick={() => setShowSidebar(false)}
+                                        onTouchEnd={() => setShowSidebar(false)}
+                                        className={
+                                            "group flex flex-row w-full justify-items-start gap-2 " +
+                                            (withoutLocale.includes(p.path) &&
+                                            p.path != "/panel"
+                                                ? "*:text-blue-400"
+                                                : "*:text-zinc-600")
+                                        }
+                                    >
+                                        {p.icon}
+                                        <span className="w-full group-hover:text-blue-400">
+                                            {t("Pages." + p.key)}
+                                        </span>
+                                    </Link>
+                                </Button>
+                            );
+                        })}
+
+                    <p className="text-[0.65rem] text-muted-foreground mt-3 uppercase">
+                        {t("admin")}
+                    </p>
+
+                    <Separator className="mb-2"/>
+
+                    {sidebarPaths
+                        .filter(
+                            (p) =>
+                                p?.roles?.includes("admin") &&
+                                !p?.roles?.includes("dealer"),
                         )
                         .map((p, index) => {
                             let withoutLocale = pathName.substring(
@@ -110,7 +156,7 @@ export default function NavLayout() {
                                     >
                                         {p.icon}
                                         <span className="w-full group-hover:text-blue-400">
-                                            {t(p.key)}
+                                            {t("Pages." + p.key)}
                                         </span>
                                     </Link>
                                 </Button>
