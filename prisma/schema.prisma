@@ -73,10 +73,10 @@ model Partner {
   id        String  @id @default(cuid())
   acronisId String? @unique
 
-  createdBy    String?
-  createdAt    DateTime      @default(now())
-  updatedBy    String?
-  updatedAt    DateTime      @updatedAt
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
 
   clients      Client[]
   licenses     License[]
@@ -118,17 +118,17 @@ model License {
 }
 
 model Application {
-  id              String   @id @default(cuid())
+  id              String    @id @default(cuid())
   partnerId       String?
   companyType     String
   name            String
   taxNo           String
   taxOffice       String
-  email           String
+  email           String    @unique
   phone           String
   mobile          String
   address         String
-  city            String
+  city            Int
   district        String
   postalCode      String
   applicationDate DateTime
