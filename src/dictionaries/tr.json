@@ -10,9 +10,69 @@
             "applications": "Başvurular",
             "settings": "Ayarlar"
         },
+        "yes": "Evet",
+        "no": "Hayır",
+        "or": "ya da",
+        "and": "ve",
         "cancel": "İptal",
         "logout": "Çıkış Yap",
-        "logoutMessage": "Kullanıcı çıkışı yapılcak. Devam edilsin mi?"
+        "logoutMessage": "Kullanıcı çıkışı yapılcak. Devam edilsin mi?",
+        "name": "Ad"
+    },
+    "SignIn": {
+        "signIn": "Giriş Yap",
+        "signInDescription": "Giriş yapmak için e-posta adresinizi giriniz",
+        "emailPlaceholder": "adsoyad@gmail.com",
+        "signInWithEmail": "E-posta ile Giriş Yap",
+        "makeApplication": "Bayilik Başvurusu Yap",
+        "termsOfService": "Hizmet Şartları",
+        "privacyPolicy": "Gizlilik Politikası",
+        "checkYourEmail": "E-postanızı Kontrol Edin",
+        "checkYourEmailDescription": "E-posta adresinize bir bağlantı gönderdik. Lütfen hesabınıza giriş yapmak için bağlantıyı takip edin.",
+        "Errors": {
+            "Error": "Hata!",
+            "Email not found": "E-posta bulunamadı"
+        }
+    },
+    "Application": {
+        "title": "Başvuru Formu",
+        "description": "Bayilik hesabı başvurusu yapmak için lütfen aşağıdaki formu doldurunuz.",
+        "steps": {
+            "1": "Distinctively incubate unique systems via team building intellectual capital. Rapidiously fashion cross-platform data whereas.",
+            "2": "Objectively envisioneer leading-edge scenarios vis-a-vis distributed niche markets. Credibly restore e-business value rather than premium solutions. Efficiently seize covalent e-services vis-a-vis.",
+            "3": "Distinctively embrace frictionless convergence without B2C portals. Dramatically restore maintainable portals vis-a-vis state of the art methods of empowerment. Appropriately synergize next-generation infrastructures and excellent synergy. Authoritatively cultivate.",
+            "4": "Globally impact progressive channels and installed base innovation. Enthusiastically leverage."
+        },
+        "Descriptions": {
+            "companyName": "Please enter the legal name of your company",
+            "taxNo": "Please enter the tax number of your company",
+            "taxOffice": "Please select the tax office of your company",
+            "email": "Please enter the email address of your company",
+            "mobile": "Please enter the mobile phone number of your company",
+            "phone": "Please enter the phone number of your company",
+            "address": "Please enter the legal address of your company",
+            "city": "Please select the city of your company",
+            "district": "Please enter the district of your company",
+            "postalCode": "Please enter the postal code of your company",
+            "contract": "Please upload the contract with your signature",
+            "taxCertificate": "Please upload the tax certificate",
+            "signatureCircular": "Please upload the signature circular",
+            "tradeRegistry": "Please upload the trade registry"
+        }
+    },
+    "Components": {
+        "search": "Arama",
+        "columns": "Kolonlar",
+        "add": "Ekle",
+        "rowsPerPage": "Sayfa başına satır",
+        "searchPlaceholder": "Arama...",
+        "noResults": "Sonuç bulunamadı.",
+        "page": "Sayfa",
+        "goToFirstPage": "İlk sayfaya git",
+        "goToLastPage": "Son sayfaya git",
+        "goToNextPage": "Bir sonraki sayfaya git",
+        "goToPreviousPage": "Bir önceki sayfaya git",
+        "clearSelection": "Seçimi Temizle"
     },
     "Dashboard": {
         "title": "Panel"
@@ -27,7 +87,7 @@
         "title": "Hata Mesajları"
     },
     "Applications": {
-        "title": "Applications"
+        "title": "Başvurular"
     },
     "Management": {
         "title": "Yönetim"

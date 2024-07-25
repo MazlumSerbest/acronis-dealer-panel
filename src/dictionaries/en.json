@@ -92,17 +92,128 @@
         "taxOffice": "Tax Office",
         "city": "City",
         "district": "District",
-        "postalCode": "Postal Code"
+        "postalCode": "Postal Code",
+        "example": "Ex.",
+        "select": "Select",
+        "searchPlaceholder": "Search...",
+        "noResults": "No results.",
+        "apply": "Apply",
+        "requiredDocuments": "Required Documents",
+        "contract": "Contract",
+        "taxCertificate": "Tax Certificate",
+        "signatureCircular": "Signature Circular",
+        "tradeRegistry": "Trade Registry",
+        "errorTitle": "Something went wrong!"
     },
     "SignIn": {
         "signIn": "Sign In",
         "signInDescription": "Enter your email below to sign in",
+        "emailPlaceholder": "name@gmail.com",
         "signInWithEmail": "Sign In with Email",
-        "makeApplication": "Make A Dealer Application",
+        "makeApplication": "Make a Dealer Application",
         "termsOfService": "Terms of Service",
         "privacyPolicy": "Privacy Policy",
         "checkYourEmail": "Check Your Email",
-        "checkYourEmailDescription": "We have sent a magic link to your email address. Please follow the link to sign in to your account."
+        "checkYourEmailDescription": "We have sent a magic link to your email address. Please follow the link to sign in to your account.",
+        "Errors": {
+            "Error": "Error!",
+            "Email not found": "Email not found"
+        }
+    },
+    "Application": {
+        "title": "Application Form",
+        "description": "Please fill in the form below to apply for a dealer account.",
+        "Steps": {
+            "1": "Distinctively incubate unique systems via team building intellectual capital. Rapidiously fashion cross-platform data whereas.",
+            "2": "Objectively envisioneer leading-edge scenarios vis-a-vis distributed niche markets. Credibly restore e-business value rather than premium solutions. Efficiently seize covalent e-services vis-a-vis.",
+            "3": "Distinctively embrace frictionless convergence without B2C portals. Dramatically restore maintainable portals vis-a-vis state of the art methods of empowerment. Appropriately synergize next-generation infrastructures and excellent synergy. Authoritatively cultivate.",
+            "4": "Globally impact progressive channels and installed base innovation. Enthusiastically leverage."
+        },
+        "Descriptions": {
+            "companyName": "Please enter the legal name of your company",
+            "taxNo": "Please enter the tax number of your company",
+            "taxOffice": "Please select the tax office of your company",
+            "email": "Please enter the email to contact of your company",
+            "mobile": "Please enter the mobile phone to contact number of your company",
+            "phone": "Please enter the phone number of your company",
+            "address": "Please enter the legal address of your company",
+            "city": "Please select the city of your company",
+            "district": "Please enter the district of your company",
+            "postalCode": "Please enter the postal code of your company",
+            "contract": "Please upload the contract with your signature of authorized person",
+            "taxCertificate": "Please upload the tax certificate",
+            "signatureCircular": "Please upload the signature circular",
+            "tradeRegistry": "Please upload the trade registry",
+            "personalData": "I accept the processing of my personal data. I have read and understood the information text"
+        }
+    },
+    "FormErrors": {
+        "Application": {
+            "companyType": {
+                "required": "Type is required"
+            },
+            "name": {
+                "required": "Name is required",
+                "invalidType": "Name must be a string",
+                "minLength": "Must be 10 characters long"
+            },
+            "taxNo": {
+                "required": "Tax No is required",
+                "invalidType": "Must be a valid number",
+                "minLength": "Must be 10 characters long",
+                "maxLength": "Must be 11 characters long"
+            },
+            "taxOffice": {
+                "required": "Tax Office is required"
+            },
+            "email": {
+                "required": "Email is required",
+                "invalidType": "Must be a valid email"
+            },
+            "mobile": {
+                "required": "Mobile is required",
+                "length": "Must be 10 characters long",
+                "invalidType": "Must be a valid phone number"
+            },
+            "phone": {
+                "required": "Phone is required",
+                "length": "Must be 10 characters long",
+                "invalidType": "Must be a valid phone number"
+            },
+            "address": {
+                "required": "Address is required",
+                "minLength": "Must be 10 characters long"
+            },
+            "city": {
+                "required": "City is required"
+            },
+            "district": {
+                "required": "District is required"
+            },
+            "postalCode": {
+                "required": "Postal Code is required",
+                "length": "Must be 5 characters long",
+                "invalidType": "Must be a valid number"
+            },
+            "contract": {
+                "required": "Contract is required"
+            },
+            "taxCertificate": {
+                "required": "Tax Certificate is required"
+            },
+            "signatureCircular": {
+                "required": "Signature Circular is required"
+            },
+            "tradeRegistry": {
+                "required": "Trade Registry is required"
+            },
+            "personalData": {
+                "required": "Must accept the processing of personal data"
+            },
+            "turnstile": {
+                "required": "Must resolve the captcha"
+            }
+        }
     },
     "Components": {
         "search": "Search",
@@ -155,6 +266,10 @@
         "brandingSubtitle": "Branding settings from Acronis Cloud Platform"
     },
     "Messages": {
-        "authorizationNeeded": "Authorization Needed!"
+        "authorizationNeeded": "Authorization Needed.",
+        "Application": {
+            "success": "Application has been successfully submitted.",
+            "error": "Application could not be submitted."
+        }
     }
 }
