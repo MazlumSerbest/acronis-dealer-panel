@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/components/ui/use-toast";
-import { useLocale } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import {
     Card,
@@ -29,55 +29,104 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
 
 import { Turnstile } from "@marsidev/react-turnstile";
+import Combobox from "@/components/Combobox";
 import Logo from "@/components/navigation/Logo";
+import FormError from "@/components/FormError";
 import { cities } from "@/lib/constants";
-import { Combobox } from "@/components/Combobox";
 import { LuBuilding2, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const applicationFormSchema = z.object({
-    type: z.enum(["business", "person"], {
-        required_error: "Lütfen şirket tipi seçiniz.",
+    companyType: z.enum(["business", "person"], {
+        required_error: "Application.companyType.required",
     }),
-    name: z.string({
-        required_error: "Name is required",
-        invalid_type_error: "Name must be a string",
-    }),
+    name: z
+        .string({
+            required_error: "Application.name.required",
+            invalid_type_error: "Application.name.invalidType",
+        })
+        .min(10, { message: "Application.name.minLength" }),
     taxNo: z
         .string({
-            required_error: "Name is required",
-            invalid_type_error: "Name must be a string",
+            required_error: "Application.taxNo.required",
         })
-        .min(10, { message: "Must be 10 or 11 characters long" })
-        .max(11, { message: "Must be 10 or 11 characters long" }),
-    taxOffice: z.number(),
-    email: z.string().email(),
-    cellPhone: z.string().length(10, { message: "Must be a valid number" }),
-    phone: z.string().length(10, { message: "Must be a valid number" }),
-    fax: z.string().length(10, { message: "Must be a valid number" }),
-    address: z.string(),
+        .min(10, { message: "Application.taxNo.minLength" })
+        .max(11, { message: "Application.taxNo.maxLength" })
+        .refine(
+            (value) => /^[0-9]*$/.test(value ?? ""),
+            "Application.taxNo.invalidType",
+        ),
+    taxOffice: z.number({
+        required_error: "Application.taxOffice.required",
+    }),
+    email: z
+        .string({
+            required_error: "Application.email.required",
+        })
+        .email({
+            message: "Application.email.invalidType",
+        }),
+    mobile: z
+        .string({
+            required_error: "Application.mobile.required",
+        })
+        .length(10, { message: "Application.mobile.length" })
+        .refine(
+            (value) => /^[0-9]*$/.test(value ?? ""),
+            "Application.mobile.invalidType",
+        ),
+    phone: z
+        .string({
+            required_error: "Application.phone.required",
+        })
+        .length(10, { message: "Application.phone.length" })
+        .refine(
+            (value) => /^[0-9]*$/.test(value ?? ""),
+            "Application.phone.invalidType",
+        ),
+    address: z
+        .string({
+            required_error: "Application.address.required",
+        })
+        .min(10, { message: "Application.address.minLength" }),
+    city: z.number({
+        required_error: "Application.city.required",
+    }),
+    district: z.string({
+        required_error: "Application.district.required",
+    }),
     postalCode: z
-        .string()
-        .length(5, { message: "Must be exactly 5 characters long" }),
-    city: z.number(),
-    district: z.string(),
-    file: z.instanceof(File),
-    signature: z.instanceof(File),
+        .string({
+            required_error: "Application.postalCode.required",
+        })
+        .length(5, { message: "Application.postalCode.length" })
+        .refine(
+            (value) => /^[0-9]*$/.test(value ?? ""),
+            "Application.postalCode.invalidType",
+        ),
+    contract: z.instanceof(File),
+    taxCertificate: z.instanceof(File),
+    signatureCircular: z.instanceof(File, { message: "" }),
+    tradeRegistry: z.instanceof(File).optional(),
+    personalData: z.literal<boolean>(true, {
+        errorMap: () => ({ message: "Application.personalData.required" }),
+    }),
     turnstile: z.literal<boolean>(true, {
-        errorMap: () => ({ message: "Lütfen Capthca'yı çözünüz." }),
+        errorMap: () => ({ message: "Application.turnstile.required" }),
     }),
 });
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
 
 // This can come from your database or API.
-const defaultValues: Partial<ApplicationFormValues> = {
-    type: "business",
-};
+const defaultValues: Partial<ApplicationFormValues> = {};
 
 export default function Application() {
     const { toast } = useToast();
     const locale = useLocale();
+    const t = useTranslations("General");
+    const ta = useTranslations("Application");
 
     const form = useForm<ApplicationFormValues>({
         resolver: zodResolver(applicationFormSchema),
@@ -85,10 +134,39 @@ export default function Application() {
     });
 
     function onSubmit(data: ApplicationFormValues) {
-        toast({
-            title: "Form Data",
-            description: JSON.stringify(data),
-        });
+        const formData = new FormData();
+        formData.append("companyType", data.companyType);
+        formData.append("name", data.name);
+        formData.append("taxNo", data.taxNo);
+        formData.append("taxOffice", data.taxOffice.toString());
+        formData.append("email", data.email);
+        formData.append("mobile", data.mobile);
+        formData.append("phone", data.phone);
+        formData.append("address", data.address);
+        formData.append("city", data.city.toString());
+        formData.append("district", data.district);
+        formData.append("postalCode", data.postalCode);
+        // Files
+
+        fetch("/api/application", {
+            method: "POST",
+            body: formData,
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    form.reset();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+            });
     }
 
     const citiesList: ListBoxItem[] = cities.map((city) => {
@@ -118,11 +196,9 @@ export default function Application() {
                 <CardHeader className="flex flex-row">
                     <div className="flex-1">
                         <CardTitle className="text-3xl tracking-tight text-blue-400">
-                            Başvuru Formu
+                            {ta("title")}
                         </CardTitle>
-                        <CardDescription>
-                            Bayi olmak için yapılması gerekenler.
-                        </CardDescription>
+                        <CardDescription>{ta("description")}</CardDescription>
                     </div>
                     <Logo width={40} height={40} />
                 </CardHeader>
@@ -131,30 +207,10 @@ export default function Application() {
 
                 <CardContent className="flex flex-col p-6 gap-4">
                     <ol className="list-decimal list-inside divide-y divide-zinc-200 text-sm text-justify *:py-2">
-                        <li>
-                            Distinctively incubate unique systems via team
-                            building intellectual capital. Rapidiously fashion
-                            cross-platform data whereas.
-                        </li>
-                        <li>
-                            Objectively envisioneer leading-edge scenarios
-                            vis-a-vis distributed niche markets. Credibly
-                            restore e-business value rather than premium
-                            solutions. Efficiently seize covalent e-services
-                            vis-a-vis.
-                        </li>
-                        <li>
-                            Distinctively embrace frictionless convergence
-                            without B2C portals. Dramatically restore
-                            maintainable portals vis-a-vis state of the art
-                            methods of empowerment. Appropriately synergize
-                            next-generation infrastructures and excellent
-                            synergy. Authoritatively cultivate.
-                        </li>
-                        <li>
-                            Globally impact progressive channels and installed
-                            base innovation. Enthusiastically leverage.
-                        </li>
+                        <li>{ta("Steps.1")}</li>
+                        <li>{ta("Steps.2")}</li>
+                        <li>{ta("Steps.3")}</li>
+                        <li>{ta("Steps.4")}</li>
                     </ol>
                 </CardContent>
 
@@ -165,10 +221,12 @@ export default function Application() {
                         <CardContent className="flex flex-col gap-6 p-6">
                             <FormField
                                 control={form.control}
-                                name="type"
+                                name="companyType"
                                 render={({ field }) => (
                                     <FormItem className="space-y-2">
-                                        <FormLabel>Şirket Tipi</FormLabel>
+                                        <FormLabel>
+                                            {t("companyType")}
+                                        </FormLabel>
                                         <FormControl>
                                             <RadioGroup
                                                 onValueChange={field.onChange}
@@ -187,30 +245,38 @@ export default function Application() {
                                                             <CardHeader className="flex flex-row p-4 gap-4 items-center">
                                                                 <LuBuilding2 className="size-6" />
                                                                 <span className="flex-1">
-                                                                    İşletme
+                                                                    {t(
+                                                                        "business",
+                                                                    )}
                                                                 </span>
                                                             </CardHeader>
                                                             <Separator />
                                                             <CardContent className="flex flex-col py-2 px-4 gap-2">
                                                                 <p className="text-primary">
-                                                                    Gerekli
-                                                                    Belgeler
+                                                                    {t(
+                                                                        "requiredDocuments",
+                                                                    )}
                                                                 </p>
                                                                 <ul className="list-disc list-inside text-sm text-muted-foreground">
                                                                     <li>
-                                                                        Sözleşme
+                                                                        {t(
+                                                                            "contract",
+                                                                        )}
                                                                     </li>
                                                                     <li>
-                                                                        Vergi
-                                                                        Levhası
+                                                                        {t(
+                                                                            "taxCertificate",
+                                                                        )}
                                                                     </li>
                                                                     <li>
-                                                                        İmza
-                                                                        Sirküsü
+                                                                        {t(
+                                                                            "signatureCircular",
+                                                                        )}
                                                                     </li>
                                                                     <li>
-                                                                        Sicil
-                                                                        Gazetesi
+                                                                        {t(
+                                                                            "tradeRegistry",
+                                                                        )}
                                                                     </li>
                                                                 </ul>
                                                             </CardContent>
@@ -229,26 +295,33 @@ export default function Application() {
                                                             <CardHeader className="flex flex-row p-4 gap-4 items-center">
                                                                 <LuUser className="size-6" />
                                                                 <span className="flex-1">
-                                                                    Şahıs
+                                                                    {t(
+                                                                        "person",
+                                                                    )}
                                                                 </span>
                                                             </CardHeader>
                                                             <Separator />
                                                             <CardContent className="flex flex-col py-2 px-4 gap-2">
                                                                 <p className="text-primary">
-                                                                    Gerekli
-                                                                    Belgeler
+                                                                    {t(
+                                                                        "requiredDocuments",
+                                                                    )}
                                                                 </p>
                                                                 <ul className="list-disc list-inside text-sm text-muted-foreground">
                                                                     <li>
-                                                                        Sözleşme
+                                                                        {t(
+                                                                            "contract",
+                                                                        )}
                                                                     </li>
                                                                     <li>
-                                                                        Vergi
-                                                                        Levhası
+                                                                        {t(
+                                                                            "taxCertificate",
+                                                                        )}
                                                                     </li>
                                                                     <li>
-                                                                        İmza
-                                                                        Sirküsü
+                                                                        {t(
+                                                                            "signatureCircular",
+                                                                        )}
                                                                     </li>
                                                                 </ul>
                                                             </CardContent>
@@ -259,7 +332,12 @@ export default function Application() {
                                         </FormControl>
                                         {/* <FormDescription>
                                         </FormDescription> */}
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors
+                                                    ?.companyType
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -268,17 +346,26 @@ export default function Application() {
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem className="space-y-2">
-                                        <FormLabel>Şirket Adı</FormLabel>
+                                        <FormLabel>
+                                            {t("companyName")}
+                                        </FormLabel>
                                         <FormControl>
                                             <Input
-                                                placeholder="Ör. Gen Bilgi Teknolojileri Sanayi ve Ticaret Ltd. Şti."
+                                                placeholder={
+                                                    t("example") +
+                                                    " Gen Bilgi Teknolojileri Sanayi ve Ticaret Ltd. Şti."
+                                                }
                                                 {...field}
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            Şirketinizin resmi adı.
+                                            {ta("Descriptions.companyName")}
                                         </FormDescription>
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.name
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -288,19 +375,27 @@ export default function Application() {
                                     name="taxNo"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Vergi No</FormLabel>
+                                            <FormLabel>{t("taxNo")}</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Ör. 1234567890"
+                                                    placeholder={
+                                                        t("example") +
+                                                        " 1234567890"
+                                                    }
                                                     maxLength={11}
                                                     minLength={10}
                                                     {...field}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Vergi no veya TC Kimlik No.
+                                                {ta("Descriptions.taxNo")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.taxNo
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -309,22 +404,31 @@ export default function Application() {
                                     name="taxOffice"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Vergi Dairesi</FormLabel>
+                                            <FormLabel>
+                                                {t("taxOffice")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Combobox
                                                     name="taxOffice"
                                                     data={taxOffices}
                                                     form={form}
                                                     field={field}
-                                                    placeholder="Seçiniz"
-                                                    inputPlaceholder="Arama Yap..."
-                                                    emptyText="Herhangi bir sonuç yok."
+                                                    placeholder={t("select")}
+                                                    inputPlaceholder={t(
+                                                        "searchPlaceholder",
+                                                    )}
+                                                    emptyText={t("noResults")}
                                                 />
                                             </FormControl>
-                                            {/* <FormDescription>
-                                                Vergi no veya TC Kimlik No.
-                                            </FormDescription> */}
-                                            <FormMessage />
+                                            <FormDescription>
+                                                {ta("Descriptions.taxOffice")}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.taxOffice
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -339,38 +443,56 @@ export default function Application() {
                                     name="email"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Email</FormLabel>
+                                            <FormLabel>{t("email")}</FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    type="email"
-                                                    placeholder="Ör. test@gmail.com"
+                                                    // type="email"
+                                                    placeholder={
+                                                        t("example") +
+                                                        " test@gmail.com"
+                                                    }
                                                     {...field}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Vergi no veya TC Kimlik No.
+                                                {ta("Descriptions.email")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.email
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="cellPhone"
+                                    name="mobile"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Mobil</FormLabel>
+                                            <FormLabel>{t("mobile")}</FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    type="tel"
-                                                    placeholder="Ör. 5051234567"
-                                                    {...field}
-                                                />
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                        +90
+                                                    </span>
+                                                    <Input
+                                                        type="tel"
+                                                        className="pl-10"
+                                                        {...field}
+                                                    />
+                                                </div>
                                             </FormControl>
                                             <FormDescription>
-                                                Vergi no veya TC Kimlik No.
+                                                {ta("Descriptions.mobile")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.mobile
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -379,38 +501,28 @@ export default function Application() {
                                     name="phone"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Telefon</FormLabel>
+                                            <FormLabel>{t("phone")}</FormLabel>
                                             <FormControl>
-                                                <Input
-                                                    type="tel"
-                                                    placeholder="Ör. 2121234567"
-                                                    {...field}
-                                                />
+                                                <div className="relative flex items-center">
+                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                        +90
+                                                    </span>
+                                                    <Input
+                                                        type="tel"
+                                                        className="pl-10"
+                                                        {...field}
+                                                    />
+                                                </div>
                                             </FormControl>
                                             <FormDescription>
-                                                Vergi no veya TC Kimlik No.
+                                                {ta("Descriptions.phone")}
                                             </FormDescription>
-                                            <FormMessage />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="fax"
-                                    render={({ field }) => (
-                                        <FormItem className="space-y-2">
-                                            <FormLabel>Fax</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    type="tel"
-                                                    placeholder="Ör. 2121234567"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormDescription>
-                                                Vergi no veya TC Kimlik No.
-                                            </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.phone
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -424,7 +536,7 @@ export default function Application() {
                                 name="address"
                                 render={({ field }) => (
                                     <FormItem className="space-y-2">
-                                        <FormLabel>Adres</FormLabel>
+                                        <FormLabel>{t("address")}</FormLabel>
                                         <FormControl>
                                             <Textarea
                                                 className="resize-none"
@@ -432,9 +544,13 @@ export default function Application() {
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            Şirketinizin resmi kayıtlı adresi.
+                                            {ta("Descriptions.address")}
                                         </FormDescription>
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.address
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -444,7 +560,7 @@ export default function Application() {
                                     name="city"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>İl</FormLabel>
+                                            <FormLabel>{t("city")}</FormLabel>
                                             <FormControl>
                                                 <Combobox
                                                     name="city"
@@ -452,15 +568,21 @@ export default function Application() {
                                                     form={form}
                                                     field={field}
                                                     // value={field.value}
-                                                    placeholder="Seçiniz"
-                                                    inputPlaceholder="Arama Yap..."
-                                                    emptyText="Herhangi bir sonuç yok."
+                                                    placeholder={t("select")}
+                                                    inputPlaceholder={t(
+                                                        "searchPlaceholder",
+                                                    )}
+                                                    emptyText={t("noResults")}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Şirketinizin resmi kayıtlı ili.
+                                                {ta("Descriptions.city")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors.city
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -469,18 +591,28 @@ export default function Application() {
                                     name="district"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>İlçe</FormLabel>
+                                            <FormLabel>
+                                                {t("district")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Ör. Karşıyaka"
+                                                    type="district"
+                                                    placeholder={
+                                                        t("example") +
+                                                        " Karşıyaka"
+                                                    }
                                                     {...field}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Şirketinizin resmi kayıtlı
-                                                ilçesi.
+                                                {ta("Descriptions.district")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.district
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -489,20 +621,29 @@ export default function Application() {
                                     name="postalCode"
                                     render={({ field }) => (
                                         <FormItem className="space-y-2">
-                                            <FormLabel>Posta Kodu</FormLabel>
+                                            <FormLabel>
+                                                {t("postalCode")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
-                                                    placeholder="Ör. 12345"
+                                                    type="postalCode"
+                                                    placeholder={
+                                                        t("example") + " 12345"
+                                                    }
                                                     maxLength={5}
                                                     minLength={5}
                                                     {...field}
                                                 />
                                             </FormControl>
                                             <FormDescription>
-                                                Şirketinizin resmi kayıtlı posta
-                                                kodu.
+                                                {ta("Descriptions.postalCode")}
                                             </FormDescription>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.postalCode
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
@@ -514,7 +655,7 @@ export default function Application() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <FormField
                                     control={form.control}
-                                    name="file"
+                                    name="contract"
                                     render={({
                                         field: {
                                             value,
@@ -523,7 +664,9 @@ export default function Application() {
                                         },
                                     }) => (
                                         <FormItem>
-                                            <FormLabel>Sözleşme</FormLabel>
+                                            <FormLabel>
+                                                {t("contract")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...fieldProps}
@@ -539,13 +682,21 @@ export default function Application() {
                                                     }
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormDescription>
+                                                {ta("Descriptions.contract")}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.contract
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="signature"
+                                    name="taxCertificate"
                                     render={({
                                         field: {
                                             value,
@@ -554,13 +705,14 @@ export default function Application() {
                                         },
                                     }) => (
                                         <FormItem>
-                                            <FormLabel>İmza Sirküsü</FormLabel>
+                                            <FormLabel>
+                                                {t("taxCertificate")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...fieldProps}
                                                     type="file"
                                                     accept="image/*,.pdf"
-                                                    placeholder="test"
                                                     onChange={(e) =>
                                                         onChange(
                                                             e.target.files &&
@@ -570,13 +722,23 @@ export default function Application() {
                                                     }
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormDescription>
+                                                {ta(
+                                                    "Descriptions.taxCertificate",
+                                                )}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.taxCertificate
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
                                 <FormField
                                     control={form.control}
-                                    name="signature"
+                                    name="signatureCircular"
                                     render={({
                                         field: {
                                             value,
@@ -585,13 +747,14 @@ export default function Application() {
                                         },
                                     }) => (
                                         <FormItem>
-                                            <FormLabel>Vergi Levhası</FormLabel>
+                                            <FormLabel>
+                                                {t("signatureCircular")}
+                                            </FormLabel>
                                             <FormControl>
                                                 <Input
                                                     {...fieldProps}
                                                     type="file"
                                                     accept="image/*,.pdf"
-                                                    placeholder="test"
                                                     onChange={(e) =>
                                                         onChange(
                                                             e.target.files &&
@@ -601,14 +764,25 @@ export default function Application() {
                                                     }
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormDescription>
+                                                {ta(
+                                                    "Descriptions.signatureCircular",
+                                                )}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.signatureCircular
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
-                                {form.getValues("type") === "business" && (
+                                {form.getValues("companyType") ===
+                                    "business" && (
                                     <FormField
                                         control={form.control}
-                                        name="signature"
+                                        name="tradeRegistry"
                                         render={({
                                             field: {
                                                 value,
@@ -618,14 +792,13 @@ export default function Application() {
                                         }) => (
                                             <FormItem>
                                                 <FormLabel>
-                                                    Sicil Gazetesi
+                                                    {t("tradeRegistry")}
                                                 </FormLabel>
                                                 <FormControl>
                                                     <Input
                                                         {...fieldProps}
                                                         type="file"
                                                         accept="image/*,.pdf"
-                                                        placeholder="test"
                                                         onChange={(e) =>
                                                             onChange(
                                                                 e.target
@@ -636,11 +809,47 @@ export default function Application() {
                                                         }
                                                     />
                                                 </FormControl>
-                                                <FormMessage />
+                                                <FormDescription>
+                                                    {ta(
+                                                        "Descriptions.tradeRegistry",
+                                                    )}
+                                                </FormDescription>
+                                                <FormError
+                                                    error={
+                                                        form?.formState?.errors
+                                                            ?.tradeRegistry
+                                                    }
+                                                />
                                             </FormItem>
                                         )}
                                     />
                                 )}
+                            </div>
+
+                            <div className="flex justify-end">
+                                <FormField
+                                    control={form.control}
+                                    name="personalData"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row space-x-3 space-y-0">
+                                            <div className="space-y-1 leading-none text-right">
+                                                <FormLabel>
+                                                    {ta(
+                                                        "Descriptions.personalData",
+                                                    )}
+                                                </FormLabel>
+                                            </div>
+                                            <FormControl>
+                                                <Checkbox
+                                                    checked={field.value}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
                             </div>
 
                             <div className="flex place-items-end">
@@ -663,14 +872,17 @@ export default function Application() {
                                             form.setValue("turnstile", false);
                                         }}
                                     />
-                                    {form.formState.errors.turnstile && (
-                                        <p className="text-[0.8em] font-medium text-destructive">
-                                            {
-                                                form?.formState?.errors
-                                                    ?.turnstile?.message
-                                            }
-                                        </p>
-                                    )}
+                                    <FormError
+                                        error={
+                                            form?.formState?.errors?.turnstile
+                                        }
+                                    />
+                                    <FormError
+                                        error={
+                                            form?.formState?.errors
+                                                ?.personalData
+                                        }
+                                    />
                                 </div>
                             </div>
                         </CardContent>
@@ -682,7 +894,7 @@ export default function Application() {
                                 type="submit"
                                 className="bg-blue-400 hover:bg-blue-400/90"
                             >
-                                Başvuru Yap
+                                {t("apply")}
                             </Button>
                         </CardFooter>
                     </form>
