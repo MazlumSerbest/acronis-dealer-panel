@@ -29,7 +29,7 @@ type Props = {
     emptyText?: string;
 };
 
-export function Combobox({
+export default function Combobox({
     name,
     data,
     form,
