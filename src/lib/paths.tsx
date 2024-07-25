@@ -7,7 +7,9 @@ import {
     LuSettings,
     LuUser2,
     LuArchiveRestore,
+    LuBriefcase,
 } from "react-icons/lu";
+
 
 export const paths: Path[] = [
     {
@@ -60,7 +62,18 @@ export const paths: Path[] = [
         icon: (
             <LuArchiveRestore
                 className="size-6 group-hover:text-blue-400"
-                aria-label="Management Page"
+                aria-label="Applications Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/partners",
+        key: "partners",
+        roles: ["admin"],
+        icon: (
+            <LuBriefcase
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Partners Page"
             />
         ),
     },
@@ -71,7 +84,7 @@ export const paths: Path[] = [
         icon: (
             <LuUser2
                 className="size-6 group-hover:text-blue-400"
-                aria-label="Management Page"
+                aria-label="Users Page"
             />
         ),
     },
