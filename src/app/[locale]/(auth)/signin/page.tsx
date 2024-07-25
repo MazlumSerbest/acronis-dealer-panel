@@ -16,7 +16,7 @@ export default async function SignIn({
     const search = new URLSearchParams(searchParams);
     const session = await auth();
     if (session) {
-        const url = "/en/panel";
+        const url = "/panel";
         return redirect(url);
     }
     const t = await getTranslations("General");
@@ -67,15 +67,20 @@ export default async function SignIn({
                                 <Input
                                     id="email"
                                     name="email"
-                                    placeholder="name@example.com"
+                                    placeholder={ts("emailPlaceholder")}
                                     type="email"
                                     autoCapitalize="none"
                                     autoComplete="email"
                                     autoCorrect="off"
                                 />
                                 {search.has("error") && (
-                                    <p className="text-xs text-red-500 px-2">
-                                        {search.get("error") ?? "Error"}
+                                    <p className="text-xs text-destructive px-2">
+                                        {search.get("error")
+                                            ? ts(
+                                                  "Errors." +
+                                                      search.get("error"),
+                                              )
+                                            : ts("Errors.Error")}
                                     </p>
                                 )}
                             </div>
@@ -111,14 +116,14 @@ export default async function SignIn({
 
                 <p className="text-center text-sm text-muted-foreground">
                     <Link
-                        href="/terms"
+                        href="#"
                         className="underline underline-offset-4 hover:text-primary"
                     >
                         {ts("termsOfService")}
                     </Link>
                     {` ${t("and")} `}
                     <Link
-                        href="/privacy"
+                        href="#"
                         className="underline underline-offset-4 hover:text-primary"
                     >
                         {ts("privacyPolicy")}

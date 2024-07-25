@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
+import { cities } from "@/lib/constants";
 
 export default function ApplicationDetail({
     params,
@@ -16,6 +17,13 @@ export default function ApplicationDetail({
     const t = useTranslations("General");
 
     const { data, error } = useSWR(`/api/application/${params.id}`);
+
+    const citiesList: ListBoxItem[] = cities.map((city) => {
+        return {
+            id: city.code,
+            name: city.name,
+        };
+    });
 
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
@@ -95,15 +103,15 @@ export default function ApplicationDetail({
                     </dd>
                 </div>
                 <div>
-                    <dt className="font-medium">{t("phone")}</dt>
+                    <dt className="font-medium">{t("mobile")}</dt>
                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                        {data.phone || "-"}
+                        {data?.mobile ? "+90" + data.phone : "-"}
                     </dd>
                 </div>
                 <div>
-                    <dt className="font-medium">{t("mobile")}</dt>
+                    <dt className="font-medium">{t("phone")}</dt>
                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                        {data.mobile || "-"}
+                        {data?.phone ? "+90" + data.phone : "-"}
                     </dd>
                 </div>
                 <div>
@@ -115,7 +123,7 @@ export default function ApplicationDetail({
                 <div>
                     <dt className="font-medium">{t("city")}</dt>
                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                        {data.city || "-"}
+                        {citiesList.find((c) => c.id == data.city)?.name || "-"}
                     </dd>
                 </div>
                 <div>

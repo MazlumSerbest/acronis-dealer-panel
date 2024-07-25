@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 export default async function VerifyRequest() {
     const session = await auth();
     if (session) {
-        const url = "/en/panel";
+        const url = "/panel";
         return redirect(url);
     }
     const ts = await getTranslations("SignIn");
