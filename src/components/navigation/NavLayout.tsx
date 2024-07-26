@@ -115,53 +115,63 @@ export default function NavLayout() {
                             );
                         })}
 
-                    <p className="text-[0.65rem] text-muted-foreground mt-3 uppercase">
-                        {t("admin")}
-                    </p>
+                    {currentUser?.role == "admin" && (
+                        <>
+                            <p className="text-[0.65rem] text-muted-foreground mt-3 uppercase">
+                                {t("admin")}
+                            </p>
 
-                    <Separator className="mb-2"/>
+                            <Separator className="mb-2" />
 
-                    {sidebarPaths
-                        .filter(
-                            (p) =>
-                                p?.roles?.includes("admin") &&
-                                !p?.roles?.includes("partner"),
-                        )
-                        .map((p, index) => {
-                            let withoutLocale = pathName.substring(
-                                pathName.indexOf("/panel"),
-                            );
-                            return (
-                                <Button
-                                    variant={
-                                        withoutLocale.includes(p.path) &&
-                                        p.path != "/panel"
-                                            ? "secondary"
-                                            : "ghost"
-                                    }
-                                    key={p.key}
-                                    asChild
-                                >
-                                    <Link
-                                        href={p.path}
-                                        onClick={() => setShowSidebar(false)}
-                                        onTouchEnd={() => setShowSidebar(false)}
-                                        className={
-                                            "group flex flex-row w-full justify-items-start gap-2 " +
-                                            (withoutLocale.includes(p.path) &&
-                                            p.path != "/panel"
-                                                ? "*:text-blue-400"
-                                                : "*:text-zinc-600")
-                                        }
-                                    >
-                                        {p.icon}
-                                        <span className="w-full group-hover:text-blue-400">
-                                            {t("Pages." + p.key)}
-                                        </span>
-                                    </Link>
-                                </Button>
-                            );
-                        })}
+                            {sidebarPaths
+                                .filter(
+                                    (p) =>
+                                        p?.roles?.includes("admin") &&
+                                        !p?.roles?.includes("partner"),
+                                )
+                                .map((p, index) => {
+                                    let withoutLocale = pathName.substring(
+                                        pathName.indexOf("/panel"),
+                                    );
+                                    return (
+                                        <Button
+                                            variant={
+                                                withoutLocale.includes(
+                                                    p.path,
+                                                ) && p.path != "/panel"
+                                                    ? "secondary"
+                                                    : "ghost"
+                                            }
+                                            key={p.key}
+                                            asChild
+                                        >
+                                            <Link
+                                                href={p.path}
+                                                onClick={() =>
+                                                    setShowSidebar(false)
+                                                }
+                                                onTouchEnd={() =>
+                                                    setShowSidebar(false)
+                                                }
+                                                className={
+                                                    "group flex flex-row w-full justify-items-start gap-2 " +
+                                                    (withoutLocale.includes(
+                                                        p.path,
+                                                    ) && p.path != "/panel"
+                                                        ? "*:text-blue-400"
+                                                        : "*:text-zinc-600")
+                                                }
+                                            >
+                                                {p.icon}
+                                                <span className="w-full group-hover:text-blue-400">
+                                                    {t("Pages." + p.key)}
+                                                </span>
+                                            </Link>
+                                        </Button>
+                                    );
+                                })}
+                        </>
+                    )}
                 </div>
 
                 <Separator />

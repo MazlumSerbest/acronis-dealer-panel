@@ -53,16 +53,30 @@ export default function UserCard() {
             fetch(`/api/user/${session?.data?.user?.email ?? ""}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    updateUser({
-                        id: data?.id,
-                        active: data?.active,
-                        role: data?.role,
-                        name: data?.name,
-                        email: data?.email,
-                        acronisTenantId: data?.acronisTenantId,
-                        createdAt: data?.createdAt,
-                        createdBy: "admin",
-                    });
+                    if (user?.role === "admin")
+                        updateUser({
+                            id: data?.id,
+                            active: data?.active,
+                            role: data?.role,
+                            name: data?.name,
+                            email: data?.email,
+                            acronisTenantId: data?.acronisTenantId,
+                            createdAt: data?.createdAt,
+                            createdBy: data?.createdBy,
+                            partner: data?.partner,
+                        });
+                    else
+                        updateUser({
+                            id: data?.id,
+                            active: data?.active,
+                            role: data?.role,
+                            name: data?.name,
+                            email: data?.email,
+                            acronisTenantId: data?.partner?.acronisId,
+                            createdAt: data?.createdAt,
+                            createdBy: data?.createdBy,
+                            partner: data?.partner,
+                        });
                 });
         }
 
@@ -70,11 +84,17 @@ export default function UserCard() {
             fetch(`/api/acronis/tenants/15229d4a-ff0f-498b-849d-a4f71bdc81a4`)
                 .then((res) => res.json())
                 .then((data) => updateMainTenant(data?.tenant));
-        else if(user?.partner?.acronisId)
+        else if (user?.partner?.acronisId)
             fetch(`/api/acronis/tenants/${user?.partner.acronisId}`)
                 .then((res) => res.json())
                 .then((data) => updateMainTenant(data?.tenant));
-    }, [session?.data?.user, updateMainTenant, updateUser, user?.partner?.acronisId, user?.role]);
+    }, [
+        session?.data?.user,
+        updateMainTenant,
+        updateUser,
+        user?.partner?.acronisId,
+        user?.role,
+    ]);
 
     // if (error) return <div>failed to load</div>;
     if (!user)
