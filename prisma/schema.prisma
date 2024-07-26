@@ -78,10 +78,10 @@ model Partner {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  clients      Client[]
-  licenses     License[]
-  users        User[]
-  applications Application[]
+  clients     Client[]
+  licenses    License[]
+  users       User[]
+  application Application?
 }
 
 model Client {
@@ -95,12 +95,14 @@ model Client {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  partner Partner @relation(fields: [partnerId], references: [id])
+  licenses License[]
+  partner Partner   @relation(fields: [partnerId], references: [id])
 }
 
 model License {
   id              String @id @default(cuid())
   partnerId       String
+  clientId        String
   key             String @unique
   typeSerialNo    String
   licenseSerialNo String @unique
@@ -115,11 +117,12 @@ model License {
   updatedAt DateTime @updatedAt
 
   partner Partner @relation(fields: [partnerId], references: [id])
+  client  Client  @relation(fields: [clientId], references: [id])
 }
 
 model Application {
   id              String    @id @default(cuid())
-  partnerId       String?
+  partnerId       String?   @unique
   companyType     String
   name            String
   taxNo           String

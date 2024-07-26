@@ -28,6 +28,12 @@ export const GET = auth(async (req: any) => {
                 partner: {
                     select: {
                         acronisId: true,
+                        application: {
+                            select: {
+                                name: true,
+                                email: true,
+                            },
+                        },
                     },
                 },
             },

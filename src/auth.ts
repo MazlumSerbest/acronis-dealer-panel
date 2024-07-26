@@ -29,7 +29,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 },
             });
 
-            if (userExists) {
+            if (userExists?.active) {
                 return true; //if the email exists in the User collection, email them a magic login link
             } else {
                 return "/api/auth/signin?error=Email not found";

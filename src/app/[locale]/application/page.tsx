@@ -1,9 +1,9 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations, useLocale } from "next-intl";
+import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useToast } from "@/components/ui/use-toast";
-import { useTranslations, useLocale } from "next-intl";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import {
     Card,
@@ -119,9 +119,6 @@ const applicationFormSchema = z.object({
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<ApplicationFormValues> = {};
-
 export default function Application() {
     const { toast } = useToast();
     const locale = useLocale();
@@ -129,8 +126,7 @@ export default function Application() {
     const ta = useTranslations("Application");
 
     const form = useForm<ApplicationFormValues>({
-        resolver: zodResolver(applicationFormSchema),
-        defaultValues,
+        resolver: zodResolver(applicationFormSchema)
     });
 
     function onSubmit(data: ApplicationFormValues) {

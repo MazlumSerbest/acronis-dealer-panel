@@ -14,7 +14,7 @@ type Props = {
     clients: Tenant[];
 }
 
-export default function GeneralTab(props: Props) {
+export default function ClientsTab(props: Props) {
     const { t, clients } = props;
 
     const router = useRouter();

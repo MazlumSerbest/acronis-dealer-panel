@@ -19,6 +19,8 @@
         "logout": "Log out",
         "logoutMessage": "You are going to log out. Are you sure?",
         "cancel": "Cancel",
+        "close": "Close",
+        "save": "Save",
         "name": "Name",
         "username": "Username",
         "login": "Login",
@@ -28,12 +30,17 @@
         "role": "Role",
         "kind": "Kind",
         "actions": "Actions",
+        "edit": "Edit",
+        "new": "New",
+        "delete": "Delete",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "active": "Active",
         "disabled": "Disabled",
         "createdAt": "Created At",
+        "createdBy": "Created By",
         "updatedAt": "Updated At",
+        "updatedBy": "Updated By",
         "email": "Email",
         "emailVerified": "Email Verified",
         "phone": "Phone",
@@ -69,6 +76,7 @@
         "platformOwned": "Platform Owned",
         "title": "Title",
         "acronisTenantId": "Acronis Tenant ID",
+        "acronisId": "Acronis ID",
         "companyType": "Company Type",
         "applicationDate": "Application Date",
         "approvedAt": "Approved At",
@@ -104,7 +112,9 @@
         "taxCertificate": "Tax Certificate",
         "signatureCircular": "Signature Circular",
         "tradeRegistry": "Trade Registry",
-        "errorTitle": "Something went wrong!"
+        "errorTitle": "Something went wrong!",
+        "partnerName": "Partner Name",
+        "toggleMenu": "Toggle menu"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -148,7 +158,12 @@
             "personalData": "I accept the processing of my personal data. I have read and understood the information text"
         }
     },
-    "FormErrors": {
+    "FormMessages": {
+        "User": {
+            "active": {
+                "description": "This value is for the active status. If the user is active, the user can login to the system."
+            }
+        },
         "Application": {
             "companyType": {
                 "required": "Type is required"

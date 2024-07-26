@@ -15,6 +15,31 @@ export const GET = auth(async (req: any, { params }) => {
             where: {
                 email: params?.id as string,
             },
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                emailVerified: true,
+                active: true,
+                partnerId: true,
+                acronisTenantId: true,
+                role: true,
+                createdBy: true,
+                createdAt: true,
+                updatedBy: true,
+                updatedAt: true,
+                partner: {
+                    select: {
+                        acronisId: true,
+                        // application: {
+                        //     select: {
+                        //         name: true,
+                        //         email: true,
+                        //     },
+                        // },
+                    },
+                },
+            }
         });
 
         return NextResponse.json(data);
@@ -32,7 +57,7 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const user: User = await req.json();
+        const user: any = await req.json();
         user.updatedAt = new Date().toISOString();
         user.updatedBy = req.auth.user.email;
 
