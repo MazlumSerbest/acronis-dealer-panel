@@ -24,19 +24,19 @@ export const GET = auth(async (req: any) => {
             case "waiting":
                 where = {
                     approvedAt: null,
-                    partnerId: null,
+                    partner: { is: null },
                 };
                 break;
             case "approved":
                 where = {
                     approvedAt: { not: null },
-                    partnerId: null,
+                    partner: { is: null },
                 };
                 break;
             case "resolved":
                 where = {
                     approvedAt: { not: null },
-                    partnerId: { not: null },
+                    partner: { isNot: null },
                 };
                 break;
             default:
@@ -45,6 +45,16 @@ export const GET = auth(async (req: any) => {
 
         const data = await prisma.application.findMany({
             where: where,
+            include: {
+                partner: {
+                    select: {
+                        id: true,
+                        acronisId: true,
+                        // name: true,
+                        // email: true,
+                    },
+                },
+            },
             orderBy: {
                 createdAt: "asc",
             },
@@ -77,6 +87,7 @@ export async function POST(req: NextRequest) {
             district: formData.get("district") as string,
             postalCode: formData.get("postalCode") as string,
             applicationDate: new Date().toISOString(),
+            createdBy: formData.get("email") as string,
         };
 
         const newApplication = await prisma.application.create({
