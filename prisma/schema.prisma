@@ -70,8 +70,10 @@ model VerificationToken {
 }
 
 model Partner {
-  id        String  @id @default(cuid())
-  acronisId String? @unique
+  id            String  @id @default(cuid())
+  applicationId String? @unique
+  acronisId     String  @unique
+  active        Boolean @default(true)
 
   createdBy String?
   createdAt DateTime @default(now())
@@ -81,7 +83,7 @@ model Partner {
   clients     Client[]
   licenses    License[]
   users       User[]
-  application Application?
+  application Application? @relation(fields: [applicationId], references: [id])
 }
 
 model Client {
@@ -96,7 +98,7 @@ model Client {
   updatedAt DateTime @updatedAt
 
   licenses License[]
-  partner Partner   @relation(fields: [partnerId], references: [id])
+  partner  Partner   @relation(fields: [partnerId], references: [id])
 }
 
 model License {
@@ -122,7 +124,6 @@ model License {
 
 model Application {
   id              String    @id @default(cuid())
-  partnerId       String?   @unique
   companyType     String
   name            String
   taxNo           String
@@ -143,5 +144,5 @@ model Application {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  partner Partner? @relation(fields: [partnerId], references: [id])
+  partner Partner?
 }

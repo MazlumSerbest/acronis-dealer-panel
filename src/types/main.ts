@@ -16,16 +16,17 @@ type Path = {
 type User = Entity & {
     partnerId?: string;
     acronisTenantId?: string;
+    active: boolean;
     name: string;
     email: string;
     emailVerified?: string;
-    active: boolean;
     role: "admin" | "partner";
     partner?: Partner;
 };
 
 type Partner = Entity & {
     acronisId?: string;
+    active: boolean;
     application?: Application;
     users?: User[];
     clients?: Client[];
