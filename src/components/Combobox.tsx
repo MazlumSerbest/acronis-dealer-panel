@@ -58,7 +58,7 @@ export default function Combobox({
                             ? data.find((i) => i.id == field.value)?.name
                             : placeholder}
                     </span>
-                    <LuChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
+                    <LuChevronsUpDown className="ml-2 size-3 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="p-0">

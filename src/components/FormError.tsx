@@ -7,7 +7,7 @@ type Props = {
 };
 
 export default function FormError({ error }: Props) {
-    const te = useTranslations("FormErrors");
+    const te = useTranslations("FormMessages");
 
     if (!error) return null;
     return (
