@@ -10,12 +10,11 @@ import {
     LuBriefcase,
 } from "react-icons/lu";
 
-
 export const paths: Path[] = [
     {
         path: "/panel",
         key: "panel",
-        roles: ["admin", "dealer"],
+        roles: ["admin", "partner"],
         icon: (
             <LuLayoutDashboard
                 className="size-6 group-hover:text-blue-400"
@@ -26,7 +25,7 @@ export const paths: Path[] = [
     {
         path: "/panel/clients",
         key: "clients",
-        roles: ["admin", "dealer"],
+        roles: ["admin", "partner"],
         icon: (
             <LuHeartHandshake
                 className="size-6 group-hover:text-blue-400"
@@ -37,7 +36,7 @@ export const paths: Path[] = [
     {
         path: "/panel/licenses",
         key: "licenses",
-        roles: ["admin", "dealer"],
+        roles: ["admin", "partner"],
         icon: (
             <LuKeyRound
                 className="size-6 group-hover:text-blue-400"
@@ -55,6 +54,28 @@ export const paths: Path[] = [
     //         />
     //     ),
     // },
+    {
+        path: "/panel/management",
+        key: "management",
+        roles: ["admin", "partner"],
+        icon: (
+            <LuUnplug
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Management Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/settings",
+        key: "settings",
+        roles: ["admin", "partner"],
+        icon: (
+            <LuSettings
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Settings Page"
+            />
+        ),
+    },
     {
         path: "/panel/applications",
         key: "applications",
@@ -85,28 +106,6 @@ export const paths: Path[] = [
             <LuUser2
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Users Page"
-            />
-        ),
-    },
-    {
-        path: "/panel/management",
-        key: "management",
-        roles: ["admin", "dealer"],
-        icon: (
-            <LuUnplug
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Management Page"
-            />
-        ),
-    },
-    {
-        path: "/panel/settings",
-        key: "settings",
-        roles: ["admin", "dealer"],
-        icon: (
-            <LuSettings
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Settings Page"
             />
         ),
     },

@@ -78,7 +78,7 @@ export default function NavLayout() {
                 )}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
                     {sidebarPaths
-                        .filter((p) => p?.roles?.includes("dealer"))
+                        .filter((p) => p?.roles?.includes("partner"))
                         .map((p, index) => {
                             let withoutLocale = pathName.substring(
                                 pathName.indexOf("/panel"),
@@ -125,7 +125,7 @@ export default function NavLayout() {
                         .filter(
                             (p) =>
                                 p?.roles?.includes("admin") &&
-                                !p?.roles?.includes("dealer"),
+                                !p?.roles?.includes("partner"),
                         )
                         .map((p, index) => {
                             let withoutLocale = pathName.substring(
