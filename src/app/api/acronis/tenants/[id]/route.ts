@@ -1,32 +1,47 @@
 import { NextResponse } from "next/server";
 import getToken from "@/lib/getToken";
+import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
-export async function GET(
-    request: Request,
-    { params }: { params: { id: string } },
-) {
+export const GET = auth(async (req: any, { params }) => {
     try {
-        const tenantId = params.id;
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (!req.auth)
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+
         const token = await getToken();
 
-        if (token) {
-            const headers = {
-                Authorization: `Bearer ${token}`,
-            };
-            const res = await fetch(
-                `${process.env.ACRONIS_API_V2_URL}/tenants/${tenantId}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                },
-            );
+        if (!token)
+            return NextResponse.json({
+                message: "Authentication failed!",
+                status: 401,
+                ok: false,
+            });
 
-            if (res.ok) {
-                const tenant = await res.json() || [];
-                return await NextResponse.json({ tenant });
-            } else return await NextResponse.json({ message: "Failed!" });
-        } else return NextResponse.json({ message: "Authentication failed!" });
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+        const res = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}`,
+            {
+                method: "GET",
+                headers: headers,
+            },
+        );
+
+        if (res.ok) {
+            const tenant = (await res.json()) || [];
+            return await NextResponse.json({ tenant });
+        } else return await NextResponse.json({ message: "Failed!" });
     } catch (error) {
         return NextResponse.json({ message: error });
     }
-}
+});

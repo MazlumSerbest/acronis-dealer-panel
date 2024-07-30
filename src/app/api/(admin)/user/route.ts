@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
+import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
@@ -50,9 +56,14 @@ export const GET = auth(async (req: any) => {
 
 export const POST = auth(async (req: any) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });

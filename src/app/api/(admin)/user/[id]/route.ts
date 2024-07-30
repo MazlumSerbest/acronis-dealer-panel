@@ -1,12 +1,18 @@
 import { NextResponse } from "next/server";
-import prisma from "@/utils/db";
 import { auth } from "@/auth";
+import prisma from "@/utils/db";
+import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any, { params }) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "authorizationNeeded",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
@@ -14,6 +20,7 @@ export const GET = auth(async (req: any, { params }) => {
         const data = await prisma.user.findUnique({
             where: {
                 email: params?.id as string,
+                deleted: false,
             },
             select: {
                 id: true,
@@ -39,7 +46,7 @@ export const GET = auth(async (req: any, { params }) => {
                         // },
                     },
                 },
-            }
+            },
         });
 
         return NextResponse.json(data);
@@ -50,9 +57,14 @@ export const GET = auth(async (req: any, { params }) => {
 
 export const PUT = auth(async (req: any, { params }) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "authorizationNeeded",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
@@ -60,6 +72,22 @@ export const PUT = auth(async (req: any, { params }) => {
         const user: any = await req.json();
         user.updatedAt = new Date().toISOString();
         user.updatedBy = req.auth.user.email;
+
+        const checkEmail = await prisma.user.findUnique({
+            where: {
+                email: user.email,
+            },
+            select: {
+                id: true,
+                email: true,
+            },
+        });
+        if (checkEmail && checkEmail?.id != user.id)
+            return NextResponse.json({
+                message: "Bu e-posta önceden kullanılmıştır!",
+                status: 400,
+                ok: false,
+            });
 
         const updatedUser = await prisma.user.update({
             data: user,
@@ -88,14 +116,24 @@ export const PUT = auth(async (req: any, { params }) => {
 
 export const DELETE = auth(async (req: any, { params }) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "authorizationNeeded",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const deletedUser = await prisma.user.delete({
+        const deletedUser = await prisma.user.update({
+            data: {
+                deleted: true,
+                updatedAt: new Date().toISOString(),
+                updatedBy: req.auth.user.email,
+            },
             where: {
                 id: params?.id as string,
             },

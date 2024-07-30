@@ -1,18 +1,12 @@
 import { NextResponse } from "next/server";
 import getToken from "@/lib/getToken";
 import { auth } from "@/auth";
-import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any, { params }) => {
     try {
-        const tm = await getTranslations({
-            locale: "en",
-            namespace: "Messages",
-        });
-
         if (!req.auth)
             return NextResponse.json({
-                message: tm("authorizationNeeded"),
+                message: "Authorization Needed!",
                 status: 401,
                 ok: false,
             });
@@ -21,28 +15,25 @@ export const GET = auth(async (req: any, { params }) => {
 
         if (!token)
             return NextResponse.json({
-                message: "Authentication failed!",
+                message: "API Authentication failed!",
                 status: 401,
                 ok: false,
             });
 
+        const username = req.nextUrl.searchParams.get("username");
         const headers = {
             Authorization: `Bearer ${token}`,
         };
-
-        const res = await fetch(
-            `${process.env.ACRONIS_ALERT_API_URL}/alerts/${params?.id}`,
+        const check = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/users/check_login?username=${username}`,
             {
                 method: "GET",
                 headers: headers,
             },
         );
 
-        if (res.ok) {
-            const alert = await res.json();
-            return await NextResponse.json({ alert });
-        } else return await NextResponse.json({ message: "Failed!" });
+        return NextResponse.json({ status: check.status, ok: check.ok });
     } catch (error) {
-        return NextResponse.json({ message: error });
+        return NextResponse.json({ message: error, status: 500, ok: false });
     }
 });
