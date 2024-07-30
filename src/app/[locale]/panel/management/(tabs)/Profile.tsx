@@ -3,7 +3,6 @@ import { useTranslations } from "next-intl";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import useUserStore from "@/store/user";
-import { Separator } from "@/components/ui/separator";
 import AcronisWarning from "@/components/AcronisWarning";
 
 export default function ProfileTab() {

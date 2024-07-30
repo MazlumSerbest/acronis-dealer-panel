@@ -22,6 +22,7 @@ model User {
   role            String?
   language        String? @default("tr")
 
+  deleted Boolean  @default(false)
   createdBy String?
   createdAt DateTime @default(now())
   updatedBy String?
@@ -74,6 +75,10 @@ model Partner {
   applicationId String? @unique
   acronisId     String  @unique
   active        Boolean @default(true)
+  name          String
+  email         String
+  mobile        String
+  phone         String
 
   createdBy String?
   createdAt DateTime @default(now())

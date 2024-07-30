@@ -206,12 +206,12 @@ export default function UserCard() {
                     </AlertDialogHeader>
                     <AlertDialogFooter>
                         <AlertDialogCancel asChild>
-                            <Button variant="secondary">{t("cancel")}</Button>
+                            <Button variant="secondary">{t("close")}</Button>
                         </AlertDialogCancel>
                         <AlertDialogAction asChild>
                             <Button
                                 variant="destructive"
-                                className="bg-red-600 hover:bg-red-600/80"
+                                className="bg-destructive hover:bg-destructive/90"
                                 // onClick={() => signOut()}
                                 onClick={() => signOut()}
                             >

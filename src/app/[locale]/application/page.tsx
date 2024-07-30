@@ -26,6 +26,7 @@ import {
     FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 
 import { Turnstile } from "@marsidev/react-turnstile";
@@ -35,7 +36,6 @@ import FormError from "@/components/FormError";
 import { cities } from "@/lib/constants";
 import { LuBuilding2, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
-import { Checkbox } from "@/components/ui/checkbox";
 
 const applicationFormSchema = z.object({
     companyType: z.enum(["business", "person"], {
@@ -125,23 +125,24 @@ export default function Application() {
     const t = useTranslations("General");
     const ta = useTranslations("Application");
 
+    //#region Form
     const form = useForm<ApplicationFormValues>({
-        resolver: zodResolver(applicationFormSchema)
+        resolver: zodResolver(applicationFormSchema),
     });
 
-    function onSubmit(data: ApplicationFormValues) {
+    function onSubmit(values: ApplicationFormValues) {
         const formData = new FormData();
-        formData.append("companyType", data.companyType);
-        formData.append("name", data.name);
-        formData.append("taxNo", data.taxNo);
-        formData.append("taxOffice", data.taxOffice.toString());
-        formData.append("email", data.email);
-        formData.append("mobile", data.mobile);
-        formData.append("phone", data.phone);
-        formData.append("address", data.address);
-        formData.append("city", data.city.toString());
-        formData.append("district", data.district);
-        formData.append("postalCode", data.postalCode);
+        formData.append("companyType", values.companyType);
+        formData.append("name", values.name);
+        formData.append("taxNo", values.taxNo);
+        formData.append("taxOffice", values.taxOffice.toString());
+        formData.append("email", values.email);
+        formData.append("mobile", values.mobile);
+        formData.append("phone", values.phone);
+        formData.append("address", values.address);
+        formData.append("city", values.city.toString());
+        formData.append("district", values.district);
+        formData.append("postalCode", values.postalCode);
         // Files
 
         fetch("/api/application", {
@@ -164,6 +165,7 @@ export default function Application() {
                 }
             });
     }
+    //#endregion
 
     const citiesList: ListBoxItem[] = cities.map((city) => {
         return {

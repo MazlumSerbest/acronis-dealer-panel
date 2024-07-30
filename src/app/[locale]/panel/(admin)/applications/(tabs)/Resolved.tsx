@@ -85,14 +85,17 @@ export default function ResolvedTab() {
             enableGlobalFilter: false,
         },
         {
-            accessorKey: "partnerId",
-            header: t("partnerId"),
+            accessorKey: "partner",
+            header: t("acronisId"),
             enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: Partner = row.getValue("partner");
+
+                return data?.acronisId || "-";
+            }
         },
     ];
     //#endregion
-
-    console.log(data);
 
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
