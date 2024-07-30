@@ -6,23 +6,27 @@ import { useTranslations } from "next-intl";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import DataTable from "@/components/table/DataTable";
-import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 export default function PartnersPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    // const { data, error, isLoading } = useSWR(`/api/partner`);
+    const { data, error, isLoading } = useSWR(`/api/partner`);
 
     //#region Table
-    const visibleColumns = {
-        "": false,
-    };
+    const visibleColumns = {};
 
     const columns: ColumnDef<any, any>[] = [
         {
@@ -71,24 +75,95 @@ export default function PartnersPage() {
                 return data || "-";
             },
         },
+        {
+            accessorKey: "mobile",
+            header: t("mobile"),
+            cell: ({ row }) => {
+                const data: string = row.getValue("mobile");
+                const mobile = data ? "+90" + data : "-";
+
+                return mobile;
+            },
+        },
+        {
+            accessorKey: "phone",
+            header: t("phone"),
+            cell: ({ row }) => {
+                const data: string = row.getValue("phone");
+                const phone = data ? "+90" + data : "-";
+
+                return phone;
+            },
+        },
+        {
+            accessorKey: "acronisId",
+            header: t("acronisId"),
+            enableHiding: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("acronisId");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "actions",
+            header: "",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            cell: ({ row }) => {
+                const data: User = row.original;
+
+                return (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <LuMoreHorizontal className="size-4" />
+                            {/* <Button
+                                aria-haspopup="true"
+                                size="icon"
+                                variant="ghost"
+                            >
+                                <span className="sr-only">
+                                    {t("toggleMenu")}
+                                </span>
+                            </Button> */}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuLabel>
+                                {t("actions")}
+                            </DropdownMenuLabel>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    // setIsNew(false);
+                                    // setOpen(true);
+                                    // form.reset(data);
+                                }}
+                            >
+                                {t("edit")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                );
+            },
+        },
     ];
     //#endregion
 
-    // if (error) return <div>{t("failedToLoad")}</div>;
-    // if (!data)
-    //     return (
-    //         <Skeleton>
-    //             <TableSkeleton />
-    //         </Skeleton>
-    //     );
+    if (error) return <div>{t("failedToLoad")}</div>;
+    if (!data)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
     return (
         <DataTable
             zebra
             columns={columns}
-            data={[]}
+            data={data || []}
             visibleColumns={visibleColumns}
-            // isLoading={isLoading}
-            onAddNew={() => null}
+            isLoading={isLoading}
+            // onAddNew={() => {}}
         />
     );
 }
