@@ -33,6 +33,7 @@
         "edit": "Edit",
         "new": "New",
         "delete": "Delete",
+        "create": "Create",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "active": "Active",
@@ -114,7 +115,16 @@
         "tradeRegistry": "Trade Registry",
         "errorTitle": "Something went wrong!",
         "partnerName": "Partner Name",
-        "toggleMenu": "Toggle menu"
+        "toggleMenu": "Toggle menu",
+        "waiting": "Waiting",
+        "approved": "Approved",
+        "resolved": "Resolved",
+        "approveApplication": "Approve Application",
+        "approve": "Approve",
+        "approveMessage": "Before approving the application, please make sure that the information is correct. Are you sure you want to approve the application?",
+        "createPartner": "Create Partner",
+        "createPartnerMessage": "Please fill in the form below with Acronis Client ID which created for this partner.",
+        "editApplication": "Edit Application"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -162,6 +172,13 @@
         "User": {
             "active": {
                 "description": "This value is for the active status. If the user is active, the user can login to the system."
+            }
+        },
+        "Partner": {
+            "acronisId": {
+                "required": "Acronis ID is required",
+                "invalidType": "Acronis ID must be a valid number",
+                "notFound": "Partner not found"
             }
         },
         "Application": {
