@@ -13,9 +13,9 @@ export default async function VerifyRequest() {
 
     return (
         <div className="flex flex-col items-center justify-center h-screen gap-10">
-            <Card className="max-w-96">
+            <Card className="max-w-[660px]">
                 <CardHeader>
-                    <CardTitle className="text-3xl">{ts("checkYourEmail")}</CardTitle>
+                    <CardTitle className="text-3xl text-blue-400">{ts("checkYourEmail")}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <p className="text-base text-gray-600">
