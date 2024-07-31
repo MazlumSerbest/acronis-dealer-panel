@@ -76,7 +76,7 @@ export default function ContactsTab() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("user");
 
-                return <BoolChip value={data} />;
+                return <BoolChip size="size-4" value={data} />;
             },
         },
     ];

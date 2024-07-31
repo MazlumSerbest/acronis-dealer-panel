@@ -67,7 +67,7 @@ export default function ClientsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("mfa_status");
 
-                return <BoolChip value={data == "enabled"} />;
+                return <BoolChip size="size-4" value={data == "enabled"} />;
             },
         },
         {
@@ -77,7 +77,7 @@ export default function ClientsPage() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("enabled");
 
-                return <BoolChip value={data} />;
+                return <BoolChip size="size-4" value={data} />;
             },
         },
         {

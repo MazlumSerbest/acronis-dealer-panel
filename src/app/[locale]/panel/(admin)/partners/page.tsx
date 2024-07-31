@@ -115,7 +115,7 @@ export default function PartnersPage() {
 
                 return (
                     <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4" />
                             {/* <Button
                                 aria-haspopup="true"

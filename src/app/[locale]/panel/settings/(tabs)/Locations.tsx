@@ -50,7 +50,7 @@ export default function LocationsTab() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("platform_owned");
 
-                return <BoolChip value={data} />;
+                return <BoolChip size="size-4" value={data} />;
             },
         },
     ];

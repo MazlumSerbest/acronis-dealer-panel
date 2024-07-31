@@ -49,7 +49,7 @@ export default function UsersTab() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("enabled");
 
-                return <BoolChip value={data} />;
+                return <BoolChip size="size-4" value={data} />;
             },
         },
     ];

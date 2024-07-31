@@ -217,7 +217,7 @@ export default function UsersPage() {
                 const data: string = row.getValue("emailVerified");
 
                 const emailVerified: boolean = data?.length > 0;
-                return <BoolChip value={emailVerified} />;
+                return <BoolChip size="size-4" value={emailVerified} />;
             },
         },
         {
@@ -227,7 +227,7 @@ export default function UsersPage() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("active");
 
-                return <BoolChip value={data} />;
+                return <BoolChip size="size-4" value={data} />;
             },
         },
         {
@@ -280,7 +280,7 @@ export default function UsersPage() {
 
                 return (
                     <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4" />
                             {/* <Button
                                 aria-haspopup="true"
