@@ -138,12 +138,16 @@
         "checkYourEmailDescription": "We have sent a magic link to your email address. Please follow the link to sign in to your account.",
         "Errors": {
             "Error": "Error!",
-            "Email not found": "Email not found"
+            "emailNotFound": "Email not found!",
+            "accountNotActive": "Account not active! Please contact the administrator.",
+            "MissingCSRF": ""
         }
     },
     "Application": {
         "title": "Application Form",
         "description": "Please fill in the form below to apply for a dealer account.",
+        "successTitle": "Thank you for your application!",
+        "successDescription": "Your Application has been successfully submitted. Please wait for the approval. Approval process may take up to 2-3 business days.",
         "Steps": {
             "1": "Distinctively incubate unique systems via team building intellectual capital. Rapidiously fashion cross-platform data whereas.",
             "2": "Objectively envisioneer leading-edge scenarios vis-a-vis distributed niche markets. Credibly restore e-business value rather than premium solutions. Efficiently seize covalent e-services vis-a-vis.",

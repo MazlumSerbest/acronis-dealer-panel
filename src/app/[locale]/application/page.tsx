@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { useTranslations, useLocale } from "next-intl";
 import { useToast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
@@ -23,7 +24,6 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -112,9 +112,9 @@ const applicationFormSchema = z.object({
     personalData: z.literal<boolean>(true, {
         errorMap: () => ({ message: "Application.personalData.required" }),
     }),
-    turnstile: z.literal<boolean>(true, {
-        errorMap: () => ({ message: "Application.turnstile.required" }),
-    }),
+    // turnstile: z.literal<boolean>(true, {
+    //     errorMap: () => ({ message: "Application.turnstile.required" }),
+    // }),
 });
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
@@ -124,6 +124,7 @@ export default function Application() {
     const locale = useLocale();
     const t = useTranslations("General");
     const ta = useTranslations("Application");
+    const [success, setSuccess] = useState(false);
 
     //#region Form
     const form = useForm<ApplicationFormValues>({
@@ -156,6 +157,7 @@ export default function Application() {
                         description: res.message,
                     });
                     form.reset();
+                    setSuccess(true);
                 } else {
                     toast({
                         variant: "destructive",
@@ -188,6 +190,23 @@ export default function Application() {
         },
     ];
 
+    if (success)
+        return (
+            <div className="flex flex-col items-center justify-center h-screen gap-10">
+                <Card className="max-w-[600px]">
+                    <CardHeader>
+                        <CardTitle className="text-3xl text-blue-400">
+                            {ta("successTitle")}
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-base text-gray-600">
+                            {ta("successDescription")}
+                        </p>
+                    </CardContent>
+                </Card>
+            </div>
+        );
     return (
         <div className="flex flex-col min-h-dvh w-full place-items-center bg-zinc-100">
             <Card className="max-w-[800px] mt-8 mb-6">
@@ -329,7 +348,7 @@ export default function Application() {
                                             </RadioGroup>
                                         </FormControl>
                                         {/* <FormDescription>
-                                        </FormDescription> */}
+                                                </FormDescription> */}
                                         <FormError
                                             error={
                                                 form?.formState?.errors
@@ -850,7 +869,7 @@ export default function Application() {
                                 />
                             </div>
 
-                            <div className="flex place-items-end">
+                            {/* <div className="flex place-items-end">
                                 <div className="flex-1"></div>
                                 <div className="grid gap-2">
                                     <Turnstile
@@ -882,7 +901,7 @@ export default function Application() {
                                         }
                                     />
                                 </div>
-                            </div>
+                            </div> */}
                         </CardContent>
                         {/* <Separator /> */}
                         <CardFooter className="flex flex-row gap-2">
