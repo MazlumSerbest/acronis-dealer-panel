@@ -90,6 +90,21 @@ export async function POST(req: NextRequest) {
             createdBy: formData.get("email") as string,
         };
 
+        const checkEmail = await prisma.application.findUnique({
+            where: {
+                email: app.email,
+            },
+            select: {
+                email: true,
+            },
+        });
+        if (checkEmail)
+            return NextResponse.json({
+                message: "Bu e-posta önceden kullanılmıştır!",
+                status: 400,
+                ok: false,
+            });
+
         const newApplication = await prisma.application.create({
             data: app,
         });
