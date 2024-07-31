@@ -29,10 +29,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 },
             });
 
-            if (userExists?.active) {
-                return true; //if the email exists in the User collection, email them a magic login link
+            // if (userExists) {
+            //     return true;
+            // } else {
+            //     return "/signin?error=Email not found";
+            // }
+
+            if (!userExists) {
+                return "/signin?error=emailNotFound";
+            } else if (userExists?.active === false) {
+                return "/signin?error=accountNotActive";
             } else {
-                return "/api/auth/signin?error=Email not found";
+                return true; //if the email exists in the User collection, email them a magic login link
             }
         },
     },
