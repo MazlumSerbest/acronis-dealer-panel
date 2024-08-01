@@ -138,6 +138,7 @@ export default function ClientsPage() {
                     data={data?.children?.items || []}
                     columns={columns}
                     visibleColumns={visibleColumns}
+                    defaultPageSize={50}
                     isLoading={isLoading}
                     onClick={(item) => {
                         router.push("clients/" + item?.original?.id);

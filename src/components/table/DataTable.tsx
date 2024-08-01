@@ -44,6 +44,8 @@ interface DataTableProps<TData, TValue> {
     basic?: boolean;
     zebra?: boolean;
     isLoading?: boolean;
+    defaultPageIndex?: number;
+    defaultPageSize?: 10 | 20 | 30 | 40 | 50;
     onAddNew?: () => any;
     onClick?: (item: any) => any;
     onDoubleClick?: (item: any) => any;
@@ -59,6 +61,8 @@ export default function DataTable<TData, TValue>(
         basic = false,
         zebra = false,
         isLoading = false,
+        defaultPageIndex = 0,
+        defaultPageSize = 10,
         onAddNew,
         onClick,
         onDoubleClick,
@@ -85,6 +89,10 @@ export default function DataTable<TData, TValue>(
         onColumnVisibilityChange: setColumnVisibility,
         initialState: {
             columnVisibility: columnVisibility,
+            pagination: {
+                pageIndex: defaultPageIndex,
+                pageSize: defaultPageSize,
+            },
         },
         state: {
             sorting,
@@ -113,7 +121,9 @@ export default function DataTable<TData, TValue>(
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
                         >
-                            <span className="sr-only lg:not-sr-only">{tc("add")}</span>
+                            <span className="sr-only lg:not-sr-only">
+                                {tc("add")}
+                            </span>
                             <LuPlus className="size-4" />
                         </Button>
                     )}
