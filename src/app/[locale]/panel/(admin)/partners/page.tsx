@@ -21,6 +21,7 @@ import useUserStore from "@/store/user";
 
 export default function PartnersPage() {
     const t = useTranslations("General");
+    const router = useRouter();
     const { user: currentUser } = useUserStore();
 
     const { data, error, isLoading } = useSWR(`/api/partner`);
@@ -111,7 +112,7 @@ export default function PartnersPage() {
             enableGlobalFilter: false,
             enableHiding: false,
             cell: ({ row }) => {
-                const data: User = row.original;
+                const data: Partner = row.original;
 
                 return (
                     <DropdownMenu>
@@ -131,6 +132,17 @@ export default function PartnersPage() {
                             <DropdownMenuLabel>
                                 {t("actions")}
                             </DropdownMenuLabel>
+                            {data?.application && (
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        router.push(
+                                            `/panel/applications/${data.application?.id}`,
+                                        );
+                                    }}
+                                >
+                                    {t("goToApplication")}
+                                </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem
                                 onClick={() => {
                                     // setIsNew(false);
