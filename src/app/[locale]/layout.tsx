@@ -29,7 +29,7 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale} className="light">
-            <body className={inter.className}>
+            <body className={inter.className + " overflow-hidden"}>
                 <NextTopLoader
                     color="rgb(96 165 250)"
                     showSpinner={false}
@@ -37,13 +37,6 @@ export default async function LocaleLayout({
                 />
                 <NextIntlClientProvider locale={locale} messages={messages}>
                     <Providers>{children}</Providers>
-                    {/* <Toaster
-                        position="bottom-center"
-                        toastOptions={{
-                            duration: 4000,
-                            className: "text-blue-400",
-                        }}
-                    /> */}
                     <Toaster />
                 </NextIntlClientProvider>
             </body>

@@ -218,23 +218,23 @@ export default function ApplicationDetail({
                             {DateTimeFormat(data.applicationDate) || "-"}
                         </dd>
                     </div>
-                    {data.approvedAt ? (
+                    {data.approvedAt && (
                         <div>
                             <dt className="font-medium">{t("approvedAt")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {DateTimeFormat(data.approvedAt) || "-"}
                             </dd>
                         </div>
-                    ) : null}
-                    {data.approvedBy ? (
+                    )}
+                    {data.approvedBy && (
                         <div>
                             <dt className="font-medium">{t("approvedBy")}</dt>
                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                 {data.approvedBy || "-"}
                             </dd>
                         </div>
-                    ) : null}
-                    {data.partner ? (
+                    )}
+                    {data.partner && (
                         <>
                             <div>
                                 <dt className="font-medium">
@@ -253,7 +253,7 @@ export default function ApplicationDetail({
                                 </dd>
                             </div>
                         </>
-                    ) : null}
+                    )}
                     <div>
                         <dt className="font-medium">{t("companyType")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
@@ -324,7 +324,7 @@ export default function ApplicationDetail({
                 </div>
 
                 <div className="flex flex-row gap-2 justify-end">
-                    {!data.approvedAt && !data.partnerId ? (
+                    {!data.approvedAt && !data.partnerId && (
                         <Dialog
                             open={openApprove}
                             onOpenChange={setOpenApprove}
@@ -371,7 +371,9 @@ export default function ApplicationDetail({
                                                         toast({
                                                             variant:
                                                                 "destructive",
-                                                            title: t("errorTitle"),
+                                                            title: t(
+                                                                "errorTitle",
+                                                            ),
                                                             description:
                                                                 res.message,
                                                         });
@@ -385,10 +387,8 @@ export default function ApplicationDetail({
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
-                    ) : (
-                        <></>
                     )}
-                    {data.approvedAt && !data.partner ? (
+                    {data.approvedAt && !data.partner && (
                         <>
                             <Button
                                 className="bg-blue-400 hover:bg-blue-400/90"
@@ -497,10 +497,8 @@ export default function ApplicationDetail({
                                 </DialogContent>
                             </Dialog>
                         </>
-                    ) : (
-                        <></>
                     )}
-                    {!data.partner ? (
+                    {!data.partner && (
                         <>
                             <Button
                                 className="bg-green-600 hover:bg-green-600/90"
@@ -654,8 +652,6 @@ export default function ApplicationDetail({
                                 </DialogContent>
                             </Dialog>
                         </>
-                    ) : (
-                        <></>
                     )}
                 </div>
             </CardContent>

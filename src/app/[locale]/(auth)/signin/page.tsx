@@ -22,17 +22,6 @@ export default async function SignIn({
     const t = await getTranslations("General");
     const ts = await getTranslations("SignIn");
 
-    // const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    // async function onSubmit(event: React.SyntheticEvent) {
-    //     event.preventDefault();
-    //     setIsLoading(true);
-
-    //     setTimeout(() => {
-    //         setIsLoading(false);
-    //     }, 3000);
-    // }
-
     return (
         <div className="flex flex-col h-dvh pt-12 sm:pt-20 px-4 sm:px-0">
             <div className="mx-auto flex flex-col w-full justify-center space-y-6 sm:w-[350px]">

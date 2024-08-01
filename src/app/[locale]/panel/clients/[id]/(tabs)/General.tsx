@@ -29,7 +29,7 @@ export default function GeneralTab(props: Props) {
                     u.offering_item?.quota?.value !== null &&
                     u.offering_item?.quota?.value !== undefined &&
                     u.value > u.offering_item.quota.value,
-            ) ? (
+            ) && (
                 <Alert className="col-span-3" variant="destructive">
                     <LuAlertTriangle className="size-4" />
                     <AlertTitle>Limit Exceeded</AlertTitle>
@@ -38,7 +38,7 @@ export default function GeneralTab(props: Props) {
                         limit.
                     </AlertDescription>
                 </Alert>
-            ) : null}
+            )}
 
             <div className="col-span-2">
                 <Card>
@@ -318,27 +318,28 @@ export default function GeneralTab(props: Props) {
                                                 <span className="text-zinc-400">
                                                     {u.offering_item?.quota
                                                         ?.value != undefined &&
-                                                    u.offering_item.quota
-                                                        .value != null ? (
-                                                        <span className="text-zinc-400">
-                                                            {` / ${
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value ==
-                                                                null
-                                                                    ? "Unlimited"
-                                                                    : u.measurement_unit ==
-                                                                      "bytes"
-                                                                    ? formatBytes(
-                                                                          u
-                                                                              .offering_item
-                                                                              ?.quota
-                                                                              ?.value,
-                                                                      )
-                                                                    : u.value
-                                                            }`}
-                                                        </span>
-                                                    ) : null}
+                                                        u.offering_item.quota
+                                                            .value != null && (
+                                                            <span className="text-zinc-400">
+                                                                {` / ${
+                                                                    u
+                                                                        .offering_item
+                                                                        ?.quota
+                                                                        ?.value ==
+                                                                    null
+                                                                        ? "Unlimited"
+                                                                        : u.measurement_unit ==
+                                                                          "bytes"
+                                                                        ? formatBytes(
+                                                                              u
+                                                                                  .offering_item
+                                                                                  ?.quota
+                                                                                  ?.value,
+                                                                          )
+                                                                        : u.value
+                                                                }`}
+                                                            </span>
+                                                        )}
                                                 </span>
                                             </p>
                                         </div>

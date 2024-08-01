@@ -24,6 +24,7 @@ export const GET = auth(async (req: any) => {
             include: {
                 application: {
                     select: {
+                        id: true,
                         name: true,
                         email: true,
                     },

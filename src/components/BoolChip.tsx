@@ -32,7 +32,7 @@ export default function BoolChip({ value, showText, size = "size-5" }: Props) {
                 ) : (
                     <LuXCircle className={cn(size, "text-red-500")} />
                 )}
-                {showText ? (
+                {showText && (
                     <p
                         className={cn(
                             value ? "text-green-600" : "text-red-500",
@@ -41,7 +41,7 @@ export default function BoolChip({ value, showText, size = "size-5" }: Props) {
                     >
                         {value == true ? "Yes" : "No"}
                     </p>
-                ) : null}
+                )}
             </div>
         </div>
     );

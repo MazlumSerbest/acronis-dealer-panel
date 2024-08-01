@@ -15,7 +15,7 @@ import Needle from "@/components/charts/Needle";
 
 export default function PanelPage() {
     return (
-        <div className="w-full h-dvh space-y-8 mt-4">
+        <div className="w-full space-y-8 mt-4">
             <div className="max-w-[1024px] m-auto">
                 <Carousel
                     opts={{

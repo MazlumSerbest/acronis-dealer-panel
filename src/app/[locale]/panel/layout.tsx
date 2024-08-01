@@ -17,7 +17,7 @@ export default async function PanelLayout({
     if (!session) return <></>;
     return (
         <SessionProvider>
-            <main className="flex min-h-screen">
+            <main className="flex h-screen">
                 <NavLayout />
                 <main className="flex-1 flex flex-col min-w-0 h-dvh gap-2 overflow-auto p-2 pb-4 pt-16 lg:p-4 lg:pt-4">
                     {children}

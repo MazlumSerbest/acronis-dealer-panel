@@ -34,6 +34,7 @@
         "new": "New",
         "delete": "Delete",
         "create": "Create",
+        "goToApplication": "Go to Application",
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "active": "Active",
@@ -140,7 +141,10 @@
             "Error": "Error!",
             "emailNotFound": "Email not found!",
             "accountNotActive": "Account not active! Please contact the administrator.",
-            "MissingCSRF": ""
+            "MissingCSRF": "",
+            "Configuration": "There is a problem with the server configuration. Please contact the administrator.",
+            "AccessDenied": "You do not have permission to access this page. Please contact the administrator.",
+            "Verification": "The token has expired or has already been used. Please request a new one."
         }
     },
     "Application": {
