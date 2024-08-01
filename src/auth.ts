@@ -20,6 +20,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     pages: {
         signIn: "/signin",
         verifyRequest: "/verifyrequest",
+        error: "/error",
     },
     callbacks: {
         async signIn({ user, account, email }) {
