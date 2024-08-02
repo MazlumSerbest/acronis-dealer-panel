@@ -6,7 +6,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import DataTable from "@/components/table/DataTable";
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import Loader from "@/components/loaders/Loader";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
@@ -79,9 +79,9 @@ export default function WaitingTab() {
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
-            <Skeleton>
-                <TableSkeleton />
-            </Skeleton>
+            <div className="h-80">
+                <Loader />
+            </div>
         );
     return (
         <DataTable

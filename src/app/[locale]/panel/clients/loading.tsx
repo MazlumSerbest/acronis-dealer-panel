@@ -1,9 +1,9 @@
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import Loader from "@/components/loaders/Loader";
 
 export default function ClientsLoading() {
     return (
-        <Skeleton>
-            <TableSkeleton />
-        </Skeleton>
+        <div className="h-80">
+            <Loader />
+        </div>
     );
 }
