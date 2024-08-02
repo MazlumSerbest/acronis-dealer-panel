@@ -11,6 +11,7 @@ import {
     Card,
     CardContent,
     CardDescription,
+    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -104,6 +105,7 @@ export default function ApplicationDetail({
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: (data) => {},
         },
     );
 
@@ -188,473 +190,511 @@ export default function ApplicationDetail({
             </Skeleton>
         );
     return (
-        <Card className="w-full">
-            <CardHeader className="py-4">
-                <CardTitle className="font-medium text-xl">
-                    {t("applicationInformation")}
-                </CardTitle>
-                <CardDescription>{data.name}</CardDescription>
-            </CardHeader>
+        <>
+            <Card className="w-full">
+                <CardHeader className="py-4">
+                    <CardTitle className="font-medium text-xl">
+                        {t("applicationInformation")}
+                    </CardTitle>
+                    <CardDescription>{data.name}</CardDescription>
+                </CardHeader>
 
-            <CardContent className="grid gap-2">
-                <div className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
-                    {
-                        <div>
-                            <dt className="font-medium">{t("status")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                {!data.approvedAt && !data.partner
-                                    ? t("waiting")
-                                    : data.approvedAt && !data.partner
-                                    ? t("approved")
-                                    : data.approvedAt && data.partner
-                                    ? t("resolved")
-                                    : "-"}
-                            </dd>
-                        </div>
-                    }
-                    <div>
-                        <dt className="font-medium">{t("applicationDate")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {DateTimeFormat(data.applicationDate) || "-"}
-                        </dd>
-                    </div>
-                    {data.approvedAt && (
-                        <div>
-                            <dt className="font-medium">{t("approvedAt")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                {DateTimeFormat(data.approvedAt) || "-"}
-                            </dd>
-                        </div>
-                    )}
-                    {data.approvedBy && (
-                        <div>
-                            <dt className="font-medium">{t("approvedBy")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                {data.approvedBy || "-"}
-                            </dd>
-                        </div>
-                    )}
-                    {data.partner && (
-                        <>
+                <CardContent className="grid gap-2">
+                    <div className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
+                        {
                             <div>
-                                <dt className="font-medium">
-                                    {t("partnerId")}
-                                </dt>
+                                <dt className="font-medium">{t("status")}</dt>
                                 <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                    {data.partner.id || "-"}
+                                    {!data.approvedAt && !data.partner
+                                        ? t("waiting")
+                                        : data.approvedAt && !data.partner
+                                        ? t("approved")
+                                        : data.approvedAt && data.partner
+                                        ? t("resolved")
+                                        : "-"}
                                 </dd>
                             </div>
-                            <div>
-                                <dt className="font-medium">
-                                    {t("acronisId")}
-                                </dt>
-                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                    {data.partner.acronisId || "-"}
-                                </dd>
-                            </div>
-                        </>
-                    )}
-                    <div>
-                        <dt className="font-medium">{t("companyType")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {t(data.companyType) || "-"}
-                        </dd>
+                        }
+                        <div>
+                            <dt className="font-medium">{t("companyName")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.name || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("companyType")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {t(data.companyType) || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("taxNo")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.taxNo || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("taxOffice")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.taxOffice || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("email")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.email || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("mobile")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data?.mobile ? "+90" + data.phone : "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("phone")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data?.phone ? "+90" + data.phone : "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("address")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.address || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("city")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {citiesList.find((c) => c.id == data.city)
+                                    ?.name || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("district")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.district || "-"}
+                            </dd>
+                        </div>
+                        <div>
+                            <dt className="font-medium">{t("postalCode")}</dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {data.postalCode || "-"}
+                            </dd>
+                        </div>
                     </div>
-                    <div>
-                        <dt className="font-medium">{t("companyName")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.name || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("taxNo")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.taxNo || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("taxOffice")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.taxOffice || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("email")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.email || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("mobile")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data?.mobile ? "+90" + data.phone : "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("phone")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data?.phone ? "+90" + data.phone : "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("address")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.address || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("city")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {citiesList.find((c) => c.id == data.city)?.name ||
-                                "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("district")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.district || "-"}
-                        </dd>
-                    </div>
-                    <div>
-                        <dt className="font-medium">{t("postalCode")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                            {data.postalCode || "-"}
-                        </dd>
-                    </div>
-                </div>
+                </CardContent>
 
-                <div className="flex flex-row gap-2 justify-end">
-                    {!data.approvedAt && !data.partnerId && (
-                        <Dialog
-                            open={openApprove}
-                            onOpenChange={setOpenApprove}
-                        >
-                            <DialogTrigger asChild>
-                                <Button className="bg-blue-400 hover:bg-blue-400/90">
-                                    {t("approveApplication")}
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>
-                                        {t("approveApplication")}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                        {t("approveMessage")}
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <DialogFooter>
-                                    <DialogClose asChild>
-                                        <Button variant="outline">
-                                            {t("close")}
-                                        </Button>
-                                    </DialogClose>
-                                    <Button
-                                        className="bg-blue-400 hover:bg-blue-400/90"
-                                        onClick={() => {
-                                            fetch(
-                                                `/api/application/${data.id}/approve`,
-                                                {
-                                                    method: "PUT",
-                                                },
-                                            )
-                                                .then((res) => res.json())
-                                                .then((res) => {
-                                                    if (res.ok) {
-                                                        toast({
-                                                            description:
-                                                                res.message,
-                                                        });
-                                                        setOpenApprove(false);
-                                                        mutate();
-                                                    } else {
-                                                        toast({
-                                                            variant:
-                                                                "destructive",
-                                                            title: t(
-                                                                "errorTitle",
-                                                            ),
-                                                            description:
-                                                                res.message,
-                                                        });
-                                                        setOpenApprove(false);
-                                                    }
-                                                });
-                                        }}
-                                    >
-                                        {t("approve")}
-                                    </Button>
-                                </DialogFooter>
-                            </DialogContent>
-                        </Dialog>
-                    )}
-                    {data.approvedAt && !data.partner && (
-                        <>
-                            <Button
-                                className="bg-blue-400 hover:bg-blue-400/90"
-                                onClick={() => {
-                                    partnerForm.reset({});
-                                    setTenantName("");
-                                    setOpenCreatePartner(true);
-                                }}
-                            >
-                                {t("createPartner")}
-                            </Button>
-
+                {!data.partner && (
+                    <CardFooter className="flex flex-row gap-2 justify-end">
+                        {!data.approvedAt && !data.partnerId && (
                             <Dialog
-                                open={openCreatePartner}
-                                onOpenChange={setOpenCreatePartner}
+                                open={openApprove}
+                                onOpenChange={setOpenApprove}
                             >
+                                <DialogTrigger asChild>
+                                    <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                        {t("approveApplication")}
+                                    </Button>
+                                </DialogTrigger>
                                 <DialogContent>
                                     <DialogHeader>
                                         <DialogTitle>
-                                            {t("createPartner")}
+                                            {t("approveApplication")}
                                         </DialogTitle>
                                         <DialogDescription>
-                                            {t("createPartnerMessage")}
+                                            {t("approveMessage")}
                                         </DialogDescription>
                                     </DialogHeader>
-                                    <Form {...partnerForm}>
-                                        <form
-                                            onSubmit={partnerForm.handleSubmit(
-                                                onSubmitPartner,
-                                            )}
-                                            autoComplete="off"
-                                            className="space-y-4"
+                                    <DialogFooter>
+                                        <DialogClose asChild>
+                                            <Button variant="outline">
+                                                {t("close")}
+                                            </Button>
+                                        </DialogClose>
+                                        <Button
+                                            className="bg-blue-400 hover:bg-blue-400/90"
+                                            onClick={() => {
+                                                fetch(
+                                                    `/api/application/${data.id}/approve`,
+                                                    {
+                                                        method: "PUT",
+                                                    },
+                                                )
+                                                    .then((res) => res.json())
+                                                    .then((res) => {
+                                                        if (res.ok) {
+                                                            toast({
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                            setOpenApprove(
+                                                                false,
+                                                            );
+                                                            mutate();
+                                                        } else {
+                                                            toast({
+                                                                variant:
+                                                                    "destructive",
+                                                                title: t(
+                                                                    "errorTitle",
+                                                                ),
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                            setOpenApprove(
+                                                                false,
+                                                            );
+                                                        }
+                                                    });
+                                            }}
                                         >
-                                            <FormField
-                                                control={partnerForm.control}
-                                                name="acronisId"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                            {t("acronisId")}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input
-                                                                {...field}
-                                                                onChange={async (
-                                                                    v,
-                                                                ) => {
-                                                                    partnerForm.setValue(
-                                                                        "acronisId",
-                                                                        v.target
-                                                                            .value,
-                                                                    );
-                                                                    fetch(
-                                                                        `/api/acronis/tenants/${v.target.value}`,
-                                                                    )
-                                                                        .then(
-                                                                            (
-                                                                                res,
-                                                                            ) =>
-                                                                                res.json(),
-                                                                        )
-                                                                        .then(
-                                                                            (
-                                                                                res,
-                                                                            ) => {
-                                                                                setTenantName(
-                                                                                    res
-                                                                                        ?.tenant
-                                                                                        ?.name,
-                                                                                );
-                                                                            },
+                                            {t("approve")}
+                                        </Button>
+                                    </DialogFooter>
+                                </DialogContent>
+                            </Dialog>
+                        )}
+                        {data.approvedAt && !data.partner && (
+                            <>
+                                <Button
+                                    className="bg-blue-400 hover:bg-blue-400/90"
+                                    onClick={() => {
+                                        partnerForm.reset({});
+                                        setTenantName("");
+                                        setOpenCreatePartner(true);
+                                    }}
+                                >
+                                    {t("createPartner")}
+                                </Button>
+
+                                <Dialog
+                                    open={openCreatePartner}
+                                    onOpenChange={setOpenCreatePartner}
+                                >
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                {t("createPartner")}
+                                            </DialogTitle>
+                                            <DialogDescription>
+                                                {t("createPartnerMessage")}
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                        <Form {...partnerForm}>
+                                            <form
+                                                onSubmit={partnerForm.handleSubmit(
+                                                    onSubmitPartner,
+                                                )}
+                                                autoComplete="off"
+                                                className="space-y-4"
+                                            >
+                                                <FormField
+                                                    control={
+                                                        partnerForm.control
+                                                    }
+                                                    name="acronisId"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("acronisId")}
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    {...field}
+                                                                    onChange={async (
+                                                                        v,
+                                                                    ) => {
+                                                                        partnerForm.setValue(
+                                                                            "acronisId",
+                                                                            v
+                                                                                .target
+                                                                                .value,
                                                                         );
-                                                                }}
+                                                                        fetch(
+                                                                            `/api/acronis/tenants/${v.target.value}`,
+                                                                        )
+                                                                            .then(
+                                                                                (
+                                                                                    res,
+                                                                                ) =>
+                                                                                    res.json(),
+                                                                            )
+                                                                            .then(
+                                                                                (
+                                                                                    res,
+                                                                                ) => {
+                                                                                    setTenantName(
+                                                                                        res
+                                                                                            ?.tenant
+                                                                                            ?.name,
+                                                                                    );
+                                                                                },
+                                                                            );
+                                                                    }}
+                                                                />
+                                                            </FormControl>
+                                                            <FormDescription>
+                                                                {tenantName}
+                                                            </FormDescription>
+                                                            <FormError
+                                                                error={
+                                                                    partnerForm
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.acronisId
+                                                                }
                                                             />
-                                                        </FormControl>
-                                                        <FormDescription>
-                                                            {tenantName}
-                                                        </FormDescription>
-                                                        <FormError
-                                                            error={
-                                                                partnerForm
-                                                                    ?.formState
-                                                                    ?.errors
-                                                                    ?.acronisId
-                                                            }
-                                                        />
-                                                    </FormItem>
-                                                )}
-                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                            <DialogFooter>
-                                                <DialogClose asChild>
-                                                    <Button variant="outline">
-                                                        {t("close")}
+                                                <DialogFooter>
+                                                    <DialogClose asChild>
+                                                        <Button variant="outline">
+                                                            {t("close")}
+                                                        </Button>
+                                                    </DialogClose>
+                                                    <Button
+                                                        type="submit"
+                                                        className="bg-blue-400 hover:bg-blue-400/90"
+                                                    >
+                                                        {t("create")}
                                                     </Button>
-                                                </DialogClose>
-                                                <Button
-                                                    type="submit"
-                                                    className="bg-blue-400 hover:bg-blue-400/90"
-                                                >
-                                                    {t("create")}
-                                                </Button>
-                                            </DialogFooter>
-                                        </form>
-                                    </Form>
-                                </DialogContent>
-                            </Dialog>
-                        </>
-                    )}
-                    {!data.partner && (
-                        <>
-                            <Button
-                                className="bg-green-600 hover:bg-green-600/90"
-                                onClick={() => {
-                                    form.reset(data);
-                                    setOpenUpdate(true);
-                                }}
-                            >
-                                {t("editApplication")}
-                            </Button>
+                                                </DialogFooter>
+                                            </form>
+                                        </Form>
+                                    </DialogContent>
+                                </Dialog>
+                            </>
+                        )}
+                        {!data.partner && (
+                            <>
+                                <Button
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                    onClick={() => {
+                                        form.reset(data);
+                                        setOpenUpdate(true);
+                                    }}
+                                >
+                                    {t("editApplication")}
+                                </Button>
 
-                            <Dialog
-                                open={openUpdate}
-                                onOpenChange={setOpenUpdate}
-                            >
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>
-                                            {t("editApplication")}
-                                        </DialogTitle>
-                                    </DialogHeader>
-                                    <Form {...form}>
-                                        <form
-                                            onSubmit={form.handleSubmit(
-                                                onSubmit,
-                                            )}
-                                            autoComplete="off"
-                                            className="space-y-4"
-                                        >
-                                            <FormField
-                                                control={form.control}
-                                                name="name"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                            {t("name")}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input {...field} />
-                                                        </FormControl>
-                                                        <FormError
-                                                            error={
-                                                                form?.formState
-                                                                    ?.errors
-                                                                    ?.name
-                                                            }
-                                                        />
-                                                    </FormItem>
+                                <Dialog
+                                    open={openUpdate}
+                                    onOpenChange={setOpenUpdate}
+                                >
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>
+                                                {t("editApplication")}
+                                            </DialogTitle>
+                                        </DialogHeader>
+                                        <Form {...form}>
+                                            <form
+                                                onSubmit={form.handleSubmit(
+                                                    onSubmit,
                                                 )}
-                                            />
-
-                                            <FormField
-                                                control={form.control}
-                                                name="email"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                            {t("email")}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <Input {...field} />
-                                                        </FormControl>
-                                                        <FormError
-                                                            error={
-                                                                form?.formState
-                                                                    ?.errors
-                                                                    ?.email
-                                                            }
-                                                        />
-                                                    </FormItem>
-                                                )}
-                                            />
-
-                                            <FormField
-                                                control={form.control}
-                                                name="mobile"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                            {t("mobile")}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <div className="relative flex items-center">
-                                                                <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
-                                                                    +90
-                                                                </span>
+                                                autoComplete="off"
+                                                className="space-y-4"
+                                            >
+                                                <FormField
+                                                    control={form.control}
+                                                    name="name"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("name")}
+                                                            </FormLabel>
+                                                            <FormControl>
                                                                 <Input
-                                                                    type="tel"
-                                                                    className="pl-10"
                                                                     {...field}
                                                                 />
-                                                            </div>
-                                                        </FormControl>
-                                                        <FormError
-                                                            error={
-                                                                form?.formState
-                                                                    ?.errors
-                                                                    ?.mobile
-                                                            }
-                                                        />
-                                                    </FormItem>
-                                                )}
-                                            />
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    form
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.name
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                            <FormField
-                                                control={form.control}
-                                                name="phone"
-                                                render={({ field }) => (
-                                                    <FormItem>
-                                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                            {t("phone")}
-                                                        </FormLabel>
-                                                        <FormControl>
-                                                            <div className="relative flex items-center">
-                                                                <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
-                                                                    +90
-                                                                </span>
+                                                <FormField
+                                                    control={form.control}
+                                                    name="email"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("email")}
+                                                            </FormLabel>
+                                                            <FormControl>
                                                                 <Input
-                                                                    type="tel"
-                                                                    className="pl-10"
                                                                     {...field}
                                                                 />
-                                                            </div>
-                                                        </FormControl>
-                                                        <FormError
-                                                            error={
-                                                                form?.formState
-                                                                    ?.errors
-                                                                    ?.phone
-                                                            }
-                                                        />
-                                                    </FormItem>
-                                                )}
-                                            />
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    form
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.email
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
 
-                                            <DialogFooter>
-                                                <DialogClose asChild>
-                                                    <Button variant="outline">
-                                                        {t("close")}
+                                                <FormField
+                                                    control={form.control}
+                                                    name="mobile"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("mobile")}
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative flex items-center">
+                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                                        +90
+                                                                    </span>
+                                                                    <Input
+                                                                        type="tel"
+                                                                        className="pl-10"
+                                                                        {...field}
+                                                                    />
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    form
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.mobile
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={form.control}
+                                                    name="phone"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("phone")}
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <div className="relative flex items-center">
+                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                                        +90
+                                                                    </span>
+                                                                    <Input
+                                                                        type="tel"
+                                                                        className="pl-10"
+                                                                        {...field}
+                                                                    />
+                                                                </div>
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    form
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.phone
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <DialogFooter>
+                                                    <DialogClose asChild>
+                                                        <Button variant="outline">
+                                                            {t("close")}
+                                                        </Button>
+                                                    </DialogClose>
+                                                    <Button
+                                                        type="submit"
+                                                        className="bg-green-600 hover:bg-green-600/90"
+                                                    >
+                                                        {t("save")}
                                                     </Button>
-                                                </DialogClose>
-                                                <Button
-                                                    type="submit"
-                                                    className="bg-green-600 hover:bg-green-600/90"
-                                                >
-                                                    {t("save")}
-                                                </Button>
-                                            </DialogFooter>
-                                        </form>
-                                    </Form>
-                                </DialogContent>
-                            </Dialog>
-                        </>
-                    )}
-                </div>
-            </CardContent>
-        </Card>
+                                                </DialogFooter>
+                                            </form>
+                                        </Form>
+                                    </DialogContent>
+                                </Dialog>
+                            </>
+                        )}
+                    </CardFooter>
+                )}
+            </Card>
+
+            <Card className="w-full">
+                <CardHeader className="py-4">
+                    <CardTitle className="font-medium text-xl">
+                        {t("registrationInformation")}
+                    </CardTitle>
+                </CardHeader>
+
+                <CardContent className="grid gap-2">
+                    <div className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
+                        <div>
+                            <dt className="font-medium">
+                                {t("applicationDate")}
+                            </dt>
+                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                {DateTimeFormat(data.applicationDate) || "-"}
+                            </dd>
+                        </div>
+                        {data.approvedAt && (
+                            <div>
+                                <dt className="font-medium">
+                                    {t("approvedAt")}
+                                </dt>
+                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                    {DateTimeFormat(data.approvedAt) || "-"}
+                                </dd>
+                            </div>
+                        )}
+                        {data.approvedBy && (
+                            <div>
+                                <dt className="font-medium">
+                                    {t("approvedBy")}
+                                </dt>
+                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                    {data.approvedBy || "-"}
+                                </dd>
+                            </div>
+                        )}
+                        {data.partner && (
+                            <>
+                                <div>
+                                    <dt className="font-medium">
+                                        {t("partnerId")}
+                                    </dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {data.partner.id || "-"}
+                                    </dd>
+                                </div>
+                                <div>
+                                    <dt className="font-medium">
+                                        {t("acronisId")}
+                                    </dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {data.partner.acronisId || "-"}
+                                    </dd>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
+        </>
     );
 }

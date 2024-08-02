@@ -99,6 +99,7 @@
         "business": "Business",
         "person": "Person",
         "applicationInformation": "Application Information",
+        "registrationInformation": "Registration Information",
         "taxNo": "Tax No",
         "taxOffice": "Tax Office",
         "city": "City",

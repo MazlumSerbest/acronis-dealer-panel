@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useEffect, useRef, useState } from "react";
+import React, { Suspense, useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,6 @@ import Skeleton, {
     DefaultSkeleton,
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
-import BoolChip from "@/components/BoolChip";
 import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
