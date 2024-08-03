@@ -42,7 +42,11 @@ export const GET = auth(async (req: any, { params }) => {
             const alert = await res.json();
             return await NextResponse.json({ alert });
         } else return await NextResponse.json({ message: "Failed!" });
-    } catch (error) {
-        return NextResponse.json({ message: error });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

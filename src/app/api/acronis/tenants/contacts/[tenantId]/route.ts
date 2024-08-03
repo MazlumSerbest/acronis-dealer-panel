@@ -54,12 +54,16 @@ export const GET = auth(async (req: any, { params }) => {
                 },
             );
 
-            if (res.ok) {
-                const contacts = await res.json();
-                return await NextResponse.json({ contacts });
-            } else return await NextResponse.json({ message: "Failed!" });
-        } else return await NextResponse.json({ message: "Failed" });
-    } catch (error) {
-        return NextResponse.json({ message: error });
+            const contacts = await res.json();
+
+            if (res.ok) return NextResponse.json({ contacts });
+            else return NextResponse.json({ message: "Failed!" });
+        } else return NextResponse.json({ message: "Failed" });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

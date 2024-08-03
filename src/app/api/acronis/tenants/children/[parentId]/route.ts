@@ -33,7 +33,7 @@ export const GET = auth(async (req: any, { params }) => {
             parent_id: params?.parentId as string,
             // lod: "basic",
         });
-        
+
         const res = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/tenants?${searchParams}`,
             // `${process.env.ACRONIS_API_V2_URL}/tenants/${parentId}/children`,
@@ -44,11 +44,15 @@ export const GET = auth(async (req: any, { params }) => {
             },
         );
 
-        if (res.ok) {
-            const children = (await res.json()) || [];
-            return await NextResponse.json({ children });
-        } else return await NextResponse.json({ message: "Failed!" });
-    } catch (error) {
-        return NextResponse.json({ message: error });
+        const children = (await res.json()) || [];
+
+        if (res.ok) return await NextResponse.json({ children });
+        else return await NextResponse.json({ message: "Failed!" });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

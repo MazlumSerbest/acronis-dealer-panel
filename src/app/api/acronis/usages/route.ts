@@ -43,11 +43,15 @@ export const GET = auth(async (req: any, { params }) => {
             },
         );
 
-        if (res.ok) {
-            const usages = await res.json();
-            return await NextResponse.json({ usages });
-        } else return await NextResponse.json({ message: "Failed!" });
-    } catch (error) {
-        return NextResponse.json({ message: error });
+        const usages = await res.json();
+
+        if (res.ok) return NextResponse.json({ usages });
+        else return NextResponse.json({ message: "Failed!" });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

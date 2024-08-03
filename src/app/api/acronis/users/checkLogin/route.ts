@@ -33,7 +33,11 @@ export const GET = auth(async (req: any, { params }) => {
         );
 
         return NextResponse.json({ status: check.status, ok: check.ok });
-    } catch (error) {
-        return NextResponse.json({ message: error, status: 500, ok: false });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

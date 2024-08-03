@@ -61,8 +61,12 @@ export const GET = auth(async (req: any) => {
         });
 
         return NextResponse.json(data);
-    } catch (error) {
-        return NextResponse.json({ message: error, status: 500, ok: false });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });
 
@@ -122,7 +126,11 @@ export async function POST(req: NextRequest) {
                 ok: false,
             });
         }
-    } catch (error) {
-        return NextResponse.json({ message: error, status: 500, ok: false });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 }

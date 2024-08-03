@@ -33,8 +33,12 @@ export const GET = auth(async (req: any) => {
         });
 
         return NextResponse.json(data);
-    } catch (error) {
-        return NextResponse.json({ message: error, status: 500, ok: false });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });
 
@@ -71,7 +75,7 @@ export const POST = auth(async (req: any) => {
         const newPartner = await prisma.partner.create({
             data: partner,
         });
-        
+
         if (newPartner.id) {
             return NextResponse.json({
                 message: "Partner başarıyla kaydedildi!",
@@ -85,7 +89,11 @@ export const POST = auth(async (req: any) => {
                 ok: false,
             });
         }
-    } catch (error) {
-        return NextResponse.json({ message: error, status: 500, ok: false });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });

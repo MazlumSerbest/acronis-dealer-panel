@@ -66,11 +66,15 @@ export const GET = auth(async (req: any, { params }) => {
                         branding: await brandingRes.json(),
                     };
 
-                    return await NextResponse.json({ tenantInfo });
-                } else return await NextResponse.json({ message: "Failed!" });
-            } else return await NextResponse.json({ message: "Failed!" });
-        } else return await NextResponse.json({ message: "Failed!" });
-    } catch (error) {
-        return NextResponse.json({ message: error });
+                    return NextResponse.json({ tenantInfo });
+                } else return NextResponse.json({ message: "Failed!" });
+            } else return NextResponse.json({ message: "Failed!" });
+        } else return NextResponse.json({ message: "Failed!" });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
     }
 });
