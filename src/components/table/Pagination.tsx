@@ -27,6 +27,9 @@ export default function Pagination<TData>({ table }: PaginationProps<TData>) {
     return (
         <div className="flex items-center justify-between px-2">
             <div className="flex-1 text-sm text-muted-foreground">
+                {tc("totalRows", {
+                    rows: table.getFilteredRowModel().rows.length,
+                })}
                 {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
                 {table.getFilteredRowModel().rows.length} row(s) selected. */}
             </div>
