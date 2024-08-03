@@ -402,15 +402,9 @@ export default function ApplicationDetail({
                                                             <FormControl>
                                                                 <Input
                                                                     {...field}
-                                                                    onChange={async (
+                                                                    onChange={(
                                                                         v,
                                                                     ) => {
-                                                                        partnerForm.setValue(
-                                                                            "acronisId",
-                                                                            v
-                                                                                .target
-                                                                                .value,
-                                                                        );
                                                                         fetch(
                                                                             `/api/acronis/tenants/${v.target.value}`,
                                                                         )
@@ -428,6 +422,12 @@ export default function ApplicationDetail({
                                                                                         res
                                                                                             ?.tenant
                                                                                             ?.name,
+                                                                                    );
+                                                                                    partnerForm.setValue(
+                                                                                        "acronisId",
+                                                                                        v
+                                                                                            .target
+                                                                                            .value,
                                                                                     );
                                                                                 },
                                                                             );

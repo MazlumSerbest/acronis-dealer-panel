@@ -113,6 +113,7 @@ export default function ClientsTab(props: Props) {
             data={clients || []}
             columns={columns}
             visibleColumns={visibleColumns}
+            defaultPageSize={50}
             onAddNew={() => null}
             onClick={(item) => {
                 router.push("/panel/clients/" + item?.original?.id);

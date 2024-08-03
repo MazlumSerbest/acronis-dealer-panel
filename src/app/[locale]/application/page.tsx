@@ -43,8 +43,7 @@ const applicationFormSchema = z.object({
     }),
     name: z
         .string({
-            required_error: "Application.name.required",
-            invalid_type_error: "Application.name.invalidType",
+            required_error: "Application.name.required"
         })
         .min(10, { message: "Application.name.minLength" }),
     taxNo: z
