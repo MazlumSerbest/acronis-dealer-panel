@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useToast } from "@/components/ui/use-toast";
@@ -51,13 +51,22 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
+import FormError from "@/components/FormError";
 
 const userFormSchema = z.object({
     id: z.string().optional(),
     active: z.boolean(),
-    role: z.enum(["admin", "partner"]),
-    name: z.string(),
-    email: z.string().email(),
+    role: z.enum(["admin", "partner"], {
+        required_error: "User.role.required"
+    }),
+    name: z.string({
+        required_error: "User.name.required"
+    }),
+    email: z.string({
+        required_error: "User.email.required"
+    }).email({
+        message: "User.email.invalidType"
+    }),
     partnerId: z.string().optional().nullable(),
 });
 
@@ -422,7 +431,11 @@ export default function UsersPage() {
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.role
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -438,7 +451,11 @@ export default function UsersPage() {
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.name
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -454,7 +471,11 @@ export default function UsersPage() {
                                         <FormControl>
                                             <Input {...field} />
                                         </FormControl>
-                                        <FormMessage />
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.email
+                                            }
+                                        />
                                     </FormItem>
                                 )}
                             />
@@ -481,7 +502,12 @@ export default function UsersPage() {
                                                     emptyText={t("noResults")}
                                                 />
                                             </FormControl>
-                                            <FormMessage />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.partnerId
+                                                }
+                                            />
                                         </FormItem>
                                     )}
                                 />
