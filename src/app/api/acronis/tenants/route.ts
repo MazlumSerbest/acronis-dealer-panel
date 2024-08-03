@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-// import getToken from "@/lib/getToken";
+import getToken from "@/lib/getToken";
+import { auth } from "@/auth";
 
 // export async function GET() {
 //     try {
@@ -30,12 +31,53 @@ import { NextResponse } from "next/server";
 //     }
 // }
 
-export async function GET() {
-    return await NextResponse.json({ data: [{ id: "1", name: "test" }] });
-}
+export const POST = auth(async (req: any, { params }) => {
+    try {
+        if (!req.auth)
+            return NextResponse.json({
+                message: "Authorization Needed!",
+                status: 401,
+                ok: false,
+            });
 
-// export async function POST() {}
+        const token = await getToken();
 
-// export async function DELETE() {}
+        if (!token)
+            return NextResponse.json({
+                message: "API Authentication failed!",
+                status: 401,
+                ok: false,
+            });
 
-// export async function PUT() {}
+        const client: any = await req.json();
+        const headers = {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+        };
+
+        const res = await fetch(`${process.env.ACRONIS_API_V2_URL}/tenants`, {
+            method: "POST",
+            body: JSON.stringify(client),
+            headers: headers,
+        });
+
+        if (res.ok)
+            return NextResponse.json({
+                message: "Tenant Created!",
+                status: res.status,
+                ok: res.ok,
+            });
+        else
+            return NextResponse.json({
+                message: res.statusText,
+                status: res.status,
+                ok: res.ok,
+            });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
