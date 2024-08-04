@@ -126,7 +126,8 @@
         "approveMessage": "Before approving the application, please make sure that the information is correct. Are you sure you want to approve the application?",
         "createPartner": "Create Partner",
         "createPartnerMessage": "Please fill in the form below with Acronis Client ID which created for this partner.",
-        "editApplication": "Edit Application"
+        "editApplication": "Edit Application",
+        "client": "Client"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -181,6 +182,16 @@
         "User": {
             "active": {
                 "description": "This value is for the active status. If the user is active, the user can login to the system."
+            },
+            "role": {
+                "required": "Role is required"
+            },
+            "name": {
+                "required": "Name is required"
+            },
+            "email": {
+                "required": "Email is required",
+                "invalidType": "Email must be a valid email"
             }
         },
         "Partner": {
@@ -190,13 +201,27 @@
                 "notFound": "Partner not found"
             }
         },
+        "Client": {
+            "name": {
+                "required": "Name is required",
+                "minLength": "Must be 6 characters long"
+            },
+            "login": {
+                "required": "Login is required",
+                "alreadyTaken": "Username is already taken",
+                "minLength": "Must be 6 characters long"
+            },
+            "email": {
+                "required": "Email is required",
+                "invalidType": "Must be a valid email"
+            }
+        },
         "Application": {
             "companyType": {
                 "required": "Type is required"
             },
             "name": {
                 "required": "Name is required",
-                "invalidType": "Name must be a string",
                 "minLength": "Must be 10 characters long"
             },
             "taxNo": {
@@ -269,7 +294,8 @@
         "goToLastPage": "Go to last page",
         "goToNextPage": "Go to next page",
         "goToPreviousPage": "Go to previous page",
-        "clearSelection": "Clear Selection"
+        "clearSelection": "Clear Selection",
+        "totalRows": "Total {rows} row(s)."
     },
     "Dashboard": {
         "title": "Dashboard"

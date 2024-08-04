@@ -87,10 +87,8 @@ export default function ClientsPage() {
 
     async function onSubmit(values: ClientFormValues) {
         const client = {
-            kind: "customer",
-            language: "tr",
             name: values.name,
-            // login: values.login,
+            login: values.login,
             parent_id: currentUser?.acronisTenantId,
             contact: {
                 email: values.email,

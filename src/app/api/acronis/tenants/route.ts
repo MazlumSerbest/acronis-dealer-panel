@@ -50,29 +50,165 @@ export const POST = auth(async (req: any, { params }) => {
             });
 
         const client: any = await req.json();
-        const headers = {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+        const authorization = `Bearer ${token}`;
+        const tenant = {
+            kind: "customer",
+            language: "tr",
+            name: client.name,
+            parent_id: client.parent_id,
+            contact: client.contact,
         };
 
-        const res = await fetch(`${process.env.ACRONIS_API_V2_URL}/tenants`, {
-            method: "POST",
-            body: JSON.stringify(client),
-            headers: headers,
-        });
+        const tenantRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants`,
+            {
+                method: "POST",
+                body: JSON.stringify(tenant),
+                headers: {
+                    Authorization: authorization,
+                    "Content-Type": "application/json",
+                },
+            },
+        );
 
-        if (res.ok)
+        if (tenantRes.ok) {
+            const tenant = await tenantRes.json();
+
+            const pricingRes = await fetch(
+                `${process.env.ACRONIS_API_V2_URL}/tenants/${tenant.id}/pricing`,
+                {
+                    headers: {
+                        Authorization: authorization,
+                    },
+                },
+            );
+
+            const pricing = await pricingRes.json();
+            pricing.mode = "production";
+
+            const productionRes = await fetch(
+                `${process.env.ACRONIS_API_V2_URL}/tenants/${tenant.id}/pricing`,
+                {
+                    method: "PUT",
+                    body: JSON.stringify(pricing),
+                    headers: {
+                        Authorization: authorization,
+                        "Content-Type": "application/json",
+                    },
+                },
+            );
+
+            if (productionRes.ok) {
+                const applicationsRes = await fetch(
+                    `${process.env.ACRONIS_API_V2_URL}/applications`,
+                    {
+                        headers: {
+                            Authorization: authorization,
+                        },
+                    },
+                );
+
+                const applications = await applicationsRes.json();
+
+                const enableBackupRes = await fetch(
+                    `${process.env.ACRONIS_API_V2_URL}/applications/${
+                        applications.items.find((app: any) => app.type == "backup").id
+                    }/bindings/tenants/${tenant.id}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: authorization,
+                        },
+                    },
+                );
+
+                const enablePlatformRes = await fetch(
+                    `${process.env.ACRONIS_API_V2_URL}/applications/${
+                        applications.items.find((app: any) => app.type == "platform")
+                            .id
+                    }/bindings/tenants/${tenant.id}`,
+                    {
+                        method: "POST",
+                        headers: {
+                            Authorization: authorization,
+                        },
+                    },
+                );
+
+                if (enableBackupRes.ok && enablePlatformRes.ok) {
+                    const user = {
+                        tenant_id: tenant.id,
+                        login: client.login,
+                        contact: client.contact,
+                    };
+
+                    const userRes = await fetch(
+                        `${process.env.ACRONIS_API_V2_URL}/users`,
+                        {
+                            method: "POST",
+                            body: JSON.stringify(user),
+                            headers: {
+                                Authorization: authorization,
+                                "Content-Type": "application/json",
+                            },
+                        },
+                    );
+
+                    if (userRes.ok) {
+                        const user = await userRes.json();
+
+                        const sendActivationRes = await fetch(
+                            `${process.env.ACRONIS_API_V2_URL}/users/${user.id}/send-activation-email`,
+                            {
+                                method: "POST",
+                                headers: {
+                                    Authorization: authorization,
+                                    "Content-Type": "application/json",
+                                },
+                            },
+                        );
+
+                        if (sendActivationRes.ok)
+                            return NextResponse.json({
+                                message: "Tenant Created!",
+                                status: 200,
+                                ok: true,
+                            });
+                        else
+                            return NextResponse.json({
+                                message: sendActivationRes.statusText,
+                                status: sendActivationRes.status,
+                                ok: sendActivationRes.ok,
+                            });
+                    } else
+                        return NextResponse.json({
+                            message: userRes.statusText,
+                            status: userRes.status,
+                            ok: userRes.ok,
+                        });
+                } else
+                    return NextResponse.json({
+                        message: "Failed to enable applications!",
+                        status: 500,
+                        ok: false,
+                    });
+            } else
+                return NextResponse.json({
+                    message: productionRes.statusText,
+                    status: productionRes.status,
+                    ok: productionRes.ok,
+                });
+        } else
             return NextResponse.json({
-                message: "Tenant Created!",
-                status: res.status,
-                ok: res.ok,
+                message: tenantRes.statusText,
+                status: tenantRes.status,
+                ok: tenantRes.ok,
             });
-        else
-            return NextResponse.json({
-                message: res.statusText,
-                status: res.status,
-                ok: res.ok,
-            });
+        // return NextResponse.json({
+        //     message: "Tenant Created!",
+        //     status: res.status,
+        //     ok: res.ok,
+        // });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,
