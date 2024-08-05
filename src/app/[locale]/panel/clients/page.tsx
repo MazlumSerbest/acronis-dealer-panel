@@ -97,7 +97,7 @@ export default function ClientsPage() {
 
         await fetch("/api/acronis/tenants", {
             method: "POST",
-            body: JSON.stringify(client, null, 4),
+            body: JSON.stringify(client),
         })
             .then((res) => res.json())
             .then((res) => {

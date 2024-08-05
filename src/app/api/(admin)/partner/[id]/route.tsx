@@ -9,7 +9,7 @@ export const GET = auth(async (req: any, { params }) => {
             locale: "en",
             namespace: "Messages",
         });
-        
+
         if (!req.auth)
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
@@ -24,7 +24,7 @@ export const GET = auth(async (req: any, { params }) => {
         });
 
         return NextResponse.json(data);
-    }  catch (error: any) {
+    } catch (error: any) {
         return NextResponse.json({
             message: error?.message,
             status: 500,

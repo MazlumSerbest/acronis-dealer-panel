@@ -192,7 +192,7 @@ export default function ApplicationDetail({
     return (
         <>
             <Card className="w-full">
-                <CardHeader className="py-4">
+                <CardHeader>
                     <CardTitle className="font-medium text-xl">
                         {t("applicationInformation")}
                     </CardTitle>
@@ -636,7 +636,7 @@ export default function ApplicationDetail({
             </Card>
 
             <Card className="w-full">
-                <CardHeader className="py-4">
+                <CardHeader>
                     <CardTitle className="font-medium text-xl">
                         {t("registrationInformation")}
                     </CardTitle>

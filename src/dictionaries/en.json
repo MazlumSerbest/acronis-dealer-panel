@@ -117,6 +117,7 @@
         "tradeRegistry": "Trade Registry",
         "errorTitle": "Something went wrong!",
         "partnerName": "Partner Name",
+        "partnerStatus": "Partner Status",
         "toggleMenu": "Toggle menu",
         "waiting": "Waiting",
         "approved": "Approved",
@@ -127,7 +128,12 @@
         "createPartner": "Create Partner",
         "createPartnerMessage": "Please fill in the form below with Acronis Client ID which created for this partner.",
         "editApplication": "Edit Application",
-        "client": "Client"
+        "client": "Client",
+        "billingDate": "Billing Date",
+        "selectDate": "Select Date",
+        "daysUntilNextBillingDate": "(Days left to billing: {days} days)",
+        "exist": "Exist",
+        "notExist": "Not Exist"
     },
     "SignIn": {
         "signIn": "Sign In",

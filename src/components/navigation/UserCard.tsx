@@ -68,6 +68,7 @@ export default function UserCard() {
                     else
                         updateUser({
                             id: data?.id,
+                            partnerId: data?.partnerId,
                             active: data?.active,
                             role: data?.role,
                             name: data?.name,

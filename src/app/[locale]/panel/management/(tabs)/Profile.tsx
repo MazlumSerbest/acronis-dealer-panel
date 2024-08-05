@@ -30,7 +30,7 @@ export default function ProfileTab() {
         <div className="flex flex-col gap-4">
             <AcronisWarning />
             <Card className="w-full">
-                <CardHeader className="py-4">
+                <CardHeader>
                     <CardTitle className="font-medium text-xl">
                         Company Information
                     </CardTitle>

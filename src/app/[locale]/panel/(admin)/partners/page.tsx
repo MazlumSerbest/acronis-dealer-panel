@@ -24,7 +24,9 @@ export default function PartnersPage() {
     const router = useRouter();
     const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading } = useSWR(`/api/partner`);
+    const { data, error, isLoading } = useSWR(`/api/partner`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Table
     const visibleColumns = {};
