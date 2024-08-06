@@ -61,17 +61,17 @@ export default function Combobox({
                     <LuChevronsUpDown className="ml-2 size-3 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="p-0">
+            <PopoverContent className="p-0 min-w-[350px]">
                 <Command>
                     <CommandInput placeholder={inputPlaceholder} />
                     <CommandList>
                         <CommandEmpty>{emptyText}</CommandEmpty>
-                        <CommandGroup>
+                        <CommandGroup className="text-foreground">
                             {data.map((i) => (
                                 <CommandItem
                                     key={i.id}
                                     value={i.name}
-                                    className="text-zinc-800"
+                                    className="text-foreground"
                                     onSelect={() => {
                                         form.setValue(name, i.id);
                                         setOpen(false);
