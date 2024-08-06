@@ -19,8 +19,17 @@ export const GET = auth(async (req: any, { params }) => {
 
         const data = await prisma.partner.findUnique({
             where: {
-                id: params?.id as string,
+                acronisId: params?.acronisId as string,
             },
+            include: {
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    }
+                }
+            }
         });
 
         return NextResponse.json(data);
