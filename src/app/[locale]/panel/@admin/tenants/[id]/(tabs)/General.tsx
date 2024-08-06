@@ -19,17 +19,27 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import BoolChip from "@/components/BoolChip";
 import NeedleChart from "@/components/charts/Needle";
 import { formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
 import { LuAlertTriangle, LuCalendar, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import BoolChip from "@/components/BoolChip";
 
 type Props = {
     t: Function;
@@ -46,46 +56,49 @@ export default function GeneralTab(props: Props) {
     const { t, tenant } = props;
     const { toast } = useToast();
     const { user } = useUserStore();
+    const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
+    const [openUserDialog, setOpenUserDialog] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
 
     const {
-        data: client,
-        error: clientError,
-        mutate: clientMutate,
-    } = useSWR(`/api/client/${tenant?.id}`, null, {
+        data: partner,
+        error: partnerError,
+        mutate: partnerMutate,
+    } = useSWR(`/api/partner/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            const today = new Date();
-            const currentYear = today.getFullYear();
-            const billingDate = new Date(data.billingDate);
+            console.log(tenant);
+            // const today = new Date();
+            // const currentYear = today.getFullYear();
+            // const billingDate = new Date(data.billingDate);
 
-            // Create an anniversary date for this year
-            let nextBillingDate = new Date(
-                currentYear,
-                billingDate.getMonth(),
-                billingDate.getDate(),
-            );
+            // // Create an anniversary date for this year
+            // let nextBillingDate = new Date(
+            //     currentYear,
+            //     billingDate.getMonth(),
+            //     billingDate.getDate(),
+            // );
 
-            // If today's date is past this year's anniversary, use the next year's anniversary
-            if (today > nextBillingDate) {
-                nextBillingDate.setFullYear(currentYear + 1);
-            }
+            // // If today's date is past this year's anniversary, use the next year's anniversary
+            // if (today > nextBillingDate) {
+            //     nextBillingDate.setFullYear(currentYear + 1);
+            // }
 
-            // Calculate the difference in time (in milliseconds)
-            const timeDiff = nextBillingDate.getTime() - today.getTime();
+            // // Calculate the difference in time (in milliseconds)
+            // const timeDiff = nextBillingDate.getTime() - today.getTime();
 
-            // Convert the difference from milliseconds to days
-            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+            // // Convert the difference from milliseconds to days
+            // const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-            return seDaysUntilNextBillingDate(daysDiff);
+            // return seDaysUntilNextBillingDate(daysDiff);
         },
     });
 
     const {
         data: usages,
-        error,
-        mutate,
+        error: usagesError,
+        mutate: usagesMutate,
     } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         revalidateOnFocus: false,
     });
@@ -96,57 +109,56 @@ export default function GeneralTab(props: Props) {
     });
 
     async function onSubmit(values: ClientFormValues) {
-        const newClient = {
-            acronisId: tenant?.id,
-            billingDate: values.billingDate?.toISOString(),
-            partnerId: user?.partnerId,
-        };
-        const existingClient = {
-            billingDate: values.billingDate?.toISOString(),
-        };
-
-        if (client)
-            fetch(`/api/client/${tenant?.id}`, {
-                method: "PUT",
-                body: JSON.stringify(existingClient),
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.ok) {
-                        toast({
-                            description: res.message,
-                        });
-                        clientMutate();
-                        setEdit(false);
-                    } else {
-                        toast({
-                            variant: "destructive",
-                            title: t("errorTitle"),
-                            description: res.message,
-                        });
-                    }
-                });
-        else
-            fetch(`/api/client`, {
-                method: "POST",
-                body: JSON.stringify(newClient),
-            })
-                .then((res) => res.json())
-                .then((res) => {
-                    if (res.ok) {
-                        toast({
-                            description: res.message,
-                        });
-                        clientMutate();
-                        setEdit(false);
-                    } else {
-                        toast({
-                            variant: "destructive",
-                            title: t("errorTitle"),
-                            description: res.message,
-                        });
-                    }
-                });
+        // const newClient = {
+        //     acronisId: tenant?.id,
+        //     billingDate: values.billingDate?.toISOString(),
+        //     partnerId: user?.partnerId,
+        // };
+        // const existingClient = {
+        //     billingDate: values.billingDate?.toISOString(),
+        // };
+        // if (client)
+        //     fetch(`/api/client/${tenant?.id}`, {
+        //         method: "PUT",
+        //         body: JSON.stringify(existingClient),
+        //     })
+        //         .then((res) => res.json())
+        //         .then((res) => {
+        //             if (res.ok) {
+        //                 toast({
+        //                     description: res.message,
+        //                 });
+        //                 clientMutate();
+        //                 setEdit(false);
+        //             } else {
+        //                 toast({
+        //                     variant: "destructive",
+        //                     title: t("errorTitle"),
+        //                     description: res.message,
+        //                 });
+        //             }
+        //         });
+        // else
+        //     fetch(`/api/client`, {
+        //         method: "POST",
+        //         body: JSON.stringify(newClient),
+        //     })
+        //         .then((res) => res.json())
+        //         .then((res) => {
+        //             if (res.ok) {
+        //                 toast({
+        //                     description: res.message,
+        //                 });
+        //                 clientMutate();
+        //                 setEdit(false);
+        //             } else {
+        //                 toast({
+        //                     variant: "destructive",
+        //                     title: t("errorTitle"),
+        //                     description: res.message,
+        //                 });
+        //             }
+        //         });
     }
     //#endregion
 
@@ -173,9 +185,9 @@ export default function GeneralTab(props: Props) {
                     <CardHeader>
                         <CardTitle className="flex flex-row justify-between">
                             <h2 className="flex-none font-medium text-xl">
-                                Client Information
+                                Tenant Information
                             </h2>
-                            <Button
+                            {/* <Button
                                 disabled={edit}
                                 size="sm"
                                 className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
@@ -188,7 +200,7 @@ export default function GeneralTab(props: Props) {
                                     {t("edit")}
                                 </span>
                                 <LuPencil className="size-4" />
-                            </Button>
+                            </Button> */}
                         </CardTitle>
                         {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
@@ -203,6 +215,7 @@ export default function GeneralTab(props: Props) {
                                         {t(tenant?.kind || "")}
                                     </dd>
                                 </div>
+
                                 <div>
                                     <dt className="font-medium">
                                         {t("acronisId")}
@@ -211,19 +224,6 @@ export default function GeneralTab(props: Props) {
                                         {tenant?.id || "-"}
                                     </dd>
                                 </div>
-                                {user?.role == "admin" &&
-                                    tenant.kind == "partner" && (
-                                        <div>
-                                            <dt className="font-medium">
-                                                {t("partnerStatus")}
-                                            </dt>
-                                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                                <BoolChip
-                                                    value={!!client?.partner}
-                                                />
-                                            </dd>
-                                        </div>
-                                    )}
 
                                 <div>
                                     <dt className="font-medium">
@@ -233,6 +233,7 @@ export default function GeneralTab(props: Props) {
                                         {tenant?.customer_type || "-"}
                                     </dd>
                                 </div>
+
                                 <div>
                                     <dt className="font-medium">
                                         {t("email")}
@@ -242,7 +243,7 @@ export default function GeneralTab(props: Props) {
                                     </dd>
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <dt className="font-medium">
                                         {t("billingDate")}
                                     </dt>
@@ -315,7 +316,7 @@ export default function GeneralTab(props: Props) {
                                             }`}
                                         </dd>
                                     )}
-                                </div>
+                                </div> */}
 
                                 <div>
                                     <dt className="font-medium">
@@ -327,6 +328,32 @@ export default function GeneralTab(props: Props) {
                                         )}
                                     </dd>
                                 </div>
+
+                                {tenant.kind == "partner" && (
+                                    <>
+                                        <div>
+                                            <dt className="font-medium">
+                                                {t("panelPartner")}
+                                            </dt>
+                                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                                <BoolChip value={!!partner} />
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt className="font-medium">
+                                                {t("panelUser")}
+                                            </dt>
+                                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                                <BoolChip
+                                                    value={
+                                                        partner?.users?.length
+                                                    }
+                                                />
+                                            </dd>
+                                        </div>
+                                    </>
+                                )}
 
                                 {/* <div>
                         <dt className="font-medium">
@@ -357,28 +384,167 @@ export default function GeneralTab(props: Props) {
                             )}
                         </form>
                     </Form>
-                    {user?.role === "admin" &&
-                        !edit &&
-                        !client?.partner &&
-                        !client?.partner?.users?.length &&
-                        tenant.kind == "partner" && (
+                    {!edit &&
+                        tenant.kind == "partner" &&
+                        (!partner || !partner?.users?.length) && (
                             <CardFooter className="flex flex-row justify-end">
-                                {client?.partner &&
-                                    !client?.partner?.users?.length && (
-                                        <Button
-                                            className="bg-green-600 hover:bg-green-600/90"
-                                            onClick={() => {}}
-                                        >
-                                            {t("createUser")}
-                                        </Button>
-                                    )}
-                                {!client?.partner && (
-                                    <Button
-                                        className="bg-green-600 hover:bg-green-600/90"
-                                        onClick={() => {}}
+                                {partner && !partner?.users?.length && (
+                                    <Dialog
+                                        open={openUserDialog}
+                                        onOpenChange={setOpenUserDialog}
                                     >
-                                        {t("createPartner")}
-                                    </Button>
+                                        <DialogTrigger asChild>
+                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                                {t("createUser")}
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>
+                                                    {t("createUser")}
+                                                </DialogTitle>
+                                                <DialogDescription>
+                                                    {t("")}
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">
+                                                        {t("close")}
+                                                    </Button>
+                                                </DialogClose>
+                                                <Button
+                                                    className="bg-blue-400 hover:bg-blue-400/90"
+                                                    onClick={() => {
+                                                        fetch(`/api/user`, {
+                                                            method: "POST",
+                                                            body: JSON.stringify(
+                                                                {
+                                                                    partnerId:
+                                                                        partner?.id,
+                                                                    name: tenant?.name,
+                                                                    email: tenant
+                                                                        ?.contact
+                                                                        ?.email,
+                                                                    role: "partner",
+                                                                },
+                                                            ),
+                                                        })
+                                                            .then((res) =>
+                                                                res.json(),
+                                                            )
+                                                            .then((res) => {
+                                                                if (res.ok) {
+                                                                    toast({
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenUserDialog(
+                                                                        false,
+                                                                    );
+                                                                    partnerMutate();
+                                                                } else {
+                                                                    toast({
+                                                                        variant:
+                                                                            "destructive",
+                                                                        title: t(
+                                                                            "errorTitle",
+                                                                        ),
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            });
+                                                    }}
+                                                >
+                                                    {t("create")}
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                )}
+                                {!partner && (
+                                    <Dialog
+                                        open={openPartnerDialog}
+                                        onOpenChange={setOpenPartnerDialog}
+                                    >
+                                        <DialogTrigger asChild>
+                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                                {t("createPartner")}
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>
+                                                    {t("createPartner")}
+                                                </DialogTitle>
+                                                <DialogDescription>
+                                                    {t("")}
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter>
+                                                <DialogClose asChild>
+                                                    <Button variant="outline">
+                                                        {t("close")}
+                                                    </Button>
+                                                </DialogClose>
+                                                <Button
+                                                    className="bg-blue-400 hover:bg-blue-400/90"
+                                                    onClick={() => {
+                                                        fetch(`/api/partner`, {
+                                                            method: "POST",
+                                                            body: JSON.stringify(
+                                                                {
+                                                                    acronisId:
+                                                                        tenant?.id,
+                                                                    name: tenant?.name,
+                                                                    email: tenant
+                                                                        ?.contact
+                                                                        ?.email,
+                                                                    phone: tenant
+                                                                        ?.contact
+                                                                        ?.phone,
+                                                                },
+                                                            ),
+                                                        })
+                                                            .then((res) =>
+                                                                res.json(),
+                                                            )
+                                                            .then((res) => {
+                                                                if (res.ok) {
+                                                                    toast({
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                    partnerMutate();
+                                                                } else {
+                                                                    toast({
+                                                                        variant:
+                                                                            "destructive",
+                                                                        title: t(
+                                                                            "errorTitle",
+                                                                        ),
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            });
+                                                    }}
+                                                >
+                                                    {t("create")}
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
                                 )}
                             </CardFooter>
                         )}

@@ -210,7 +210,7 @@ export default function UsersPage() {
             cell: ({ row }) => {
                 const data: Partner = row.getValue("partner");
 
-                return data?.application?.name || "-";
+                return data?.name || "-";
             },
         },
         // {
