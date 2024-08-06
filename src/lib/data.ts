@@ -7,7 +7,7 @@ export async function getPartners(forListBox?: boolean) {
             .filter((p: Partner) => p.active)
             .map((p: Partner) => ({
                 id: p.id,
-                name: p.application?.name,
+                name: p?.name,
             }));
     return partners.filter((c: Partner) => c.active);
 }

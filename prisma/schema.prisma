@@ -77,8 +77,8 @@ model Partner {
   active        Boolean @default(true)
   name          String
   email         String
-  mobile        String
-  phone         String
+  mobile        String?
+  phone         String?
 
   createdBy String?
   createdAt DateTime @default(now())

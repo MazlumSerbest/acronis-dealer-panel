@@ -21,20 +21,6 @@ export const GET = auth(async (req: any, { params }) => {
             where: {
                 acronisId: params?.acronisId as string,
             },
-            include: {
-                partner: {
-                    select: {
-                        id: true,
-                        name: true,
-                        users: {
-                            select: {
-                                id: true,
-                                email: true,
-                            },
-                        },
-                    },
-                },
-            },
         });
 
         return NextResponse.json(data);

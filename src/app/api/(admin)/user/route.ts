@@ -34,6 +34,7 @@ export const GET = auth(async (req: any) => {
                 partner: {
                     select: {
                         acronisId: true,
+                        name: true,
                         application: {
                             select: {
                                 name: true,

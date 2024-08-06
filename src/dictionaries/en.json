@@ -3,6 +3,7 @@
         "": "Test",
         "Pages": {
             "panel": "Dashboard",
+            "tenants": "Tenants",
             "clients": "Clients",
             "licenses": "Licenses",
             "alerts": "Alerts",
@@ -69,6 +70,7 @@
         "openDetail": "Open Detail",
         "general": "General",
         "clients": "Clients",
+        "tenants": "Tenants",
         "licenses": "Licenses",
         "serialNo": "Serial No",
         "duration": "Duration",
@@ -117,7 +119,6 @@
         "tradeRegistry": "Trade Registry",
         "errorTitle": "Something went wrong!",
         "partnerName": "Partner Name",
-        "partnerStatus": "Partner Status",
         "toggleMenu": "Toggle menu",
         "waiting": "Waiting",
         "approved": "Approved",
@@ -133,7 +134,10 @@
         "selectDate": "Select Date",
         "daysUntilNextBillingDate": "(Days left to billing: {days} days)",
         "exist": "Exist",
-        "notExist": "Not Exist"
+        "notExist": "Not Exist",
+        "createUser": "Create User",
+        "panelPartner": "Panel Partner",
+        "panelUser": "Panel User"
     },
     "SignIn": {
         "signIn": "Sign In",

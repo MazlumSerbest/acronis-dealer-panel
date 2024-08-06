@@ -26,6 +26,10 @@ type User = Entity & {
 
 type Partner = Entity & {
     acronisId?: string;
+    name: string;
+    email: string;
+    phone: string;
+    mobile: string;
     active: boolean;
     application?: Application;
     users?: User[];
