@@ -26,6 +26,16 @@ import {
     DialogClose,
 } from "@/components/ui/dialog";
 import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+    AlertDialogDescription,
+    AlertDialogCancel,
+} from "@/components/ui/alert-dialog";
+import {
     Form,
     FormControl,
     FormDescription,
@@ -288,30 +298,30 @@ export default function ApplicationDetail({
                 {!data.partner && (
                     <CardFooter className="flex flex-row gap-2 justify-end">
                         {!data.approvedAt && !data.partnerId && (
-                            <Dialog
+                            <AlertDialog
                                 open={openApprove}
                                 onOpenChange={setOpenApprove}
                             >
-                                <DialogTrigger asChild>
+                                <AlertDialogTrigger asChild>
                                     <Button className="bg-blue-400 hover:bg-blue-400/90">
                                         {t("approveApplication")}
                                     </Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
                                             {t("approveApplication")}
-                                        </DialogTitle>
-                                        <DialogDescription>
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
                                             {t("approveMessage")}
-                                        </DialogDescription>
-                                    </DialogHeader>
-                                    <DialogFooter>
-                                        <DialogClose asChild>
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel asChild>
                                             <Button variant="outline">
-                                                {t("close")}
+                                                {t("cancel")}
                                             </Button>
-                                        </DialogClose>
+                                        </AlertDialogCancel>
                                         <Button
                                             className="bg-blue-400 hover:bg-blue-400/90"
                                             onClick={() => {
@@ -351,9 +361,9 @@ export default function ApplicationDetail({
                                         >
                                             {t("approve")}
                                         </Button>
-                                    </DialogFooter>
-                                </DialogContent>
-                            </Dialog>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         )}
                         {data.approvedAt && !data.partner && (
                             <>

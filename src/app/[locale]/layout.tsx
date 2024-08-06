@@ -7,7 +7,7 @@ import { notFound } from "next/navigation";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
 
-const locales = ["tr", "en"];
+const locales = ["en", "tr"];
 
 const inter = Inter({ subsets: ["latin"] });
 

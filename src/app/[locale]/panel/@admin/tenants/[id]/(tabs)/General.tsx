@@ -20,15 +20,15 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger,
-} from "@/components/ui/dialog";
+    AlertDialog,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 
@@ -389,30 +389,31 @@ export default function GeneralTab(props: Props) {
                         (!partner || !partner?.users?.length) && (
                             <CardFooter className="flex flex-row justify-end">
                                 {partner && !partner?.users?.length && (
-                                    <Dialog
+                                    <AlertDialog
                                         open={openUserDialog}
                                         onOpenChange={setOpenUserDialog}
+                                        
                                     >
-                                        <DialogTrigger asChild>
+                                        <AlertDialogTrigger asChild>
                                             <Button className="bg-blue-400 hover:bg-blue-400/90">
                                                 {t("createUser")}
                                             </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
                                                     {t("createUser")}
-                                                </DialogTitle>
-                                                <DialogDescription>
-                                                    {t("")}
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <DialogFooter>
-                                                <DialogClose asChild>
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("createUserWarning")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel asChild>
                                                     <Button variant="outline">
-                                                        {t("close")}
+                                                        {t("cancel")}
                                                     </Button>
-                                                </DialogClose>
+                                                </AlertDialogCancel>
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
@@ -462,35 +463,35 @@ export default function GeneralTab(props: Props) {
                                                 >
                                                     {t("create")}
                                                 </Button>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </Dialog>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 )}
                                 {!partner && (
-                                    <Dialog
+                                    <AlertDialog
                                         open={openPartnerDialog}
                                         onOpenChange={setOpenPartnerDialog}
                                     >
-                                        <DialogTrigger asChild>
+                                        <AlertDialogTrigger asChild>
                                             <Button className="bg-blue-400 hover:bg-blue-400/90">
                                                 {t("createPartner")}
                                             </Button>
-                                        </DialogTrigger>
-                                        <DialogContent>
-                                            <DialogHeader>
-                                                <DialogTitle>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
                                                     {t("createPartner")}
-                                                </DialogTitle>
-                                                <DialogDescription>
-                                                    {t("")}
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <DialogFooter>
-                                                <DialogClose asChild>
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("createPartnerWarning")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel asChild>
                                                     <Button variant="outline">
-                                                        {t("close")}
+                                                        {t("cancel")}
                                                     </Button>
-                                                </DialogClose>
+                                                </AlertDialogCancel>
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
@@ -542,9 +543,9 @@ export default function GeneralTab(props: Props) {
                                                 >
                                                     {t("create")}
                                                 </Button>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </Dialog>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 )}
                             </CardFooter>
                         )}
