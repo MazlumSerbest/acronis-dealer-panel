@@ -1,7 +1,15 @@
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import Sendgrid from "next-auth/providers/sendgrid";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/utils/db";
+
+declare module "next-auth" {
+    interface Session {
+        user: {
+            role: string | null | undefined;
+        } & DefaultSession["user"];
+    }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(prisma),
@@ -23,7 +31,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         error: "/error",
     },
     callbacks: {
-        async signIn({ user, account, email }) {
+        async session({ session }) {
+            const user = await prisma.user.findFirst({
+                where: {
+                    email: session.user.email || "",
+                },
+            });
+            session.user.role = user?.role;
+            return session;
+        },
+        async signIn({ user }) {
             const userExists = await prisma.user.findFirst({
                 where: {
                     email: user.email || "",

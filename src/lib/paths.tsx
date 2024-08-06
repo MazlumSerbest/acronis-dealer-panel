@@ -10,11 +10,74 @@ import {
     LuBriefcase,
 } from "react-icons/lu";
 
-export const paths: Path[] = [
+export const adminPaths: Path[] = [
     {
         path: "/panel",
         key: "panel",
-        roles: ["admin", "partner"],
+        icon: (
+            <LuLayoutDashboard
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Dashboard"
+            />
+        ),
+    },
+    {
+        path: "/panel/tenants",
+        key: "tenants",
+        icon: (
+            <LuHeartHandshake
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Tenants Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/licenses",
+        key: "licenses",
+        icon: (
+            <LuKeyRound
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Licenses Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/applications",
+        key: "applications",
+        icon: (
+            <LuArchiveRestore
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Applications Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/partners",
+        key: "partners",
+        icon: (
+            <LuBriefcase
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Partners Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/users",
+        key: "users",
+        roles: ["admin"],
+        icon: (
+            <LuUser2
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Users Page"
+            />
+        ),
+    },
+];
+
+export const partnerPaths: Path[] = [
+    {
+        path: "/panel",
+        key: "panel",
         icon: (
             <LuLayoutDashboard
                 className="size-6 group-hover:text-blue-400"
@@ -25,7 +88,6 @@ export const paths: Path[] = [
     {
         path: "/panel/clients",
         key: "clients",
-        roles: ["admin", "partner"],
         icon: (
             <LuHeartHandshake
                 className="size-6 group-hover:text-blue-400"
@@ -36,7 +98,6 @@ export const paths: Path[] = [
     {
         path: "/panel/licenses",
         key: "licenses",
-        roles: ["admin", "partner"],
         icon: (
             <LuKeyRound
                 className="size-6 group-hover:text-blue-400"
@@ -57,7 +118,6 @@ export const paths: Path[] = [
     {
         path: "/panel/management",
         key: "management",
-        roles: ["admin", "partner"],
         icon: (
             <LuUnplug
                 className="size-6 group-hover:text-blue-400"
@@ -68,44 +128,10 @@ export const paths: Path[] = [
     {
         path: "/panel/settings",
         key: "settings",
-        roles: ["admin", "partner"],
         icon: (
             <LuSettings
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Settings Page"
-            />
-        ),
-    },
-    {
-        path: "/panel/applications",
-        key: "applications",
-        roles: ["admin"],
-        icon: (
-            <LuArchiveRestore
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Applications Page"
-            />
-        ),
-    },
-    {
-        path: "/panel/partners",
-        key: "partners",
-        roles: ["admin"],
-        icon: (
-            <LuBriefcase
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Partners Page"
-            />
-        ),
-    },
-    {
-        path: "/panel/users",
-        key: "users",
-        roles: ["admin"],
-        icon: (
-            <LuUser2
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Users Page"
             />
         ),
     },
