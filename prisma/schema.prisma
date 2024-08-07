@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -22,7 +23,7 @@ model User {
   role            String?
   language        String? @default("tr")
 
-  deleted Boolean  @default(false)
+  deleted   Boolean  @default(false)
   createdBy String?
   createdAt DateTime @default(now())
   updatedBy String?
@@ -107,14 +108,14 @@ model Client {
 }
 
 model License {
-  id              String @id @default(cuid())
-  partnerId       String
-  clientId        String
-  key             String @unique
-  typeSerialNo    String
-  licenseSerialNo String @unique
+  id        String  @id @default(cuid())
+  productId String
+  partnerId String?
+  clientId  String?
+  key       String  @unique
+  serialNo  String  @unique
 
-  // expiresAt DateTime?
+  expiresAt DateTime?
   boughtAt    DateTime?
   activatedAt DateTime?
 
@@ -123,8 +124,24 @@ model License {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  partner Partner @relation(fields: [partnerId], references: [id])
-  client  Client  @relation(fields: [clientId], references: [id])
+  type    Product @relation(fields: [productId], references: [id])
+  partner Partner? @relation(fields: [partnerId], references: [id])
+  client  Client?  @relation(fields: [clientId], references: [id])
+}
+
+model Product {
+  id    String  @id @default(cuid())
+  code  String  @unique
+  name  String
+  model String?
+
+  active    Boolean  @default(true)
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  licenses License[]
 }
 
 model Application {
