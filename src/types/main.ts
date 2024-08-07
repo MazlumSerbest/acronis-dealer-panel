@@ -52,6 +52,12 @@ type License = Entity & {
     activatedAt?: string;
 };
 
+type Product = Entity & {
+    code: string;
+    name: string;
+    model: "perGB" | "perWorkload";
+};
+
 type Application = Entity & {
     partnerId?: string;
     companyType: "business" | "person";

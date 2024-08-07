@@ -6,6 +6,7 @@
             "tenants": "Tenants",
             "clients": "Clients",
             "licenses": "Licenses",
+            "products": "Products",
             "alerts": "Alerts",
             "management": "Management",
             "applications": "Applications",
@@ -139,7 +140,12 @@
         "createUserWarning": "If you proceed, a new user will be created for this partner. Registration info going to taken from this tenant. Are you sure you want to proceed?",
         "createPartnerWarning": "If you proceed, a new panel partner will be created for this tenant. Registration info going to taken from this tenant. Are you sure you want to proceed?",
         "panelPartner": "Panel Partner",
-        "panelUser": "Panel User"
+        "panelUser": "Panel User",
+        "product": "Product",
+        "code": "Code",
+        "model": "Model",
+        "perGB": "Per Gigabyte",
+        "perWorkload": "Per Workload"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -228,6 +234,7 @@
                 "invalidType": "Must be a valid email"
             }
         },
+        "Product": {},
         "Application": {
             "companyType": {
                 "required": "Type is required"

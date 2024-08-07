@@ -8,6 +8,9 @@ import {
     LuUser2,
     LuArchiveRestore,
     LuBriefcase,
+    LuFileKey,
+    LuKey,
+    LuPackage,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -35,9 +38,19 @@ export const adminPaths: Path[] = [
         path: "/panel/licenses",
         key: "licenses",
         icon: (
-            <LuKeyRound
+            <LuKey
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Licenses Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/products",
+        key: "products",
+        icon: (
+            <LuPackage
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Products Page"
             />
         ),
     },
