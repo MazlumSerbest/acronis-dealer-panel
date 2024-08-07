@@ -68,30 +68,8 @@ export default function GeneralTab(props: Props) {
     } = useSWR(`/api/partner/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            console.log(tenant);
-            // const today = new Date();
-            // const currentYear = today.getFullYear();
-            // const billingDate = new Date(data.billingDate);
-
-            // // Create an anniversary date for this year
-            // let nextBillingDate = new Date(
-            //     currentYear,
-            //     billingDate.getMonth(),
-            //     billingDate.getDate(),
-            // );
-
-            // // If today's date is past this year's anniversary, use the next year's anniversary
-            // if (today > nextBillingDate) {
-            //     nextBillingDate.setFullYear(currentYear + 1);
-            // }
-
-            // // Calculate the difference in time (in milliseconds)
-            // const timeDiff = nextBillingDate.getTime() - today.getTime();
-
-            // // Convert the difference from milliseconds to days
-            // const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
-
-            // return seDaysUntilNextBillingDate(daysDiff);
+            // const daysDiff = calculateDaysUntilAnniversary(data.billingDate)
+            // seDaysUntilNextBillingDate(daysDiff);
         },
     });
 

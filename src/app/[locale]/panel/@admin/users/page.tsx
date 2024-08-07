@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -23,7 +22,6 @@ import {
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form";
 import {
     DropdownMenu,
@@ -206,7 +204,6 @@ export default function UsersPage() {
         {
             accessorKey: "partner",
             header: t("partnerName"),
-            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: Partner = row.getValue("partner");
 
