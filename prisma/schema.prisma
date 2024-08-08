@@ -134,6 +134,8 @@ model Product {
   code  String  @unique
   name  String
   model String?
+  quota Int?
+  // price Float?
 
   active    Boolean  @default(true)
   createdBy String?

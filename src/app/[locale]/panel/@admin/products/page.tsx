@@ -59,6 +59,7 @@ const productFormSchema = z.object({
         required_error: "Product.code.required",
     }),
     model: z.enum(["perGB", "perWorkload"]).optional(),
+    quota: z.coerce.number().optional(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -158,6 +159,16 @@ export default function ProductsPage() {
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "quota",
+            header: t("quota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("quota");
 
                 return data || "-";
             },
@@ -431,6 +442,26 @@ export default function ProductsPage() {
                                         <FormError
                                             error={
                                                 form?.formState?.errors?.model
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="quota"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t("quota")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} type="number"/>
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.quota
                                             }
                                         />
                                     </FormItem>
