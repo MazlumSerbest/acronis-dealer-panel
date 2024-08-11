@@ -115,7 +115,7 @@ model License {
   key       String  @unique
   serialNo  String  @unique
 
-  expiresAt DateTime?
+  expiresAt   DateTime?
   boughtAt    DateTime?
   activatedAt DateTime?
 
@@ -124,7 +124,7 @@ model License {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  type    Product @relation(fields: [productId], references: [id])
+  type    Product  @relation(fields: [productId], references: [id])
   partner Partner? @relation(fields: [partnerId], references: [id])
   client  Client?  @relation(fields: [clientId], references: [id])
 }

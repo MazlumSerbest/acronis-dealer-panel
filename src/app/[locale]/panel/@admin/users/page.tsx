@@ -48,11 +48,11 @@ import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
-import { getPartners } from "@/lib/data";
+import { getProducts } from "@/lib/data";
 import FormError from "@/components/FormError";
 
 const userFormSchema = z.object({
-    id: z.string().optional(),
+    id: z.string().cuid().optional(),
     active: z.boolean(),
     role: z.enum(["admin", "partner"], {
         required_error: "User.role.required"
@@ -323,7 +323,7 @@ export default function UsersPage() {
 
     //#region Data
     async function getData() {
-        const par: ListBoxItem[] = await getPartners(true);
+        const par: ListBoxItem[] = await getProducts(true);
         setPartners(par);
     }
 
