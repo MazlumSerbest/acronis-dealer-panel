@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -14,13 +14,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
@@ -28,9 +22,10 @@ import NeedleChart from "@/components/charts/Needle";
 import { formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
-import { LuAlertTriangle, LuCalendar, LuPencil } from "react-icons/lu";
+import { LuAlertTriangle, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateDaysUntilAnniversary } from "@/utils/functions";
+import DatePicker from "@/components/DatePicker";
 
 type Props = {
     t: Function;
@@ -224,50 +219,7 @@ export default function GeneralTab(props: Props) {
                                             name="billingDate"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <Popover>
-                                                        <PopoverTrigger asChild>
-                                                            <FormControl>
-                                                                <Button
-                                                                    variant={
-                                                                        "outline"
-                                                                    }
-                                                                    className={cn(
-                                                                        "w-[240px] pl-3 text-left font-normal",
-                                                                        !field.value &&
-                                                                            "text-muted-foreground",
-                                                                    )}
-                                                                >
-                                                                    {field.value ? (
-                                                                        DateFormat(
-                                                                            field?.value?.toString(),
-                                                                        )
-                                                                    ) : (
-                                                                        <span>
-                                                                            {t(
-                                                                                "selectDate",
-                                                                            )}
-                                                                        </span>
-                                                                    )}
-                                                                    <LuCalendar className="ml-auto h-4 w-4 opacity-50" />
-                                                                </Button>
-                                                            </FormControl>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent
-                                                            className="w-auto p-0"
-                                                            align="start"
-                                                        >
-                                                            <Calendar
-                                                                mode="single"
-                                                                selected={
-                                                                    field.value
-                                                                }
-                                                                onSelect={
-                                                                    field.onChange
-                                                                }
-                                                                initialFocus
-                                                            />
-                                                        </PopoverContent>
-                                                    </Popover>
+                                                    <DatePicker field={field} />
                                                 </FormItem>
                                             )}
                                         />
