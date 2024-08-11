@@ -100,6 +100,7 @@ export default function DataTable<TData, TValue>(
             globalFilter,
             columnVisibility,
         },
+        autoResetPageIndex: false,
     });
 
     return (

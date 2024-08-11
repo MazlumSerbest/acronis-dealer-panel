@@ -53,7 +53,7 @@ export default function Combobox({
                         !field.value && "text-muted-foreground",
                     )}
                 >
-                    <span className="flex-1 text-left">
+                    <span className="flex-1 text-left font-normal">
                         {field.value
                             ? data.find((i) => i.id == field.value)?.name
                             : placeholder}
@@ -71,7 +71,7 @@ export default function Combobox({
                                 <CommandItem
                                     key={i.id}
                                     value={i.name}
-                                    className="text-foreground"
+                                    className="!opacity-80"
                                     onSelect={() => {
                                         form.setValue(name, i.id);
                                         setOpen(false);

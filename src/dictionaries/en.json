@@ -34,6 +34,7 @@
         "actions": "Actions",
         "edit": "Edit",
         "new": "New",
+        "add": "Add",
         "delete": "Delete",
         "create": "Create",
         "goToApplication": "Go to Application",
@@ -132,7 +133,6 @@
         "editApplication": "Edit Application",
         "client": "Client",
         "billingDate": "Billing Date",
-        "selectDate": "Select Date",
         "daysUntilNextBillingDate": "(Days left to billing: {days} days)",
         "exist": "Exist",
         "notExist": "Not Exist",
@@ -145,7 +145,10 @@
         "code": "Code",
         "model": "Model",
         "perGB": "Per Gigabyte",
-        "perWorkload": "Per Workload"
+        "perWorkload": "Per Workload",
+        "license": "License",
+        "key": "Key",
+        "expiresAt": "Expires At"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -314,7 +317,8 @@
         "goToNextPage": "Go to next page",
         "goToPreviousPage": "Go to previous page",
         "clearSelection": "Clear Selection",
-        "totalRows": "Total {rows} row(s)."
+        "totalRows": "Total {rows} row(s).",
+        "selectDate": "Pick a date"
     },
     "Dashboard": {
         "title": "Dashboard"
