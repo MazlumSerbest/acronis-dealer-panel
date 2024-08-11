@@ -9,5 +9,17 @@ export async function getPartners(forListBox?: boolean) {
                 id: p.id,
                 name: p?.name,
             }));
-    return partners.filter((c: Partner) => c.active);
+    return partners;
+}
+
+export async function getProducts(forListBox?: boolean) {
+    const res = await fetch("/api/product");
+    const products = await res.json();
+
+    if (forListBox)
+        return products.map((p: Product) => ({
+            id: p.id,
+            name: p?.name,
+        }));
+    return products;
 }
