@@ -72,14 +72,15 @@ model VerificationToken {
 }
 
 model Partner {
-  id            String  @id @default(cuid())
-  applicationId String? @unique
-  acronisId     String  @unique
-  active        Boolean @default(true)
+  id            String    @id @default(cuid())
+  applicationId String?   @unique
+  acronisId     String    @unique
+  active        Boolean   @default(true)
   name          String
   email         String
   mobile        String?
   phone         String?
+  billingDate   DateTime?
 
   createdBy String?
   createdAt DateTime @default(now())

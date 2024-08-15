@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,12 +13,7 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover";
+import { Form, FormField, FormItem } from "@/components/ui/form";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -29,33 +24,31 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import NeedleChart from "@/components/charts/Needle";
-import { formatBytes } from "@/utils/functions";
+import DatePicker from "@/components/DatePicker";
+import { calculateDaysUntilAnniversary, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
-import { LuAlertTriangle, LuCalendar, LuPencil } from "react-icons/lu";
-import useUserStore from "@/store/user";
+import { LuAlertTriangle, LuPencil } from "react-icons/lu";
 
 type Props = {
     t: Function;
     tenant: Tenant;
 };
 
-const clientFormSchema = z.object({
+const partnerFormSchema = z.object({
     billingDate: z.date().optional(),
 });
 
-type ClientFormValues = z.infer<typeof clientFormSchema>;
+type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export default function GeneralTab(props: Props) {
     const { t, tenant } = props;
     const { toast } = useToast();
-    const { user } = useUserStore();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -68,8 +61,8 @@ export default function GeneralTab(props: Props) {
     } = useSWR(`/api/partner/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            // const daysDiff = calculateDaysUntilAnniversary(data.billingDate)
-            // seDaysUntilNextBillingDate(daysDiff);
+            const daysDiff = calculateDaysUntilAnniversary(data.billingDate)
+            seDaysUntilNextBillingDate(daysDiff);
         },
     });
 
@@ -82,61 +75,35 @@ export default function GeneralTab(props: Props) {
     });
 
     //#region Form
-    const form = useForm<ClientFormValues>({
-        resolver: zodResolver(clientFormSchema),
+    const form = useForm<PartnerFormValues>({
+        resolver: zodResolver(partnerFormSchema),
     });
 
-    async function onSubmit(values: ClientFormValues) {
-        // const newClient = {
-        //     acronisId: tenant?.id,
-        //     billingDate: values.billingDate?.toISOString(),
-        //     partnerId: user?.partnerId,
-        // };
-        // const existingClient = {
-        //     billingDate: values.billingDate?.toISOString(),
-        // };
-        // if (client)
-        //     fetch(`/api/client/${tenant?.id}`, {
-        //         method: "PUT",
-        //         body: JSON.stringify(existingClient),
-        //     })
-        //         .then((res) => res.json())
-        //         .then((res) => {
-        //             if (res.ok) {
-        //                 toast({
-        //                     description: res.message,
-        //                 });
-        //                 clientMutate();
-        //                 setEdit(false);
-        //             } else {
-        //                 toast({
-        //                     variant: "destructive",
-        //                     title: t("errorTitle"),
-        //                     description: res.message,
-        //                 });
-        //             }
-        //         });
-        // else
-        //     fetch(`/api/client`, {
-        //         method: "POST",
-        //         body: JSON.stringify(newClient),
-        //     })
-        //         .then((res) => res.json())
-        //         .then((res) => {
-        //             if (res.ok) {
-        //                 toast({
-        //                     description: res.message,
-        //                 });
-        //                 clientMutate();
-        //                 setEdit(false);
-        //             } else {
-        //                 toast({
-        //                     variant: "destructive",
-        //                     title: t("errorTitle"),
-        //                     description: res.message,
-        //                 });
-        //             }
-        //         });
+    async function onSubmit(values: PartnerFormValues) {
+        const existingPartner = {
+            billingDate: values.billingDate?.toISOString(),
+        };
+        if (partner)
+            fetch(`/api/partner/${tenant?.id}`, {
+                method: "PUT",
+                body: JSON.stringify(existingPartner),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.ok) {
+                        toast({
+                            description: res.message,
+                        });
+                        partnerMutate();
+                        setEdit(false);
+                    } else {
+                        toast({
+                            variant: "destructive",
+                            title: t("errorTitle"),
+                            description: res.message,
+                        });
+                    }
+                });
     }
     //#endregion
 
@@ -165,20 +132,22 @@ export default function GeneralTab(props: Props) {
                             <h2 className="flex-none font-medium text-xl">
                                 Tenant Information
                             </h2>
-                            {/* <Button
-                                disabled={edit}
-                                size="sm"
-                                className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                onClick={() => {
-                                    form.reset(client);
-                                    setEdit(true);
-                                }}
-                            >
-                                <span className="sr-only lg:not-sr-only">
-                                    {t("edit")}
-                                </span>
-                                <LuPencil className="size-4" />
-                            </Button> */}
+                            {partner && (
+                                <Button
+                                    disabled={edit}
+                                    size="sm"
+                                    className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                    onClick={() => {
+                                        form.reset(partner);
+                                        setEdit(true);
+                                    }}
+                                >
+                                    <span className="sr-only lg:not-sr-only">
+                                        {t("edit")}
+                                    </span>
+                                    <LuPencil className="size-4" />
+                                </Button>
+                            )}
                         </CardTitle>
                         {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
@@ -221,7 +190,7 @@ export default function GeneralTab(props: Props) {
                                     </dd>
                                 </div>
 
-                                {/* <div>
+                                <div>
                                     <dt className="font-medium">
                                         {t("billingDate")}
                                     </dt>
@@ -231,57 +200,14 @@ export default function GeneralTab(props: Props) {
                                             name="billingDate"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <Popover>
-                                                        <PopoverTrigger asChild>
-                                                            <FormControl>
-                                                                <Button
-                                                                    variant={
-                                                                        "outline"
-                                                                    }
-                                                                    className={cn(
-                                                                        "w-[240px] pl-3 text-left font-normal",
-                                                                        !field.value &&
-                                                                            "text-muted-foreground",
-                                                                    )}
-                                                                >
-                                                                    {field.value ? (
-                                                                        DateFormat(
-                                                                            field?.value?.toString(),
-                                                                        )
-                                                                    ) : (
-                                                                        <span>
-                                                                            {t(
-                                                                                "selectDate",
-                                                                            )}
-                                                                        </span>
-                                                                    )}
-                                                                    <LuCalendar className="ml-auto h-4 w-4 opacity-50" />
-                                                                </Button>
-                                                            </FormControl>
-                                                        </PopoverTrigger>
-                                                        <PopoverContent
-                                                            className="w-auto p-0"
-                                                            align="start"
-                                                        >
-                                                            <Calendar
-                                                                mode="single"
-                                                                selected={
-                                                                    field.value
-                                                                }
-                                                                onSelect={
-                                                                    field.onChange
-                                                                }
-                                                                initialFocus
-                                                            />
-                                                        </PopoverContent>
-                                                    </Popover>
+                                                    <DatePicker field={field} />
                                                 </FormItem>
                                             )}
                                         />
                                     ) : (
                                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                             {`${DateFormat(
-                                                client?.billingDate || "",
+                                                partner?.billingDate || "",
                                             )} ${
                                                 daysUntilNextBillingDate
                                                     ? t(
@@ -294,7 +220,7 @@ export default function GeneralTab(props: Props) {
                                             }`}
                                         </dd>
                                     )}
-                                </div> */}
+                                </div>
 
                                 <div>
                                     <dt className="font-medium">
@@ -370,7 +296,6 @@ export default function GeneralTab(props: Props) {
                                     <AlertDialog
                                         open={openUserDialog}
                                         onOpenChange={setOpenUserDialog}
-                                        
                                     >
                                         <AlertDialogTrigger asChild>
                                             <Button className="bg-blue-400 hover:bg-blue-400/90">

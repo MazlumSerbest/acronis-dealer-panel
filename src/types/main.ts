@@ -31,6 +31,7 @@ type Partner = Entity & {
     phone: string;
     mobile: string;
     active: boolean;
+    billingDate?: string;
     application?: Application;
     users?: User[];
     clients?: Client[];
