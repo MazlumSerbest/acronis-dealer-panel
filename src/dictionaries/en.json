@@ -144,6 +144,11 @@
         "product": "Product",
         "code": "Code",
         "model": "Model",
+        "unit": "Unit",
+        "MB": "MB",
+        "GB": "GB",
+        "TB": "TB",
+        "piece": "Piece",
         "perGB": "Per Gigabyte",
         "perWorkload": "Per Workload",
         "license": "License",
@@ -327,7 +332,10 @@
         "title": "Clients"
     },
     "Licenses": {
-        "title": "Licenses"
+        "title": "Licenses",
+        "unassigned": "Unassigned",
+        "assigned": "Assigned",
+        "active": "Active"
     },
     "Alerts": {
         "title": "Alerts"

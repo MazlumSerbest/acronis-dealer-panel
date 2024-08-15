@@ -135,6 +135,7 @@ model Product {
   name  String
   model String?
   quota Int?
+  unit  String?
   // price Float?
 
   active    Boolean  @default(true)

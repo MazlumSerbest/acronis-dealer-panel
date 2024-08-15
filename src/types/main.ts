@@ -56,6 +56,8 @@ type Product = Entity & {
     code: string;
     name: string;
     model: "perGB" | "perWorkload";
+    quota?: number;
+    unit?: "MB" | "GB" | "TB" | "piece";
 };
 
 type Application = Entity & {

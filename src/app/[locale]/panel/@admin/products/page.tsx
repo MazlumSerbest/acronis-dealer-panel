@@ -60,6 +60,7 @@ const productFormSchema = z.object({
     }),
     model: z.enum(["perGB", "perWorkload"]).optional(),
     quota: z.coerce.number().optional(),
+    unit: z.enum(["MB", "GB", "TB", "piece"]).optional(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -71,13 +72,9 @@ export default function ProductsPage() {
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
 
-    const { data, error, isLoading, mutate } = useSWR(
-        `/api/product`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const { data, error, isLoading, mutate } = useSWR(`/api/product`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Form
     const form = useForm<ProductFormValues>({
@@ -171,6 +168,16 @@ export default function ProductsPage() {
                 const data: string = row.getValue("quota");
 
                 return data || "-";
+            },
+        },
+        {
+            accessorKey: "unit",
+            header: t("unit"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("unit");
+
+                return data ? t(data) : "-";
             },
         },
         {
@@ -412,9 +419,7 @@ export default function ProductsPage() {
                                 name="model"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>
-                                            {t("model")}
-                                        </FormLabel>
+                                        <FormLabel>{t("model")}</FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
                                             defaultValue={field.value}
@@ -453,15 +458,58 @@ export default function ProductsPage() {
                                 name="quota"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>
-                                            {t("quota")}
-                                        </FormLabel>
+                                        <FormLabel>{t("quota")}</FormLabel>
                                         <FormControl>
-                                            <Input {...field} type="number"/>
+                                            <Input {...field} type="number" />
                                         </FormControl>
                                         <FormError
                                             error={
                                                 form?.formState?.errors?.quota
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="unit"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t("unit")}</FormLabel>
+                                        <Select
+                                            onValueChange={field.onChange}
+                                            defaultValue={field.value}
+                                        >
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue
+                                                        placeholder={t(
+                                                            "select",
+                                                        )}
+                                                    />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {/* <SelectItem>
+                                                </SelectItem> */}
+                                                <SelectItem value="MB">
+                                                    {t("MB")}
+                                                </SelectItem>
+                                                <SelectItem value="GB">
+                                                    {t("GB")}
+                                                </SelectItem>
+                                                <SelectItem value="TB">
+                                                    {t("TB")}
+                                                </SelectItem>
+                                                <SelectItem value="piece">
+                                                    {t("piece")}
+                                                </SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.unit
                                             }
                                         />
                                     </FormItem>
