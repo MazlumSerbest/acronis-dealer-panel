@@ -19,11 +19,11 @@ export default async function PanelLayout({
     if (!session) return <></>;
     return (
         <SessionProvider>
-            <main className="flex h-screen">
+            <main className="flex">
                 <NavLayout />
-                <main className="flex-1 flex flex-col min-w-0 h-dvh gap-2 overflow-auto p-2 pb-4 pt-16 lg:p-4 lg:pt-4">
+                <div className="relative flex-1 flex flex-col gap-2 h-dvh overflow-auto p-2 pb-4 pt-16 lg:p-4 lg:pt-4">
                     {session.user?.role == "admin" ? admin : partner}
-                </main>
+                </div>
             </main>
         </SessionProvider>
     );

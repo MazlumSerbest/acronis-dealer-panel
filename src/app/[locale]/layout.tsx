@@ -29,7 +29,7 @@ export default async function LocaleLayout({
 
     return (
         <html lang={locale} className="light">
-            <body className={inter.className + " overflow-hidden"}>
+            <body className={inter.className}>
                 <NextTopLoader
                     color="rgb(96 165 250)"
                     showSpinner={false}
