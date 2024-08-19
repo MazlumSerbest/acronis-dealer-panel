@@ -43,7 +43,7 @@ export default function ClientsTab(props: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
 
-                return <div className="font-medium">{data || "-"}</div>;
+                return data || "-";
             },
         },
         {

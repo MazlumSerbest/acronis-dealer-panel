@@ -42,7 +42,7 @@ export default function LicensesPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
 
-                return <div className="font-medium">{data || "-"}</div>;
+                return data || "-";
             },
         },
         {
@@ -65,7 +65,7 @@ export default function LicensesPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
-                return <div className="font-medium">{data || "-"}</div>;
+                return data || "-";
             },
         },
         {

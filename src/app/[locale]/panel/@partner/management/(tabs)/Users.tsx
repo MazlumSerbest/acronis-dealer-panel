@@ -39,7 +39,7 @@ export default function UsersTab() {
             cell: ({ row }) => {
                 const data: string = row.getValue("login");
 
-                return <div className="font-medium">{data || "-"}</div>;
+                return data || "-";
             },
         },
         {

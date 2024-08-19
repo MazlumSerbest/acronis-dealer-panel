@@ -93,7 +93,7 @@ export default function TenantsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
 
-                return <div className="font-medium">{data || "-"}</div>;
+                return data || "-";
             },
         },
         {
