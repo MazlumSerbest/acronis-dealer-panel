@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";

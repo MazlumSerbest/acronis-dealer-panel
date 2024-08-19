@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/form";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
@@ -92,7 +92,7 @@ export default function ClientsPage() {
             parent_id: currentUser?.acronisTenantId,
             contact: {
                 email: values.email,
-            }
+            },
         };
 
         await fetch("/api/acronis/tenants", {
@@ -168,6 +168,7 @@ export default function ClientsPage() {
 
                 return <BoolChip size="size-4" value={data == "enabled"} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "enabled",
@@ -178,6 +179,7 @@ export default function ClientsPage() {
 
                 return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "usage",
@@ -229,6 +231,36 @@ export default function ClientsPage() {
                         visibleColumns={visibleColumns}
                         defaultPageSize={50}
                         isLoading={isLoading}
+                        facetedFilters={[
+                            {
+                                column: "mfa_status",
+                                title: t("mfaStatus"),
+                                options: [
+                                    {
+                                        value: "enabled",
+                                        label: t("enabled"),
+                                    },
+                                    {
+                                        value: "disabled",
+                                        label: t("disabled"),
+                                    },
+                                ],
+                            },
+                            {
+                                column: "enabled",
+                                title: t("enabled"),
+                                options: [
+                                    {
+                                        value: true,
+                                        label: t("true"),
+                                    },
+                                    {
+                                        value: false,
+                                        label: t("false"),
+                                    },
+                                ],
+                            },
+                        ]}
                         onAddNew={() => {
                             setOpen(true);
                         }}

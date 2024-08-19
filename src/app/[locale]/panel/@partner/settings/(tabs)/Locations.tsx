@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import AcronisWarning from "@/components/AcronisWarning";
 import useUserStore from "@/store/user";

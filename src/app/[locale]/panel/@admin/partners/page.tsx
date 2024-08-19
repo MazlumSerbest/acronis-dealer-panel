@@ -14,7 +14,7 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";

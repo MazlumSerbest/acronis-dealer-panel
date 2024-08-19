@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import AcronisWarning from "@/components/AcronisWarning";

@@ -30,7 +30,7 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, Row } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
@@ -55,16 +55,18 @@ const userFormSchema = z.object({
     id: z.string().cuid().optional(),
     active: z.boolean(),
     role: z.enum(["admin", "partner"], {
-        required_error: "User.role.required"
+        required_error: "User.role.required",
     }),
     name: z.string({
-        required_error: "User.name.required"
+        required_error: "User.name.required",
     }),
-    email: z.string({
-        required_error: "User.email.required"
-    }).email({
-        message: "User.email.invalidType"
-    }),
+    email: z
+        .string({
+            required_error: "User.email.required",
+        })
+        .email({
+            message: "User.email.invalidType",
+        }),
     partnerId: z.string().optional().nullable(),
 });
 
@@ -200,6 +202,7 @@ export default function UsersPage() {
 
                 return t(data) || "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "partner",
@@ -208,6 +211,13 @@ export default function UsersPage() {
                 const data: Partner = row.getValue("partner");
 
                 return data?.name || "-";
+            },
+            filterFn: (rows: any, id, value) => {
+                return rows?.filter((row: any) => {
+                    const data: Partner = row.getValue(id);
+
+                    return data?.name?.toLowerCase().includes(value.toLowerCase());
+                });
             },
         },
         // {
@@ -235,6 +245,7 @@ export default function UsersPage() {
 
                 return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
@@ -347,6 +358,24 @@ export default function UsersPage() {
                 data={data}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
+                facetedFilters={[
+                    {
+                        column: "role",
+                        title: t("role"),
+                        options: [
+                            { value: "admin", label: t("admin") },
+                            { value: "partner", label: t("partner") },
+                        ],
+                    },
+                    {
+                        column: "active",
+                        title: t("active"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
+                ]}
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);

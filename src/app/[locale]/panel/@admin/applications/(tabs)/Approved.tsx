@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import Loader from "@/components/loaders/Loader";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
@@ -58,6 +58,7 @@ export default function ApprovedTab() {
 
                 return t(data) || "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "applicationDate",
@@ -101,6 +102,16 @@ export default function ApprovedTab() {
             columns={columns}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
+            facetedFilters={[
+                {
+                    column: "companyType",
+                    title: t("companyType"),
+                    options: [
+                        { value: "business", label: t("business") },
+                        { value: "person", label: t("person") },
+                    ],
+                },
+            ]}
             onClick={(item) => {
                 router.push("/panel/applications/" + item.original.id);
             }}

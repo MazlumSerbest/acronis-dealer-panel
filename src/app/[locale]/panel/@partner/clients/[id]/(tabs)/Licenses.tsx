@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import { LuChevronsUpDown } from "react-icons/lu";
 
 type Props = {

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
@@ -73,6 +73,7 @@ export default function ClientsTab(props: Props) {
 
                 return <BoolChip size="size-4" value={data == "enabled"} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "enabled",
@@ -83,6 +84,7 @@ export default function ClientsTab(props: Props) {
 
                 return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "created_at",
@@ -114,6 +116,36 @@ export default function ClientsTab(props: Props) {
             columns={columns}
             visibleColumns={visibleColumns}
             defaultPageSize={50}
+            facetedFilters={[
+                {
+                    column: "mfa_status",
+                    title: t("mfaStatus"),
+                    options: [
+                        {
+                            value: "enabled",
+                            label: t("enabled"),
+                        },
+                        {
+                            value: "disabled",
+                            label: t("disabled"),
+                        },
+                    ],
+                },
+                {
+                    column: "enabled",
+                    title: t("enabled"),
+                    options: [
+                        {
+                            value: true,
+                            label: t("true"),
+                        },
+                        {
+                            value: false,
+                            label: t("false"),
+                        },
+                    ],
+                },
+            ]}
             onClick={(item) => {
                 router.push("/panel/clients/" + item?.original?.id);
             }}

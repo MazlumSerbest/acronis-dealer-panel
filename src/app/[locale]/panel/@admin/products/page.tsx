@@ -42,7 +42,7 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 
-import DataTable from "@/components/table/DataTable";
+import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
@@ -179,6 +179,7 @@ export default function ProductsPage() {
 
                 return data ? t(data) : "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "code",
@@ -212,6 +213,7 @@ export default function ProductsPage() {
 
                 return t(data) || "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "active",
@@ -222,6 +224,7 @@ export default function ProductsPage() {
 
                 return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
@@ -323,6 +326,34 @@ export default function ProductsPage() {
                 data={data}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
+                facetedFilters={[
+                    {
+                        column: "unit",
+                        title: t("unit"),
+                        options: [
+                            { value: "MB", label: t("MB") },
+                            { value: "GB", label: t("GB") },
+                            { value: "TB", label: t("TB") },
+                            { value: "piece", label: t("piece") },
+                        ],
+                    },
+                    {
+                        column: "model",
+                        title: t("model"),
+                        options: [
+                            { value: "perGB", label: t("perGB") },
+                            { value: "perWorkload", label: t("perWorkload") },
+                        ],
+                    },
+                    {
+                        column: "active",
+                        title: t("active"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
+                ]}
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
