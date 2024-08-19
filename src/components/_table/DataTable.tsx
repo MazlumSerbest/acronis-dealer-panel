@@ -1,12 +1,13 @@
-import { ReactNode, useState } from "react";
+"use client";
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+
 import {
     ColumnDef,
     SortingState,
     VisibilityState,
     flexRender,
     getCoreRowModel,
-    getFacetedRowModel,
-    getFacetedUniqueValues,
     getFilteredRowModel,
     getPaginationRowModel,
     getSortedRowModel,
@@ -20,32 +21,21 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "../ui/table";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
+} from "@/components/ui/table";
 import {
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
-import { Pagination } from "./Pagination";
-import { DataTableViewOptions } from "./ViewOptions";
-import { DataTableFacetedFilter } from "./FacetedFilter";
-// import { Toolbar } from "./Toolbar";
-
-import { useTranslations } from "next-intl";
-import Loader from "../loaders/Loader";
+import Pagination from "./Pagination";
+import ViewOptions from "./ViewOptions";
 import { cn } from "@/lib/utils";
-import {
-    Cross2Icon,
-    MagicWandIcon,
-    MixerHorizontalIcon,
-    PlusIcon,
-} from "@radix-ui/react-icons";
+import Loader from "../loaders/Loader";
+import { LuPlus } from "react-icons/lu";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -56,55 +46,47 @@ interface DataTableProps<TData, TValue> {
     isLoading?: boolean;
     defaultPageIndex?: number;
     defaultPageSize?: 10 | 20 | 30 | 40 | 50;
-    selectable?: boolean;
-    selectOnClick?: boolean;
-    facetedFilters?: {
-        column: string;
-        title: string;
-        options: { value: any; label: string }[];
-    }[];
-    actions?: any;
     onAddNew?: () => any;
     onClick?: (item: any) => any;
     onDoubleClick?: (item: any) => any;
 }
 
-export function DataTable<TData, TValue>({
-    columns,
-    data = [],
-    visibleColumns = {},
-    basic = false,
-    zebra = false,
-    isLoading = false,
-    defaultPageIndex = 0,
-    defaultPageSize = 10,
-    selectable = false,
-    selectOnClick = false,
-    facetedFilters,
-    actions,
-    onAddNew,
-    onClick,
-    onDoubleClick,
-}: DataTableProps<TData, TValue>) {
+export default function DataTable<TData, TValue>(
+    props: DataTableProps<TData, TValue>,
+) {
+    const {
+        columns,
+        data = [],
+        visibleColumns = {},
+        basic = false,
+        zebra = false,
+        isLoading = false,
+        defaultPageIndex = 0,
+        defaultPageSize = 10,
+        onAddNew,
+        onClick,
+        onDoubleClick,
+    } = props;
+
     const tc = useTranslations("Components");
 
-    const [rowSelection, setRowSelection] = useState({});
-    const [columnVisibility, setColumnVisibility] =
-        useState<VisibilityState>(visibleColumns);
+    const [sorting, setSorting] = useState<SortingState>([]);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [columnVisibility, setColumnVisibility] =
+        useState<VisibilityState>(visibleColumns);
 
     const table = useReactTable({
         data,
         columns,
-        state: {
-            sorting,
-            columnVisibility,
-            rowSelection,
-            globalFilter,
-            // columnFilters,
-        },
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        // onColumnFiltersChange: setColumnFilters,
+        onGlobalFilterChange: setGlobalFilter,
+        getFilteredRowModel: getFilteredRowModel(),
+        onColumnVisibilityChange: setColumnVisibility,
         initialState: {
             columnVisibility: columnVisibility,
             pagination: {
@@ -112,95 +94,27 @@ export function DataTable<TData, TValue>({
                 pageSize: defaultPageSize,
             },
         },
+        state: {
+            sorting,
+            // columnFilters,
+            globalFilter,
+            columnVisibility,
+        },
         autoResetPageIndex: false,
-        enableRowSelection: true,
-        onRowSelectionChange: setRowSelection,
-        onSortingChange: setSorting,
-        // onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-        getCoreRowModel: getCoreRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
-        onGlobalFilterChange: setGlobalFilter,
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFacetedRowModel: getFacetedRowModel(),
-        getFacetedUniqueValues: getFacetedUniqueValues(),
     });
-
-    let isFiltered =
-        table.getState().columnFilters?.length > 0 ||
-        table.getState().globalFilter?.length > 0;
 
     return (
         <div className="space-y-4">
-            {/* Toolbar */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 items-center justify-between gap-2">
-                <div className="flex flex-1 items-center space-x-2">
-                    <Input
-                        placeholder={tc("searchPlaceholder")}
-                        value={globalFilter ?? ""}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        className="max-w-sm"
-                    />
+            <div className="flex items-center gap-2 justify-between">
+                <Input
+                    placeholder={tc("searchPlaceholder")}
+                    value={globalFilter ?? ""}
+                    onChange={(e) => setGlobalFilter(e.target.value)}
+                    className="max-w-sm"
+                />
 
-                    {facetedFilters?.map(
-                        (filter) =>
-                            table.getColumn(filter.column) && (
-                                <DataTableFacetedFilter
-                                    key={filter.column}
-                                    column={table.getColumn(filter.column)}
-                                    title={filter.title}
-                                    options={filter.options}
-                                />
-                            ),
-                    )}
-
-                    {isFiltered && (
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                table.resetGlobalFilter();
-                                table.resetColumnFilters();
-                            }}
-                            className="flex gap-2 h-8 px-2 lg:px-3"
-                        >
-                            <span className="sr-only lg:not-sr-only">
-                                {tc("clear")}
-                            </span>
-                            <Cross2Icon className="size-4" />
-                        </Button>
-                    )}
-                </div>
-
-                <div className="flex flex-row gap-2 justify-center lg:justify-end">
-                    {actions && (
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="h-8 gap-2 flex"
-                                >
-                                    <MagicWandIcon className="size-4" />
-                                    <span className="sr-only lg:not-sr-only">
-                                        {tc("actions")}
-                                    </span>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                align="end"
-                                className="max-w-[300px]"
-                            >
-                                <DropdownMenuLabel>
-                                    {tc("actions")}
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                {actions.map((action: ReactNode) => action)}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    )}
-
-                    <DataTableViewOptions table={table} />
+                <div className="flex gap-2">
+                    <ViewOptions table={table} />
 
                     {onAddNew && (
                         <Button
@@ -211,7 +125,7 @@ export function DataTable<TData, TValue>({
                             <span className="sr-only lg:not-sr-only">
                                 {tc("add")}
                             </span>
-                            <PlusIcon className="size-4" />
+                            <LuPlus className="size-4" />
                         </Button>
                     )}
                 </div>
@@ -224,10 +138,7 @@ export function DataTable<TData, TValue>({
                             <TableRow key={headerGroup.id}>
                                 {headerGroup.headers.map((header) => {
                                     return (
-                                        <TableHead
-                                            key={header.id}
-                                            colSpan={header.colSpan}
-                                        >
+                                        <TableHead key={header.id}>
                                             {header.isPlaceholder
                                                 ? null
                                                 : flexRender(
@@ -264,16 +175,12 @@ export function DataTable<TData, TValue>({
                                             className={cn(
                                                 "select-none",
                                                 zebra && "odd:bg-zinc-100/50",
-                                                (onClick ||
-                                                    onDoubleClick ||
-                                                    selectOnClick) &&
+                                                (onClick || onDoubleClick) &&
                                                     "cursor-pointer",
                                             )}
                                             onClick={() => {
                                                 onClick
                                                     ? onClick(row)
-                                                    : selectOnClick
-                                                    ? row.toggleSelected()
                                                     : undefined;
                                             }}
                                             onDoubleClick={() =>
@@ -310,7 +217,10 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <Pagination table={table} />
+
+            {data.length < 10 || !data.length ? null : (
+                <Pagination table={table} />
+            )}
         </div>
     );
 }

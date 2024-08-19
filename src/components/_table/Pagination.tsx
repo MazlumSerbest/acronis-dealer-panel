@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -6,22 +8,20 @@ import {
 } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select";
+} from "@/components/ui/select";
 
-import { useTranslations } from "next-intl";
-
-interface DataTablePaginationProps<TData> {
+interface PaginationProps<TData> {
     table: Table<TData>;
 }
 
-export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
+export default function Pagination<TData>({ table }: PaginationProps<TData>) {
     const tc = useTranslations("Components");
 
     return (
@@ -31,6 +31,8 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
                     selected: table.getFilteredSelectedRowModel().rows.length,
                     length: table.getFilteredRowModel().rows.length,
                 })}
+                {/* {table.getFilteredSelectedRowModel().rows.length} of{" "}
+                {table.getFilteredRowModel().rows.length} row(s) selected. */}
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
                 <div className="flex items-center space-x-2">

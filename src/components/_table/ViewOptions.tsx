@@ -1,25 +1,23 @@
+import { useTranslations } from "next-intl";
+
+import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { MixerHorizontalIcon } from "@radix-ui/react-icons";
 import { Table } from "@tanstack/react-table";
 
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import {
-    DropdownMenuTrigger,
     DropdownMenu,
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuSeparator,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
-import { useTranslations } from "next-intl";
-
-interface DataTableViewOptionsProps<TData> {
+interface ViewOptionsProps<TData> {
     table: Table<TData>;
 }
 
-export function DataTableViewOptions<TData>({
-    table,
-}: DataTableViewOptionsProps<TData>) {
+export default function ViewOptions<TData>({ table }: ViewOptionsProps<TData>) {
     const tc = useTranslations("Components");
     const visibleColumns = table
         .getAllColumns()
@@ -45,8 +43,8 @@ export function DataTableViewOptions<TData>({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="max-w-[300px]">
-                        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
+                        {/* <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+            <DropdownMenuSeparator /> */}
                         {visibleColumns.map((column) => {
                             return (
                                 <DropdownMenuCheckboxItem
