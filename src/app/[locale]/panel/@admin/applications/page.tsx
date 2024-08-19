@@ -13,9 +13,7 @@ export default function ApplicationsPage() {
         <div className="flex flex-col w-full items-center">
             <Tabs defaultValue="waiting" className="flex flex-col w-full">
                 <TabsList className="mx-auto *:md:w-[200px] mb-2">
-                    <TabsTrigger value="waiting">
-                        <h5>{ta("waiting")}</h5>
-                    </TabsTrigger>
+                    <TabsTrigger value="waiting">{ta("waiting")}</TabsTrigger>
                     <TabsTrigger value="approved">{ta("approved")}</TabsTrigger>
                     <TabsTrigger value="resolved">{ta("resolved")}</TabsTrigger>
                 </TabsList>
