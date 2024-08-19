@@ -155,8 +155,12 @@
         "perWorkload": "Per Workload",
         "license": "License",
         "key": "Key",
+        "assign": "Assign",
+        "clientAcronisId": "Client Acronis ID",
         "expiresAt": "Expires At",
-        "assign": "Assign"
+        "expiredAt": "Expired At",
+        "assignedAt": "Assigned At",
+        "activatedAt": "Activated At"
     },
     "SignIn": {
         "signIn": "Sign In",

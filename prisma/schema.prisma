@@ -117,7 +117,7 @@ model License {
   serialNo  String  @unique
 
   expiresAt   DateTime?
-  boughtAt    DateTime?
+  assignedAt  DateTime?
   activatedAt DateTime?
 
   createdBy String?
