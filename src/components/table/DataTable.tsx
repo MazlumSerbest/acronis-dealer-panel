@@ -140,7 +140,7 @@ export function DataTable<TData, TValue>({
                         placeholder={tc("searchPlaceholder")}
                         value={globalFilter ?? ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
-                        className="max-w-sm"
+                        className="max-w-sm min-w-max"
                     />
 
                     {facetedFilters?.map(
@@ -172,7 +172,7 @@ export function DataTable<TData, TValue>({
                     )}
                 </div>
 
-                <div className="flex flex-row gap-2 justify-center lg:justify-end">
+                <div className="flex flex-row gap-2 justify-end">
                     {actions && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -182,7 +182,7 @@ export function DataTable<TData, TValue>({
                                     className="h-8 gap-2 flex"
                                 >
                                     <MagicWandIcon className="size-4" />
-                                    <span className="sr-only lg:not-sr-only">
+                                    <span className="">
                                         {tc("actions")}
                                     </span>
                                 </Button>
@@ -208,7 +208,7 @@ export function DataTable<TData, TValue>({
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
                         >
-                            <span className="sr-only lg:not-sr-only">
+                            <span className="">
                                 {tc("add")}
                             </span>
                             <PlusIcon className="size-4" />
