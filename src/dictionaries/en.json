@@ -16,6 +16,8 @@
         },
         "yes": "Yes",
         "no": "No",
+        "true": "Yes",
+        "false": "No",
         "or": "or",
         "and": "and",
         "logout": "Log out",
@@ -153,7 +155,8 @@
         "perWorkload": "Per Workload",
         "license": "License",
         "key": "Key",
-        "expiresAt": "Expires At"
+        "expiresAt": "Expires At",
+        "assign": "Assign"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -322,8 +325,10 @@
         "goToNextPage": "Go to next page",
         "goToPreviousPage": "Go to previous page",
         "clearSelection": "Clear Selection",
-        "totalRows": "Total {rows} row(s).",
-        "selectDate": "Pick a date"
+        "totalRows": "{selected} of {length} row(s) selected.",
+        "selectDate": "Pick a date",
+        "clear": "Clear",
+        "actions": "Actions"
     },
     "Dashboard": {
         "title": "Dashboard"
@@ -335,7 +340,9 @@
         "title": "Licenses",
         "unassigned": "Unassigned",
         "assigned": "Assigned",
-        "active": "Active"
+        "active": "Active",
+        "completed": "Completed",
+        "expired": "Expired"
     },
     "Alerts": {
         "title": "Alerts"
