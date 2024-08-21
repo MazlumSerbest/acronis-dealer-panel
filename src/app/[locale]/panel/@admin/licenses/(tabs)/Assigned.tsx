@@ -37,7 +37,7 @@ export default function AssignedTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "name",
+            accessorKey: "product",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -54,9 +54,9 @@ export default function AssignedTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("name");
+                const data: Product = row.getValue("product");
 
-                return data || "-";
+                return data?.name || "-";
             },
         },
         {
@@ -100,16 +100,6 @@ export default function AssignedTab() {
             },
         },
         {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
-
-                return DateTimeFormat(data);
-            },
-        },
-        {
             accessorKey: "assignedAt",
             header: t("assignedAt"),
             enableGlobalFilter: false,
@@ -120,19 +110,32 @@ export default function AssignedTab() {
             },
         },
         {
-            accessorKey: "duration",
-            header: t("duration"),
+            accessorKey: "expiresAt",
+            header: t("expiresAt"),
             enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("expiresAt");
+
+                return DateTimeFormat(data);
+            },
         },
         {
-            accessorKey: "quota",
+            accessorKey: "product",
             header: t("quota"),
-            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return data?.quota || "-";
+            },
         },
         {
-            accessorKey: "type",
-            header: t("type"),
-            enableGlobalFilter: false,
+            accessorKey: "product",
+            header: t("unit"),
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return t(data?.unit) || "-";
+            },
         },
         {
             accessorKey: "createdAt",

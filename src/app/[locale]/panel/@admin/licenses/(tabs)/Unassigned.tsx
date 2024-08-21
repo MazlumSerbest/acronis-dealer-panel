@@ -13,6 +13,7 @@ import {
     Dialog,
     DialogClose,
     DialogContent,
+    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -33,7 +34,9 @@ import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { getProducts } from "@/lib/data";
+import { getPartners, getProducts } from "@/lib/data";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 const licenseFormSchema = z.object({
     productId: z.string(),
@@ -44,12 +47,21 @@ const licenseFormSchema = z.object({
 
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
+const assignFormSchema = z.object({
+    partnerId: z.string(),
+});
+
+type AssignFormValues = z.infer<typeof assignFormSchema>;
+
 export default function UnassignedTab() {
     const t = useTranslations("General");
     const router = useRouter();
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
+    const [assignOpen, setAssignOpen] = useState(false);
     const [products, setProducts] = useState<ListBoxItem[] | null>(null);
+    const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
+    const [selected, setSelected] = useState<string[]>([]);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/license?status=unassigned`,
@@ -64,7 +76,55 @@ export default function UnassignedTab() {
         resolver: zodResolver(licenseFormSchema),
     });
 
-    function onSubmit(values: LicenseFormValues) {}
+    function onSubmit(values: LicenseFormValues) {
+        fetch("/api/admin/license", {
+            method: "POST",
+            body: JSON.stringify(values),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpen(false);
+                    mutate();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+            });
+    }
+
+    const assignForm = useForm<AssignFormValues>({
+        resolver: zodResolver(assignFormSchema),
+    });
+
+    function onAssignSubmit(values: AssignFormValues) {
+        fetch("/api/admin/license/assign", {
+            method: "PUT",
+            body: JSON.stringify({ ids: selected, ...values }),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setAssignOpen(false);
+                    mutate();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+            });
+    }
     // #endregion
 
     //#region Table
@@ -77,7 +137,46 @@ export default function UnassignedTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "name",
+            id: "select",
+            enableSorting: false,
+            enableHiding: false,
+            enableGlobalFilter: false,
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={async (value) => {
+                        await table.toggleAllPageRowsSelected(!!value);
+                        setSelected(
+                            table
+                                .getSelectedRowModel()
+                                .rows.map((row) => row.original?.id),
+                        );
+                    }}
+                    aria-label="Select all"
+                    className="translate-y-[2px]"
+                />
+            ),
+            cell: ({ table, row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={async (value) => {
+                        await row.toggleSelected(!!value);
+                        setSelected(
+                            table
+                                .getSelectedRowModel()
+                                .rows.map((row) => row.original?.id),
+                        );
+                    }}
+                    aria-label="Select row"
+                    className="translate-y-[2px]"
+                />
+            ),
+        },
+        {
+            accessorKey: "product",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -94,9 +193,9 @@ export default function UnassignedTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("name");
+                const data: Product = row.getValue("product");
 
-                return data || "-";
+                return data?.name || "-";
             },
         },
         {
@@ -123,19 +222,22 @@ export default function UnassignedTab() {
             },
         },
         {
-            accessorKey: "duration",
-            header: t("duration"),
-            enableGlobalFilter: false,
-        },
-        {
-            accessorKey: "quota",
+            accessorKey: "product",
             header: t("quota"),
-            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return data?.quota || "-";
+            },
         },
         {
-            accessorKey: "type",
-            header: t("type"),
-            enableGlobalFilter: false,
+            accessorKey: "product",
+            header: t("unit"),
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return t(data?.unit) || "-";
+            },
         },
         {
             accessorKey: "createdAt",
@@ -184,6 +286,8 @@ export default function UnassignedTab() {
     async function getData() {
         const pro: ListBoxItem[] = await getProducts();
         setProducts(pro);
+        const par: ListBoxItem[] = await getPartners();
+        setPartners(par);
     }
 
     useEffect(() => {
@@ -201,10 +305,31 @@ export default function UnassignedTab() {
     return (
         <>
             <DataTable
-                zebra
+                // zebra
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
+                actions={
+                    selected.length > 0 && [
+                        <DropdownMenuItem
+                            key="assign"
+                            onClick={() => {
+                                setAssignOpen(true);
+                                console.log(selected);
+                            }}
+                        >
+                            {t("assignToPartner")}
+                        </DropdownMenuItem>,
+                    ]
+                }
+                selectOnClick={async (table, row) => {
+                    await row.toggleSelected();
+                    setSelected(
+                        table
+                            .getSelectedRowModel()
+                            .rows.map((r: any) => r.original?.id),
+                    );
+                }}
                 onAddNew={() => {
                     setOpen(true);
                     form.reset();
@@ -322,6 +447,74 @@ export default function UnassignedTab() {
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("add")}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>
+                            {t("assign")} {t("license")}
+                        </DialogTitle>
+                        <DialogDescription>
+                            {t("assignDescription", {
+                                length: selected.length,
+                            })}
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <Form {...assignForm}>
+                        <form
+                            onSubmit={assignForm.handleSubmit(onAssignSubmit)}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={assignForm.control}
+                                name="partnerId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("partner")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Combobox
+                                                name="partnerId"
+                                                data={partners || []}
+                                                form={assignForm}
+                                                field={field}
+                                                placeholder={t("select")}
+                                                inputPlaceholder={t(
+                                                    "searchPlaceholder",
+                                                )}
+                                                emptyText={t("noResults")}
+                                            />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                assignForm?.formState?.errors
+                                                    ?.partnerId
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("assign")}
                                 </Button>
                             </DialogFooter>
                         </form>

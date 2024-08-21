@@ -24,20 +24,20 @@ export const GET = auth(async (req: any) => {
         switch (status) {
             case "unassigned":
                 where = {
-                    partnerId: { is: null },
-                    clientId: { is: null },
+                    partner: { is: null },
+                    client: { is: null },
                 };
                 break;
             case "assigned":
                 where = {
-                    partnerId: { isNot: null },
-                    clientId: { is: null },
+                    partner: { isNot: null },
+                    client: { is: null },
                 };
                 break;
             case "active":
                 where = {
-                    partnerId: { isNot: null },
-                    clientId: { isNot: null },
+                    partner: { isNot: null },
+                    client: { isNot: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -50,8 +50,8 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    partnerId: { isNot: null },
-                    clientId: { isNot: null },
+                    partner: { isNot: null },
+                    client: { isNot: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -64,7 +64,8 @@ export const GET = auth(async (req: any) => {
                 break;
             case "expired":
                 where = {
-                    clientId: { is: null },
+                    // clientId: { is: null },
+                    activatedAt: { is: null },
                     expiredAt: { lt: new Date() },
                 };
                 break;
@@ -93,7 +94,7 @@ export const GET = auth(async (req: any) => {
                     },
                     client: {
                         select: {
-                            name: true,
+                            acronisId: true,
                         },
                     },
                 };
@@ -104,7 +105,16 @@ export const GET = auth(async (req: any) => {
 
         const data = await prisma.license.findMany({
             where: where,
-            include: include,
+            include: {
+                ...include,
+                product: {
+                    select: {
+                        name: true,
+                        quota: true,
+                        unit: true,
+                    },
+                },
+            },
             orderBy: {
                 createdAt: "asc",
             },
@@ -136,6 +146,30 @@ export const POST = auth(async (req: any) => {
 
         const license = await req.json();
         license.createdBy = req.auth.user.email;
+
+        const checkSerial = await prisma.license.findUnique({
+            where: {
+                serialNo: license.serialNo,
+            },
+        });
+        if (checkSerial)
+            return NextResponse.json({
+                message: tm("licenseSerialExists"),
+                status: 400,
+                ok: false,
+            });
+
+        const checkKey = await prisma.license.findUnique({
+            where: {
+                key: license.key,
+            },
+        });
+        if (checkKey)
+            return NextResponse.json({
+                message: tm("licenseKeyExists"),
+                status: 400,
+                ok: false,
+            });
 
         const newLicense = await prisma.license.create({
             data: license,

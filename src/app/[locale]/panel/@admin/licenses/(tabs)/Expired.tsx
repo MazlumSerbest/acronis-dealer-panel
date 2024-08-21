@@ -39,7 +39,7 @@ export default function ExpiredTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "name",
+            accessorKey: "product",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -56,9 +56,9 @@ export default function ExpiredTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("name");
+                const data: Product = row.getValue("product");
 
-                return data || "-";
+                return data?.name || "-";
             },
         },
         {
@@ -149,19 +149,22 @@ export default function ExpiredTab() {
             },
         },
         {
-            accessorKey: "duration",
-            header: t("duration"),
-            enableGlobalFilter: false,
-        },
-        {
-            accessorKey: "quota",
+            accessorKey: "product",
             header: t("quota"),
-            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return data?.quota || "-";
+            },
         },
         {
-            accessorKey: "type",
-            header: t("type"),
-            enableGlobalFilter: false,
+            accessorKey: "product",
+            header: t("unit"),
+            cell: ({ row }) => {
+                const data: Product = row.getValue("product");
+
+                return t(data?.unit) || "-";
+            },
         },
         {
             accessorKey: "createdAt",
