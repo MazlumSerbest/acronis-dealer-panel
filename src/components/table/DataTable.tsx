@@ -25,7 +25,6 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import {
     DropdownMenu,
-    DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuLabel,
     DropdownMenuSeparator,
@@ -43,7 +42,6 @@ import { cn } from "@/lib/utils";
 import {
     Cross2Icon,
     MagicWandIcon,
-    MixerHorizontalIcon,
     PlusIcon,
 } from "@radix-ui/react-icons";
 
@@ -57,7 +55,6 @@ interface DataTableProps<TData, TValue> {
     defaultPageIndex?: number;
     defaultPageSize?: 10 | 20 | 30 | 40 | 50;
     selectable?: boolean;
-    selectOnClick?: boolean;
     facetedFilters?: {
         column: string;
         title: string;
@@ -65,6 +62,7 @@ interface DataTableProps<TData, TValue> {
     }[];
     actions?: any;
     onAddNew?: () => any;
+    selectOnClick?: (table: any, item: any) => any;
     onClick?: (item: any) => any;
     onDoubleClick?: (item: any) => any;
 }
@@ -79,10 +77,10 @@ export function DataTable<TData, TValue>({
     defaultPageIndex = 0,
     defaultPageSize = 10,
     selectable = false,
-    selectOnClick = false,
     facetedFilters,
     actions,
     onAddNew,
+    selectOnClick,
     onClick,
     onDoubleClick,
 }: DataTableProps<TData, TValue>) {
@@ -182,9 +180,7 @@ export function DataTable<TData, TValue>({
                                     className="h-8 gap-2 flex"
                                 >
                                     <MagicWandIcon className="size-4" />
-                                    <span className="">
-                                        {tc("actions")}
-                                    </span>
+                                    <span className="">{tc("actions")}</span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
@@ -208,9 +204,7 @@ export function DataTable<TData, TValue>({
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
                         >
-                            <span className="">
-                                {tc("add")}
-                            </span>
+                            <span className="">{tc("add")}</span>
                             <PlusIcon className="size-4" />
                         </Button>
                     )}
@@ -273,7 +267,7 @@ export function DataTable<TData, TValue>({
                                                 onClick
                                                     ? onClick(row)
                                                     : selectOnClick
-                                                    ? row.toggleSelected()
+                                                    ? selectOnClick(table, row)
                                                     : undefined;
                                             }}
                                             onDoubleClick={() =>
