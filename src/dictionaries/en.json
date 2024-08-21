@@ -156,11 +156,13 @@
         "license": "License",
         "key": "Key",
         "assign": "Assign",
+        "assignToPartner": "Assign to Partner",
         "clientAcronisId": "Client Acronis ID",
         "expiresAt": "Expires At",
         "expiredAt": "Expired At",
         "assignedAt": "Assigned At",
-        "activatedAt": "Activated At"
+        "activatedAt": "Activated At",
+        "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?"
     },
     "SignIn": {
         "signIn": "Sign In",

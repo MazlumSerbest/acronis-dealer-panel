@@ -6,7 +6,6 @@ import { useTranslations } from "next-intl";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
@@ -15,13 +14,12 @@ import PageHeader from "@/components/PageHeader";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { Checkbox } from "@/components/ui/checkbox";
 
 export default function TenantsPage() {
     const t = useTranslations("General");
     const router = useRouter();
     const { user: currentUser } = useUserStore();
-    const [selected, setSelected] = useState<string[]>([]);
+    // const [selected, setSelected] = useState<string[]>([]);
 
     const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
@@ -170,7 +168,6 @@ export default function TenantsPage() {
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("tenants")} />
-            {selected}
             {!data ? (
                 <Skeleton>
                     <TableSkeleton />
