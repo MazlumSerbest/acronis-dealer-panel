@@ -17,7 +17,96 @@ export const GET = auth(async (req: any) => {
                 ok: false,
             });
 
+        const status = req.nextUrl.searchParams.get("status");
+        const partnerId = req.nextUrl.searchParams.get("partnerId");
+        let where = {};
+        let include = {};
+
+        if (!partnerId)
+            return NextResponse.json({
+                message: tm("noPartnerId"),
+                status: 400,
+                ok: false,
+            });
+
+        switch (status) {
+            case "inactive":
+                where = {
+                    client: { is: null },
+                    OR: [
+                        { expiresAt: null },
+                        { expiresAt: { gt: new Date() } },
+                    ],
+                };
+                break;
+            case "active":
+                where = {
+                    client: { isNot: null },
+                    activatedAt: {
+                        not: null,
+                        gte: new Date(
+                            new Date().setFullYear(
+                                new Date().getFullYear() - 1,
+                            ),
+                        ),
+                    },
+                };
+                break;
+            case "finished":
+                where = {
+                    client: { isNot: null },
+                    activatedAt: {
+                        not: null,
+                        lt: new Date(
+                            new Date().setFullYear(
+                                new Date().getFullYear() - 1,
+                            ),
+                        ),
+                    },
+                };
+                break;
+            case "expired":
+                where = {
+                    // clientId: { is: null },
+                    activatedAt: null,
+                    expiresAt: { lt: new Date() },
+                };
+                break;
+            default:
+                break;
+        }
+
+        switch (status) {
+            case "active":
+            case "finished":
+            case "expired":
+                include = {
+                    client: {
+                        select: {
+                            acronisId: true,
+                        },
+                    },
+                };
+                break;
+            default:
+                break;
+        }
+
         const data = await prisma.license.findMany({
+            where: {
+                partnerId: partnerId,
+                ...where,
+            },
+            include: {
+                ...include,
+                product: {
+                    select: {
+                        name: true,
+                        quota: true,
+                        unit: true,
+                    },
+                },
+            },
             orderBy: {
                 createdAt: "asc",
             },

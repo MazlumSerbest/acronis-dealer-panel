@@ -26,12 +26,20 @@ export const GET = auth(async (req: any) => {
                 where = {
                     partner: { is: null },
                     client: { is: null },
+                    OR: [
+                        { expiresAt: null },
+                        { expiresAt: { gt: new Date() } },
+                    ],
                 };
                 break;
             case "assigned":
                 where = {
                     partner: { isNot: null },
                     client: { is: null },
+                    OR: [
+                        { expiresAt: null },
+                        { expiresAt: { gt: new Date() } },
+                    ],
                 };
                 break;
             case "active":
@@ -48,7 +56,7 @@ export const GET = auth(async (req: any) => {
                     },
                 };
                 break;
-            case "completed":
+            case "finished":
                 where = {
                     partner: { isNot: null },
                     client: { isNot: null },
@@ -65,8 +73,8 @@ export const GET = auth(async (req: any) => {
             case "expired":
                 where = {
                     // clientId: { is: null },
-                    activatedAt: { is: null },
-                    expiredAt: { lt: new Date() },
+                    activatedAt: null,
+                    expiresAt: { lt: new Date() },
                 };
                 break;
             default:
@@ -84,7 +92,7 @@ export const GET = auth(async (req: any) => {
                 };
                 break;
             case "active":
-            case "completed":
+            case "finished":
             case "expired":
                 include = {
                     partner: {
