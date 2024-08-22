@@ -315,7 +315,6 @@ export default function UnassignedTab() {
                             key="assign"
                             onClick={() => {
                                 setAssignOpen(true);
-                                console.log(selected);
                             }}
                         >
                             {t("assignToPartner")}

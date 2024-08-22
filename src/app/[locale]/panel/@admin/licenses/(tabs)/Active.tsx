@@ -106,7 +106,7 @@ export default function ActiveTab() {
             cell: ({ row }) => {
                 const data: Client = row.getValue("client");
 
-                return data.acronisId || "-";
+                return data?.acronisId || "-";
             },
             filterFn: (rows: any, id, value) => {
                 return rows.filter((row: any) => {

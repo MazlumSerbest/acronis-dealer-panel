@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import UnassignedTab from "./(tabs)/Unassigned";
 import AssignedTab from "./(tabs)/Assigned";
 import ActiveTab from "./(tabs)/Active";
-import CompletedTab from "./(tabs)/Completed";
+import FinishedTab from "./(tabs)/Finished";
 import ExpiredTab from "./(tabs)/Expired";
 
 export default function LicensesPage() {
@@ -17,7 +17,7 @@ export default function LicensesPage() {
                 <TabsTrigger value="unassigned">{tl("unassigned")}</TabsTrigger>
                 <TabsTrigger value="assigned">{tl("assigned")}</TabsTrigger>
                 <TabsTrigger value="active">{tl("active")}</TabsTrigger>
-                <TabsTrigger value="completed">{tl("completed")}</TabsTrigger>
+                <TabsTrigger value="finished">{tl("finished")}</TabsTrigger>
                 <TabsTrigger value="expired">{tl("expired")}</TabsTrigger>
             </TabsList>
             <TabsContent value="unassigned">
@@ -29,8 +29,8 @@ export default function LicensesPage() {
             <TabsContent value="active">
                 <ActiveTab />
             </TabsContent>
-            <TabsContent value="completed">
-                <CompletedTab />
+            <TabsContent value="finished">
+                <FinishedTab />
             </TabsContent>
             <TabsContent value="expired">
                 <ExpiredTab />

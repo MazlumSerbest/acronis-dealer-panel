@@ -12,14 +12,14 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function CompletedTab() {
+export default function FinishedTab() {
     const t = useTranslations("General");
     const router = useRouter();
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/admin/license?status=completed`,
+        `/api/admin/license?status=finished`,
         null,
         {
             revalidateOnFocus: false,
@@ -104,7 +104,7 @@ export default function CompletedTab() {
             cell: ({ row }) => {
                 const data: Client = row.getValue("client");
 
-                return data.acronisId || "-";
+                return data?.acronisId || "-";
             },
             filterFn: (rows: any, id, value) => {
                 return rows.filter((row: any) => {

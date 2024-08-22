@@ -90,7 +90,7 @@ export default function ExpiredTab() {
             cell: ({ row }) => {
                 const data: Partner = row.getValue("partner");
 
-                return data.name || "-";
+                return data?.name || "-";
             },
             filterFn: (rows: any, id, value) => {
                 return rows.filter((row: any) => {
@@ -102,24 +102,7 @@ export default function ExpiredTab() {
             },
         },
         {
-            accessorKey: "client",
-            header: t("clientAcronisId"),
-            cell: ({ row }) => {
-                const data: Client = row.getValue("client");
-
-                return data.acronisId || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const client = row.original.client;
-                    return client.acronisId
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
-            },
-        },
-        {
-            accessorKey: "expiredAt",
+            accessorKey: "expiresAt",
             header: t("expiredAt"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
