@@ -108,9 +108,9 @@ const applicationFormSchema = z.object({
     taxCertificate: z.instanceof(File),
     signatureCircular: z.instanceof(File, { message: "" }),
     tradeRegistry: z.instanceof(File).optional(),
-    personalData: z.literal<boolean>(true, {
-        errorMap: () => ({ message: "Application.personalData.required" }),
-    }),
+    // personalData: z.literal<boolean>(true, {
+    //     errorMap: () => ({ message: "Application.personalData.required" }),
+    // }),
     // turnstile: z.literal<boolean>(true, {
     //     errorMap: () => ({ message: "Application.turnstile.required" }),
     // }),
@@ -842,7 +842,7 @@ export default function Application() {
                                 )}
                             </div>
 
-                            <div className="flex justify-end">
+                            {/* <div className="flex justify-end">
                                 <FormField
                                     control={form.control}
                                     name="personalData"
@@ -866,7 +866,7 @@ export default function Application() {
                                         </FormItem>
                                     )}
                                 />
-                            </div>
+                            </div> */}
 
                             {/* <div className="flex place-items-end">
                                 <div className="flex-1"></div>
