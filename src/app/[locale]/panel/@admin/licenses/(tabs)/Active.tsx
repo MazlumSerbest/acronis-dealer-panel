@@ -14,11 +14,8 @@ import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function ActiveTab() {
     const t = useTranslations("General");
-    const router = useRouter();
-    const { toast } = useToast();
-    const [open, setOpen] = useState(false);
 
-    const { data, error, isLoading, mutate } = useSWR(
+    const { data, error } = useSWR(
         `/api/admin/license?status=active`,
         null,
         {

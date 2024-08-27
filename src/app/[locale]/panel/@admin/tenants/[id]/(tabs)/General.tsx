@@ -46,8 +46,7 @@ const partnerFormSchema = z.object({
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
-export default function GeneralTab(props: Props) {
-    const { t, tenant } = props;
+export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
@@ -61,7 +60,7 @@ export default function GeneralTab(props: Props) {
     } = useSWR(`/api/partner/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            const daysDiff = calculateDaysUntilAnniversary(data.billingDate)
+            const daysDiff = calculateDaysUntilAnniversary(data.billingDate);
             seDaysUntilNextBillingDate(daysDiff);
         },
     });
@@ -107,6 +106,7 @@ export default function GeneralTab(props: Props) {
     }
     //#endregion
 
+    if (usagesError) return <div>{t("failedToLoad")}</div>;
     return (
         <div className="grid grid-cols-3 gap-4">
             {usages?.usages?.items?.some(

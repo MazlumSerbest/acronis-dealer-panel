@@ -38,8 +38,7 @@ const clientFormSchema = z.object({
 
 type ClientFormValues = z.infer<typeof clientFormSchema>;
 
-export default function GeneralTab(props: Props) {
-    const { t, tenant } = props;
+export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
     const { user } = useUserStore();
     const [edit, setEdit] = useState(false);

@@ -12,9 +12,7 @@ type Props = {
     tenant: Tenant;
 };
 
-export default function LicensesTab(props: Props) {
-    const { t, tenant } = props;
-    
+export default function LicensesTab({ t, tenant }: Props) {
     const router = useRouter();
 
     //#region Table
