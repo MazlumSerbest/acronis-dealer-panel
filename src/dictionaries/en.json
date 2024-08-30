@@ -162,7 +162,9 @@
         "expiredAt": "Expired At",
         "assignedAt": "Assigned At",
         "activatedAt": "Activated At",
-        "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?"
+        "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?",
+        "clientNotFound": "There is no panel client with this Acronis ID.",
+        "backToSignIn": "Back to Sign In"
     },
     "SignIn": {
         "signIn": "Sign In",
