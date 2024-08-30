@@ -10,17 +10,26 @@ export const GET = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const data = await prisma.product.findUnique({
+        const data = await prisma.partner.findUnique({
             where: {
-                id: params?.id as string,
+                acronisId: params?.acronisId as string,
             },
+            include: {
+                users: {
+                    select: {
+                        id: true,
+                        name: true,
+                        email: true,
+                    }
+                }
+            }
         });
 
         return NextResponse.json(data);
@@ -40,49 +49,33 @@ export const PUT = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const product: any = await req.json();
-        product.updatedAt = new Date().toISOString();
-        product.updatedBy = req.auth.user.email;
+        const partner: any = await req.json();
+        partner.updatedAt = new Date().toISOString();
+        partner.updatedBy = req.auth.user.email;
 
-        const checkCode = await prisma.product.findUnique({
+        const updatedPartner = await prisma.partner.update({
+            data: partner,
             where: {
-                code: product.code,
-            },
-            select: {
-                id: true,
-                code: true,
-            },
-        });
-        if (checkCode && checkCode?.id != product.id)
-            return NextResponse.json({
-                message: "Bu kod önceden kullanılmıştır!",
-                status: 400,
-                ok: false,
-            });
-
-        const updatedProduct = await prisma.product.update({
-            data: product,
-            where: {
-                id: params?.id as string,
+                acronisId: params?.acronisId as string,
             },
         });
 
-        if (updatedProduct.id) {
+        if (updatedPartner.id) {
             return NextResponse.json({
-                message: "Ürün başarıyla güncellendi!",
+                message: "Partner başarıyla güncellendi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Ürün güncellenemedi!",
+                message: "Partner güncellenemedi!",
                 status: 400,
                 ok: false,
             });

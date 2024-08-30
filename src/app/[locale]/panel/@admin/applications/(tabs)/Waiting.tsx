@@ -15,7 +15,7 @@ export default function WaitingTab() {
     const t = useTranslations("General");
 
     const { data, error, isLoading } = useSWR(
-        `/api/application?status=waiting`,
+        `/api/admin/application?status=waiting`,
         null,
         {
             revalidateOnFocus: false,

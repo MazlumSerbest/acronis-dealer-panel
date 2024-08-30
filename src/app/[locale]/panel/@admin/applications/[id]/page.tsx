@@ -111,7 +111,7 @@ export default function ApplicationDetail({
     const [tenantName, setTenantName] = useState("");
 
     const { data, error, mutate } = useSWR(
-        `/api/application/${params.id}`,
+        `/api/admin/application/${params.id}`,
         null,
         {
             revalidateOnFocus: false,
@@ -125,7 +125,7 @@ export default function ApplicationDetail({
     });
 
     function onSubmit(values: ApplicationFormValues) {
-        fetch(`/api/application/${params.id}`, {
+        fetch(`/api/admin/application/${params.id}`, {
             method: "PUT",
             body: JSON.stringify(values),
             headers: { "Content-Type": "application/json" },
@@ -161,7 +161,7 @@ export default function ApplicationDetail({
             applicationId: params.id,
         };
 
-        fetch("/api/partner", {
+        fetch("/api/admin/partner", {
             method: "POST",
             body: JSON.stringify(partner),
             headers: { "Content-Type": "application/json" },

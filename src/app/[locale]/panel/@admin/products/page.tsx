@@ -72,7 +72,7 @@ export default function ProductsPage() {
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/product`, null, {
+    const { data, error, isLoading, mutate } = useSWR(`/api/admin/product`, null, {
         revalidateOnFocus: false,
     });
 
@@ -83,7 +83,7 @@ export default function ProductsPage() {
 
     function onSubmit(values: ProductFormValues) {
         if (isNew) {
-            fetch("/api/product", {
+            fetch("/api/admin/product", {
                 method: "POST",
                 body: JSON.stringify(values),
             })
@@ -104,7 +104,7 @@ export default function ProductsPage() {
                     }
                 });
         } else {
-            fetch(`/api/product/${values.id}`, {
+            fetch(`/api/admin/product/${values.id}`, {
                 method: "PUT",
                 body: JSON.stringify(values),
             })

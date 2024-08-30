@@ -24,7 +24,7 @@ export default function PartnersPage() {
     const router = useRouter();
     const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading } = useSWR(`/api/partner`, null, {
+    const { data, error, isLoading } = useSWR(`/api/admin/partner`, null, {
         revalidateOnFocus: false,
     });
 

@@ -10,7 +10,7 @@ export const GET = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
@@ -66,7 +66,7 @@ export const PUT = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
@@ -129,7 +129,7 @@ export const DELETE = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,

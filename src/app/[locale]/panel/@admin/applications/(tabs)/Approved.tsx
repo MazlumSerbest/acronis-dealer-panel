@@ -15,7 +15,7 @@ export default function ApprovedTab() {
     const t = useTranslations("General");
 
     const { data, error, isLoading } = useSWR(
-        `/api/application?status=approved`,
+        `/api/admin/application?status=approved`,
         null,
         {
             revalidateOnFocus: false,

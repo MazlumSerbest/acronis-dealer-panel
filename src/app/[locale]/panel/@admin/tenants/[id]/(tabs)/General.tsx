@@ -83,7 +83,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             billingDate: values.billingDate?.toISOString(),
         };
         if (partner)
-            fetch(`/api/partner/${tenant?.id}`, {
+            fetch(`/api/admin/partner/${tenant?.id}`, {
                 method: "PUT",
                 body: JSON.stringify(existingPartner),
             })

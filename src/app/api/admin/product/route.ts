@@ -3,33 +3,24 @@ import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
 
-export const GET = auth(async (req: any, { params }) => {
+export const GET = auth(async (req: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const data = await prisma.partner.findUnique({
-            where: {
-                acronisId: params?.acronisId as string,
+        const data = await prisma.product.findMany({
+            orderBy: {
+                createdAt: "asc",
             },
-            include: {
-                users: {
-                    select: {
-                        id: true,
-                        name: true,
-                        email: true,
-                    }
-                }
-            }
         });
 
         return NextResponse.json(data);
@@ -42,40 +33,50 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-export const PUT = auth(async (req: any, { params }) => {
+export const POST = auth(async (req: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const partner: any = await req.json();
-        partner.updatedAt = new Date().toISOString();
-        partner.updatedBy = req.auth.user.email;
+        const product = await req.json();
+        product.createdBy = req.auth.user.email;
 
-        const updatedPartner = await prisma.partner.update({
-            data: partner,
+        const checkCode = await prisma.product.findUnique({
             where: {
-                acronisId: params?.acronisId as string,
+                code: product.code,
+            },
+            select: {
+                code: true,
             },
         });
-
-        if (updatedPartner.id) {
+        if (checkCode)
             return NextResponse.json({
-                message: "Partner başarıyla güncellendi!",
+                message: "Bu kod kullanılmıştır!",
+                status: 400,
+                ok: false,
+            });
+
+        const newProduct = await prisma.product.create({
+            data: product,
+        });
+        if (newProduct.id) {
+            return NextResponse.json({
+                message: "Ürün başarıyla kaydedildi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Partner güncellenemedi!",
+                message: "Ürün kaydedilemedi!",
                 status: 400,
                 ok: false,
             });

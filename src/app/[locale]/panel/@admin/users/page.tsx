@@ -81,7 +81,7 @@ export default function UsersPage() {
 
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/user`, null, {
+    const { data, error, isLoading, mutate } = useSWR(`/api/admin/user`, null, {
         revalidateOnFocus: false,
     });
 
@@ -92,7 +92,7 @@ export default function UsersPage() {
 
     function onSubmit(values: UserFormValues) {
         if (isNew) {
-            fetch("/api/user", {
+            fetch("/api/admin/user", {
                 method: "POST",
                 body: JSON.stringify(values),
             })
@@ -113,7 +113,7 @@ export default function UsersPage() {
                     }
                 });
         } else {
-            fetch(`/api/user/${values.id}`, {
+            fetch(`/api/admin/user/${values.id}`, {
                 method: "PUT",
                 body: JSON.stringify(values),
             })

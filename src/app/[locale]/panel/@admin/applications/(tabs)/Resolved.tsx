@@ -15,7 +15,7 @@ export default function ResolvedTab() {
     const t = useTranslations("General");
 
     const { data, error, isLoading } = useSWR(
-        "/api/application?status=resolved",
+        "/api/admin/application?status=resolved",
         null,
         {
             revalidateOnFocus: false,
