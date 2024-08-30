@@ -19,15 +19,16 @@ export const GET = auth(async (req: any) => {
 
         const status = req.nextUrl.searchParams.get("status");
         const partnerId = req.nextUrl.searchParams.get("partnerId");
+        const clientId = req.nextUrl.searchParams.get("clientId");
         let where = {};
         let include = {};
 
-        if (!partnerId)
-            return NextResponse.json({
-                message: tm("noPartnerId"),
-                status: 400,
-                ok: false,
-            });
+        // if (!partnerId)
+        //     return NextResponse.json({
+        //         message: tm("noPartnerId"),
+        //         status: 400,
+        //         ok: false,
+        //     });
 
         switch (status) {
             case "inactive":
@@ -92,11 +93,22 @@ export const GET = auth(async (req: any) => {
                 break;
         }
 
-        const data = await prisma.license.findMany({
-            where: {
+        if (partnerId) {
+            where = {
                 partnerId: partnerId,
                 ...where,
-            },
+            };
+        }
+
+        if (clientId) {
+            where = {
+                clientId: clientId,
+                ...where,
+            };
+        }
+
+        const data = await prisma.license.findMany({
+            where: where,
             include: {
                 ...include,
                 product: {

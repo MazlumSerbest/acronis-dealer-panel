@@ -1,27 +1,42 @@
+import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useTranslations } from "next-intl";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { LuChevronsUpDown } from "react-icons/lu";
+import { DataTable } from "@/components/table/DataTable";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
-import { useTranslations } from "next-intl";
-import ActiveTab from "./(licenseTabs)/Active";
-import FinishedTab from "./(licenseTabs)/Finished";
+import { LuChevronsUpDown } from "react-icons/lu";
 
 type Props = {
-    t: Function;
     tenant: Tenant;
 };
 
-export default function LicensesTab({ t, tenant }: Props) {
-    const tl = useTranslations("Licenses");
+export default function FinishedTab({ tenant }: Props) {
+    const t = useTranslations("General");
+    const [license, setLicense] = useState();
+
+    const { data, error, isLoading, mutate } = useSWR(`/api/client/${tenant?.id}`, null, {
+        revalidateOnFocus: false,
+        onSuccess: (data) => {
+            fetch(`/api/license?status=finished&clientId=${data.id}`)
+                .then((res) => res.json())
+                .then((res) => setLicense(res));
+        },
+    });
+
+    // const { data: licenseData, error: licenseError } = useSWR(
+    //     `/api/admin/license?status=finished&partnerId=${?.id}`,
+    //     null,
+    //     {
+    //         revalidateOnFocus: false,
+    //     },
+    // );
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
-        assignedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -73,6 +88,26 @@ export default function LicensesTab({ t, tenant }: Props) {
                 const data: string = row.getValue("serialNo");
 
                 return data || "-";
+            },
+        },
+        {
+            accessorKey: "assignedAt",
+            header: t("assignedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("assignedAt");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "activatedAt",
+            header: t("activatedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("activatedAt");
+
+                return DateTimeFormat(data);
             },
         },
         {
@@ -136,19 +171,24 @@ export default function LicensesTab({ t, tenant }: Props) {
     ];
     //#endregion
 
-    // if (error) return <div>{t("failedToLoad")}</div>;
+    useEffect(() => {
+        mutate();
+    }, [mutate]);
+    
+    if (error) return <div>{t("failedToLoad")}</div>;
+    if (!data)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
     return (
-        <Tabs defaultValue="active" className="flex flex-col w-full">
-            <TabsList className="max-w-fit">
-                <TabsTrigger value="active">{tl("active")}</TabsTrigger>
-                <TabsTrigger value="finished">{tl("finished")}</TabsTrigger>
-            </TabsList>
-            <TabsContent value="active">
-                <ActiveTab tenant={tenant} />
-            </TabsContent>
-            <TabsContent value="finished">
-                <FinishedTab tenant={tenant} />
-            </TabsContent>
-        </Tabs>
+        <DataTable
+            zebra
+            columns={columns}
+            data={license || []}
+            visibleColumns={visibleColumns}
+            isLoading={isLoading}
+        />
     );
 }
