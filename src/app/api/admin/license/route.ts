@@ -18,6 +18,8 @@ export const GET = auth(async (req: any) => {
             });
 
         const status = req.nextUrl.searchParams.get("status");
+        const partnerId = req.nextUrl.searchParams.get("partnerId");
+        const clientId = req.nextUrl.searchParams.get("clientId");
         let where = {};
         let include = {};
 
@@ -109,6 +111,20 @@ export const GET = auth(async (req: any) => {
                 break;
             default:
                 break;
+        }
+
+        if (partnerId) {
+            where = {
+                partnerId: partnerId,
+                ...where,
+            };
+        }
+
+        if (clientId) {
+            where = {
+                clientId: clientId,
+                ...where,
+            };
         }
 
         const data = await prisma.license.findMany({

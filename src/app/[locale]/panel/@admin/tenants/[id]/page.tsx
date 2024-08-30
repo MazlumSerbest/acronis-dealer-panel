@@ -83,15 +83,7 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="general">
-                        <Suspense
-                            fallback={
-                                <Skeleton>
-                                    <DefaultSkeleton />
-                                </Skeleton>
-                            }
-                        >
-                            <GeneralTab t={t} tenant={data?.tenant} />
-                        </Suspense>
+                        <GeneralTab t={t} tenant={data?.tenant} />
                     </TabsContent>
                     <TabsContent value="clients">
                         {!isMutating && children ? (
@@ -103,15 +95,7 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                         )}
                     </TabsContent>
                     <TabsContent value="licenses">
-                        <Suspense
-                            fallback={
-                                <Skeleton>
-                                    <DefaultSkeleton />
-                                </Skeleton>
-                            }
-                        >
-                            <LicensesTab t={t} tenant={data?.tenant} />
-                        </Suspense>
+                        <LicensesTab t={t} tenant={data?.tenant} />
                     </TabsContent>
                 </Tabs>
                 {/* <Tabs
