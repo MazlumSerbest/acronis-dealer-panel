@@ -220,6 +220,7 @@ export default function InactiveTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
+            onAddNew={() => {}}
             actions={
                 selected.length > 0 && [
                     <DropdownMenuItem

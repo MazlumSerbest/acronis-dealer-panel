@@ -65,10 +65,13 @@ export default function NavLayout() {
                 <Separator />
 
                 {userTenant ? (
-                    <div className="flex items-center w-52">
-                        <h1 className="font-semibold text-blue-400">
-                            {userTenant.name}
+                    <div className="flex flex-col w-52 gap-1">
+                        <h1 className="text-lg font-semibold text-blue-400">
+                            {currentUser?.role == "admin" ? "Admin Panel" : "Partner Panel"}
                         </h1>
+                        <h2 className="text-sm font-semibold text-zinc-600">
+                            {currentUser?.role == "partner" && userTenant.name}
+                        </h2>
                     </div>
                 ) : (
                     <div className="animate-pulse flex items-center">
