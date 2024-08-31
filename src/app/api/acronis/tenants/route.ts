@@ -49,14 +49,14 @@ export const POST = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const client: any = await req.json();
+        const customer: any = await req.json();
         const authorization = `Bearer ${token}`;
         const tenant = {
             kind: "customer",
             language: "tr",
-            name: client.name,
-            parent_id: client.parent_id,
-            contact: client.contact,
+            name: customer.name,
+            parent_id: customer.parent_id,
+            contact: customer.contact,
         };
 
         const tenantRes = await fetch(
@@ -124,8 +124,8 @@ export const POST = auth(async (req: any, { params }) => {
 
         const user = {
             tenant_id: newTenant.id,
-            login: client.login,
-            contact: client.contact,
+            login: customer.login,
+            contact: customer.contact,
         };
 
         const userRes = await fetch(`${process.env.ACRONIS_API_V2_URL}/users`, {

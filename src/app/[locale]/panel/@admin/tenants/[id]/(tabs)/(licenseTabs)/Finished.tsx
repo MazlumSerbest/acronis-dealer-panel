@@ -21,15 +21,13 @@ export default function FinishedTab({ tenant }: Props) {
     const [license, setLicense] = useState();
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/${tenant.kind == "partner" ? "partner" : "client"}/${tenant?.id}`,
+        `/api/${tenant.kind}/${tenant?.id}`,
         null,
         {
             revalidateOnFocus: false,
             onSuccess: (data) => {
                 fetch(
-                    `/api/admin/license?status=finished&${
-                        tenant.kind == "partner" ? "partner" : "client"
-                    }Id=${data.id}`,
+                    `/api/admin/license?status=finished&${tenant.kind}Id=${data.id}`,
                 )
                     .then((res) => res.json())
                     .then((res) => setLicense(res));
@@ -118,17 +116,17 @@ export default function FinishedTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "client",
-            header: t("clientAcronisId"),
+            accessorKey: "customer",
+            header: t("customerAcronisId"),
             cell: ({ row }) => {
-                const data: Client = row.getValue("client");
+                const data: Customer = row.getValue("customer");
 
                 return data?.acronisId || "-";
             },
             filterFn: (rows: any, id, value) => {
                 return rows.filter((row: any) => {
-                    const client = row.original.client;
-                    return client.acronisId
+                    const customer = row.original.customer;
+                    return customer.acronisId
                         .toLowerCase()
                         .includes(value.toLowerCase());
                 });
@@ -219,7 +217,7 @@ export default function FinishedTab({ tenant }: Props) {
         mutate();
     }, [mutate]);
 
-    if (error) return <div>{t("clientNotFound")}</div>;
+    if (error) return <div>{t("customerNotFound")}</div>;
     if (!data)
         return (
             <Skeleton>

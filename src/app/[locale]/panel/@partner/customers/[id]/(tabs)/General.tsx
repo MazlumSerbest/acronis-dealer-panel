@@ -32,11 +32,11 @@ type Props = {
     tenant: Tenant;
 };
 
-const clientFormSchema = z.object({
+const customerFormSchema = z.object({
     billingDate: z.date().optional(),
 });
 
-type ClientFormValues = z.infer<typeof clientFormSchema>;
+type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
@@ -45,10 +45,10 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
 
     const {
-        data: client,
-        error: clientError,
-        mutate: clientMutate,
-    } = useSWR(`/api/client/${tenant?.id}`, null, {
+        data: customer,
+        error: customerError,
+        mutate: customerMutate,
+    } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             const daysDiff = calculateDaysUntilAnniversary(data.billingDate);
@@ -65,24 +65,24 @@ export default function GeneralTab({ t, tenant }: Props) {
     });
 
     //#region Form
-    const form = useForm<ClientFormValues>({
-        resolver: zodResolver(clientFormSchema),
+    const form = useForm<CustomerFormValues>({
+        resolver: zodResolver(customerFormSchema),
     });
 
-    async function onSubmit(values: ClientFormValues) {
-        const newClient = {
+    async function onSubmit(values: CustomerFormValues) {
+        const newCustomer = {
             acronisId: tenant?.id,
             billingDate: values.billingDate?.toISOString(),
             partnerId: user?.partnerId,
         };
-        const existingClient = {
+        const existingCustomer = {
             billingDate: values.billingDate?.toISOString(),
         };
 
-        if (client)
-            fetch(`/api/client/${tenant?.id}`, {
+        if (customer)
+            fetch(`/api/customer/${tenant?.id}`, {
                 method: "PUT",
-                body: JSON.stringify(existingClient),
+                body: JSON.stringify(existingCustomer),
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -90,7 +90,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         toast({
                             description: res.message,
                         });
-                        clientMutate();
+                        customerMutate();
                         setEdit(false);
                     } else {
                         toast({
@@ -101,9 +101,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                     }
                 });
         else
-            fetch(`/api/client`, {
+            fetch(`/api/customer`, {
                 method: "POST",
-                body: JSON.stringify(newClient),
+                body: JSON.stringify(newCustomer),
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -111,7 +111,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         toast({
                             description: res.message,
                         });
-                        clientMutate();
+                        customerMutate();
                         setEdit(false);
                     } else {
                         toast({
@@ -136,7 +136,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <LuAlertTriangle className="size-4" />
                     <AlertTitle>Limit Exceeded</AlertTitle>
                     <AlertDescription>
-                        Some of this clients usages are exceeding the quota
+                        Some of this customers usages are exceeding the quota
                         limit.
                     </AlertDescription>
                 </Alert>
@@ -147,14 +147,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <CardHeader>
                         <CardTitle className="flex flex-row justify-between">
                             <h2 className="flex-none font-medium text-xl">
-                                Client Information
+                                Customer Information
                             </h2>
                             <Button
                                 disabled={edit}
                                 size="sm"
                                 className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                                 onClick={() => {
-                                    form.reset(client);
+                                    form.reset(customer);
                                     setEdit(true);
                                 }}
                             >
@@ -225,7 +225,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     ) : (
                                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                             {`${DateFormat(
-                                                client?.billingDate || "",
+                                                customer?.billingDate || "",
                                             )} ${
                                                 daysUntilNextBillingDate
                                                     ? t(

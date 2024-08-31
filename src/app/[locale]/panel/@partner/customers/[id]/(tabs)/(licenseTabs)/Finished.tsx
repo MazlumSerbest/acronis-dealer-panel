@@ -18,10 +18,10 @@ export default function FinishedTab({ tenant }: Props) {
     const t = useTranslations("General");
     const [license, setLicense] = useState();
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/client/${tenant?.id}`, null, {
+    const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            fetch(`/api/license?status=finished&clientId=${data.id}`)
+            fetch(`/api/license?status=finished&customerId=${data.id}`)
                 .then((res) => res.json())
                 .then((res) => setLicense(res));
         },

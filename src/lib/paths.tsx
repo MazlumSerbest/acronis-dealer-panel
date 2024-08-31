@@ -99,12 +99,12 @@ export const partnerPaths: Path[] = [
         ),
     },
     {
-        path: "/panel/clients",
-        key: "clients",
+        path: "/panel/customers",
+        key: "customers",
         icon: (
             <LuHeartHandshake
                 className="size-6 group-hover:text-blue-400"
-                aria-label="Clients Page"
+                aria-label="Customers Page"
             />
         ),
     },

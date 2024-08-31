@@ -27,7 +27,7 @@ export default function ExpiredTab() {
 
     //#region Table
     const visibleColumns = {
-        clientAcronisId: false,
+        customerAcronisId: false,
         assignedAt: false,
         activatedAt: false,
         createdAt: false,

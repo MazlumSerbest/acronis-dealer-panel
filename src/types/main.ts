@@ -34,11 +34,11 @@ type Partner = Entity & {
     billingDate?: string;
     application?: Application;
     users?: User[];
-    clients?: Client[];
+    customers?: Customer[];
     licenses?: License[];
 };
 
-type Client = Entity & {
+type Customer = Entity & {
     partnerId: string;
     acronisId?: string;
     billingDate?: string;

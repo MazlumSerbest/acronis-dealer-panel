@@ -326,7 +326,7 @@ export default function ApplicationDetail({
                                             className="bg-blue-400 hover:bg-blue-400/90"
                                             onClick={() => {
                                                 fetch(
-                                                    `/api/application/${data.id}/approve`,
+                                                    `/api/admin/application/${data.id}/approve`,
                                                     {
                                                         method: "PUT",
                                                     },

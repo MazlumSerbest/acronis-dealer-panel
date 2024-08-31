@@ -14,7 +14,7 @@ import Skeleton, {
     DefaultSkeleton,
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
-import ClientsTab from "./(tabs)/Clients";
+import CustomersTab from "./(tabs)/Customers";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
 
@@ -74,8 +74,8 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                             {t("general")}
                         </TabsTrigger>
                         {currentTenant?.kind == "partner" && (
-                            <TabsTrigger value="clients" className="w-full">
-                                {t("clients")}
+                            <TabsTrigger value="customers" className="w-full">
+                                {t("customers")}
                             </TabsTrigger>
                         )}
                         <TabsTrigger value="licenses" className="w-full">
@@ -85,9 +85,9 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data?.tenant} />
                     </TabsContent>
-                    <TabsContent value="clients">
+                    <TabsContent value="customers">
                         {!isMutating && children ? (
-                            <ClientsTab t={t} clients={children} />
+                            <CustomersTab t={t} customers={children} />
                         ) : (
                             <Skeleton>
                                 <TableSkeleton />

@@ -15,17 +15,13 @@ import { LuChevronsUpDown } from "react-icons/lu";
 export default function ExpiredTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
-        `/api/admin/license?status=expired`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const { data, error } = useSWR(`/api/admin/license?status=expired`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Table
     const visibleColumns = {
-        clientAcronisId: false,
+        customerAcronisId: false,
         assignedAt: false,
         activatedAt: false,
         createdAt: false,

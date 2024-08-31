@@ -57,7 +57,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         data: partner,
         error: partnerError,
         mutate: partnerMutate,
-    } = useSWR(`/api/partner/${tenant?.id}`, null, {
+    } = useSWR(`/api/admin/partner/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             const daysDiff = calculateDaysUntilAnniversary(data.billingDate);
@@ -320,7 +320,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
-                                                        fetch(`/api/user`, {
+                                                        fetch(`/api/admin/user`, {
                                                             method: "POST",
                                                             body: JSON.stringify(
                                                                 {
@@ -398,7 +398,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
-                                                        fetch(`/api/partner`, {
+                                                        fetch(`/api/admin/partner`, {
                                                             method: "POST",
                                                             body: JSON.stringify(
                                                                 {

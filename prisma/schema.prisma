@@ -87,13 +87,13 @@ model Partner {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  clients     Client[]
+  customers   Customer[]
   licenses    License[]
   users       User[]
   application Application? @relation(fields: [applicationId], references: [id])
 }
 
-model Client {
+model Customer {
   id          String    @id @default(cuid())
   partnerId   String
   acronisId   String?   @unique
@@ -109,12 +109,12 @@ model Client {
 }
 
 model License {
-  id        String  @id @default(cuid())
-  productId String
-  partnerId String?
-  clientId  String?
-  key       String  @unique
-  serialNo  String  @unique
+  id         String  @id @default(cuid())
+  productId  String
+  partnerId  String?
+  customerId String?
+  key        String  @unique
+  serialNo   String  @unique
 
   expiresAt   DateTime?
   assignedAt  DateTime?
@@ -125,9 +125,9 @@ model License {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  product Product  @relation(fields: [productId], references: [id])
-  partner Partner? @relation(fields: [partnerId], references: [id])
-  client  Client?  @relation(fields: [clientId], references: [id])
+  product  Product   @relation(fields: [productId], references: [id])
+  partner  Partner?  @relation(fields: [partnerId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
 }
 
 model Product {

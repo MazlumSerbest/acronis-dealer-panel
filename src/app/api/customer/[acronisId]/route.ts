@@ -17,7 +17,7 @@ export const GET = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const data = await prisma.client.findUnique({
+        const data = await prisma.customer.findUnique({
             where: {
                 acronisId: params?.acronisId as string,
             },
@@ -47,18 +47,18 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const client: any = await req.json();
-        client.updatedAt = new Date().toISOString();
-        client.updatedBy = req.auth.user.email;
+        const customer: any = await req.json();
+        customer.updatedAt = new Date().toISOString();
+        customer.updatedBy = req.auth.user.email;
 
-        const updatedClient = await prisma.client.update({
-            data: client,
+        const updatedCustomer = await prisma.customer.update({
+            data: customer,
             where: {
                 acronisId: params?.acronisId as string,
             },
         });
 
-        if (updatedClient.id) {
+        if (updatedCustomer.id) {
             return NextResponse.json({
                 message: "Müşteri başarıyla güncellendi!",
                 status: 200,

@@ -19,7 +19,7 @@ export const GET = auth(async (req: any) => {
 
         const status = req.nextUrl.searchParams.get("status");
         const partnerId = req.nextUrl.searchParams.get("partnerId");
-        const clientId = req.nextUrl.searchParams.get("clientId");
+        const customerId = req.nextUrl.searchParams.get("customerId");
         let where = {};
         let include = {};
 
@@ -27,7 +27,7 @@ export const GET = auth(async (req: any) => {
             case "unassigned":
                 where = {
                     partner: { is: null },
-                    client: { is: null },
+                    customer: { is: null },
                     OR: [
                         { expiresAt: null },
                         { expiresAt: { gt: new Date() } },
@@ -37,7 +37,7 @@ export const GET = auth(async (req: any) => {
             case "assigned":
                 where = {
                     partner: { isNot: null },
-                    client: { is: null },
+                    customer: { is: null },
                     OR: [
                         { expiresAt: null },
                         { expiresAt: { gt: new Date() } },
@@ -47,7 +47,7 @@ export const GET = auth(async (req: any) => {
             case "active":
                 where = {
                     partner: { isNot: null },
-                    client: { isNot: null },
+                    customer: { isNot: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -61,7 +61,7 @@ export const GET = auth(async (req: any) => {
             case "finished":
                 where = {
                     partner: { isNot: null },
-                    client: { isNot: null },
+                    customer: { isNot: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -74,7 +74,7 @@ export const GET = auth(async (req: any) => {
                 break;
             case "expired":
                 where = {
-                    // clientId: { is: null },
+                    // customerId: { is: null },
                     activatedAt: null,
                     expiresAt: { lt: new Date() },
                 };
@@ -102,7 +102,7 @@ export const GET = auth(async (req: any) => {
                             name: true,
                         },
                     },
-                    client: {
+                    customer: {
                         select: {
                             acronisId: true,
                         },
@@ -120,9 +120,9 @@ export const GET = auth(async (req: any) => {
             };
         }
 
-        if (clientId) {
+        if (customerId) {
             where = {
-                clientId: clientId,
+                customerId: customerId,
                 ...where,
             };
         }

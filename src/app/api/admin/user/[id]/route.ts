@@ -10,7 +10,7 @@ export const GET = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (req.auth.user.role !== "admin")
+        if (!req.auth)
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,

@@ -98,17 +98,17 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "client",
-            header: t("clientAcronisId"),
+            accessorKey: "customer",
+            header: t("customerAcronisId"),
             cell: ({ row }) => {
-                const data: Client = row.getValue("client");
+                const data: Customer = row.getValue("customer");
 
                 return data?.acronisId || "-";
             },
             filterFn: (rows: any, id, value) => {
                 return rows.filter((row: any) => {
-                    const client = row.original.client;
-                    return client.acronisId
+                    const customer = row.original.customer;
+                    return customer.acronisId
                         .toLowerCase()
                         .includes(value.toLowerCase());
                 });

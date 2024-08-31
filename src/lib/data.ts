@@ -1,5 +1,5 @@
 export async function getPartners(forListBox?: boolean) {
-    const res = await fetch("/api/partner");
+    const res = await fetch("/api/admin/partner");
     const partners = await res.json();
 
     if (forListBox)
@@ -13,7 +13,7 @@ export async function getPartners(forListBox?: boolean) {
 }
 
 export async function getProducts(forListBox?: boolean) {
-    const res = await fetch("/api/product");
+    const res = await fetch("/api/admin/product");
     const products = await res.json();
 
     if (forListBox)

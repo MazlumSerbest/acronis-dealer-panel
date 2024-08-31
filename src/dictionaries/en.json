@@ -4,7 +4,7 @@
         "Pages": {
             "panel": "Dashboard",
             "tenants": "Tenants",
-            "clients": "Clients",
+            "customers": "Customers",
             "licenses": "Licenses",
             "products": "Products",
             "alerts": "Alerts",
@@ -73,7 +73,7 @@
         "privacyPolicyUrl": "Privacy Policy",
         "openDetail": "Open Detail",
         "general": "General",
-        "clients": "Clients",
+        "customers": "Customers",
         "tenants": "Tenants",
         "licenses": "Licenses",
         "serialNo": "Serial No",
@@ -157,13 +157,13 @@
         "key": "Key",
         "assign": "Assign",
         "assignToPartner": "Assign to Partner",
-        "clientAcronisId": "Client Acronis ID",
+        "customerAcronisId": "Customer Acronis ID",
         "expiresAt": "Expires At",
         "expiredAt": "Expired At",
         "assignedAt": "Assigned At",
         "activatedAt": "Activated At",
         "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?",
-        "clientNotFound": "There is no panel client with this Acronis ID.",
+        "customerNotFound": "There is no panel customer with this Acronis ID.",
         "backToSignIn": "Back to Sign In"
     },
     "SignIn": {
@@ -238,7 +238,7 @@
                 "notFound": "Partner not found"
             }
         },
-        "Client": {
+        "Customer": {
             "name": {
                 "required": "Name is required",
                 "minLength": "Must be 6 characters long"
@@ -341,8 +341,8 @@
     "Dashboard": {
         "title": "Dashboard"
     },
-    "Clients": {
-        "title": "Clients"
+    "Customers": {
+        "title": "Customers"
     },
     "Licenses": {
         "title": "Licenses",

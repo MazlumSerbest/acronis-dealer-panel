@@ -38,33 +38,33 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { Input } from "@/components/ui/input";
 
-const clientFormSchema = z.object({
+const customerFormSchema = z.object({
     name: z
         .string({
-            required_error: "Client.name.required",
+            required_error: "Customer.name.required",
         })
         .min(6, {
-            message: "Client.name.minLength",
+            message: "Customer.name.minLength",
         }),
     login: z
         .string({
-            required_error: "Client.login.required",
+            required_error: "Customer.login.required",
         })
         .min(6, {
-            message: "Client.login.minLength",
+            message: "Customer.login.minLength",
         }),
     email: z
         .string({
-            required_error: "Client.email.required",
+            required_error: "Customer.email.required",
         })
         .email({
-            message: "Client.email.invalidType",
+            message: "Customer.email.invalidType",
         }),
 });
 
-type ClientFormValues = z.infer<typeof clientFormSchema>;
+type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
-export default function ClientsPage() {
+export default function CustomersPage() {
     const t = useTranslations("General");
     const router = useRouter();
     const { toast } = useToast();
@@ -81,12 +81,12 @@ export default function ClientsPage() {
     );
 
     //#region Form
-    const form = useForm<ClientFormValues>({
-        resolver: zodResolver(clientFormSchema),
+    const form = useForm<CustomerFormValues>({
+        resolver: zodResolver(customerFormSchema),
     });
 
-    async function onSubmit(values: ClientFormValues) {
-        const client = {
+    async function onSubmit(values: CustomerFormValues) {
+        const customer = {
             name: values.name,
             login: values.login,
             parent_id: currentUser?.acronisTenantId,
@@ -97,7 +97,7 @@ export default function ClientsPage() {
 
         await fetch("/api/acronis/tenants", {
             method: "POST",
-            body: JSON.stringify(client),
+            body: JSON.stringify(customer),
         })
             .then((res) => res.json())
             .then((res) => {
@@ -217,7 +217,7 @@ export default function ClientsPage() {
     if (error) return <div>{t("failedToLoad")}</div>;
     return (
         <div className="flex flex-col gap-4">
-            <PageHeader title={t("clients")} />
+            <PageHeader title={t("customers")} />
             {!data ? (
                 <Skeleton>
                     <TableSkeleton />
@@ -265,7 +265,7 @@ export default function ClientsPage() {
                             setOpen(true);
                         }}
                         onClick={(item) => {
-                            router.push("clients/" + item?.original?.id);
+                            router.push("customers/" + item?.original?.id);
                         }}
                     />
 
@@ -273,7 +273,7 @@ export default function ClientsPage() {
                         <DialogContent>
                             <DialogHeader>
                                 <DialogTitle>
-                                    {`${t("new")} ${t("client")}`}
+                                    {`${t("new")} ${t("customer")}`}
                                 </DialogTitle>
                                 <DialogDescription></DialogDescription>
                             </DialogHeader>
@@ -358,7 +358,7 @@ export default function ClientsPage() {
                                                                                     {
                                                                                         type: "manual",
                                                                                         message:
-                                                                                            "Client.login.alreadyTaken",
+                                                                                            "Customer.login.alreadyTaken",
                                                                                     },
                                                                                 );
                                                                             }

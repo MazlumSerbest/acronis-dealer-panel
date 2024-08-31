@@ -2,7 +2,7 @@
     "General": {
         "Pages": {
             "panel": "Panel",
-            "clients": "Müşteriler",
+            "customers": "Müşteriler",
             "licenses": "Lisanslar",
             "alerts": "Hata Mesajları",
             "management": "Yönetim",
@@ -78,7 +78,7 @@
     "Dashboard": {
         "title": "Panel"
     },
-    "Clients": {
+    "Customers": {
         "title": "Müşteriler"
     },
     "Licenses": {

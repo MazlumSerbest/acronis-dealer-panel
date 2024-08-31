@@ -18,10 +18,10 @@ export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
     const [license, setLicense] = useState();
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/client/${tenant?.id}`, null, {
+    const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            fetch(`/api/license?status=active&clientId=${data.id}`)
+            fetch(`/api/license?status=active&customerId=${data.id}`)
                 .then((res) => res.json())
                 .then((res) => setLicense(res));
         },
@@ -179,7 +179,7 @@ export default function ActiveTab({ tenant }: Props) {
         mutate();
     }, [mutate]);
 
-    if (error) return <div>{t("clientNotFound")}</div>;
+    if (error) return <div>{t("customerNotFound")}</div>;
     if (!data)
         return (
             <Skeleton>

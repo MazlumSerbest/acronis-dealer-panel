@@ -17,14 +17,14 @@ export const POST = auth(async (req: any) => {
                 ok: false,
             });
 
-        const client: any = await req.json();
-        client.createdBy = req.auth.user.email;
+        const customer: any = await req.json();
+        customer.createdBy = req.auth.user.email;
 
-        const newClient = await prisma.client.create({
-            data: client,
+        const newCustomer = await prisma.customer.create({
+            data: customer,
         });
 
-        if (newClient.id) {
+        if (newCustomer.id) {
             return NextResponse.json({
                 message: "Müşteri başarıyla kaydedildi!",
                 status: 200,

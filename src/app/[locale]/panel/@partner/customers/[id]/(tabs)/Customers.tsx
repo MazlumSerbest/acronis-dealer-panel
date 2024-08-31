@@ -11,10 +11,10 @@ import { LuChevronsUpDown } from "react-icons/lu";
 
 type Props = {
     t: Function;
-    clients: Tenant[];
+    customers: Tenant[];
 };
 
-export default function ClientsTab({ t, clients }: Props) {
+export default function CustomersTab({ t, customers }: Props) {
     const router = useRouter();
 
     //#region Table
@@ -110,7 +110,7 @@ export default function ClientsTab({ t, clients }: Props) {
     return (
         <DataTable
             zebra
-            data={clients || []}
+            data={customers || []}
             columns={columns}
             visibleColumns={visibleColumns}
             defaultPageSize={50}
@@ -145,7 +145,7 @@ export default function ClientsTab({ t, clients }: Props) {
                 },
             ]}
             onClick={(item) => {
-                router.push("/panel/clients/" + item?.original?.id);
+                router.push("/panel/customers/" + item?.original?.id);
             }}
         />
     );

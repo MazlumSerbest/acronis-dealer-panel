@@ -50,7 +50,7 @@ export default function UserCard() {
 
     useEffect(() => {
         if (session?.data?.user) {
-            fetch(`/api/user/${session?.data?.user?.email ?? ""}`)
+            fetch(`/api/admin/user/${session?.data?.user?.email ?? ""}`)
                 .then((res) => res.json())
                 .then((data) => {
                     if (user?.role === "admin")
