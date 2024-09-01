@@ -46,10 +46,10 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import FormError from "@/components/FormError";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
-import { getProducts } from "@/lib/data";
-import FormError from "@/components/FormError";
+import { getPartners } from "@/lib/data";
 
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -334,7 +334,7 @@ export default function UsersPage() {
 
     //#region Data
     async function getData() {
-        const par: ListBoxItem[] = await getProducts(true);
+        const par: ListBoxItem[] = await getPartners(true);
         setPartners(par);
     }
 
