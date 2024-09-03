@@ -12,7 +12,9 @@
             "applications": "Applications",
             "partners": "Partners",
             "users": "Users",
-            "settings": "Settings"
+            "settings": "Settings",
+            "courses": "Courses",
+            "learn": "Learn"
         },
         "yes": "Yes",
         "no": "No",
@@ -164,7 +166,9 @@
         "activatedAt": "Activated At",
         "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?",
         "customerNotFound": "There is no panel customer with this Acronis ID.",
-        "backToSignIn": "Back to Sign In"
+        "registrationNotFound": "There is no panel registry with this Acronis ID.",
+        "backToSignIn": "Back to Sign In",
+        "download": "Download"
     },
     "SignIn": {
         "signIn": "Sign In",

@@ -21,7 +21,9 @@ export default function FinishedTab({ tenant }: Props) {
     const [license, setLicense] = useState();
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/${tenant.kind}/${tenant?.id}`,
+        `/api/${tenant.kind == "partner" ? "admin/partner" : "customer"}/${
+            tenant?.id
+        }`,
         null,
         {
             revalidateOnFocus: false,
@@ -34,14 +36,6 @@ export default function FinishedTab({ tenant }: Props) {
             },
         },
     );
-
-    // const { data: licenseData, error: licenseError } = useSWR(
-    //     `/api/admin/license?status=finished&partnerId=${?.id}`,
-    //     null,
-    //     {
-    //         revalidateOnFocus: false,
-    //     },
-    // );
 
     //#region Table
     const visibleColumns = {
@@ -217,7 +211,7 @@ export default function FinishedTab({ tenant }: Props) {
         mutate();
     }, [mutate]);
 
-    if (error) return <div>{t("customerNotFound")}</div>;
+    if (error) return <div>{t("registrationNotFound")}</div>;
     if (!data)
         return (
             <Skeleton>

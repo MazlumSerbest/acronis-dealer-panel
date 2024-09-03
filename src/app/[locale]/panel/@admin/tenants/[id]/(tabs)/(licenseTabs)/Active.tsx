@@ -21,7 +21,9 @@ export default function ActiveTab({ tenant }: Props) {
     const [license, setLicense] = useState();
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/${tenant.kind}/${tenant?.id}`,
+        `/api/${tenant.kind == "partner" ? "admin/partner" : "customer"}/${
+            tenant?.id
+        }`,
         null,
         {
             revalidateOnFocus: false,
@@ -221,7 +223,7 @@ export default function ActiveTab({ tenant }: Props) {
         mutate();
     }, [mutate]);
 
-    if (error) return <div>{t("customerNotFound")}</div>;
+    if (error) return <div>{t("registrationNotFound")}</div>;
     if (!data)
         return (
             <Skeleton>
