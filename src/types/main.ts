@@ -78,3 +78,27 @@ type Application = Entity & {
     approvedAt?: string;
     approvedBy?: string;
 };
+
+type Course = Entity & {
+    category: "panel" | "acronis";
+    name: string;
+    shortDescription: string;
+    description: string;
+    duration: string;
+    level: string;
+    image: string;
+    chapters: Chapter[];
+};
+
+type Chapter = Entity & {
+    name: string;
+    order: number;
+    lessons: Lesson[];
+};
+
+type Lesson = Entity & {
+    name: string;
+    description: string;
+    order: number;
+    link: string;
+};

@@ -172,3 +172,55 @@ model Application {
 
   partner Partner?
 }
+
+model Course {
+  id               String  @id @default(cuid())
+  category         String
+  name             String
+  shortDescription String
+  description      String?
+  duration         String
+  level            String
+  image            String?
+
+  active    Boolean  @default(true)
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  chapters Chapter[]
+}
+
+model Chapter {
+  id       String @id @default(cuid())
+  courseId String
+  name     String
+  order    String
+
+  active    Boolean  @default(true)
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  course  Course   @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
+}
+
+model Lesson {
+  id          String  @id @default(cuid())
+  chapterId   String
+  name        String
+  description String?
+  order       String
+  link        String
+
+  active    Boolean  @default(true)
+  createdBy String?
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  chapter Chapter @relation(fields: [chapterId], references: [id])
+}
