@@ -1,8 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -12,16 +10,30 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 
-export default function FinishedTab() {
-    const t = useTranslations("General");
+type Props = {
+    tenant: Tenant;
+};
 
-    const { data, error } = useSWR(
-        `/api/admin/license?status=finished`,
-        null,
-        {
-            revalidateOnFocus: false,
+export default function CompletedTab({ tenant }: Props) {
+    const t = useTranslations("General");
+    const [license, setLicense] = useState();
+
+    const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
+        revalidateOnFocus: false,
+        onSuccess: (data) => {
+            fetch(`/api/license?status=completed&customerId=${data.id}`)
+                .then((res) => res.json())
+                .then((res) => setLicense(res));
         },
-    );
+    });
+
+    // const { data: licenseData, error: licenseError } = useSWR(
+    //     `/api/admin/license?status=completed&partnerId=${?.id}`,
+    //     null,
+    //     {
+    //         revalidateOnFocus: false,
+    //     },
+    // );
 
     //#region Table
     const visibleColumns = {
@@ -76,40 +88,6 @@ export default function FinishedTab() {
                 const data: string = row.getValue("serialNo");
 
                 return data || "-";
-            },
-        },
-        {
-            accessorKey: "partner",
-            header: t("partnerName"),
-            cell: ({ row }) => {
-                const data: Partner = row.getValue("partner");
-
-                return data.name || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const partner = row.original.partner;
-                    return partner.name
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
-            },
-        },
-        {
-            accessorKey: "customer",
-            header: t("customerAcronisId"),
-            cell: ({ row }) => {
-                const data: Customer = row.getValue("customer");
-
-                return data?.acronisId || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const customer = row.original.customer;
-                    return customer.acronisId
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
             },
         },
         {
@@ -193,6 +171,10 @@ export default function FinishedTab() {
     ];
     //#endregion
 
+    useEffect(() => {
+        mutate();
+    }, [mutate]);
+    
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
@@ -204,8 +186,9 @@ export default function FinishedTab() {
         <DataTable
             zebra
             columns={columns}
-            data={data || []}
+            data={license || []}
             visibleColumns={visibleColumns}
+            isLoading={isLoading}
         />
     );
 }

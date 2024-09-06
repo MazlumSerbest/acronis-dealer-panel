@@ -53,7 +53,7 @@ export const GET = auth(async (req: any) => {
                     },
                 };
                 break;
-            case "finished":
+            case "completed":
                 where = {
                     customer: { isNot: null },
                     activatedAt: {
@@ -79,7 +79,7 @@ export const GET = auth(async (req: any) => {
 
         switch (status) {
             case "active":
-            case "finished":
+            case "completed":
             case "expired":
                 include = {
                     customer: {

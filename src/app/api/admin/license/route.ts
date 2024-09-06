@@ -58,7 +58,7 @@ export const GET = auth(async (req: any) => {
                     },
                 };
                 break;
-            case "finished":
+            case "completed":
                 where = {
                     partner: { isNot: null },
                     customer: { isNot: null },
@@ -94,7 +94,7 @@ export const GET = auth(async (req: any) => {
                 };
                 break;
             case "active":
-            case "finished":
+            case "completed":
             case "expired":
                 include = {
                     partner: {

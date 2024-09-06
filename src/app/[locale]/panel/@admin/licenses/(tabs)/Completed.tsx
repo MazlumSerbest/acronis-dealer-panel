@@ -11,14 +11,12 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
-import useUserStore from "@/store/user";
 
-export default function FinishedTab() {
+export default function CompletedTab() {
     const t = useTranslations("General");
-    const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/license?partnerId=${currentUser?.partnerId}&status=finished`,
+        `/api/admin/license?status=completed`,
         null,
         {
             revalidateOnFocus: false,
@@ -78,6 +76,23 @@ export default function FinishedTab() {
                 const data: string = row.getValue("serialNo");
 
                 return data || "-";
+            },
+        },
+        {
+            accessorKey: "partner",
+            header: t("partnerName"),
+            cell: ({ row }) => {
+                const data: Partner = row.getValue("partner");
+
+                return data.name || "-";
+            },
+            filterFn: (rows: any, id, value) => {
+                return rows.filter((row: any) => {
+                    const partner = row.original.partner;
+                    return partner.name
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+                });
             },
         },
         {
@@ -187,6 +202,7 @@ export default function FinishedTab() {
         );
     return (
         <DataTable
+            zebra
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}

@@ -16,7 +16,7 @@ type Props = {
     tenant: Tenant;
 };
 
-export default function FinishedTab({ tenant }: Props) {
+export default function CompletedTab({ tenant }: Props) {
     const t = useTranslations("General");
     const [license, setLicense] = useState();
 
@@ -29,7 +29,7 @@ export default function FinishedTab({ tenant }: Props) {
             revalidateOnFocus: false,
             onSuccess: (data) => {
                 fetch(
-                    `/api/admin/license?status=finished&${tenant.kind}Id=${data.id}`,
+                    `/api/admin/license?status=completed&${tenant.kind}Id=${data.id}`,
                 )
                     .then((res) => res.json())
                     .then((res) => setLicense(res));

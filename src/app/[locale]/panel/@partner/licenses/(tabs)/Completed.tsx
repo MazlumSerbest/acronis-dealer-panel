@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
+import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -9,31 +11,19 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
+import useUserStore from "@/store/user";
 
-type Props = {
-    tenant: Tenant;
-};
-
-export default function FinishedTab({ tenant }: Props) {
+export default function CompletedTab() {
     const t = useTranslations("General");
-    const [license, setLicense] = useState();
+    const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
-        revalidateOnFocus: false,
-        onSuccess: (data) => {
-            fetch(`/api/license?status=finished&customerId=${data.id}`)
-                .then((res) => res.json())
-                .then((res) => setLicense(res));
+    const { data, error } = useSWR(
+        `/api/license?partnerId=${currentUser?.partnerId}&status=completed`,
+        null,
+        {
+            revalidateOnFocus: false,
         },
-    });
-
-    // const { data: licenseData, error: licenseError } = useSWR(
-    //     `/api/admin/license?status=finished&partnerId=${?.id}`,
-    //     null,
-    //     {
-    //         revalidateOnFocus: false,
-    //     },
-    // );
+    );
 
     //#region Table
     const visibleColumns = {
@@ -88,6 +78,23 @@ export default function FinishedTab({ tenant }: Props) {
                 const data: string = row.getValue("serialNo");
 
                 return data || "-";
+            },
+        },
+        {
+            accessorKey: "customer",
+            header: t("customerAcronisId"),
+            cell: ({ row }) => {
+                const data: Customer = row.getValue("customer");
+
+                return data?.acronisId || "-";
+            },
+            filterFn: (rows: any, id, value) => {
+                return rows.filter((row: any) => {
+                    const customer = row.original.customer;
+                    return customer.acronisId
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
+                });
             },
         },
         {
@@ -171,10 +178,6 @@ export default function FinishedTab({ tenant }: Props) {
     ];
     //#endregion
 
-    useEffect(() => {
-        mutate();
-    }, [mutate]);
-    
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
@@ -184,11 +187,9 @@ export default function FinishedTab({ tenant }: Props) {
         );
     return (
         <DataTable
-            zebra
             columns={columns}
-            data={license || []}
+            data={data || []}
             visibleColumns={visibleColumns}
-            isLoading={isLoading}
         />
     );
 }

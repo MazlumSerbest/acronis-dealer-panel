@@ -8,7 +8,7 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { useTranslations } from "next-intl";
 import ActiveTab from "./(licenseTabs)/Active";
-import FinishedTab from "./(licenseTabs)/Finished";
+import CompletedTab from "./(licenseTabs)/Completed";
 
 type Props = {
     t: Function;
@@ -141,13 +141,13 @@ export default function LicensesTab({ t, tenant }: Props) {
         <Tabs defaultValue="active" className="flex flex-col w-full">
             <TabsList className="max-w-fit">
                 <TabsTrigger value="active">{tl("active")}</TabsTrigger>
-                <TabsTrigger value="finished">{tl("finished")}</TabsTrigger>
+                <TabsTrigger value="completed">{tl("completed")}</TabsTrigger>
             </TabsList>
             <TabsContent value="active">
                 <ActiveTab tenant={tenant} />
             </TabsContent>
-            <TabsContent value="finished">
-                <FinishedTab tenant={tenant} />
+            <TabsContent value="completed">
+                <CompletedTab tenant={tenant} />
             </TabsContent>
         </Tabs>
     );

@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import InactiveTab from "./(tabs)/Inactive";
 import ActiveTab from "./(tabs)/Active";
-import FinishedTab from "./(tabs)/Finished";
+import CompletedTab from "./(tabs)/Completed";
 import ExpiredTab from "./(tabs)/Expired";
 
 export default function LicensesPage() {
@@ -15,7 +15,7 @@ export default function LicensesPage() {
             <TabsList className="max-w-fit">
                 <TabsTrigger value="inactive">{tl("inactive")}</TabsTrigger>
                 <TabsTrigger value="active">{tl("active")}</TabsTrigger>
-                <TabsTrigger value="finished">{tl("finished")}</TabsTrigger>
+                <TabsTrigger value="completed">{tl("completed")}</TabsTrigger>
                 <TabsTrigger value="expired">{tl("expired")}</TabsTrigger>
             </TabsList>
             <TabsContent value="inactive">
@@ -24,8 +24,8 @@ export default function LicensesPage() {
             <TabsContent value="active">
                 <ActiveTab />
             </TabsContent>
-            <TabsContent value="finished">
-                <FinishedTab />
+            <TabsContent value="completed">
+                <CompletedTab />
             </TabsContent>
             <TabsContent value="expired">
                 <ExpiredTab />
