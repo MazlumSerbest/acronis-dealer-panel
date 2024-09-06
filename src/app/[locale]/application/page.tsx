@@ -36,6 +36,7 @@ import FormError from "@/components/FormError";
 import { cities } from "@/lib/constants";
 import { LuBuilding2, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
+import DealerContract from "./dealerContract";
 
 const applicationFormSchema = z.object({
     companyType: z.enum(["business", "person"], {
@@ -43,7 +44,7 @@ const applicationFormSchema = z.object({
     }),
     name: z
         .string({
-            required_error: "Application.name.required"
+            required_error: "Application.name.required",
         })
         .min(10, { message: "Application.name.minLength" }),
     taxNo: z
@@ -223,7 +224,9 @@ export default function Application() {
 
                 <CardContent className="flex flex-col p-6 gap-4">
                     <ol className="list-decimal list-inside divide-y divide-zinc-200 text-sm text-justify *:py-2">
-                        <li>{ta("Steps.1")}</li>
+                        <li>
+                            <DealerContract label="Sözleşme" /> {ta("Steps.1")}
+                        </li>
                         <li>{ta("Steps.2")}</li>
                         <li>{ta("Steps.3")}</li>
                         <li>{ta("Steps.4")}</li>
@@ -681,7 +684,8 @@ export default function Application() {
                                     }) => (
                                         <FormItem>
                                             <FormLabel>
-                                                {t("contract")}
+                                                {t("contract") + ""}
+                                                <DealerContract label="Sözleşmeyi İndir" />
                                             </FormLabel>
                                             <FormControl>
                                                 <Input
