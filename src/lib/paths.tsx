@@ -11,6 +11,7 @@ import {
     LuFileKey,
     LuKey,
     LuPackage,
+    LuGraduationCap,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -85,6 +86,16 @@ export const adminPaths: Path[] = [
             />
         ),
     },
+    {
+        path: "/panel/courses",
+        key: "courses",
+        icon: (
+            <LuGraduationCap
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Courses Page"
+            />
+        ),
+    },
 ];
 
 export const partnerPaths: Path[] = [
@@ -145,6 +156,16 @@ export const partnerPaths: Path[] = [
             <LuSettings
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Settings Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/learn",
+        key: "learn",
+        icon: (
+            <LuGraduationCap
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Learn Page"
             />
         ),
     },
