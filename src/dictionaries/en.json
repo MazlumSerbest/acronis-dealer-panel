@@ -168,7 +168,20 @@
         "customerNotFound": "There is no panel customer with this Acronis ID.",
         "registrationNotFound": "There is no panel registry with this Acronis ID.",
         "backToSignIn": "Back to Sign In",
-        "download": "Download"
+        "download": "Download",
+        "legalName": "Legal Name",
+        "legalAddress": "Legal Address",
+        "description": "Description",
+        "currentLesson": "Current Lesson",
+        "previous": "Previous",
+        "next": "Next",
+        "startCourse": "Start Course",
+        "chapterInfo ": "Chapters",
+        "infoCounts": "{chapterCount} Chapters, {lessonCount} Lessons",
+        "partnerPanelCourses": "Partner Panel Courses",
+        "partnerPanelCoursesDescription": "Courses for partners to learn how to use DBackup Partner Panel",
+        "acronisCloudCourses": "Acronis Cloud Courses",
+        "acronisCloudCoursesDescription": "Courses for partners to learn how to use Acronis Cloud Platform"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -354,8 +367,9 @@
         "assigned": "Assigned",
         "inactive": "Inactive",
         "active": "Active",
-        "finished": "Finished",
-        "expired": "Expired"
+        "completed": "Completed",
+        "expired": "Expired",
+        "status": "Status"
     },
     "Alerts": {
         "title": "Alerts"

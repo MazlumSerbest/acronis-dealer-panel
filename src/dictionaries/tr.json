@@ -1,14 +1,17 @@
 {
     "General": {
+        "": "Test",
         "Pages": {
             "panel": "Panel",
+            "tenants": "Kiracılar",
             "customers": "Müşteriler",
             "licenses": "Lisanslar",
+            "products": "Ürünler",
             "alerts": "Hata Mesajları",
             "management": "Yönetim",
-            "users": "Kullanıcılar",
             "applications": "Başvurular",
             "partners": "Partnerler",
+            "users": "Kullanıcılar",
             "settings": "Ayarlar"
         },
         "yes": "Evet",
