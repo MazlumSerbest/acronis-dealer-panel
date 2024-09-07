@@ -23,7 +23,12 @@ export default function ApprovedTab() {
     );
 
     //#region Table
-    const visibleColumns = {};
+    const visibleColumns = {
+        createdAt: false,
+        createdBy: false,
+        updatedAt: false,
+        updatedBy: false,
+    };
 
     const columns: ColumnDef<any, any>[] = [
         {
@@ -84,6 +89,46 @@ export default function ApprovedTab() {
             accessorKey: "approvedBy",
             header: t("approvedBy"),
             enableGlobalFilter: false,
+        },
+        {
+            accessorKey: "createdAt",
+            header: t("createdAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("createdAt");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "createdBy",
+            header: t("createdBy"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("createdBy");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "updatedAt",
+            header: t("updatedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updatedAt");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "updatedBy",
+            header: t("updatedBy"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updatedBy");
+
+                return data || "-";
+            },
         },
     ];
     //#endregion

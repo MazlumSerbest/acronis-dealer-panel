@@ -18,6 +18,7 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import { DateTimeFormat } from "@/utils/date";
 
 export default function PartnersPage() {
     const t = useTranslations("General");
@@ -29,7 +30,12 @@ export default function PartnersPage() {
     });
 
     //#region Table
-    const visibleColumns = {};
+    const visibleColumns = {
+        createdAt: false,
+        createdBy: false,
+        updatedAt: false,
+        updatedBy: false,
+    };
 
     const columns: ColumnDef<any, any>[] = [
         {
@@ -104,6 +110,46 @@ export default function PartnersPage() {
             enableHiding: false,
             cell: ({ row }) => {
                 const data: string = row.getValue("acronisId");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "createdAt",
+            header: t("createdAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("createdAt");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "createdBy",
+            header: t("createdBy"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("createdBy");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "updatedAt",
+            header: t("updatedAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updatedAt");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "updatedBy",
+            header: t("updatedBy"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("updatedBy");
 
                 return data || "-";
             },
