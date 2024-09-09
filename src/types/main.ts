@@ -80,6 +80,7 @@ type Application = Entity & {
 };
 
 type Course = Entity & {
+    active: boolean;
     category: "panel" | "acronis";
     name: string;
     shortDescription: string;

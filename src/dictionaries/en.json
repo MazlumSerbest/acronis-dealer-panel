@@ -171,6 +171,7 @@
         "download": "Download",
         "legalName": "Legal Name",
         "legalAddress": "Legal Address",
+        "shortDescription": "Short Description",
         "description": "Description",
         "currentLesson": "Current Lesson",
         "previous": "Previous",
@@ -181,7 +182,12 @@
         "partnerPanelCourses": "Partner Panel Courses",
         "partnerPanelCoursesDescription": "Courses for partners to learn how to use DBackup Partner Panel",
         "acronisCloudCourses": "Acronis Cloud Courses",
-        "acronisCloudCoursesDescription": "Courses for partners to learn how to use Acronis Cloud Platform"
+        "acronisCloudCoursesDescription": "Courses for partners to learn how to use Acronis Cloud Platform",
+        "course": "Course",
+        "panel": "Panel",
+        "acronis": "Acronis",
+        "category": "Category",
+        "level": "Level"
     },
     "SignIn": {
         "signIn": "Sign In",
