@@ -9,7 +9,7 @@ export default function ManagementPage() {
     const t = useTranslations("Management");
 
     return (
-        <div className="flex flex-col w-full items-center mt-4">
+        <div className="flex flex-col w-full items-center">
             <Tabs defaultValue="profile" className="flex flex-col w-full">
                 <TabsList className="mx-auto *:md:w-[200px] mb-2">
                     <TabsTrigger value="profile">{t("profile")}</TabsTrigger>

@@ -9,7 +9,7 @@ export default function LearnLayout({
     const t = useTranslations("General.Pages");
     
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
             <PageHeader title={t("learn")} />
             {children}
         </div>

@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import useSWR from "swr";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -8,10 +9,14 @@ import { useTranslations } from "next-intl";
 
 export default function LearnPage() {
     const t = useTranslations("General");
+    const [courses, setCourses] = useState<Course[]>([]);
 
     //#region Fetch Data
-    const { data: courses, error } = useSWR(`/api/admin/course`, null, {
+    const { data, error } = useSWR(`/api/admin/course`, null, {
         revalidateOnFocus: false,
+        onSuccess: (data) => {
+            setCourses(data.filter((c: Course) => c.active));
+        }
     });
     //#endregion
 
@@ -32,6 +37,7 @@ export default function LearnPage() {
                                 .map((course: Course) => {
                                     return (
                                         <CourseCard
+                                            key={course.id}
                                             id={course.id}
                                             name={course.name}
                                             description={
@@ -60,6 +66,7 @@ export default function LearnPage() {
                                 .map((course: Course) => {
                                     return (
                                         <CourseCard
+                                            key={course.id}
                                             id={course.id}
                                             name={course.name}
                                             description={

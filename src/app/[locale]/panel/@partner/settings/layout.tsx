@@ -9,7 +9,7 @@ export default function SettingsLayout({
     const t = useTranslations("General.Pages");
     
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
             <PageHeader title={t("settings")} />
             {children}
         </div>

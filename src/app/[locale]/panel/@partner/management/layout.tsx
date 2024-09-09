@@ -9,7 +9,7 @@ export default function ManagementLayout({
     const t = useTranslations("General.Pages");
     
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-4">
             <PageHeader title={t("management")} />
             {children}
         </div>

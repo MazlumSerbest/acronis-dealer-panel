@@ -8,7 +8,7 @@ export default function SettingsPage() {
     const t = useTranslations("Settings");
 
     return (
-        <div className="flex w-full mt-4">
+        <div className="flex w-full">
             <Tabs defaultValue="general" className="flex flex-col w-full">
                 <TabsList className="mx-auto *:md:w-[200px] mb-2">
                     <TabsTrigger value="general">{t("general")}</TabsTrigger>
