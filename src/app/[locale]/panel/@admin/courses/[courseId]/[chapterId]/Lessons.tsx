@@ -1,7 +1,6 @@
-"use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,6 +11,15 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -21,8 +29,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
     Dialog,
-    DialogContent,
     DialogClose,
+    DialogContent,
     DialogFooter,
     DialogHeader,
     DialogTitle,
@@ -30,98 +38,117 @@ import {
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
-const courseFormSchema = z.object({
+const lessonFormSchema = z.object({
+    id: z.string().cuid().optional(),
+    chapterId: z.string().cuid().optional(),
+    active: z.boolean(),
     name: z
         .string({
-            required_error: "Course.name.required",
+            required_error: "Lesson.name.required",
         })
         .max(60, {
-            message: "Course.name.maxLength",
+            message: "Lesson.name.maxLength",
         }),
-    category: z.enum(["panel", "acronis"], {
-        required_error: "Course.category.required",
+    order: z.coerce.number({
+        required_error: "Lesson.order.required",
     }),
-    shortDescription: z
+    link: z
         .string({
-            required_error: "Course.shortDescription.required",
+            required_error: "Lesson.link.required",
         })
-        .max(80, {
-            message: "Course.shortDescription.maxLength",
+        .url({
+            message: "Lesson.link.invalidType",
         }),
-    description: z.string({
-        required_error: "Course.description.required",
-    }),
-    duration: z.string({
-        required_error: "Course.duration.required",
-    }),
-    level: z.string({
-        required_error: "Course.level.required",
-    }),
+    description: z
+        .string({
+            // required_error: "Lesson.description.required",
+        })
+        .optional().nullable(),
 });
 
-type CourseFormValues = z.infer<typeof courseFormSchema>;
+type LessonFormValues = z.infer<typeof lessonFormSchema>;
 
-export default function CoursesPage() {
+export default function Lessons({
+    chapterId,
+    lessons,
+    isLoading,
+    mutate,
+}: {
+    chapterId: string;
+    lessons: Lesson[];
+    isLoading: boolean;
+    mutate: () => void;
+}) {
     const t = useTranslations("General");
-    const router = useRouter();
+    const tf = useTranslations("FormMessages.Lesson");
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
-
-    const { data, error, isLoading, mutate } = useSWR(
-        `/api/admin/course`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const [isNew, setIsNew] = useState(false);
 
     //#region Form
-    const form = useForm<CourseFormValues>({
-        resolver: zodResolver(courseFormSchema),
+    const form = useForm<LessonFormValues>({
+        resolver: zodResolver(lessonFormSchema),
     });
 
-    function onSubmit(values: CourseFormValues) {
-        fetch("/api/admin/course", {
-            method: "POST",
-            body: JSON.stringify(values),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.ok) {
-                    toast({
-                        description: res.message,
-                    });
-                    setOpen(false);
-                    form.reset({});
-                    mutate();
-                } else {
-                    toast({
-                        variant: "destructive",
-                        title: t("errorTitle"),
-                        description: res.message,
-                    });
-                }
-            });
+    function onSubmit(values: LessonFormValues) {
+        if (isNew) {
+            values.chapterId = chapterId;
+            fetch("/api/admin/lesson", {
+                method: "POST",
+                body: JSON.stringify(values),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.ok) {
+                        toast({
+                            description: res.message,
+                        });
+                        setOpen(false);
+                        form.reset({});
+                        mutate();
+                    } else {
+                        toast({
+                            variant: "destructive",
+                            title: t("errorTitle"),
+                            description: res.message,
+                        });
+                    }
+                });
+        } else
+            fetch(`/api/admin/lesson/${values.id}`, {
+                method: "PUT",
+                body: JSON.stringify(values),
+            })
+                .then((res) => res.json())
+                .then((res) => {
+                    if (res.ok) {
+                        toast({
+                            description: res.message,
+                        });
+                        setOpen(false);
+                        form.reset({});
+                        mutate();
+                    } else {
+                        toast({
+                            variant: "destructive",
+                            title: t("errorTitle"),
+                            description: res.message,
+                        });
+                    }
+                });
     }
     //#endregion
 
@@ -158,15 +185,46 @@ export default function CoursesPage() {
             },
         },
         {
-            accessorKey: "category",
-            header: t("category"),
+            accessorKey: "order",
+            enableHiding: false,
+            enableGlobalFilter: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("order")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("order");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "description",
+            header: t("description"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: string = row.getValue("category");
+                const data: string = row.getValue("description");
 
-                return t(data) || "-";
+                return data ? (
+                    <p>
+                        {data?.length > 25
+                            ? data?.substring(0, 25) + "..."
+                            : data}
+                    </p>
+                ) : (
+                    "-"
+                );
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "active",
@@ -232,14 +290,14 @@ export default function CoursesPage() {
                         <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4" />
                             {/* <Button
-                                 aria-haspopup="true"
-                                 size="icon"
-                                 variant="ghost"
-                             >
-                                 <span className="sr-only">
-                                     {t("toggleMenu")}
-                                 </span>
-                             </Button> */}
+                             aria-haspopup="true"
+                             size="icon"
+                             variant="ghost"
+                         >
+                             <span className="sr-only">
+                                 {t("toggleMenu")}
+                             </span>
+                         </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -247,9 +305,9 @@ export default function CoursesPage() {
                             </DropdownMenuLabel>
                             <DropdownMenuItem
                                 onClick={() => {
-                                    router.push(
-                                        `/panel/courses/${row.original.id}`,
-                                    );
+                                    form.reset(data);
+                                    setIsNew(false);
+                                    setOpen(true);
                                 }}
                             >
                                 {t("edit")}
@@ -263,58 +321,81 @@ export default function CoursesPage() {
     ];
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
-    if (!data)
-        return (
-            <Skeleton>
-                <TableSkeleton />
-            </Skeleton>
-        );
     return (
         <>
-            <DataTable
-                zebra
-                columns={columns}
-                data={data || []}
-                visibleColumns={visibleColumns}
-                isLoading={isLoading}
-                facetedFilters={[
-                    {
-                        column: "category",
-                        title: t("category"),
-                        options: [
-                            { value: "panel", label: t("panel") },
-                            { value: "acronis", label: t("acronis") },
-                        ],
-                    },
-                    {
-                        column: "active",
-                        title: t("active"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                ]}
-                onAddNew={() => {
-                    setOpen(true);
-                }}
-            />
+            <Card>
+                <CardHeader>
+                    <CardTitle className="font-medium text-xl">
+                        {t("lessons")}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent className="">
+                    <DataTable
+                        zebra
+                        columns={columns}
+                        data={lessons || []}
+                        visibleColumns={visibleColumns}
+                        isLoading={isLoading}
+                        facetedFilters={[
+                            {
+                                column: "active",
+                                title: t("active"),
+                                options: [
+                                    { value: true, label: t("true") },
+                                    { value: false, label: t("false") },
+                                ],
+                            },
+                        ]}
+                        onAddNew={() => {
+                            setIsNew(true);
+                            setOpen(true);
+                            form.reset({ active: true });
+                            form.reset({ active: true });
+                        }}
+                    />
+                </CardContent>
+            </Card>
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {`${t("new")} ${t("course")}`}
+                            {isNew ? t("newLesson") : t("editLesson")}
                         </DialogTitle>
                     </DialogHeader>
-
                     <Form {...form}>
                         <form
                             onSubmit={form.handleSubmit(onSubmit)}
                             autoComplete="off"
                             className="space-y-4"
                         >
+                            {!isNew && (
+                                <FormField
+                                    control={form.control}
+                                    name="active"
+                                    render={({ field }) => (
+                                        <FormItem className="flex flex-row items-center justify-between">
+                                            <div className="space-y-0.5">
+                                                <FormLabel>
+                                                    {t("active")}
+                                                </FormLabel>
+                                                <FormDescription>
+                                                    {tf("active.description")}
+                                                </FormDescription>
+                                            </div>
+                                            <FormControl>
+                                                <Switch
+                                                    checked={field.value}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                />
+                                            </FormControl>
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
+
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -337,38 +418,18 @@ export default function CoursesPage() {
 
                             <FormField
                                 control={form.control}
-                                name="category"
+                                name="order"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("category")}
+                                            {t("order")}
                                         </FormLabel>
-                                        <Select
-                                            onValueChange={field.onChange}
-                                            defaultValue={field.value}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue
-                                                        placeholder={t(
-                                                            "select",
-                                                        )}
-                                                    />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="panel">
-                                                    {t("panel")}
-                                                </SelectItem>
-                                                <SelectItem value="acronis">
-                                                    {t("acronis")}
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                        <FormControl>
+                                            <Input type="number" {...field} />
+                                        </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors
-                                                    ?.category
+                                                form?.formState?.errors?.order
                                             }
                                         />
                                     </FormItem>
@@ -377,60 +438,21 @@ export default function CoursesPage() {
 
                             <FormField
                                 control={form.control}
-                                name="duration"
+                                name="link"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("duration")}
+                                            {t("link")}
                                         </FormLabel>
+                                        <FormDescription>
+                                            {tf("link.description")}
+                                        </FormDescription>
                                         <FormControl>
-                                            <Input {...field} />
+                                            <Textarea {...field} rows={2} />
                                         </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors
-                                                    ?.duration
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="level"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("level")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.level
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            />
-
-                            <FormField
-                                control={form.control}
-                                name="shortDescription"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("shortDescription")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} maxLength={80} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.shortDescription
+                                                form?.formState?.errors?.link
                                             }
                                         />
                                     </FormItem>
@@ -442,11 +464,11 @@ export default function CoursesPage() {
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <FormLabel>
                                             {t("description")}
                                         </FormLabel>
                                         <FormControl>
-                                            <Textarea {...field} rows={4} />
+                                            <Textarea {...field} value={field.value ?? ''} rows={4} />
                                         </FormControl>
                                         <FormError
                                             error={

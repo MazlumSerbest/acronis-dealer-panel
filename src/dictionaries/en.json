@@ -187,7 +187,20 @@
         "panel": "Panel",
         "acronis": "Acronis",
         "category": "Category",
-        "level": "Level"
+        "level": "Level",
+        "order": "Order",
+        "link": "Link",
+        "chapter": "Chapter",
+        "editCourse": "Edit Course",
+        "editChapter": "Edit Chapter",
+        "courseDetail": "Course Detail",
+        "chapters": "Chapters",
+        "chapterDetail": "Chapter Detail",
+        "lessons": "Lessons",
+        "backToCourse": "Back to Course",
+        "backToCourses": "Back to Courses",
+        "newLesson": "New Lesson",
+        "editLesson": "Edit Lesson"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -277,6 +290,65 @@
             }
         },
         "Product": {},
+        "Course": {
+            "active": {
+                "description": "This value is for the active status. If the course is active, the course can be seen by the partner users."
+            },
+            "name": {
+                "required": "Name is required",
+                "maxLength": "Must be 60 characters long"
+            },
+            "category": {
+                "required": "Category is required"
+            },
+            "duration": {
+                "required": "Duration is required"
+            },
+            "level": {
+                "required": "Level is required"
+            },
+            "shortDescription": {
+                "required": "Short Description is required",
+                "maxLength": "Must be 80 characters long"
+            },
+            "description": {
+                "required": "Description is required"
+            }
+        },
+        "Chapter": {
+            "active": {
+                "description": "This value is for the active status. If the chapter is active, the chapter can be seen under the course."
+            },
+            "name": {
+                "required": "Name is required",
+                "maxLength": "Must be 60 characters long"
+            },
+            "order": {
+                "required": "Order is required",
+                "invalidType": "Must be a valid number"
+            }
+        },
+        "Lesson": {
+            "active": {
+                "description": "This value is for the active status. If the lesson is active, the lesson can be seen under the chapter."
+            },
+            "name": {
+                "required": "Name is required",
+                "maxLength": "Must be 60 characters long"
+            },
+            "order": {
+                "required": "Order is required",
+                "invalidType": "Must be a valid number"
+            },
+            "link": {
+                "description": "This value is for youtube video link. You can copy the link from the share button of the video.",
+                "required": "Link is required",
+                "invalidType": "Must be a valid URL"
+            },
+            "description": {
+                "required": "Description is required"
+            }
+        },
         "Application": {
             "companyType": {
                 "required": "Type is required"
