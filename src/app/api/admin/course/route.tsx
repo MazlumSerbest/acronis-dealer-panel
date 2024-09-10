@@ -18,6 +18,9 @@ export const GET = auth(async (req: any) => {
             });
 
         const data = await prisma.course.findMany({
+            orderBy: {
+                createdAt: "asc",
+            },
             select: {
                 id: true,
                 category: true,
@@ -33,7 +36,7 @@ export const GET = auth(async (req: any) => {
                         active: true,
                     },
                     orderBy: {
-                        order: "desc",
+                        order: "asc",
                     },
                     select: {
                         id: true,
@@ -44,7 +47,7 @@ export const GET = auth(async (req: any) => {
                                 active: true,
                             },
                             orderBy: {
-                                order: "desc",
+                                order: "asc",
                             },
                             select: {
                                 id: true,
@@ -56,9 +59,6 @@ export const GET = auth(async (req: any) => {
                         },
                     },
                 },
-            },
-            orderBy: {
-                createdAt: "asc",
             },
         });
 

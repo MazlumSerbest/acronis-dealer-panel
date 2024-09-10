@@ -17,9 +17,18 @@ export const GET = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const data = await prisma.lesson.findUnique({
+        const data = await prisma.chapter.findUnique({
             where: {
                 id: params?.id as string,
+            },
+            include: {
+                lessons: true,
+                course: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         });
 
@@ -47,26 +56,26 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const lesson: any = await req.json();
-        lesson.updatedAt = new Date().toISOString();
-        lesson.updatedBy = req.auth.user.email;
+        const chapter: any = await req.json();
+        chapter.updatedAt = new Date().toISOString();
+        chapter.updatedBy = req.auth.user.email;
 
-        const updatedLesson = await prisma.lesson.update({
-            data: lesson,
+        const updatedChapter = await prisma.chapter.update({
+            data: chapter,
             where: {
                 id: params?.id as string,
             },
         });
 
-        if (updatedLesson.id) {
+        if (updatedChapter.id) {
             return NextResponse.json({
-                message: "Ders başarıyla güncellendi!",
+                message: "Bölüm başarıyla güncellendi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Ders güncellenemedi!",
+                message: "Bölüm güncellenemedi!",
                 status: 400,
                 ok: false,
             });
