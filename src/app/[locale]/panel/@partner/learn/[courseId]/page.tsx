@@ -41,13 +41,17 @@ export default function CourseDetail({
             onSuccess: (data) => {
                 let chapters = 0;
                 let lessons = 0;
-                data.chapters.forEach((chapter: Chapter) => {
-                    chapters++;
-                    lessons += chapter.lessons.length;
+                data.chapters.forEach((c: Chapter) => {
+                    if (c.active) {
+                        chapters++;
+                        lessons += c.lessons.filter(
+                            (l: Lesson) => l.active,
+                        ).length;
+                    }
                 });
                 setChapterCount(chapters);
                 setLessonCount(lessons);
-            }
+            },
         },
     );
     //#endregion
@@ -101,8 +105,9 @@ export default function CourseDetail({
                         </CardHeader>
                         <Separator />
                         <Accordion type="single" collapsible className="w-full">
-                            {course.chapters.map(
-                                (chapter: Chapter, index: number) => (
+                            {course.chapters
+                                .filter((c: Chapter) => c.active)
+                                .map((chapter: Chapter, index: number) => (
                                     <AccordionItem
                                         key={index}
                                         value={chapter.id}
@@ -112,33 +117,36 @@ export default function CourseDetail({
                                             {chapter.name}
                                         </AccordionTrigger>
                                         <AccordionContent className="space-y divide-y gap-2 p-0">
-                                            {chapter.lessons.map(
-                                                (
-                                                    lesson: Lesson,
-                                                    index: number,
-                                                ) => (
-                                                    <Button
-                                                        key={index}
-                                                        variant="ghost"
-                                                        className="p-6"
-                                                        asChild
-                                                    >
-                                                        <Link
-                                                            href={`/panel/learn/${course.id}/${lesson.id}`}
-                                                            className="flex w-full place-items-start hover:text-blue-400 text-muted-foreground gap-2"
+                                            {chapter.lessons
+                                                .filter((l: Lesson) => l.active)
+                                                .map(
+                                                    (
+                                                        lesson: Lesson,
+                                                        index: number,
+                                                    ) => (
+                                                        <Button
+                                                            key={index}
+                                                            variant="ghost"
+                                                            className="p-6"
+                                                            asChild
                                                         >
-                                                            <LuPlayCircle className="size-5 group-hover:text-blue-400" />
-                                                            <span className="flex-1">
-                                                                {lesson.name}
-                                                            </span>
-                                                        </Link>
-                                                    </Button>
-                                                ),
-                                            )}
+                                                            <Link
+                                                                href={`/panel/learn/${course.id}/${lesson.id}`}
+                                                                className="flex w-full place-items-start hover:text-blue-400 text-muted-foreground gap-2"
+                                                            >
+                                                                <LuPlayCircle className="size-5 group-hover:text-blue-400" />
+                                                                <span className="flex-1">
+                                                                    {
+                                                                        lesson.name
+                                                                    }
+                                                                </span>
+                                                            </Link>
+                                                        </Button>
+                                                    ),
+                                                )}
                                         </AccordionContent>
                                     </AccordionItem>
-                                ),
-                            )}
+                                ))}
                         </Accordion>
                     </Card>
                 </div>

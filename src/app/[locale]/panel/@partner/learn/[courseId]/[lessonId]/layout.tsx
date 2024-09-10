@@ -62,7 +62,9 @@ export default function CourseLayout({
         );
         setCurrentLesson(currentLesson);
 
-        const allLessons = course?.chapters?.flatMap((c: Chapter) => c.lessons);
+        const allLessons = course?.chapters
+            ?.filter((c: Chapter) => c.active)
+            .flatMap((c: Chapter) => c.lessons.filter((l: Lesson) => l.active));
         setPrevLessonId(
             allLessons?.[allLessons.indexOf(currentLesson) - 1]?.id,
         );
@@ -85,10 +87,11 @@ export default function CourseLayout({
                 </div>
                 <Card className="col-span-3 lg:col-span-1 w-full max-h-min overflow-auto">
                     <CardHeader className="py-3">
+                        <CardTitle className="text-xl">{course.name}</CardTitle>
                         <CardDescription className="text-sm">
                             {t("currentLesson")}
                         </CardDescription>
-                        <CardTitle>{currentLesson?.name}</CardTitle>
+                        <CardTitle className="text-sm">{currentLesson?.name}</CardTitle>
                         <div className="flex flex-row justify-between !mt-4">
                             <Button
                                 size="sm"
@@ -140,8 +143,9 @@ export default function CourseLayout({
                         className="w-full"
                         collapsible
                     >
-                        {course.chapters.map(
-                            (chapter: Chapter, index: number) => (
+                        {course.chapters
+                            .filter((c: Chapter) => c.active)
+                            .map((chapter: Chapter, index: number) => (
                                 <AccordionItem
                                     key={index}
                                     value={chapter.id}
@@ -152,36 +156,40 @@ export default function CourseLayout({
                                     </AccordionTrigger>
                                     <AccordionContent className="space-y divide-y gap-2 p-0">
                                         <div></div>
-                                        {chapter.lessons.map(
-                                            (lesson: Lesson, index: number) => (
-                                                <Button
-                                                    key={index}
-                                                    variant="ghost"
-                                                    className="p-6"
-                                                    asChild
-                                                >
-                                                    <Link
-                                                        href={`/panel/learn/${courseId}/${lesson.id}`}
-                                                        className={cn(
-                                                            "flex w-full place-items-start hover:text-blue-400 text-muted-foreground gap-2",
-                                                            lesson.id ==
-                                                                lessonId
-                                                                ? "*:text-blue-400"
-                                                                : "*:text-muted-foreground",
-                                                        )}
+                                        {chapter.lessons
+                                            .filter((l: Lesson) => l.active)
+                                            .map(
+                                                (
+                                                    lesson: Lesson,
+                                                    index: number,
+                                                ) => (
+                                                    <Button
+                                                        key={index}
+                                                        variant="ghost"
+                                                        className="p-6"
+                                                        asChild
                                                     >
-                                                        <LuPlayCircle className="size-5 group-hover:text-blue-400" />
-                                                        <span className="flex-1">
-                                                            {lesson.name}
-                                                        </span>
-                                                    </Link>
-                                                </Button>
-                                            ),
-                                        )}
+                                                        <Link
+                                                            href={`/panel/learn/${courseId}/${lesson.id}`}
+                                                            className={cn(
+                                                                "flex w-full place-items-start hover:text-blue-400 text-muted-foreground gap-2",
+                                                                lesson.id ==
+                                                                    lessonId
+                                                                    ? "*:text-blue-400"
+                                                                    : "*:text-muted-foreground",
+                                                            )}
+                                                        >
+                                                            <LuPlayCircle className="size-5 group-hover:text-blue-400" />
+                                                            <span className="flex-1">
+                                                                {lesson.name}
+                                                            </span>
+                                                        </Link>
+                                                    </Button>
+                                                ),
+                                            )}
                                     </AccordionContent>
                                 </AccordionItem>
-                            ),
-                        )}
+                            ))}
                     </Accordion>
                 </Card>
             </div>
