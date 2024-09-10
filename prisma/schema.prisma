@@ -196,7 +196,7 @@ model Chapter {
   id       String @id @default(cuid())
   courseId String
   name     String
-  order    Int?
+  order    Int
 
   active    Boolean  @default(true)
   createdBy String
@@ -213,7 +213,7 @@ model Lesson {
   chapterId   String
   name        String
   description String?
-  order       Int?
+  order       Int
   link        String
 
   active    Boolean  @default(true)
