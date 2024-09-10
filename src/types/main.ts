@@ -92,12 +92,14 @@ type Course = Entity & {
 };
 
 type Chapter = Entity & {
+    active: boolean;
     name: string;
     order: number;
     lessons: Lesson[];
 };
 
 type Lesson = Entity & {
+    active: boolean;
     name: string;
     description: string;
     order: number;

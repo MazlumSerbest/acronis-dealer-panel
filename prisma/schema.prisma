@@ -24,7 +24,7 @@ model User {
   language        String? @default("tr")
 
   deleted   Boolean  @default(false)
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -82,7 +82,7 @@ model Partner {
   phone         String?
   billingDate   DateTime?
 
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -99,7 +99,7 @@ model Customer {
   acronisId   String?   @unique
   billingDate DateTime?
 
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -120,7 +120,7 @@ model License {
   assignedAt  DateTime?
   activatedAt DateTime?
 
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -140,7 +140,7 @@ model Product {
   // price Float?
 
   active    Boolean  @default(true)
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -165,7 +165,7 @@ model Application {
   approvedAt      DateTime?
   approvedBy      String?
 
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -184,7 +184,7 @@ model Course {
   image            String?
 
   active    Boolean  @default(true)
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -196,10 +196,10 @@ model Chapter {
   id       String @id @default(cuid())
   courseId String
   name     String
-  order    String
+  order    Int?
 
   active    Boolean  @default(true)
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
@@ -213,11 +213,11 @@ model Lesson {
   chapterId   String
   name        String
   description String?
-  order       String
+  order       Int?
   link        String
 
   active    Boolean  @default(true)
-  createdBy String?
+  createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
