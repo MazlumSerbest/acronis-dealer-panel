@@ -1,5 +1,5 @@
 "use client";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import Skeleton, {
     DefaultSkeleton,
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
-import CustomersTab from "./(tabs)/Customers";
+import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
 
@@ -74,8 +74,8 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                             {t("general")}
                         </TabsTrigger>
                         {currentTenant?.kind == "partner" && (
-                            <TabsTrigger value="customers" className="w-full">
-                                {t("customers")}
+                            <TabsTrigger value="clients" className="w-full">
+                                {t("clients")}
                             </TabsTrigger>
                         )}
                         <TabsTrigger value="licenses" className="w-full">
@@ -85,9 +85,9 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data?.tenant} />
                     </TabsContent>
-                    <TabsContent value="customers">
+                    <TabsContent value="clients">
                         {!isMutating && children ? (
-                            <CustomersTab t={t} customers={children} />
+                            <ClientsTab t={t} clients={children} />
                         ) : (
                             <Skeleton>
                                 <TableSkeleton />
