@@ -6,6 +6,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import {
     Card,
     CardContent,
@@ -14,9 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
 import {
     Form,
     FormControl,
@@ -26,21 +27,24 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
 
 import { Turnstile } from "@marsidev/react-turnstile";
 import Combobox from "@/components/Combobox";
 import Logo from "@/components/navigation/Logo";
 import FormError from "@/components/FormError";
-import { cities } from "@/lib/constants";
+
+import { cities, dealers } from "@/lib/constants";
 import { LuBuilding2, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
+
 import DealerContract from "./dealerContract";
 
 const applicationFormSchema = z.object({
     companyType: z.enum(["business", "person"], {
         required_error: "Application.companyType.required",
+    }),
+    dealerAcronisId: z.enum(["08726e91-e5ee-4ffe-84e2-e7ce3d0efaee"], {
+        required_error: "Application.dealerAcronisId.required",
     }),
     name: z
         .string({
@@ -109,12 +113,9 @@ const applicationFormSchema = z.object({
     taxCertificate: z.instanceof(File),
     signatureCircular: z.instanceof(File, { message: "" }),
     tradeRegistry: z.instanceof(File).optional(),
-    // personalData: z.literal<boolean>(true, {
-    //     errorMap: () => ({ message: "Application.personalData.required" }),
-    // }),
-    // turnstile: z.literal<boolean>(true, {
-    //     errorMap: () => ({ message: "Application.turnstile.required" }),
-    // }),
+    turnstile: z.literal<boolean>(true, {
+        errorMap: () => ({ message: "Application.turnstile.required" }),
+    }),
 });
 
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
@@ -169,6 +170,12 @@ export default function Application() {
     }
     //#endregion
 
+    const dealersList: ListBoxItem[] = dealers.map((dealer) => {
+        return {
+            id: dealer.acronisId,
+            name: dealer.name,
+        };
+    });
     const citiesList: ListBoxItem[] = cities.map((city) => {
         return {
             id: city.code,
@@ -360,6 +367,39 @@ export default function Application() {
                                     </FormItem>
                                 )}
                             />
+
+                            <FormField
+                                control={form.control}
+                                name="dealerAcronisId"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-2">
+                                        <FormLabel>{t("dealer")}</FormLabel>
+                                        <FormControl>
+                                            <Combobox
+                                                name="dealerAcronisId"
+                                                data={dealersList}
+                                                form={form}
+                                                field={field}
+                                                placeholder={t("select")}
+                                                inputPlaceholder={t(
+                                                    "searchPlaceholder",
+                                                )}
+                                                emptyText={t("noResults")}
+                                            />
+                                        </FormControl>
+                                        <FormDescription>
+                                            {ta("Descriptions.dealerAcronisId")}
+                                        </FormDescription>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors
+                                                    ?.dealerAcronisId
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -846,33 +886,7 @@ export default function Application() {
                                 )}
                             </div>
 
-                            {/* <div className="flex justify-end">
-                                <FormField
-                                    control={form.control}
-                                    name="personalData"
-                                    render={({ field }) => (
-                                        <FormItem className="flex flex-row space-x-3 space-y-0">
-                                            <div className="space-y-1 leading-none text-right">
-                                                <FormLabel>
-                                                    {ta(
-                                                        "Descriptions.personalData",
-                                                    )}
-                                                </FormLabel>
-                                            </div>
-                                            <FormControl>
-                                                <Checkbox
-                                                    checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                />
-                                            </FormControl>
-                                        </FormItem>
-                                    )}
-                                />
-                            </div> */}
-
-                            {/* <div className="flex place-items-end">
+                            <div className="flex place-items-end">
                                 <div className="flex-1"></div>
                                 <div className="grid gap-2">
                                     <Turnstile
@@ -897,14 +911,8 @@ export default function Application() {
                                             form?.formState?.errors?.turnstile
                                         }
                                     />
-                                    <FormError
-                                        error={
-                                            form?.formState?.errors
-                                                ?.personalData
-                                        }
-                                    />
                                 </div>
-                            </div> */}
+                            </div>
                         </CardContent>
                         {/* <Separator /> */}
                         <CardFooter className="flex flex-row gap-2">

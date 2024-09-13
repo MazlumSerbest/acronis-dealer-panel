@@ -1,3 +1,10 @@
+export const dealers = [
+    {
+        acronisId: "08726e91-e5ee-4ffe-84e2-e7ce3d0efaee",
+        name: "Bilsam Teknoloji Ürünleri",
+    },
+];
+
 export const cities = [
     {
         name: "Adana",
@@ -1427,7 +1434,7 @@ export const cities = [
 // Acronis
 export const usageNames = [
     {
-        name: "Storage",
         key: "storage",
+        name: "Storage",
     },
 ];

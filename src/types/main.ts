@@ -26,6 +26,8 @@ type User = Entity & {
 
 type Partner = Entity & {
     acronisId?: string;
+    dealerAcronisId?: string;
+    applicationId?: string;
     name: string;
     email: string;
     phone: string;

@@ -200,7 +200,9 @@
         "backToCourse": "Back to Course",
         "backToCourses": "Back to Courses",
         "newLesson": "New Lesson",
-        "editLesson": "Edit Lesson"
+        "editLesson": "Edit Lesson",
+        "clients": "Clients",
+        "newCustomer": "New Customer"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -234,6 +236,7 @@
             "4": "Globally impact progressive channels and installed base innovation. Enthusiastically leverage."
         },
         "Descriptions": {
+            "dealerAcronisId": "Please select the dealer which you buy your licenses from",
             "companyName": "Please enter the legal name of your company",
             "taxNo": "Please enter the tax number of your company",
             "taxOffice": "Please select the tax office of your company",
@@ -268,10 +271,19 @@
             }
         },
         "Partner": {
-            "acronisId": {
-                "required": "Acronis ID is required",
-                "invalidType": "Acronis ID must be a valid number",
-                "notFound": "Partner not found"
+            "name": {
+                "required": "Name is required",
+                "minLength": "Must be 6 characters long"
+            },
+            "login": {
+                "required": "Login is required",
+                "alreadyTaken": "Username is already taken",
+                "minLength": "Must be 6 characters long",
+                "description": "This will be used to login to Acronis Cloud Console and must be unique value."
+            },
+            "email": {
+                "required": "Email is required",
+                "invalidType": "Must be a valid email"
             }
         },
         "Customer": {
@@ -282,7 +294,8 @@
             "login": {
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
-                "minLength": "Must be 6 characters long"
+                "minLength": "Must be 6 characters long",
+                "description": "This will be used to login to Acronis Cloud Console and must be unique value."
             },
             "email": {
                 "required": "Email is required",
@@ -352,6 +365,10 @@
         "Application": {
             "companyType": {
                 "required": "Type is required"
+            },
+            "dealerAcronisId": {
+                "required": "Dealer is required",
+                "description": ""
             },
             "name": {
                 "required": "Name is required",

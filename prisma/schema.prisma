@@ -72,15 +72,16 @@ model VerificationToken {
 }
 
 model Partner {
-  id            String    @id @default(cuid())
-  applicationId String?   @unique
-  acronisId     String    @unique
-  active        Boolean   @default(true)
-  name          String
-  email         String
-  mobile        String?
-  phone         String?
-  billingDate   DateTime?
+  id              String    @id @default(cuid())
+  applicationId   String?   @unique
+  acronisId       String    @unique
+  dealerAcronisId String?
+  active          Boolean   @default(true)
+  name            String
+  email           String
+  mobile          String?
+  phone           String?
+  billingDate     DateTime?
 
   createdBy String
   createdAt DateTime @default(now())
@@ -150,6 +151,7 @@ model Product {
 
 model Application {
   id              String    @id @default(cuid())
+  dealerAcronisId String    @default("08726e91-e5ee-4ffe-84e2-e7ce3d0efaee")
   companyType     String
   name            String
   taxNo           String

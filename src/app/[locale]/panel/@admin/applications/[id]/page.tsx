@@ -88,10 +88,32 @@ const applicationFormSchema = z.object({
 type ApplicationFormValues = z.infer<typeof applicationFormSchema>;
 
 const partnerFormSchema = z.object({
-    acronisId: z.string({
-        required_error: "Partner.acronisId.required",
-        invalid_type_error: "Partner.acronisId.invalidType",
-    }),
+    name: z
+        .string({
+            required_error: "Partner.name.required",
+        })
+        .min(6, {
+            message: "Partner.name.minLength",
+        }),
+    login: z
+        .string({
+            required_error: "Partner.login.required",
+        })
+        .min(6, {
+            message: "Partner.login.minLength",
+        }),
+    email: z
+        .string({
+            required_error: "Partner.email.required",
+        })
+        .email({
+            message: "Partner.email.invalidType",
+        }),
+    kind: z.enum(["partner"]).optional(),
+    // acronisId: z.string({
+    //     required_error: "Partner.acronisId.required",
+    //     invalid_type_error: "Partner.acronisId.invalidType",
+    // }),
 });
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
@@ -102,13 +124,14 @@ export default function ApplicationDetail({
     params: { id: string };
 }) {
     const t = useTranslations("General");
-    const tf = useTranslations("FormMessages");
+    const tf = useTranslations("FormMessages.Partner");
     const { toast } = useToast();
 
     const [openApprove, setOpenApprove] = useState(false);
     const [openCreatePartner, setOpenCreatePartner] = useState(false);
     const [openUpdate, setOpenUpdate] = useState(false);
     const [tenantName, setTenantName] = useState("");
+    const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
 
     const { data, error, mutate } = useSWR(
         `/api/admin/application/${params.id}`,
@@ -154,17 +177,19 @@ export default function ApplicationDetail({
 
     function onSubmitPartner(values: PartnerFormValues) {
         const partner = {
-            ...values,
-            name: data?.name,
-            email: data?.email,
-            mobile: data?.mobile,
-            applicationId: params.id,
+            name: values.name,
+            login: values.login,
+            applicationId: data.id,
+            parent_id: data.dealerAcronisId, // ???
+            kind: "partner",
+            contact: {
+                email: values.email,
+            },
         };
 
-        fetch("/api/admin/partner", {
+        fetch("/api/acronis/tenants", {
             method: "POST",
             body: JSON.stringify(partner),
-            headers: { "Content-Type": "application/json" },
         })
             .then((res) => res.json())
             .then((res) => {
@@ -182,6 +207,28 @@ export default function ApplicationDetail({
                     });
                 }
             });
+
+        // fetch("/api/admin/partner", {
+        //     method: "POST",
+        //     body: JSON.stringify(partner),
+        //     headers: { "Content-Type": "application/json" },
+        // })
+        //     .then((res) => res.json())
+        //     .then((res) => {
+        //         if (res.ok) {
+        //             toast({
+        //                 description: res.message,
+        //             });
+        //             setOpenCreatePartner(false);
+        //             mutate();
+        //         } else {
+        //             toast({
+        //                 variant: "destructive",
+        //                 title: t("errorTitle"),
+        //                 description: res.message,
+        //             });
+        //         }
+        //     });
     }
     //#endregion
 
@@ -370,7 +417,11 @@ export default function ApplicationDetail({
                                 <Button
                                     className="bg-blue-400 hover:bg-blue-400/90"
                                     onClick={() => {
-                                        partnerForm.reset({});
+                                        partnerForm.reset({
+                                            name: data.name,
+                                            email: data.email,
+                                            login: "",
+                                        });
                                         setTenantName("");
                                         setOpenCreatePartner(true);
                                     }}
@@ -387,9 +438,9 @@ export default function ApplicationDetail({
                                             <DialogTitle>
                                                 {t("createPartner")}
                                             </DialogTitle>
-                                            <DialogDescription>
+                                            {/* <DialogDescription>
                                                 {t("createPartnerMessage")}
-                                            </DialogDescription>
+                                            </DialogDescription> */}
                                         </DialogHeader>
                                         <Form {...partnerForm}>
                                             <form
@@ -403,56 +454,136 @@ export default function ApplicationDetail({
                                                     control={
                                                         partnerForm.control
                                                     }
-                                                    name="acronisId"
+                                                    name="name"
                                                     render={({ field }) => (
                                                         <FormItem>
                                                             <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                                {t("acronisId")}
+                                                                {t("name")}
                                                             </FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    partnerForm
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.name
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={
+                                                        partnerForm.control
+                                                    }
+                                                    name="login"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("username")}
+                                                            </FormLabel>
+                                                            <FormDescription>
+                                                                {tf(
+                                                                    "login.description",
+                                                                )}
+                                                            </FormDescription>
                                                             <FormControl>
                                                                 <Input
                                                                     {...field}
                                                                     onChange={(
                                                                         v,
                                                                     ) => {
-                                                                        fetch(
-                                                                            `/api/acronis/tenants/${v.target.value}`,
+                                                                        partnerForm.setValue(
+                                                                            "login",
+                                                                            v
+                                                                                .target
+                                                                                .value,
+                                                                        );
+                                                                        if (
+                                                                            v
+                                                                                .target
+                                                                                .value
+                                                                                .length >
+                                                                            5
                                                                         )
-                                                                            .then(
-                                                                                (
-                                                                                    res,
-                                                                                ) =>
-                                                                                    res.json(),
+                                                                            fetch(
+                                                                                `/api/acronis/users/checkLogin?username=${v.target.value}`,
                                                                             )
-                                                                            .then(
-                                                                                (
-                                                                                    res,
-                                                                                ) => {
-                                                                                    setTenantName(
-                                                                                        res
-                                                                                            ?.tenant
-                                                                                            ?.name,
-                                                                                    );
-                                                                                    partnerForm.setValue(
-                                                                                        "acronisId",
-                                                                                        v
-                                                                                            .target
-                                                                                            .value,
-                                                                                    );
-                                                                                },
-                                                                            );
+                                                                                .then(
+                                                                                    (
+                                                                                        res,
+                                                                                    ) =>
+                                                                                        res.json(),
+                                                                                )
+                                                                                .then(
+                                                                                    (
+                                                                                        res,
+                                                                                    ) => {
+                                                                                        if (
+                                                                                            res.ok
+                                                                                        ) {
+                                                                                            setLoginAlreadyTaken(
+                                                                                                false,
+                                                                                            );
+                                                                                            partnerForm.clearErrors(
+                                                                                                "login",
+                                                                                            );
+                                                                                        } else {
+                                                                                            setLoginAlreadyTaken(
+                                                                                                true,
+                                                                                            );
+                                                                                            partnerForm.setError(
+                                                                                                "login",
+                                                                                                {
+                                                                                                    type: "manual",
+                                                                                                    message:
+                                                                                                        "Customer.login.alreadyTaken",
+                                                                                                },
+                                                                                            );
+                                                                                        }
+                                                                                    },
+                                                                                );
                                                                     }}
                                                                 />
                                                             </FormControl>
-                                                            <FormDescription>
-                                                                {tenantName}
-                                                            </FormDescription>
                                                             <FormError
                                                                 error={
                                                                     partnerForm
                                                                         ?.formState
                                                                         ?.errors
-                                                                        ?.acronisId
+                                                                        ?.login
+                                                                }
+                                                            />
+                                                        </FormItem>
+                                                    )}
+                                                />
+
+                                                <FormField
+                                                    control={
+                                                        partnerForm.control
+                                                    }
+                                                    name="email"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                {t("email")}
+                                                            </FormLabel>
+                                                            <FormControl>
+                                                                <Input
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                            <FormError
+                                                                error={
+                                                                    partnerForm
+                                                                        ?.formState
+                                                                        ?.errors
+                                                                        ?.email
                                                                 }
                                                             />
                                                         </FormItem>
@@ -466,6 +597,9 @@ export default function ApplicationDetail({
                                                         </Button>
                                                     </DialogClose>
                                                     <Button
+                                                        disabled={
+                                                            loginAlreadyTaken
+                                                        }
                                                         type="submit"
                                                         className="bg-blue-400 hover:bg-blue-400/90"
                                                     >
