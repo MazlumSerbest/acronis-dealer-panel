@@ -320,20 +320,23 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
-                                                        fetch(`/api/admin/user`, {
-                                                            method: "POST",
-                                                            body: JSON.stringify(
-                                                                {
-                                                                    partnerId:
-                                                                        partner?.id,
-                                                                    name: tenant?.name,
-                                                                    email: tenant
-                                                                        ?.contact
-                                                                        ?.email,
-                                                                    role: "partner",
-                                                                },
-                                                            ),
-                                                        })
+                                                        fetch(
+                                                            `/api/admin/user`,
+                                                            {
+                                                                method: "POST",
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        partnerId:
+                                                                            partner?.id,
+                                                                        name: tenant?.name,
+                                                                        email: tenant
+                                                                            ?.contact
+                                                                            ?.email,
+                                                                        role: "partner",
+                                                                    },
+                                                                ),
+                                                            },
+                                                        )
                                                             .then((res) =>
                                                                 res.json(),
                                                             )
@@ -370,7 +373,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 )}
-                                {!partner && (
+                                {!partner && tenant.kind == "partner" && (
                                     <AlertDialog
                                         open={openPartnerDialog}
                                         onOpenChange={setOpenPartnerDialog}
@@ -398,22 +401,25 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 <Button
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
-                                                        fetch(`/api/admin/partner`, {
-                                                            method: "POST",
-                                                            body: JSON.stringify(
-                                                                {
-                                                                    acronisId:
-                                                                        tenant?.id,
-                                                                    name: tenant?.name,
-                                                                    email: tenant
-                                                                        ?.contact
-                                                                        ?.email,
-                                                                    phone: tenant
-                                                                        ?.contact
-                                                                        ?.phone,
-                                                                },
-                                                            ),
-                                                        })
+                                                        fetch(
+                                                            `/api/admin/partner`,
+                                                            {
+                                                                method: "POST",
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        acronisId:
+                                                                            tenant?.id,
+                                                                        name: tenant?.name,
+                                                                        email: tenant
+                                                                            ?.contact
+                                                                            ?.email,
+                                                                        phone: tenant
+                                                                            ?.contact
+                                                                            ?.phone,
+                                                                    },
+                                                                ),
+                                                            },
+                                                        )
                                                             .then((res) =>
                                                                 res.json(),
                                                             )

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
+import prisma from "@/utils/db";
 import getToken from "@/lib/getToken";
 import { auth } from "@/auth";
+import { getTranslations } from "next-intl/server";
 
 // export async function GET() {
 //     try {
@@ -49,21 +51,21 @@ export const POST = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const customer: any = await req.json();
+        const tenant: any = await req.json();
         const authorization = `Bearer ${token}`;
-        const tenant = {
-            kind: "customer",
+        const newTenant = {
+            kind: tenant.kind,
             language: "tr",
-            name: customer.name,
-            parent_id: customer.parent_id,
-            contact: customer.contact,
+            name: tenant.name,
+            parent_id: tenant.parent_id,
+            contact: tenant.contact,
         };
 
         const tenantRes = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/tenants`,
             {
                 method: "POST",
-                body: JSON.stringify(tenant),
+                body: JSON.stringify(newTenant),
                 headers: {
                     Authorization: authorization,
                     "Content-Type": "application/json",
@@ -78,7 +80,7 @@ export const POST = auth(async (req: any, { params }) => {
                 ok: tenantRes.ok,
             });
 
-        const newTenant = await tenantRes.json();
+        const createdTenant = await tenantRes.json();
 
         const applicationsRes = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/applications`,
@@ -94,7 +96,7 @@ export const POST = auth(async (req: any, { params }) => {
         const enableBackupRes = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/applications/${
                 applications.items.find((app: any) => app.type == "backup").id
-            }/bindings/tenants/${newTenant.id}`,
+            }/bindings/tenants/${createdTenant.id}`,
             {
                 method: "POST",
                 headers: {
@@ -106,7 +108,7 @@ export const POST = auth(async (req: any, { params }) => {
         const enablePlatformRes = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/applications/${
                 applications.items.find((app: any) => app.type == "platform").id
-            }/bindings/tenants/${newTenant.id}`,
+            }/bindings/tenants/${createdTenant.id}`,
             {
                 method: "POST",
                 headers: {
@@ -123,9 +125,9 @@ export const POST = auth(async (req: any, { params }) => {
             });
 
         const user = {
-            tenant_id: newTenant.id,
-            login: customer.login,
-            contact: customer.contact,
+            tenant_id: createdTenant.id,
+            login: tenant.login,
+            contact: tenant.contact,
         };
 
         const userRes = await fetch(`${process.env.ACRONIS_API_V2_URL}/users`, {
@@ -146,7 +148,7 @@ export const POST = auth(async (req: any, { params }) => {
 
         const newUser = await userRes.json();
 
-        const sendActivationRes = await fetch(
+        await fetch(
             `${process.env.ACRONIS_API_V2_URL}/users/${newUser.id}/send-activation-email`,
             {
                 method: "POST",
@@ -157,18 +159,57 @@ export const POST = auth(async (req: any, { params }) => {
             },
         );
 
-        if (sendActivationRes.ok)
-            return NextResponse.json({
-                message: "Tenant Created!",
-                status: 200,
-                ok: true,
+        if (tenant.kind === "partner") {
+            const partner: any = {
+                acronisId: createdTenant.id,
+                dealerAcronisId: tenant.parent_id,
+                name: tenant?.name,
+                email: tenant?.contact.email,
+                // mobile: tenant?.mobile,
+                applicationId: tenant.applicationId,
+                createdBy: req.auth.user.email,
+            };
+
+            const newPartner = await prisma.partner.create({
+                data: partner,
             });
-        else
-            return NextResponse.json({
-                message: sendActivationRes.statusText,
-                status: sendActivationRes.status,
-                ok: sendActivationRes.ok,
+
+            if (newPartner.id)
+                return NextResponse.json({
+                    message: "Partner başarıyla kaydedildi!",
+                    status: 200,
+                    ok: true,
+                });
+            else
+                return NextResponse.json({
+                    message: "Partner kaydedilemedi!",
+                    status: 400,
+                    ok: false,
+                });
+        } else {
+            const customer = {
+                acronisId: createdTenant.id,
+                partnerId: tenant.partnerId,
+                createdBy: req.auth.user.email,
+            };
+
+            const newCustomer = await prisma.customer.create({
+                data: customer,
             });
+
+            if (newCustomer.id)
+                return NextResponse.json({
+                    message: "Müşteri başarıyla kaydedildi!",
+                    status: 200,
+                    ok: true,
+                });
+            else
+                return NextResponse.json({
+                    message: "Müşteri kaydedilemedi!",
+                    status: 400,
+                    ok: false,
+                });
+        }
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

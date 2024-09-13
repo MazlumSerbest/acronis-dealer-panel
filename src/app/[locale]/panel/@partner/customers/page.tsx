@@ -60,12 +60,14 @@ const customerFormSchema = z.object({
         .email({
             message: "Customer.email.invalidType",
         }),
+    kind: z.enum(["customer"]).optional(),
 });
 
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
 export default function CustomersPage() {
     const t = useTranslations("General");
+    const tf = useTranslations("FormMessages.Customer");
     const router = useRouter();
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
@@ -85,17 +87,19 @@ export default function CustomersPage() {
         resolver: zodResolver(customerFormSchema),
     });
 
-    async function onSubmit(values: CustomerFormValues) {
+    function onSubmit(values: CustomerFormValues) {
         const customer = {
             name: values.name,
             login: values.login,
             parent_id: currentUser?.acronisTenantId,
+            partnerId: currentUser?.partnerId,
+            kind: "customer",
             contact: {
                 email: values.email,
             },
         };
 
-        await fetch("/api/acronis/tenants", {
+        fetch("/api/acronis/tenants", {
             method: "POST",
             body: JSON.stringify(customer),
         })
@@ -272,9 +276,7 @@ export default function CustomersPage() {
                     <Dialog open={open} onOpenChange={setOpen}>
                         <DialogContent>
                             <DialogHeader>
-                                <DialogTitle>
-                                    {`${t("new")} ${t("customer")}`}
-                                </DialogTitle>
+                                <DialogTitle>{t("newCustomer")}</DialogTitle>
                                 <DialogDescription></DialogDescription>
                             </DialogHeader>
                             <Form {...form}>
@@ -313,9 +315,7 @@ export default function CustomersPage() {
                                                     {t("username")}
                                                 </FormLabel>
                                                 <FormDescription>
-                                                    This will be used to login
-                                                    to Acronis Cloud Console and
-                                                    must be unique.
+                                                    {tf("login.description")}
                                                 </FormDescription>
                                                 <FormControl>
                                                     <Input
