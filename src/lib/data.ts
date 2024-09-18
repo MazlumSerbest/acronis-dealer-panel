@@ -12,6 +12,26 @@ export async function getPartners(forListBox?: boolean) {
     return partners;
 }
 
+export async function getCustomers(partnerId?: string, forListBox?: boolean) {
+    if (!partnerId) return [];
+
+    const res = await fetch(`/api/customer?partnerId=${partnerId}`);
+    const customers = await res.json();
+    
+    const uuids = await customers.map((c: Customer) => c.acronisId).join(",");
+    const tenantRes = await fetch(
+        `/api/acronis/tenants?lod=basic&uuids=${uuids}`,
+    );
+    const tenants = await tenantRes.json();
+
+    if (forListBox)
+        return customers.map((c: Customer) => ({
+            id: c.id,
+            name: tenants.items?.find((t: any) => t.id === c.acronisId)?.name,
+        }));
+    return customers;
+}
+
 export async function getProducts(forListBox?: boolean) {
     const res = await fetch("/api/admin/product");
     const products = await res.json();
