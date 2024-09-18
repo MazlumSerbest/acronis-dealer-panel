@@ -145,6 +145,7 @@ export default function ApplicationDetail({
     //#region Form
     const form = useForm<ApplicationFormValues>({
         resolver: zodResolver(applicationFormSchema),
+        mode: "onChange",
     });
 
     function onSubmit(values: ApplicationFormValues) {

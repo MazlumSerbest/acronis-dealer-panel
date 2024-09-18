@@ -48,14 +48,13 @@ const licenseFormSchema = z.object({
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
 const assignFormSchema = z.object({
-    partnerId: z.string(),
+    partnerId: z.string().cuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
 
 export default function UnassignedTab() {
     const t = useTranslations("General");
-    const router = useRouter();
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
     const [assignOpen, setAssignOpen] = useState(false);
@@ -63,7 +62,7 @@ export default function UnassignedTab() {
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
     const [selected, setSelected] = useState<string[]>([]);
 
-    const { data, error, isLoading, mutate } = useSWR(
+    const { data, error, mutate } = useSWR(
         `/api/admin/license?status=unassigned`,
         null,
         {
@@ -103,10 +102,10 @@ export default function UnassignedTab() {
         resolver: zodResolver(assignFormSchema),
     });
 
-    function onAssignSubmit(values: AssignFormValues) {
+    function onSubmitAssign(values: AssignFormValues) {
         fetch("/api/admin/license/assign", {
             method: "PUT",
-            body: JSON.stringify({ ids: selected, ...values }),
+            body: JSON.stringify({ ...values, ids: selected }),
         })
             .then((res) => res.json())
             .then((res) => {
@@ -283,14 +282,14 @@ export default function UnassignedTab() {
     //#endregion
 
     //#region Data
-    async function getData() {
-        const pro: ListBoxItem[] = await getProducts();
-        setProducts(pro);
-        const par: ListBoxItem[] = await getPartners();
-        setPartners(par);
-    }
-
     useEffect(() => {
+        async function getData() {
+            const pro: ListBoxItem[] = await getProducts();
+            setProducts(pro);
+            const par: ListBoxItem[] = await getPartners();
+            setPartners(par);
+        }
+
         getData();
     }, []);
     //#endregion
@@ -468,7 +467,7 @@ export default function UnassignedTab() {
 
                     <Form {...assignForm}>
                         <form
-                            onSubmit={assignForm.handleSubmit(onAssignSubmit)}
+                            onSubmit={assignForm.handleSubmit(onSubmitAssign)}
                             autoComplete="off"
                             className="space-y-4"
                         >
