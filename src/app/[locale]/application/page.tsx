@@ -918,7 +918,7 @@ export default function Application() {
                         <CardFooter className="flex flex-row gap-2">
                             <div className="flex-1"></div>
                             <Button
-                                size="lg"
+                                size="default"
                                 type="submit"
                                 className="bg-blue-400 hover:bg-blue-400/90"
                             >
