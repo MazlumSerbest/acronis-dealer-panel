@@ -4,34 +4,56 @@ import getToken from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
-// export async function GET() {
-//     try {
-//         const token = await getToken();
+export const GET = auth(async (req: any, { params }) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
 
-//         if (token) {
-//             const headers = {
-//                 Authorization: `Bearer ${token}`,
-//             };
-//             const params = new URLSearchParams({
-//                 lod: "basic",
-//             });
-//             const res = await fetch(
-//                 `${process.env.ACRONIS_API_V2_URL}/tenants?${params}`,
-//                 {
-//                     method: "GET",
-//                     headers: headers,
-//                 },
-//             );
+        if (!req.auth)
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
 
-//             if (res.ok) {
-//                 const allTenants = await res.json();
-//                 return await NextResponse.json({ allTenants });
-//             } else return await NextResponse.json({ message: "Failed!" });
-//         } else return NextResponse.json({ message: "Authentication failed!" });
-//     } catch (error) {
-//         return NextResponse.json({ message: error });
-//     }
-// }
+        const token = await getToken();
+
+        if (!token)
+            return NextResponse.json({
+                message: "Authentication failed!",
+                status: 401,
+                ok: false,
+            });
+
+        const headers = {
+            Authorization: `Bearer ${token}`,
+        };
+        const params = new URLSearchParams({
+            lod: req.nextUrl.searchParams.get("lod") || "basic",
+            uuids: req.nextUrl.searchParams.get("uuids"),
+        });
+        const res = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants?${params}`,
+            {
+                method: "GET",
+                headers: headers,
+            },
+        );
+
+        const tenants = (await res.json()) || [];
+
+        if (res.ok) return await NextResponse.json(tenants);
+        else return await NextResponse.json({ message: "Failed!" });
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
 
 export const POST = auth(async (req: any, { params }) => {
     try {
