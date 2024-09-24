@@ -10,7 +10,7 @@ export const PUT = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (req.auth.user.role !== "admin")
+        if (!req.auth)
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
@@ -18,7 +18,7 @@ export const PUT = auth(async (req: any, { params }) => {
             });
 
         const license: any = {};
-        license.partial = true;
+        license.partial = params?.partial == "true" ? true : false;
         license.updatedAt = new Date().toISOString();
         license.updatedBy = req.auth.user.email;
 
