@@ -85,6 +85,7 @@ export default function CustomersPage() {
     //#region Form
     const form = useForm<CustomerFormValues>({
         resolver: zodResolver(customerFormSchema),
+        mode: "onChange",
     });
 
     function onSubmit(values: CustomerFormValues) {
