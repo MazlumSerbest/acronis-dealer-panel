@@ -117,7 +117,6 @@ model License {
   key        String  @unique
   serialNo   String  @unique
 
-  partial     Boolean   @default(false)
   expiresAt   DateTime?
   assignedAt  DateTime?
   activatedAt DateTime?
@@ -130,21 +129,6 @@ model License {
   product  Product   @relation(fields: [productId], references: [id])
   partner  Partner?  @relation(fields: [partnerId], references: [id])
   customer Customer? @relation(fields: [customerId], references: [id])
-  partials PartialLicense[]
-}
-
-model PartialLicense {
-  id         String  @id @default(cuid())
-  licenseId  String
-  customerId String?
-  quota      Int
-
-  createdBy String
-  createdAt DateTime @default(now())
-  updatedBy String?
-  updatedAt DateTime @updatedAt
-
-  license  License   @relation(fields: [licenseId], references: [id])
 }
 
 model Product {

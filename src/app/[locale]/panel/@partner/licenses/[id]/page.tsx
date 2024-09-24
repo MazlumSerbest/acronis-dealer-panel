@@ -18,10 +18,9 @@ import {
 import Loader from "@/components/loaders/Loader";
 import { Button } from "@/components/ui/button";
 
-import Partials from "./Partials";
 import { DateFormat } from "@/utils/date";
 
-export default function PartialLicenseDetail({
+export default function LicenseDetail({
     params,
 }: {
     params: { id: string };
@@ -88,24 +87,7 @@ export default function PartialLicenseDetail({
                         </div>
                     </div>
                 </CardContent>
-                <CardFooter className="flex flex-row gap-2 justify-end">
-                    <Button
-                        className="bg-destructive hover:bg-destructive/90"
-                        onClick={() => {
-                            // setOpen(true);
-                        }}
-                    >
-                        {t("setAsNotPartial")}
-                    </Button>
-                </CardFooter>
             </Card>
-
-            <Partials
-                licenseId={params.id}
-                partials={data.partials}
-                isLoading={isLoading}
-                mutate={mutate}
-            />
         </>
     );
 }

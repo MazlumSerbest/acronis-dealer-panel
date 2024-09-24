@@ -55,12 +55,6 @@ type License = Entity & {
     activatedAt?: string;
 };
 
-type PartialLicense = Entity & {
-    licenseId: string;
-    customerId: string;
-    quota: number;
-}
-
 type Product = Entity & {
     code: string;
     name: string;

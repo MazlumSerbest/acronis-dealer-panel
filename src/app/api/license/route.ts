@@ -34,34 +34,15 @@ export const GET = auth(async (req: any) => {
             case "inactive":
                 where = {
                     customer: { is: null },
-                    partial: false,
                     OR: [
                         { expiresAt: null },
                         { expiresAt: { gt: new Date() } },
                     ],
                 };
                 break;
-            case "partial":
-                where = {
-                    partial: true,
-                    OR: [
-                        { activatedAt: null },
-                        {
-                            activatedAt: {
-                                gte: new Date(
-                                    new Date().setFullYear(
-                                        new Date().getFullYear() - 1,
-                                    ),
-                                ),
-                            },
-                        },
-                    ],
-                };
-                break;
             case "active":
                 where = {
                     customer: { isNot: null },
-                    partial: false,
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -74,7 +55,7 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    OR: [{ customer: { isNot: null } }, { partial: true }],
+                    OR: [{ customer: { isNot: null } }],
                     activatedAt: {
                         not: null,
                         lt: new Date(

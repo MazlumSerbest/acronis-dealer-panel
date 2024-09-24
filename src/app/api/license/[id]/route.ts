@@ -28,8 +28,7 @@ export const GET = auth(async (req: any, { params }) => {
                         quota: true,
                         unit: true,
                     },
-                },
-                partials: true,
+                }
             },
         });
 

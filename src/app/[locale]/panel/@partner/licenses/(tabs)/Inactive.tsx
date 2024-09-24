@@ -93,7 +93,6 @@ export default function InactiveTab() {
 
     const [openAdd, setOpenAdd] = useState(false);
     const [openAssign, setOpenAssign] = useState(false);
-    const [openPartialApprove, setOpenPartialApprove] = useState(false);
 
     const { data, error, mutate } = useSWR(
         `/api/license?partnerId=${currentUser?.partnerId}&status=inactive`,
@@ -302,15 +301,6 @@ export default function InactiveTab() {
                 return t(data?.unit) || "-";
             },
         },
-        // {
-        //     accessorKey: "partial",
-        //     header: t("partialLicense"),
-        //     cell: ({ row }) => {
-        //         const data: boolean = row.getValue("partial");
-
-        //         return <BoolChip value={data} />;
-        //     },
-        // },
         {
             accessorKey: "createdAt",
             header: t("createdAt"),
@@ -387,9 +377,6 @@ export default function InactiveTab() {
         //                     >
         //                         {t("assignToCustomer")}
         //                     </DropdownMenuItem>
-        //                     <DropdownMenuItem key="partial" onClick={() => {}}>
-        //                         {t("makePartial")}
-        //                     </DropdownMenuItem>
         //                 </DropdownMenuContent>
         //             </DropdownMenu>
         //         );
@@ -436,17 +423,7 @@ export default function InactiveTab() {
                             }}
                         >
                             {t("assignToCustomer")}
-                        </DropdownMenuItem>,
-                        selectedIds.length == 1 && (
-                            <DropdownMenuItem
-                                key="partial"
-                                onClick={() => {
-                                    setOpenPartialApprove(true);
-                                }}
-                            >
-                                {t("makePartialLicense")}
-                            </DropdownMenuItem>
-                        ),
+                        </DropdownMenuItem>
                     ]
                 }
                 selectOnClick={async (table, row) => {
@@ -610,61 +587,6 @@ export default function InactiveTab() {
                     </Form>
                 </DialogContent>
             </Dialog>
-
-            <AlertDialog
-                open={openPartialApprove}
-                onOpenChange={setOpenPartialApprove}
-            >
-                <AlertDialogTrigger asChild></AlertDialogTrigger>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>
-                            {t("partialLicense")}
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                            {t("partialLicenseDescription")}
-                        </AlertDialogDescription>
-                        <AlertDialogDescription>
-                            {t("areYouSure")}
-                        </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel asChild>
-                            <Button variant="outline">{t("cancel")}</Button>
-                        </AlertDialogCancel>
-                        <Button
-                            className="bg-blue-400 hover:bg-blue-400/90"
-                            onClick={() => {
-                                selectedIds &&
-                                    fetch(
-                                        `/api/license/${selectedIds[0]}/true`,
-                                        {
-                                            method: "PUT",
-                                        },
-                                    )
-                                        .then((res) => res.json())
-                                        .then((res) => {
-                                            if (res.ok) {
-                                                toast({
-                                                    description: res.message,
-                                                });
-                                                setOpenPartialApprove(false);
-                                                mutate();
-                                            } else {
-                                                toast({
-                                                    variant: "destructive",
-                                                    title: t("errorTitle"),
-                                                    description: res.message,
-                                                });
-                                            }
-                                        });
-                            }}
-                        >
-                            {t("makePartialLicense")}
-                        </Button>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
         </>
     );
 }
