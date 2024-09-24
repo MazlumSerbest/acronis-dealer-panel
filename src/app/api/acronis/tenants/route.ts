@@ -184,7 +184,7 @@ export const POST = auth(async (req: any, { params }) => {
         if (tenant.kind === "partner") {
             const partner: any = {
                 acronisId: createdTenant.id,
-                dealerAcronisId: tenant.parent_id,
+                parentAcronisId: tenant.parent_id,
                 name: tenant?.name,
                 email: tenant?.contact.email,
                 // mobile: tenant?.mobile,

@@ -246,7 +246,7 @@
             "4": "Globally impact progressive channels and installed base innovation. Enthusiastically leverage."
         },
         "Descriptions": {
-            "dealerAcronisId": "Please select the dealer which you buy your licenses from",
+            "parentAcronisId": "Please select the dealer which you buy your licenses from",
             "companyName": "Please enter the legal name of your company",
             "taxNo": "Please enter the tax number of your company",
             "taxOffice": "Please select the tax office of your company",
@@ -376,7 +376,7 @@
             "companyType": {
                 "required": "Type is required"
             },
-            "dealerAcronisId": {
+            "parentAcronisId": {
                 "required": "Dealer is required",
                 "description": ""
             },

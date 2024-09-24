@@ -43,8 +43,8 @@ const applicationFormSchema = z.object({
     companyType: z.enum(["business", "person"], {
         required_error: "Application.companyType.required",
     }),
-    dealerAcronisId: z.enum(["08726e91-e5ee-4ffe-84e2-e7ce3d0efaee"], {
-        required_error: "Application.dealerAcronisId.required",
+    parentAcronisId: z.enum(["08726e91-e5ee-4ffe-84e2-e7ce3d0efaee"], {
+        required_error: "Application.parentAcronisId.required",
     }),
     name: z
         .string({
@@ -370,13 +370,13 @@ export default function Application() {
 
                             <FormField
                                 control={form.control}
-                                name="dealerAcronisId"
+                                name="parentAcronisId"
                                 render={({ field }) => (
                                     <FormItem className="space-y-2">
                                         <FormLabel>{t("dealer")}</FormLabel>
                                         <FormControl>
                                             <Combobox
-                                                name="dealerAcronisId"
+                                                name="parentAcronisId"
                                                 data={dealersList}
                                                 form={form}
                                                 field={field}
@@ -388,12 +388,12 @@ export default function Application() {
                                             />
                                         </FormControl>
                                         <FormDescription>
-                                            {ta("Descriptions.dealerAcronisId")}
+                                            {ta("Descriptions.parentAcronisId")}
                                         </FormDescription>
                                         <FormError
                                             error={
                                                 form?.formState?.errors
-                                                    ?.dealerAcronisId
+                                                    ?.parentAcronisId
                                             }
                                         />
                                     </FormItem>

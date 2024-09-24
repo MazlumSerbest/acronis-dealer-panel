@@ -80,7 +80,7 @@ export async function POST(req: NextRequest) {
         const formData = await req.formData();
         const app = {
             companyType: formData.get("companyType") as string,
-            dealerAcronisId: formData.get("dealerAcronisId") as string,
+            parentAcronisId: formData.get("parentAcronisId") as string,
             name: formData.get("name") as string,
             taxNo: formData.get("taxNo") as string,
             taxOffice: formData.get("taxOffice") as string,

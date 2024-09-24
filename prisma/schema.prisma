@@ -75,7 +75,8 @@ model Partner {
   id              String    @id @default(cuid())
   applicationId   String?   @unique
   acronisId       String    @unique
-  dealerAcronisId String?
+  parentId        String?
+  parentAcronisId String?
   active          Boolean   @default(true)
   name            String
   email           String
@@ -88,10 +89,12 @@ model Partner {
   updatedBy String?
   updatedAt DateTime @updatedAt
 
+  application Application? @relation(fields: [applicationId], references: [id])
+  parent      Partner?     @relation("parent", fields: [parentId], references: [id])
+  children    Partner[]    @relation("parent")
   customers   Customer[]
   licenses    License[]
   users       User[]
-  application Application? @relation(fields: [applicationId], references: [id])
 }
 
 model Customer {
@@ -138,7 +141,6 @@ model Product {
   model String?
   quota Int?
   unit  String?
-  // price Float?
 
   active    Boolean  @default(true)
   createdBy String
@@ -151,7 +153,7 @@ model Product {
 
 model Application {
   id              String    @id @default(cuid())
-  dealerAcronisId String
+  parentAcronisId String
   companyType     String
   name            String
   taxNo           String
