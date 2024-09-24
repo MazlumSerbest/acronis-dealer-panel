@@ -202,7 +202,17 @@
         "newLesson": "New Lesson",
         "editLesson": "Edit Lesson",
         "clients": "Clients",
-        "newCustomer": "New Customer"
+        "newCustomer": "New Customer",
+        "makePartialLicense": "Make Partial License",
+        "assignToCustomer": "Assign to Customer",
+        "addLicense": "Add License",
+        "addLicenseDescription": "Enter the serial numbers of the licenses you want to add below. Click the 'Add Serial No' button to enter multiple serial numbers.",
+        "licenseSerialNo": "License Serial No",
+        "addSerialNo": "Add Serial No",
+        "partialLicense": "Partial License",
+        "partialLicenseDescription": "If you make this a partial license, the license activated after the first assignment. As long as you do not assign part of this license to any customer, you can convert it to a regular license later.",
+        "areYouSure": "Are you sure you want to proceed?",
+        "assignLicense": "Assign License"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -461,6 +471,7 @@
         "unassigned": "Unassigned",
         "assigned": "Assigned",
         "inactive": "Inactive",
+        "partial": "Partial",
         "active": "Active",
         "completed": "Completed",
         "expired": "Expired",

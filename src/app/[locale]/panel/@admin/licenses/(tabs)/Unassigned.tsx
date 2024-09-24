@@ -60,7 +60,7 @@ export default function UnassignedTab() {
     const [assignOpen, setAssignOpen] = useState(false);
     const [products, setProducts] = useState<ListBoxItem[] | null>(null);
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
-    const [selected, setSelected] = useState<string[]>([]);
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const { data, error, mutate } = useSWR(
         `/api/admin/license?status=unassigned`,
@@ -105,7 +105,7 @@ export default function UnassignedTab() {
     function onSubmitAssign(values: AssignFormValues) {
         fetch("/api/admin/license/assign", {
             method: "PUT",
-            body: JSON.stringify({ ...values, ids: selected }),
+            body: JSON.stringify({ ...values, ids: selectedIds }),
         })
             .then((res) => res.json())
             .then((res) => {
@@ -148,7 +148,7 @@ export default function UnassignedTab() {
                     }
                     onCheckedChange={async (value) => {
                         await table.toggleAllPageRowsSelected(!!value);
-                        setSelected(
+                        setSelectedIds(
                             table
                                 .getSelectedRowModel()
                                 .rows.map((row) => row.original?.id),
@@ -163,7 +163,7 @@ export default function UnassignedTab() {
                     checked={row.getIsSelected()}
                     onCheckedChange={async (value) => {
                         await row.toggleSelected(!!value);
-                        setSelected(
+                        setSelectedIds(
                             table
                                 .getSelectedRowModel()
                                 .rows.map((row) => row.original?.id),
@@ -309,7 +309,7 @@ export default function UnassignedTab() {
                 data={data || []}
                 visibleColumns={visibleColumns}
                 actions={
-                    selected.length > 0 && [
+                    selectedIds.length > 0 && [
                         <DropdownMenuItem
                             key="assign"
                             onClick={() => {
@@ -322,7 +322,7 @@ export default function UnassignedTab() {
                 }
                 selectOnClick={async (table, row) => {
                     await row.toggleSelected();
-                    setSelected(
+                    setSelectedIds(
                         table
                             .getSelectedRowModel()
                             .rows.map((r: any) => r.original?.id),
@@ -460,7 +460,7 @@ export default function UnassignedTab() {
                         </DialogTitle>
                         <DialogDescription>
                             {t("assignDescription", {
-                                length: selected.length,
+                                length: selectedIds.length,
                             })}
                         </DialogDescription>
                     </DialogHeader>
