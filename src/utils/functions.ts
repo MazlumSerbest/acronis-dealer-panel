@@ -18,26 +18,37 @@ export function formatBytes(a: any, b = 2) {
 
 export function calculateDaysUntilAnniversary(date: string) {
     const today = new Date();
-            const currentYear = today.getFullYear();
-            const anniversary = new Date(date);
+    const currentYear = today.getFullYear();
+    const anniversary = new Date(date);
 
-            // Create an anniversary date for this year
-            let nextAnniversary = new Date(
-                currentYear,
-                anniversary.getMonth(),
-                anniversary.getDate(),
-            );
+    // Create an anniversary date for this year
+    let nextAnniversary = new Date(
+        currentYear,
+        anniversary.getMonth(),
+        anniversary.getDate(),
+    );
 
-            // If today's date is past this year's anniversary, use the next year's anniversary
-            if (today > nextAnniversary) {
-                nextAnniversary.setFullYear(currentYear + 1);
-            }
+    // If today's date is past this year's anniversary, use the next year's anniversary
+    if (today > nextAnniversary) {
+        nextAnniversary.setFullYear(currentYear + 1);
+    }
 
-            // Calculate the difference in time (in milliseconds)
-            const timeDiff = nextAnniversary.getTime() - today.getTime();
+    // Calculate the difference in time (in milliseconds)
+    const timeDiff = nextAnniversary.getTime() - today.getTime();
 
-            // Convert the difference from milliseconds to days
-            const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    // Convert the difference from milliseconds to days
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
 
-            return daysDiff;
+    return daysDiff;
+}
+
+export function calculateRemainingDays(date: string) {
+    const today = new Date();
+    const anniversary = new Date(date);
+
+    // Calculate the difference in time (in milliseconds)   
+    const timeDiff = anniversary.getTime() - today.getTime();
+    // Convert the difference from milliseconds to days
+    const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
+    return daysDiff;
 }

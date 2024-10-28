@@ -19,12 +19,11 @@ import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import NeedleChart from "@/components/charts/Needle";
-import { formatBytes } from "@/utils/functions";
+import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
 import { LuAlertTriangle, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { calculateDaysUntilAnniversary } from "@/utils/functions";
 import DatePicker from "@/components/DatePicker";
 
 type Props = {
@@ -51,7 +50,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            const daysDiff = calculateDaysUntilAnniversary(data.billingDate);
+            const daysDiff = calculateRemainingDays(data.billingDate);
             seDaysUntilNextBillingDate(daysDiff);
         },
     });
@@ -224,18 +223,20 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         />
                                     ) : (
                                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                            {`${DateFormat(
-                                                customer?.billingDate || "",
-                                            )} ${
-                                                daysUntilNextBillingDate
-                                                    ? t(
-                                                          "daysUntilNextBillingDate",
-                                                          {
-                                                              days: daysUntilNextBillingDate,
-                                                          },
-                                                      )
-                                                    : ""
-                                            }`}
+                                            {customer?.billingDate
+                                                ? `${DateFormat(
+                                                      customer?.billingDate,
+                                                  )} ${
+                                                      daysUntilNextBillingDate > 0
+                                                          ? t(
+                                                                "daysUntilNextBillingDate",
+                                                                {
+                                                                    days: daysUntilNextBillingDate,
+                                                                },
+                                                            )
+                                                          : t("billingDatePassed")
+                                                  }`
+                                                : "-"}
                                         </dd>
                                     )}
                                 </div>
