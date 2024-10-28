@@ -159,14 +159,14 @@ export const partnerPaths: Path[] = [
             />
         ),
     },
-    {
-        path: "/panel/learn",
-        key: "learn",
-        icon: (
-            <LuGraduationCap
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Learn Page"
-            />
-        ),
-    },
+    // {
+    //     path: "/panel/learn",
+    //     key: "learn",
+    //     icon: (
+    //         <LuGraduationCap
+    //             className="size-6 group-hover:text-blue-400"
+    //             aria-label="Learn Page"
+    //         />
+    //     ),
+    // },
 ];

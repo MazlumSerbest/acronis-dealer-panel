@@ -284,9 +284,9 @@ export default function UnassignedTab() {
     //#region Data
     useEffect(() => {
         async function getData() {
-            const pro: ListBoxItem[] = await getProducts();
+            const pro: ListBoxItem[] = await getProducts(true);
             setProducts(pro);
-            const par: ListBoxItem[] = await getPartners();
+            const par: ListBoxItem[] = await getPartners(true);
             setPartners(par);
         }
 
