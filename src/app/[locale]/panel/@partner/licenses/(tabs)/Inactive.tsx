@@ -59,10 +59,10 @@ import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
 import { getCustomers } from "@/lib/data";
 import Combobox from "@/components/Combobox";
-import { add } from "date-fns";
 
 const addFormSchema = z.object({
-    keys: z.array(
+    partnerId: z.string().cuid().optional(),
+    serials: z.array(
         z.object({
             value: z.string().length(10, {
                 message: "Lütfen geçerli bir lisans kodu giriniz.",
@@ -74,7 +74,7 @@ const addFormSchema = z.object({
 type AddFormValues = z.infer<typeof addFormSchema>;
 
 const defaultValues: Partial<AddFormValues> = {
-    keys: [{ value: "" }],
+    serials: [{ value: "" }],
 };
 
 const assignFormSchema = z.object({
@@ -110,12 +110,15 @@ export default function InactiveTab() {
     });
 
     const { fields, append, remove } = useFieldArray({
-        name: "keys",
+        name: "serials",
         control: addForm.control,
     });
 
     function onSubmitAdd(values: AddFormValues) {
-        fetch("/api/admin", {
+        values.partnerId = currentUser?.partnerId;
+        if (!values.partnerId) return;
+
+        fetch("/api/license", {
             method: "PUT",
             body: JSON.stringify(values),
         })
@@ -423,7 +426,7 @@ export default function InactiveTab() {
                             }}
                         >
                             {t("assignToCustomer")}
-                        </DropdownMenuItem>
+                        </DropdownMenuItem>,
                     ]
                 }
                 selectOnClick={async (table, row) => {
@@ -457,7 +460,7 @@ export default function InactiveTab() {
                                     <FormField
                                         control={addForm.control}
                                         key={field.id}
-                                        name={`keys.${index}.value`}
+                                        name={`serials.${index}.value`}
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel
