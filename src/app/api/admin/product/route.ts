@@ -18,6 +18,20 @@ export const GET = auth(async (req: any) => {
             });
 
         const data = await prisma.product.findMany({
+            select: {
+                id: true,
+                code: true,
+                name: true,
+                model: true,
+                active: true,
+                createdBy: true,
+                createdAt: true,
+                updatedBy: true,
+                updatedAt: true,
+                quota: true,
+                unit: true,
+                edition: true
+            },
             orderBy: {
                 createdAt: "asc",
             },

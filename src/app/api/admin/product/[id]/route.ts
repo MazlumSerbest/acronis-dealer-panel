@@ -18,6 +18,20 @@ export const GET = auth(async (req: any, { params }) => {
             });
 
         const data = await prisma.product.findUnique({
+            select: {
+                id: true,
+                code: true,
+                name: true,
+                model: true,
+                active: true,
+                createdBy: true,
+                createdAt: true,
+                updatedBy: true,
+                updatedAt: true,
+                quota: true,
+                unit: true,
+                edition: true
+            },
             where: {
                 id: params?.id as string,
             },
