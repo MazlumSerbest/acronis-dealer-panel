@@ -34,6 +34,7 @@ import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
 import { LuAlertTriangle, LuPencil } from "react-icons/lu";
+import useUserStore from "@/store/user";
 
 type Props = {
     t: Function;
@@ -48,6 +49,7 @@ type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
     const [edit, setEdit] = useState(false);
@@ -132,7 +134,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             <h2 className="flex-none font-medium text-xl">
                                 Tenant Information
                             </h2>
-                            {partner && (
+                            {partner && partner.parentAcronisId ==  currentUser?.acronisTenantId && (
                                 <Button
                                     disabled={edit}
                                     size="sm"
@@ -210,14 +212,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 ? `${DateFormat(
                                                       partner?.billingDate,
                                                   )} ${
-                                                      daysUntilNextBillingDate > 0
+                                                      daysUntilNextBillingDate >
+                                                      0
                                                           ? t(
                                                                 "daysUntilNextBillingDate",
                                                                 {
                                                                     days: daysUntilNextBillingDate,
                                                                 },
                                                             )
-                                                          : t("billingDatePassed")
+                                                          : t(
+                                                                "billingDatePassed",
+                                                            )
                                                   }`
                                                 : "-"}
                                         </dd>

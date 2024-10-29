@@ -138,7 +138,7 @@
         "client": "Client",
         "billingDate": "Billing Date",
         "daysUntilNextBillingDate": "(Days left to billing: {days} days)",
-        "billingDatePassed": "(Billing date passed!)",
+        "billingDatePassed": "(The billing date has passed!)",
         "exist": "Exist",
         "notExist": "Not Exist",
         "createUser": "Create User",

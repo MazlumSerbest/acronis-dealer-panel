@@ -39,7 +39,7 @@ type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
-    const { user } = useUserStore();
+    const { user: currentUser } = useUserStore();
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
 
@@ -47,7 +47,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         data: customer,
         error: customerError,
         mutate: customerMutate,
-    } = useSWR(`/api/customer/${tenant?.id}`, null, {
+    } = useSWR(`/api/${tenant?.kind}/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             const daysDiff = calculateRemainingDays(data.billingDate);
@@ -72,14 +72,14 @@ export default function GeneralTab({ t, tenant }: Props) {
         const newCustomer = {
             acronisId: tenant?.id,
             billingDate: values.billingDate?.toISOString(),
-            partnerId: user?.partnerId,
+            partnerId: currentUser?.partnerId
         };
         const existingCustomer = {
             billingDate: values.billingDate?.toISOString(),
         };
 
         if (customer)
-            fetch(`/api/customer/${tenant?.id}`, {
+            fetch(`/api/${tenant?.kind}/${tenant?.id}`, {
                 method: "PUT",
                 body: JSON.stringify(existingCustomer),
             })
@@ -100,7 +100,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     }
                 });
         else
-            fetch(`/api/customer`, {
+            fetch(`/api/${tenant?.kind}`, {
                 method: "POST",
                 body: JSON.stringify(newCustomer),
             })

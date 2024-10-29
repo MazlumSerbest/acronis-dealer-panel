@@ -37,8 +37,10 @@ import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const customerFormSchema = z.object({
+    kind: z.enum(["customer", "partner"]),
     name: z
         .string({
             required_error: "Customer.name.required",
@@ -60,7 +62,6 @@ const customerFormSchema = z.object({
         .email({
             message: "Customer.email.invalidType",
         }),
-    kind: z.enum(["customer"]).optional(),
 });
 
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
@@ -86,15 +87,18 @@ export default function CustomersPage() {
     const form = useForm<CustomerFormValues>({
         resolver: zodResolver(customerFormSchema),
         mode: "onChange",
+        defaultValues: {
+            kind: "customer",
+        }
     });
 
     function onSubmit(values: CustomerFormValues) {
         const customer = {
             name: values.name,
             login: values.login,
-            parent_id: currentUser?.acronisTenantId,
+            parentAcronisId: currentUser?.acronisTenantId,
             partnerId: currentUser?.partnerId,
-            kind: "customer",
+            kind: values,
             contact: {
                 email: values.email,
             },
@@ -265,6 +269,20 @@ export default function CustomersPage() {
                                     },
                                 ],
                             },
+                            {
+                                column: "kind",
+                                title: t("kind"),
+                                options: [
+                                    {
+                                        value: "customer",
+                                        label: t("customer"),
+                                    },
+                                    {
+                                        value: "partner",
+                                        label: t("partner"),
+                                    },
+                                ],
+                            },
                         ]}
                         onAddNew={() => {
                             setOpen(true);
@@ -286,6 +304,46 @@ export default function CustomersPage() {
                                     autoComplete="off"
                                     className="space-y-4"
                                 >
+                                    <FormField
+                                        control={form.control}
+                                        name="kind"
+                                        render={({ field }) => (
+                                            <FormItem className="space-y-3">
+                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                    {t("kind")}
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <RadioGroup
+                                                        onValueChange={
+                                                            field.onChange
+                                                        }
+                                                        defaultValue={
+                                                            field.value
+                                                        }
+                                                        className="flex flex-col space-y-1"
+                                                    >
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="customer" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                {t("customer")}
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                        <FormItem className="flex items-center space-x-3 space-y-0">
+                                                            <FormControl>
+                                                                <RadioGroupItem value="partner" />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                {t("partner")}
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    </RadioGroup>
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+
                                     <FormField
                                         control={form.control}
                                         name="name"
