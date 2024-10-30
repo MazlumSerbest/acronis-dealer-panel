@@ -66,85 +66,87 @@ model VerificationToken {
 }
 
 model Partner {
-  id              String       @id @default(cuid())
-  acronisId       String       @unique
-  applicationId   String?      @unique
+  id              String    @id @default(cuid())
+  acronisId       String    @unique
+  applicationId   String?   @unique
   parentAcronisId String?
   parentId        String?
-  active          Boolean      @default(true)
-  email           String
-  mobile          String?
-  name            String
-  phone           String?
+  active          Boolean   @default(true)
+  name            String?
+  // email           String
+  // mobile          String?
+  // phone           String?
   billingDate     DateTime?
 
-  createdBy       String
-  createdAt       DateTime     @default(now())
-  updatedBy       String?
-  updatedAt       DateTime     @updatedAt
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
 
-  customers       Customer[]
-  licenses        License[]
-  application     Application? @relation(fields: [applicationId], references: [id])
-  parent          Partner?     @relation("parent", fields: [parentId], references: [id])
-  children        Partner[]    @relation("parent")
-  users           User[]
+  customers   Customer[]
+  licenses    License[]
+  application Application? @relation(fields: [applicationId], references: [id])
+  parent      Partner?     @relation("parent", fields: [parentId], references: [id])
+  children    Partner[]    @relation("parent")
+  users       User[]
 }
 
 model Customer {
   id          String    @id @default(cuid())
   partnerId   String
   acronisId   String?   @unique
+  name        String?
   billingDate DateTime?
   active      Boolean   @default(true)
 
-  createdBy   String
-  createdAt   DateTime  @default(now())
-  updatedBy   String?
-  updatedAt   DateTime  @updatedAt
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
 
-  partner     Partner   @relation(fields: [partnerId], references: [id])
-  licenses    License[]
+  partner  Partner   @relation(fields: [partnerId], references: [id])
+  licenses License[]
 }
 
 model License {
-  id          String    @id @default(cuid())
-  partnerId   String?
-  customerId  String?
-  key         String    @unique
-  activatedAt DateTime?
-  serialNo    String    @unique
-  productId   String
-  expiresAt   DateTime?
-  assignedAt  DateTime?
+  id                String    @id @default(cuid())
+  partnerId         String?
+  customerId        String?
+  key               String    @unique
+  activatedAt       DateTime?
+  serialNo          String    @unique
+  productId         String
+  expiresAt         DateTime?
+  assignedAt        DateTime?
+  // deductedFromQuota Boolean   @default(false)
 
-  createdBy   String
-  createdAt   DateTime  @default(now())
-  updatedBy   String?
-  updatedAt   DateTime  @updatedAt
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
 
-  customer    Customer? @relation(fields: [customerId], references: [id])
-  partner     Partner?  @relation(fields: [partnerId], references: [id])
-  product     Product   @relation(fields: [productId], references: [id])
+  customer Customer? @relation(fields: [customerId], references: [id])
+  partner  Partner?  @relation(fields: [partnerId], references: [id])
+  product  Product   @relation(fields: [productId], references: [id])
 }
 
 model Product {
-  id        String    @id @default(cuid())
-  code      String    @unique
-  name      String
-  model     String?
-  active    Boolean   @default(true)
-  quota     Int?
-  unit      String?
-  bytes     BigInt?
-  edition   String?
+  id      String  @id @default(cuid())
+  code    String  @unique
+  name    String
+  model   String?
+  active  Boolean @default(true)
+  quota   Int?
+  unit    String?
+  bytes   BigInt?
+  edition String?
 
   createdBy String
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
   updatedBy String?
-  updatedAt DateTime  @updatedAt
+  updatedAt DateTime @updatedAt
 
-  licenses  License[]
+  licenses License[]
 }
 
 model Application {
@@ -165,16 +167,16 @@ model Application {
   approvedBy      String?
   city            Int
 
-  createdAt       DateTime  @default(now())
-  createdBy       String
-  updatedAt       DateTime  @updatedAt
-  updatedBy       String?
+  createdAt DateTime @default(now())
+  createdBy String
+  updatedAt DateTime @updatedAt
+  updatedBy String?
 
-  partner         Partner?
+  partner Partner?
 }
 
 model Course {
-  id               String    @id @default(cuid())
+  id               String  @id @default(cuid())
   category         String
   name             String
   shortDescription String
@@ -182,47 +184,47 @@ model Course {
   duration         String
   level            String
   image            String?
-  active           Boolean   @default(true)
-
-  createdBy        String
-  createdAt        DateTime  @default(now())
-  updatedBy        String?
-  updatedAt        DateTime  @updatedAt
-
-  chapters         Chapter[]
-}
-
-model Chapter {
-  id        String   @id @default(cuid())
-  courseId  String
-  name      String
-  active    Boolean  @default(true)
-  order     Int
+  active           Boolean @default(true)
 
   createdBy String
   createdAt DateTime @default(now())
   updatedBy String?
   updatedAt DateTime @updatedAt
 
-  course    Course   @relation(fields: [courseId], references: [id])
-  lessons   Lesson[]
+  chapters Chapter[]
+}
+
+model Chapter {
+  id       String  @id @default(cuid())
+  courseId String
+  name     String
+  active   Boolean @default(true)
+  order    Int
+
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+
+  course  Course   @relation(fields: [courseId], references: [id])
+  lessons Lesson[]
 }
 
 model Lesson {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   chapterId   String
   name        String
   description String?
   link        String
-  active      Boolean  @default(true)
+  active      Boolean @default(true)
   order       Int
 
-  createdBy   String
-  createdAt   DateTime @default(now())
-  updatedBy   String?
-  updatedAt   DateTime @updatedAt
+  createdBy String
+  createdAt DateTime @default(now())
+  updatedBy String?
+  updatedAt DateTime @updatedAt
 
-  chapter     Chapter  @relation(fields: [chapterId], references: [id])
+  chapter Chapter @relation(fields: [chapterId], references: [id])
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
