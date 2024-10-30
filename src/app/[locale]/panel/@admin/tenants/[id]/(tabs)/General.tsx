@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -33,7 +34,7 @@ import DatePicker from "@/components/DatePicker";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
-import { LuAlertTriangle, LuPencil } from "react-icons/lu";
+import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 type Props = {
@@ -135,22 +136,25 @@ export default function GeneralTab({ t, tenant }: Props) {
                             <h2 className="flex-none font-medium text-xl">
                                 Tenant Information
                             </h2>
-                            {partner && partner.parentAcronisId ==  currentUser?.acronisTenantId && (
-                                <Button
-                                    disabled={edit}
-                                    size="sm"
-                                    className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                    onClick={() => {
-                                        form.reset(partner);
-                                        setEdit(true);
-                                    }}
-                                >
-                                    <span className="sr-only lg:not-sr-only">
-                                        {t("edit")}
-                                    </span>
-                                    <LuPencil className="size-4" />
-                                </Button>
-                            )}
+
+                            {partner &&
+                                partner.parentAcronisId ==
+                                    currentUser?.acronisTenantId && (
+                                    <Button
+                                        disabled={edit}
+                                        size="sm"
+                                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                        onClick={() => {
+                                            form.reset(partner);
+                                            setEdit(true);
+                                        }}
+                                    >
+                                        <span className="sr-only lg:not-sr-only">
+                                            {t("edit")}
+                                        </span>
+                                        <LuPencil className="size-4" />
+                                    </Button>
+                                )}
                         </CardTitle>
                         {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
@@ -296,170 +300,180 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
-                    {!edit &&
-                        tenant.kind == "partner" &&
-                        (!partner || !partner?.users?.length) && (
-                            <CardFooter className="flex flex-row justify-end">
-                                {partner && !partner?.users?.length && (
-                                    <AlertDialog
-                                        open={openUserDialog}
-                                        onOpenChange={setOpenUserDialog}
-                                    >
-                                        <AlertDialogTrigger asChild>
-                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
+                    {!edit && tenant.kind == "partner" && (
+                        <CardFooter className="flex flex-row justify-between gap-2">
+                            <Button
+                                variant="link"
+                                size="default"
+                                className="p-0 text-blue-400"
+                                asChild
+                            >
+                                <Link
+                                    target="_blank"
+                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
+                                >
+                                    {t("showOnAcronis")}
+                                    <LuArrowUpRight className="ml-2 size-4" />
+                                </Link>
+                            </Button>
+
+                            {partner && !partner?.users?.length && (
+                                <AlertDialog
+                                    open={openUserDialog}
+                                    onOpenChange={setOpenUserDialog}
+                                >
+                                    <AlertDialogTrigger asChild>
+                                        <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                            {t("createUser")}
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
                                                 {t("createUser")}
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    {t("createUser")}
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    {t("createUserWarning")}
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel asChild>
-                                                    <Button variant="outline">
-                                                        {t("cancel")}
-                                                    </Button>
-                                                </AlertDialogCancel>
-                                                <Button
-                                                    className="bg-blue-400 hover:bg-blue-400/90"
-                                                    onClick={() => {
-                                                        fetch(
-                                                            `/api/admin/user`,
-                                                            {
-                                                                method: "POST",
-                                                                body: JSON.stringify(
-                                                                    {
-                                                                        partnerId:
-                                                                            partner?.id,
-                                                                        name: tenant?.name,
-                                                                        email: tenant
-                                                                            ?.contact
-                                                                            ?.email,
-                                                                        role: "partner",
-                                                                    },
-                                                                ),
-                                                            },
-                                                        )
-                                                            .then((res) =>
-                                                                res.json(),
-                                                            )
-                                                            .then((res) => {
-                                                                if (res.ok) {
-                                                                    toast({
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenUserDialog(
-                                                                        false,
-                                                                    );
-                                                                    partnerMutate();
-                                                                } else {
-                                                                    toast({
-                                                                        variant:
-                                                                            "destructive",
-                                                                        title: t(
-                                                                            "errorTitle",
-                                                                        ),
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenPartnerDialog(
-                                                                        false,
-                                                                    );
-                                                                }
-                                                            });
-                                                    }}
-                                                >
-                                                    {t("create")}
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                {t("createUserWarning")}
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel asChild>
+                                                <Button variant="outline">
+                                                    {t("cancel")}
                                                 </Button>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                )}
-                                {!partner && tenant.kind == "partner" && (
-                                    <AlertDialog
-                                        open={openPartnerDialog}
-                                        onOpenChange={setOpenPartnerDialog}
-                                    >
-                                        <AlertDialogTrigger asChild>
-                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                            </AlertDialogCancel>
+                                            <Button
+                                                className="bg-blue-400 hover:bg-blue-400/90"
+                                                onClick={() => {
+                                                    fetch(`/api/admin/user`, {
+                                                        method: "POST",
+                                                        body: JSON.stringify({
+                                                            partnerId:
+                                                                partner?.id,
+                                                            name: tenant?.name,
+                                                            email: tenant
+                                                                ?.contact
+                                                                ?.email,
+                                                            role: "partner",
+                                                        }),
+                                                    })
+                                                        .then((res) =>
+                                                            res.json(),
+                                                        )
+                                                        .then((res) => {
+                                                            if (res.ok) {
+                                                                toast({
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                setOpenUserDialog(
+                                                                    false,
+                                                                );
+                                                                partnerMutate();
+                                                            } else {
+                                                                toast({
+                                                                    variant:
+                                                                        "destructive",
+                                                                    title: t(
+                                                                        "errorTitle",
+                                                                    ),
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                setOpenPartnerDialog(
+                                                                    false,
+                                                                );
+                                                            }
+                                                        });
+                                                }}
+                                            >
+                                                {t("create")}
+                                            </Button>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            )}
+                            {!partner && tenant.kind == "partner" && (
+                                <AlertDialog
+                                    open={openPartnerDialog}
+                                    onOpenChange={setOpenPartnerDialog}
+                                >
+                                    <AlertDialogTrigger asChild>
+                                        <Button className="bg-blue-400 hover:bg-blue-400/90">
+                                            {t("createPartner")}
+                                        </Button>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
                                                 {t("createPartner")}
-                                            </Button>
-                                        </AlertDialogTrigger>
-                                        <AlertDialogContent>
-                                            <AlertDialogHeader>
-                                                <AlertDialogTitle>
-                                                    {t("createPartner")}
-                                                </AlertDialogTitle>
-                                                <AlertDialogDescription>
-                                                    {t("createPartnerWarning")}
-                                                </AlertDialogDescription>
-                                            </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel asChild>
-                                                    <Button variant="outline">
-                                                        {t("cancel")}
-                                                    </Button>
-                                                </AlertDialogCancel>
-                                                <Button
-                                                    className="bg-blue-400 hover:bg-blue-400/90"
-                                                    onClick={() => {
-                                                        fetch(
-                                                            `/api/admin/partner`,
-                                                            {
-                                                                method: "POST",
-                                                                body: JSON.stringify(
-                                                                    {
-                                                                        acronisId:
-                                                                            tenant?.id,
-                                                                        name: tenant?.name
-                                                                    },
-                                                                ),
-                                                            },
-                                                        )
-                                                            .then((res) =>
-                                                                res.json(),
-                                                            )
-                                                            .then((res) => {
-                                                                if (res.ok) {
-                                                                    toast({
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenPartnerDialog(
-                                                                        false,
-                                                                    );
-                                                                    partnerMutate();
-                                                                } else {
-                                                                    toast({
-                                                                        variant:
-                                                                            "destructive",
-                                                                        title: t(
-                                                                            "errorTitle",
-                                                                        ),
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenPartnerDialog(
-                                                                        false,
-                                                                    );
-                                                                }
-                                                            });
-                                                    }}
-                                                >
-                                                    {t("create")}
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                {t("createPartnerWarning")}
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel asChild>
+                                                <Button variant="outline">
+                                                    {t("cancel")}
                                                 </Button>
-                                            </AlertDialogFooter>
-                                        </AlertDialogContent>
-                                    </AlertDialog>
-                                )}
-                            </CardFooter>
-                        )}
+                                            </AlertDialogCancel>
+                                            <Button
+                                                className="bg-blue-400 hover:bg-blue-400/90"
+                                                onClick={() => {
+                                                    fetch(
+                                                        `/api/admin/partner`,
+                                                        {
+                                                            method: "POST",
+                                                            body: JSON.stringify(
+                                                                {
+                                                                    acronisId:
+                                                                        tenant?.id,
+                                                                    parentAcronisId:
+                                                                        tenant?.parent_id,
+                                                                    name: tenant?.name,
+                                                                },
+                                                            ),
+                                                        },
+                                                    )
+                                                        .then((res) =>
+                                                            res.json(),
+                                                        )
+                                                        .then((res) => {
+                                                            if (res.ok) {
+                                                                toast({
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                setOpenPartnerDialog(
+                                                                    false,
+                                                                );
+                                                                partnerMutate();
+                                                            } else {
+                                                                toast({
+                                                                    variant:
+                                                                        "destructive",
+                                                                    title: t(
+                                                                        "errorTitle",
+                                                                    ),
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                setOpenPartnerDialog(
+                                                                    false,
+                                                                );
+                                                            }
+                                                        });
+                                                }}
+                                            >
+                                                {t("create")}
+                                            </Button>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            )}
+                        </CardFooter>
+                    )}
                 </Card>
             </div>
 

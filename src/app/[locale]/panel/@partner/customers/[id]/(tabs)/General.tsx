@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Link from "next/link";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -22,7 +23,7 @@ import NeedleChart from "@/components/charts/Needle";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
-import { LuAlertTriangle, LuPencil } from "react-icons/lu";
+import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import DatePicker from "@/components/DatePicker";
 
@@ -73,7 +74,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             name: tenant?.name,
             acronisId: tenant?.id,
             billingDate: values.billingDate?.toISOString(),
-            partnerId: currentUser?.partnerId
+            partnerId: currentUser?.partnerId,
         };
         const existingCustomer = {
             name: tenant?.name,
@@ -229,14 +230,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 ? `${DateFormat(
                                                       customer?.billingDate,
                                                   )} ${
-                                                      daysUntilNextBillingDate > 0
+                                                      daysUntilNextBillingDate >
+                                                      0
                                                           ? t(
                                                                 "daysUntilNextBillingDate",
                                                                 {
                                                                     days: daysUntilNextBillingDate,
                                                                 },
                                                             )
-                                                          : t("billingDatePassed")
+                                                          : t(
+                                                                "billingDatePassed",
+                                                            )
                                                   }`
                                                 : "-"}
                                         </dd>
@@ -283,6 +287,24 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
+                    {!edit && (
+                        <CardFooter>
+                            <Button
+                                variant="link"
+                                size="default"
+                                className="p-0 text-blue-400"
+                                asChild
+                            >
+                                <Link
+                                    target="_blank"
+                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
+                                >
+                                    {t("showOnAcronis")}
+                                    <LuArrowUpRight className="ml-2 size-4" />
+                                </Link>
+                            </Button>
+                        </CardFooter>
+                    )}
                 </Card>
             </div>
 

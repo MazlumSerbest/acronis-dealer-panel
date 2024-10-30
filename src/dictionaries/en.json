@@ -213,7 +213,8 @@
         "partialLicense": "Partial License",
         "partialLicenseDescription": "If you make this a partial license, the license activated after the first assignment. As long as you do not assign part of this license to any customer, you can convert it to a regular license later.",
         "areYouSure": "Are you sure you want to proceed?",
-        "assignLicense": "Assign License"
+        "assignLicense": "Assign License",
+        "showOnAcronis": "Show on Cyber Protect Cloud"
     },
     "SignIn": {
         "signIn": "Sign In",

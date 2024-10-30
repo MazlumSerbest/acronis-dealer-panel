@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -12,15 +12,15 @@ import { adminPaths, partnerPaths } from "@/lib/paths";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 
-import { LuMenu } from "react-icons/lu";
+import { LuArrowUpRight, LuMenu } from "react-icons/lu";
 import useAcronisStore from "@/store/acronis";
 import useUserStore from "@/store/user";
 
 export default function NavLayout() {
     const t = useTranslations("General");
     const [showSidebar, setShowSidebar] = useState(false);
-    const { userTenant } = useAcronisStore();
     const { user: currentUser } = useUserStore();
+    const { userTenant } = useAcronisStore();
 
     const pathName = usePathname();
 
@@ -28,6 +28,8 @@ export default function NavLayout() {
     useOnClickOutside(ref, (_) => {
         setShowSidebar(false);
     });
+
+    useEffect(() => {}, [userTenant]);
 
     return (
         <>
@@ -67,7 +69,9 @@ export default function NavLayout() {
                 {userTenant ? (
                     <div className="flex flex-col w-52 gap-1">
                         <h1 className="text-lg font-semibold text-blue-400">
-                            {currentUser?.role == "admin" ? "Admin Panel" : "Partner Panel"}
+                            {currentUser?.role == "admin"
+                                ? "Admin Panel"
+                                : "Partner Panel"}
                         </h1>
                         <h2 className="text-sm font-semibold text-zinc-600">
                             {currentUser?.role == "partner" && userTenant.name}
@@ -159,6 +163,23 @@ export default function NavLayout() {
                             );
                         })
                     )}
+                </div>
+
+                <div className="flex">
+                    <Button
+                        size="sm"
+                        variant="link"
+                        className="p-0 m-auto text-muted-foreground underline-muted-foreground"
+                        asChild
+                    >
+                        <Link
+                            target="_blank"
+                            href={`https://tr01-cloud.acronis.com/mc/app;group_id=${userTenant?.id}`}
+                        >
+                            Acronis Cyber Protect Cloud
+                            <LuArrowUpRight className="ml-2 size-3" />
+                        </Link>
+                    </Button>
                 </div>
 
                 <Separator />
