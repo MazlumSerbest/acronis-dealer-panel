@@ -1,7 +1,7 @@
 type Entity = {
-    id: string;
-    createdBy: string;
-    createdAt: string;
+    id?: string;
+    createdBy?: string;
+    createdAt?: string;
     updatedBy?: string;
     updatedAt?: string;
 };
@@ -25,14 +25,12 @@ type User = Entity & {
 };
 
 type Partner = Entity & {
+    parentId?: string;
     acronisId?: string;
     parentAcronisId?: string;
     applicationId?: string;
     name: string;
-    email: string;
-    phone: string;
-    mobile: string;
-    active: boolean;
+    active?: boolean;
     billingDate?: string;
     application?: Application;
     users?: User[];
@@ -41,6 +39,7 @@ type Partner = Entity & {
 };
 
 type Customer = Entity & {
+    name: string;
     partnerId: string;
     acronisId?: string;
     billingDate?: string;

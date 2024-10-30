@@ -1,58 +1,58 @@
 // V2
 type AcronisEntity = {
-    id: string;
-    created_at: string;
+    id?: string;
+    created_at?: string;
     updated_at?: string;
     deleted_at?: string;
 };
 
 type Tenant = AcronisEntity & {
     parent_id: string;
-    enabled: boolean;
+    enabled?: boolean;
     name: string;
     kind: string;
-    language: string;
-    customer_id: string;
-    customer_type: string;
+    language?: string;
+    customer_id?: string;
+    customer_type?: string;
     contact: TenantContact;
-    contacts: TenantContact[];
-    pricing_mode: string;
-    has_children: boolean;
+    contacts?: TenantContact[];
+    pricing_mode?: string;
+    has_children?: boolean;
 };
 
 type TenantUser = AcronisEntity & {
     tenant_id: string;
     login: string;
-    activated: boolean;
-    enabled: boolean;
-    mfa_status: string;
+    activated?: boolean;
+    enabled?: boolean;
+    mfa_status?: string;
     language: string;
     contact: TenantContact;
 };
 
 type TenantContact = AcronisEntity & {
-    aan: string;
-    address1: string;
-    address2: string;
-    city: string;
-    country: string;
-    state: string;
-    zipcode: string;
-    firstname: string;
-    lastname: string;
-    fullname: string;
-    email: string;
-    email_confirmed: string;
-    phone: string;
-    fax: string;
-    website: string;
-    language: string;
-    industry: string;
-    organization_size: string;
-    title: string;
-    types: Array<"legal" | "billing" | "technical" | "business">;
-    tenant_id: string;
-    user_id: string;
+    aan?: string;
+    address1?: string;
+    address2?: string;
+    city?: string;
+    country?: string;
+    state?: string;
+    zipcode?: string;
+    firstname?: string;
+    lastname?: string;
+    fullname?: string;
+    email?: string;
+    email_confirmed?: string;
+    phone?: string;
+    fax?: string;
+    website?: string;
+    language?: string;
+    industry?: string;
+    organization_size?: string;
+    title?: string;
+    types?: Array<"legal" | "billing" | "technical" | "business">;
+    tenant_id?: string;
+    user_id?: string;
 };
 
 type TenantLocation = AcronisEntity & {
