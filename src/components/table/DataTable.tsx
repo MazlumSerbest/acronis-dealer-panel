@@ -1,6 +1,7 @@
 import { ReactNode, useState } from "react";
 import {
     ColumnDef,
+    ColumnFiltersState,
     SortingState,
     VisibilityState,
     flexRender,
@@ -111,7 +112,7 @@ export function DataTable<TData, TValue>({
             },
         },
         autoResetPageIndex: false,
-        enableRowSelection: true,
+        enableRowSelection: selectable,
         onRowSelectionChange: setRowSelection,
         onSortingChange: setSorting,
         // onColumnFiltersChange: setColumnFilters,

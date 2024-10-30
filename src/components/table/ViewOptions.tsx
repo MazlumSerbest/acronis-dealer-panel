@@ -45,7 +45,7 @@ export function DataTableViewOptions<TData>({
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="max-w-[300px]">
-                        <DropdownMenuLabel>Toggle columns</DropdownMenuLabel>
+                        <DropdownMenuLabel>{tc("toggleColumns")}</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         {visibleColumns.map((column) => {
                             return (
