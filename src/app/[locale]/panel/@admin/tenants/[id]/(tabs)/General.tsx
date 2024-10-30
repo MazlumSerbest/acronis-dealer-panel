@@ -82,6 +82,7 @@ export default function GeneralTab({ t, tenant }: Props) {
 
     async function onSubmit(values: PartnerFormValues) {
         const existingPartner = {
+            name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
         };
         if (partner)
@@ -416,13 +417,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                     {
                                                                         acronisId:
                                                                             tenant?.id,
-                                                                        name: tenant?.name,
-                                                                        email: tenant
-                                                                            ?.contact
-                                                                            ?.email,
-                                                                        phone: tenant
-                                                                            ?.contact
-                                                                            ?.phone,
+                                                                        name: tenant?.name
                                                                     },
                                                                 ),
                                                             },

@@ -62,49 +62,6 @@ export default function PartnersPage() {
             },
         },
         {
-            accessorKey: "email",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("email")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
-            cell: ({ row }) => {
-                const data: string = row.getValue("email");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "mobile",
-            header: t("mobile"),
-            cell: ({ row }) => {
-                const data: string = row.getValue("mobile");
-                const mobile = data ? "+90" + data : "-";
-
-                return mobile;
-            },
-        },
-        {
-            accessorKey: "phone",
-            header: t("phone"),
-            cell: ({ row }) => {
-                const data: string = row.getValue("phone");
-                const phone = data ? "+90" + data : "-";
-
-                return phone;
-            },
-        },
-        {
             accessorKey: "acronisId",
             header: t("acronisId"),
             enableHiding: false,
