@@ -169,6 +169,7 @@ export default function UsersPage() {
 
                 return data || "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "email",
@@ -202,7 +203,6 @@ export default function UsersPage() {
 
                 return t(data) || "-";
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "partner",
@@ -214,9 +214,11 @@ export default function UsersPage() {
             },
             filterFn: (rows: any, id, value) => {
                 return rows?.filter((row: any) => {
-                    const data: Partner = row.getValue(id);
+                    const partner = row.getValue("name");
 
-                    return data?.name?.toLowerCase().includes(value.toLowerCase());
+                    return partner.name
+                        .toLowerCase()
+                        .includes(value.toLowerCase());
                 });
             },
         },
@@ -239,13 +241,11 @@ export default function UsersPage() {
         {
             accessorKey: "active",
             header: t("active"),
-            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: boolean = row.getValue("active");
 
                 return <BoolChip size="size-4" value={data} />;
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",

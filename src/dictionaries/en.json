@@ -459,7 +459,8 @@
         "totalRows": "{selected} of {length} row(s) selected.",
         "selectDate": "Pick a date",
         "clear": "Clear",
-        "actions": "Actions"
+        "actions": "Actions",
+        "toggleColumns": "Toggle Columns"
     },
     "Dashboard": {
         "title": "Dashboard"

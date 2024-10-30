@@ -67,6 +67,9 @@ export default function UnassignedTab() {
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: (data) => {
+                console.log(data);
+            },
         },
     );
 
@@ -177,6 +180,7 @@ export default function UnassignedTab() {
         {
             accessorKey: "product",
             enableHiding: false,
+            accessorFn: (row) => row.original.product.name,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}
@@ -195,6 +199,13 @@ export default function UnassignedTab() {
                 const data: Product = row.getValue("product");
 
                 return data?.name || "-";
+            },
+            filterFn: (row, columnId, filterValue) => {
+                const product: Product = row.getValue("product");
+
+                return product.name
+                    .toLowerCase()
+                    .includes(filterValue.toLowerCase());
             },
         },
         {
@@ -223,6 +234,7 @@ export default function UnassignedTab() {
         {
             accessorKey: "product",
             header: t("quota"),
+            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: Product = row.getValue("product");
 
@@ -232,6 +244,7 @@ export default function UnassignedTab() {
         {
             accessorKey: "product",
             header: t("unit"),
+            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: Product = row.getValue("product");
 
@@ -308,6 +321,7 @@ export default function UnassignedTab() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
+                selectable
                 actions={
                     selectedIds.length > 0 && [
                         <DropdownMenuItem

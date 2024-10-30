@@ -70,11 +70,13 @@ export default function GeneralTab({ t, tenant }: Props) {
 
     async function onSubmit(values: CustomerFormValues) {
         const newCustomer = {
+            name: tenant?.name,
             acronisId: tenant?.id,
             billingDate: values.billingDate?.toISOString(),
             partnerId: currentUser?.partnerId
         };
         const existingCustomer = {
+            name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
         };
 
