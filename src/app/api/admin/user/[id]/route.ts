@@ -31,6 +31,7 @@ export const GET = auth(async (req: any, { params }) => {
                 partnerId: true,
                 acronisTenantId: true,
                 role: true,
+                licensed: true,
                 createdBy: true,
                 createdAt: true,
                 updatedBy: true,

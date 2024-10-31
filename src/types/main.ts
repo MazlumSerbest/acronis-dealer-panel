@@ -21,6 +21,7 @@ type User = Entity & {
     email: string;
     emailVerified?: string;
     role: "admin" | "partner";
+    licensed: boolean;
     partner?: Partner;
 };
 

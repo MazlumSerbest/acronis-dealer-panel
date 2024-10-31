@@ -23,6 +23,7 @@ model User {
   acronisTenantId String?
   partnerId       String?
   language        String?   @default("tr")
+  licensed        Boolean   @default(false)
   deleted         Boolean   @default(false)
   accounts        Account[]
   sessions        Session[]
@@ -109,15 +110,15 @@ model Customer {
 }
 
 model License {
-  id                String    @id @default(cuid())
-  partnerId         String?
-  customerId        String?
-  key               String    @unique
-  activatedAt       DateTime?
-  serialNo          String    @unique
-  productId         String
-  expiresAt         DateTime?
-  assignedAt        DateTime?
+  id          String    @id @default(cuid())
+  partnerId   String?
+  customerId  String?
+  key         String    @unique
+  activatedAt DateTime?
+  serialNo    String    @unique
+  productId   String
+  expiresAt   DateTime?
+  assignedAt  DateTime?
   // deductedFromQuota Boolean   @default(false)
 
   createdBy String

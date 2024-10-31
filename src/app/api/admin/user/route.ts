@@ -27,6 +27,7 @@ export const GET = auth(async (req: any) => {
                 role: true,
                 partnerId: true,
                 acronisTenantId: true,
+                licensed: true,
                 createdBy: true,
                 createdAt: true,
                 updatedBy: true,

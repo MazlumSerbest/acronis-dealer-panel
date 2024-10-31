@@ -18,6 +18,7 @@ type Tenant = AcronisEntity & {
     contacts?: TenantContact[];
     pricing_mode?: string;
     has_children?: boolean;
+    mfa_status?: string;
 };
 
 type TenantUser = AcronisEntity & {

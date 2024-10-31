@@ -214,7 +214,9 @@
         "partialLicenseDescription": "If you make this a partial license, the license activated after the first assignment. As long as you do not assign part of this license to any customer, you can convert it to a regular license later.",
         "areYouSure": "Are you sure you want to proceed?",
         "assignLicense": "Assign License",
-        "showOnAcronis": "Show on Cyber Protect Cloud"
+        "showOnAcronis": "Show on Acronis Cyber Protect Cloud",
+        "licensed": "Licensed",
+        "licensedUser": "Licensed User"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -270,6 +272,9 @@
         "User": {
             "active": {
                 "description": "This value is for the active status. If the user is active, the user can login to the system."
+            },
+            "licensed": {
+                "description": "This value is for the licensed status. If the user is licensed, some pages may change for this user."
             },
             "role": {
                 "required": "Role is required"

@@ -54,6 +54,7 @@ import { getPartners } from "@/lib/data";
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
     active: z.boolean(),
+    licensed: z.boolean(),
     role: z.enum(["admin", "partner"], {
         required_error: "User.role.required",
     }),
@@ -203,6 +204,7 @@ export default function UsersPage() {
 
                 return t(data) || "-";
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "partner",
@@ -239,13 +241,26 @@ export default function UsersPage() {
             },
         },
         {
+            accessorKey: "licensed",
+            header: t("licensedUser"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("licensed");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
             accessorKey: "active",
             header: t("active"),
+            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: boolean = row.getValue("active");
 
                 return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
@@ -365,6 +380,14 @@ export default function UsersPage() {
                         options: [
                             { value: "admin", label: t("admin") },
                             { value: "partner", label: t("partner") },
+                        ],
+                    },
+                    {
+                        column: "licensed",
+                        title: t("licensed"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
                         ],
                     },
                     {
@@ -507,36 +530,69 @@ export default function UsersPage() {
                             />
 
                             {form.watch("role") === "partner" && (
-                                <FormField
-                                    control={form.control}
-                                    name="partnerId"
-                                    render={({ field }) => (
-                                        <FormItem>
-                                            <FormLabel>
-                                                {t("partner")}
-                                            </FormLabel>
-                                            <FormControl>
-                                                <Combobox
-                                                    name="partnerId"
-                                                    data={partners || []}
-                                                    form={form}
-                                                    field={field}
-                                                    placeholder={t("select")}
-                                                    inputPlaceholder={t(
-                                                        "searchPlaceholder",
-                                                    )}
-                                                    emptyText={t("noResults")}
+                                <>
+                                    <FormField
+                                        control={form.control}
+                                        name="licensed"
+                                        render={({ field }) => (
+                                            <FormItem className="flex flex-row items-center justify-between">
+                                                <div className="space-y-0.5">
+                                                    <FormLabel>
+                                                        {t("licensedUser")}
+                                                    </FormLabel>
+                                                    <FormDescription>
+                                                        {tf(
+                                                            "licensed.description",
+                                                        )}
+                                                    </FormDescription>
+                                                </div>
+                                                <FormControl>
+                                                    <Switch
+                                                        checked={field.value}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
+                                                    />
+                                                </FormControl>
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    <FormField
+                                        control={form.control}
+                                        name="partnerId"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    {t("partner")}
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Combobox
+                                                        name="partnerId"
+                                                        data={partners || []}
+                                                        form={form}
+                                                        field={field}
+                                                        placeholder={t(
+                                                            "select",
+                                                        )}
+                                                        inputPlaceholder={t(
+                                                            "searchPlaceholder",
+                                                        )}
+                                                        emptyText={t(
+                                                            "noResults",
+                                                        )}
+                                                    />
+                                                </FormControl>
+                                                <FormError
+                                                    error={
+                                                        form?.formState?.errors
+                                                            ?.partnerId
+                                                    }
                                                 />
-                                            </FormControl>
-                                            <FormError
-                                                error={
-                                                    form?.formState?.errors
-                                                        ?.partnerId
-                                                }
-                                            />
-                                        </FormItem>
-                                    )}
-                                />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </>
                             )}
 
                             <DialogFooter>
