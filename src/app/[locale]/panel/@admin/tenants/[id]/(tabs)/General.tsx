@@ -10,6 +10,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
     Card,
     CardContent,
+    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,
@@ -26,11 +27,14 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
-import NeedleChart from "@/components/charts/Needle";
 import DatePicker from "@/components/DatePicker";
+import StorageCard from "@/components/usages/Storage";
+import UsageCard from "@/components/usages/Usage";
+
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { cn } from "@/lib/utils";
@@ -55,6 +59,8 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [openUserDialog, setOpenUserDialog] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
+    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
+    const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
 
     const {
         data: partner,
@@ -74,6 +80,26 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate: usagesMutate,
     } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         revalidateOnFocus: false,
+        onSuccess: (data) => {
+            setUsagesPerGB(
+                data?.usages?.items?.filter(
+                    (u: TenantUsage) =>
+                        u.edition == "pck_per_gigabyte" &&
+                        u.value > 0 &&
+                        u.usage_name != "storage" &&
+                        u.usage_name != "storage_total",
+                ),
+            );
+            setUsagesPerWorkload(
+                data?.usages?.items?.filter(
+                    (u: TenantUsage) =>
+                        u.edition == "pck_per_workload" &&
+                        u.value > 0 &&
+                        u.usage_name != "storage" &&
+                        u.usage_name != "storage_total",
+                ),
+            );
+        },
     });
 
     //#region Form
@@ -112,7 +138,7 @@ export default function GeneralTab({ t, tenant }: Props) {
 
     if (usagesError) return <div>{t("failedToLoad")}</div>;
     return (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="container grid grid-cols-3 gap-4">
             {usages?.usages?.items?.some(
                 (u: TenantUsage) =>
                     u.offering_item?.quota?.value !== null &&
@@ -156,6 +182,23 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </Button>
                                 )}
                         </CardTitle>
+                        {edit ? (
+                            <></>
+                        ) : (
+                            // <CardDescription>
+                            //     Some information only can be changed from the
+                            //     Acronis Cloud Platform
+                            // </CardDescription>
+                            <CardDescription className="hover:underline">
+                                <Link
+                                    target="_blank"
+                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
+                                >
+                                    {t("showOnAcronis")}
+                                    <LuArrowUpRight className="ml-1 size-4 inline-block" />
+                                </Link>
+                            </CardDescription>
+                        )}
                         {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
                     {/* <Separator /> */}
@@ -164,9 +207,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:items-center *:px-4 *:py-2">
                                 <div>
-                                    <dt className="font-medium">{t("kind")}</dt>
+                                    <dt className="font-medium">{t("name")}</dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {t(tenant?.kind || "")}
+                                        {tenant?.name || "-"}
                                     </dd>
                                 </div>
 
@@ -181,10 +224,19 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                                 <div>
                                     <dt className="font-medium">
-                                        {t("customerType")}
+                                        {t("enabled")}
                                     </dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {tenant?.customer_type || "-"}
+                                        <BoolChip
+                                            value={tenant?.enabled || false}
+                                        />
+                                    </dd>
+                                </div>
+
+                                <div>
+                                    <dt className="font-medium">{t("kind")}</dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {t(tenant?.kind || "")}
                                     </dd>
                                 </div>
 
@@ -194,6 +246,19 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                         {tenant?.contact?.email || "-"}
+                                    </dd>
+                                </div>
+
+                                <div>
+                                    <dt className="font-medium">
+                                        {t("mfaStatus")}
+                                    </dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        <BoolChip
+                                            value={
+                                                tenant?.mfa_status == "enabled"
+                                            }
+                                        />
                                     </dd>
                                 </div>
 
@@ -234,7 +299,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     )}
                                 </div>
 
-                                <div>
+                                {/* <div>
                                     <dt className="font-medium">
                                         {t("createdAt")}
                                     </dt>
@@ -243,7 +308,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             tenant?.created_at || "",
                                         )}
                                     </dd>
-                                </div>
+                                </div> */}
 
                                 {tenant.kind == "partner" && (
                                     <>
@@ -300,9 +365,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
-                    {!edit && tenant.kind == "partner" && (
-                        <CardFooter className="flex flex-row justify-between gap-2">
-                            <Button
+                    {!edit &&
+                        tenant.parent_id == currentUser?.acronisTenantId &&
+                        (!partner || partner?.users?.length == 0) && (
+                            <CardFooter className="flex flex-row justify-end gap-2">
+                                {/* <Button
                                 variant="link"
                                 size="default"
                                 className="p-0 text-blue-400"
@@ -315,165 +382,170 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     {t("showOnAcronis")}
                                     <LuArrowUpRight className="ml-2 size-4" />
                                 </Link>
-                            </Button>
+                            </Button> */}
 
-                            {partner && !partner?.users?.length && (
-                                <AlertDialog
-                                    open={openUserDialog}
-                                    onOpenChange={setOpenUserDialog}
-                                >
-                                    <AlertDialogTrigger asChild>
-                                        <Button className="bg-blue-400 hover:bg-blue-400/90">
-                                            {t("createUser")}
-                                        </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
+                                {partner && !partner?.users?.length && (
+                                    <AlertDialog
+                                        open={openUserDialog}
+                                        onOpenChange={setOpenUserDialog}
+                                    >
+                                        <AlertDialogTrigger asChild>
+                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
                                                 {t("createUser")}
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                {t("createUserWarning")}
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel asChild>
-                                                <Button variant="outline">
-                                                    {t("cancel")}
-                                                </Button>
-                                            </AlertDialogCancel>
-                                            <Button
-                                                className="bg-blue-400 hover:bg-blue-400/90"
-                                                onClick={() => {
-                                                    fetch(`/api/admin/user`, {
-                                                        method: "POST",
-                                                        body: JSON.stringify({
-                                                            partnerId:
-                                                                partner?.id,
-                                                            name: tenant?.name,
-                                                            email: tenant
-                                                                ?.contact
-                                                                ?.email,
-                                                            role: "partner",
-                                                        }),
-                                                    })
-                                                        .then((res) =>
-                                                            res.json(),
-                                                        )
-                                                        .then((res) => {
-                                                            if (res.ok) {
-                                                                toast({
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                setOpenUserDialog(
-                                                                    false,
-                                                                );
-                                                                partnerMutate();
-                                                            } else {
-                                                                toast({
-                                                                    variant:
-                                                                        "destructive",
-                                                                    title: t(
-                                                                        "errorTitle",
-                                                                    ),
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                setOpenPartnerDialog(
-                                                                    false,
-                                                                );
-                                                            }
-                                                        });
-                                                }}
-                                            >
-                                                {t("create")}
                                             </Button>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            )}
-                            {!partner && tenant.kind == "partner" && (
-                                <AlertDialog
-                                    open={openPartnerDialog}
-                                    onOpenChange={setOpenPartnerDialog}
-                                >
-                                    <AlertDialogTrigger asChild>
-                                        <Button className="bg-blue-400 hover:bg-blue-400/90">
-                                            {t("createPartner")}
-                                        </Button>
-                                    </AlertDialogTrigger>
-                                    <AlertDialogContent>
-                                        <AlertDialogHeader>
-                                            <AlertDialogTitle>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    {t("createUser")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("createUserWarning")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel asChild>
+                                                    <Button variant="outline">
+                                                        {t("cancel")}
+                                                    </Button>
+                                                </AlertDialogCancel>
+                                                <Button
+                                                    className="bg-blue-400 hover:bg-blue-400/90"
+                                                    onClick={() => {
+                                                        fetch(
+                                                            `/api/admin/user`,
+                                                            {
+                                                                method: "POST",
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        partnerId:
+                                                                            partner?.id,
+                                                                        name: tenant?.name,
+                                                                        email: tenant
+                                                                            ?.contact
+                                                                            ?.email,
+                                                                        role: "partner",
+                                                                    },
+                                                                ),
+                                                            },
+                                                        )
+                                                            .then((res) =>
+                                                                res.json(),
+                                                            )
+                                                            .then((res) => {
+                                                                if (res.ok) {
+                                                                    toast({
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenUserDialog(
+                                                                        false,
+                                                                    );
+                                                                    partnerMutate();
+                                                                } else {
+                                                                    toast({
+                                                                        variant:
+                                                                            "destructive",
+                                                                        title: t(
+                                                                            "errorTitle",
+                                                                        ),
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            });
+                                                    }}
+                                                >
+                                                    {t("create")}
+                                                </Button>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                )}
+                                {!partner && tenant.kind == "partner" && (
+                                    <AlertDialog
+                                        open={openPartnerDialog}
+                                        onOpenChange={setOpenPartnerDialog}
+                                    >
+                                        <AlertDialogTrigger asChild>
+                                            <Button className="bg-blue-400 hover:bg-blue-400/90">
                                                 {t("createPartner")}
-                                            </AlertDialogTitle>
-                                            <AlertDialogDescription>
-                                                {t("createPartnerWarning")}
-                                            </AlertDialogDescription>
-                                        </AlertDialogHeader>
-                                        <AlertDialogFooter>
-                                            <AlertDialogCancel asChild>
-                                                <Button variant="outline">
-                                                    {t("cancel")}
-                                                </Button>
-                                            </AlertDialogCancel>
-                                            <Button
-                                                className="bg-blue-400 hover:bg-blue-400/90"
-                                                onClick={() => {
-                                                    fetch(
-                                                        `/api/admin/partner`,
-                                                        {
-                                                            method: "POST",
-                                                            body: JSON.stringify(
-                                                                {
-                                                                    acronisId:
-                                                                        tenant?.id,
-                                                                    parentAcronisId:
-                                                                        tenant?.parent_id,
-                                                                    name: tenant?.name,
-                                                                },
-                                                            ),
-                                                        },
-                                                    )
-                                                        .then((res) =>
-                                                            res.json(),
-                                                        )
-                                                        .then((res) => {
-                                                            if (res.ok) {
-                                                                toast({
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                setOpenPartnerDialog(
-                                                                    false,
-                                                                );
-                                                                partnerMutate();
-                                                            } else {
-                                                                toast({
-                                                                    variant:
-                                                                        "destructive",
-                                                                    title: t(
-                                                                        "errorTitle",
-                                                                    ),
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                setOpenPartnerDialog(
-                                                                    false,
-                                                                );
-                                                            }
-                                                        });
-                                                }}
-                                            >
-                                                {t("create")}
                                             </Button>
-                                        </AlertDialogFooter>
-                                    </AlertDialogContent>
-                                </AlertDialog>
-                            )}
-                        </CardFooter>
-                    )}
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    {t("createPartner")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("createPartnerWarning")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel asChild>
+                                                    <Button variant="outline">
+                                                        {t("cancel")}
+                                                    </Button>
+                                                </AlertDialogCancel>
+                                                <Button
+                                                    className="bg-blue-400 hover:bg-blue-400/90"
+                                                    onClick={() => {
+                                                        fetch(
+                                                            `/api/admin/partner`,
+                                                            {
+                                                                method: "POST",
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        acronisId:
+                                                                            tenant?.id,
+                                                                        parentAcronisId:
+                                                                            tenant?.parent_id,
+                                                                        name: tenant?.name,
+                                                                    },
+                                                                ),
+                                                            },
+                                                        )
+                                                            .then((res) =>
+                                                                res.json(),
+                                                            )
+                                                            .then((res) => {
+                                                                if (res.ok) {
+                                                                    toast({
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                    partnerMutate();
+                                                                } else {
+                                                                    toast({
+                                                                        variant:
+                                                                            "destructive",
+                                                                        title: t(
+                                                                            "errorTitle",
+                                                                        ),
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    setOpenPartnerDialog(
+                                                                        false,
+                                                                    );
+                                                                }
+                                                            });
+                                                    }}
+                                                >
+                                                    {t("create")}
+                                                </Button>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                )}
+                            </CardFooter>
+                        )}
                 </Card>
             </div>
 
@@ -482,254 +554,142 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="grid grid-cols-1 w-full gap-2 col-span-3 md:col-span-1">
-                    <Card className="w-full">
-                        <CardHeader className="py-4">
-                            <CardTitle className="font-medium text-xl">
-                                Backup Storage
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <Separator /> */}
-                        <CardContent className="flex flex-col p-6 place-items-center">
-                            <NeedleChart
-                                value={
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.value
-                                }
-                                total={
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.offering_item.quota?.value
-                                }
-                            />
-                            <p className="text-center">
-                                {formatBytes(
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.value,
+                <div className="flex flex-col grid-cols-1 w-full col-span-3 gap-4 justify-between md:col-span-1">
+                    <StorageCard
+                        title="Backup Storage"
+                        description="Shows the storage usage per workload"
+                        model={t("perWorkload")}
+                        usage={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_workload",
+                            )?.value
+                        }
+                        quota={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_workload",
+                            )?.offering_item.quota
+                        }
+                    />
+                    <StorageCard
+                        title="Backup Storage"
+                        description="Shows the storage usage per gigabyte"
+                        model={t("perGB")}
+                        usage={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_gigabyte",
+                            )?.value
+                        }
+                        quota={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_gigabyte",
+                            )?.offering_item.quota
+                        }
+                    />
+                </div>
+            )}
+
+            <div className="col-span-3">
+                <h2 className="font-medium text-xl">{t("usages")}</h2>
+            </div>
+
+            <Tabs defaultValue="perWorkload" className="col-span-3">
+                <TabsList>
+                    <TabsTrigger value={"perWorkload"}>
+                        {t("perWorkload")}
+                    </TabsTrigger>
+                    <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
+                </TabsList>
+                {!usages ? (
+                    <div className="col-span-3 mt-2">
+                        <Skeleton>
+                            <DefaultSkeleton />
+                        </Skeleton>
+                    </div>
+                ) : (
+                    <>
+                        <TabsContent value={"perWorkload"}>
+                            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                {usagesPerWorkload?.length ? (
+                                    usagesPerWorkload
+                                        ?.sort((a, b) =>
+                                            a.usage_name < b.usage_name
+                                                ? 1
+                                                : b.usage_name < a.usage_name
+                                                ? -1
+                                                : 0,
+                                        )
+                                        .map((u: TenantUsage, index) => (
+                                            <UsageCard
+                                                key={index}
+                                                title={u.name}
+                                                description={u.usage_name}
+                                                unit={u.measurement_unit}
+                                                value={u.value}
+                                                quota={
+                                                    u.offering_item
+                                                        ?.quota as any
+                                                }
+                                            />
+                                        ))
+                                ) : (
+                                    <>
+                                        <div className="flex items-center justify-center col-span-4">
+                                            <p>
+                                                No usage data available for this
+                                                tenant.
+                                            </p>
+                                        </div>
+                                    </>
                                 )}
-                                <span className="text-zinc-400">
-                                    {" / "}
-                                    {formatBytes(
-                                        usages?.usages?.items?.find(
-                                            (u: TenantUsage) =>
-                                                u.usage_name == "storage" &&
-                                                u.edition == "pck_per_workload",
-                                        )?.offering_item?.quota?.value || 0,
-                                    )}
-                                </span>
-                            </p>
-                        </CardContent>
-                    </Card>
-                    {/* <Card className="w-fit">
-                    <CardHeader className="py-4">
-                            <CardTitle className="font-medium text-xl">
-                                Usages
-                        </CardTitle>
-                    </CardHeader>
-                    <Separator />
-                    <CardContent className="p-6">
-                        <NeedleChart
-                            value={data?.usages?.items?.[1].value}
-                            total={
-                                data?.usages?.items?.[1].offering_item.quota
-                                    .value
-                            }
-                        />
-                    </CardContent>
-                </Card> */}
-                </div>
-            )}
-
-            {!usages ? (
-                <div className="col-span-3">
-                    <Skeleton>
-                        <DefaultSkeleton />
-                    </Skeleton>
-                </div>
-            ) : (
-                <Card className="col-span-3">
-                    <CardHeader className="py-4">
-                        <CardTitle className="font-medium text-xl">
-                            Usages
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 divide-x *:px-4">
-                        <div>
-                            <h2 className="flex-none font-medium text-lg text-center">
-                                Per Workload
-                            </h2>
-                            <div className="flex flex-col font-light divide-y">
-                                {usages?.usages?.items
-                                    ?.filter(
-                                        (u: TenantUsage) =>
-                                            u.edition == "pck_per_workload",
-                                    )
-                                    .map((u: TenantUsage) => (
-                                        <div className="p-2" key={u.usage_name}>
-                                            <p className="font-medium">
-                                                {u.name} ({u.usage_name}) :
-                                            </p>
+                            </div>
+                        </TabsContent>
+                        <TabsContent value={"perGB"}>
+                            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                {usagesPerGB?.length ? (
+                                    usagesPerGB
+                                        ?.sort((a, b) =>
+                                            a.usage_name < b.usage_name
+                                                ? 1
+                                                : b.usage_name < a.usage_name
+                                                ? -1
+                                                : 0,
+                                        )
+                                        .map((u: TenantUsage, index) => (
+                                            <UsageCard
+                                                key={index}
+                                                title={u.name}
+                                                description={u.usage_name}
+                                                unit={u.measurement_unit}
+                                                value={u.value}
+                                                quota={
+                                                    u.offering_item
+                                                        ?.quota as any
+                                                }
+                                            />
+                                        ))
+                                ) : (
+                                    <>
+                                        <div className="flex items-center justify-center col-span-4">
                                             <p>
-                                                <span
-                                                    className={cn(
-                                                        u.offering_item?.quota
-                                                            ?.value !==
-                                                            undefined &&
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value !==
-                                                                null &&
-                                                            u.value >
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value
-                                                            ? "text-red-600"
-                                                            : u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  undefined &&
-                                                              u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  null &&
-                                                              u.value >=
-                                                                  u
-                                                                      .offering_item
-                                                                      ?.quota
-                                                                      ?.value *
-                                                                      0.7
-                                                            ? "text-yellow-500"
-                                                            : "",
-                                                    )}
-                                                >
-                                                    {u.measurement_unit ==
-                                                    "bytes"
-                                                        ? formatBytes(u.value)
-                                                        : u.value}
-                                                </span>
-                                                {u.offering_item?.quota
-                                                    ?.value != undefined &&
-                                                u.offering_item.quota.value !=
-                                                    null ? (
-                                                    <span className="text-zinc-400">
-                                                        {` / ${
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value == null
-                                                                ? "Unlimited"
-                                                                : u.measurement_unit ==
-                                                                  "bytes"
-                                                                ? formatBytes(
-                                                                      u
-                                                                          .offering_item
-                                                                          ?.quota
-                                                                          ?.value,
-                                                                  )
-                                                                : u.value
-                                                        }`}
-                                                    </span>
-                                                ) : null}
+                                                No usage data available for this
+                                                tenant.
                                             </p>
                                         </div>
-                                    ))}
+                                    </>
+                                )}
                             </div>
-                        </div>
-
-                        <div>
-                            <h2 className="flex-none font-medium text-lg text-center">
-                                Per Gigabyte
-                            </h2>
-                            <div className="flex flex-col font-light divide-y">
-                                {usages?.usages?.items
-                                    ?.filter(
-                                        (u: TenantUsage) =>
-                                            u.edition == "pck_per_gigabyte",
-                                    )
-                                    .map((u: TenantUsage) => (
-                                        <div className="p-2" key={u.usage_name}>
-                                            <p className="font-medium">
-                                                {u.name} ({u.usage_name}) :
-                                            </p>
-                                            <p>
-                                                <span
-                                                    className={cn(
-                                                        u.offering_item?.quota
-                                                            ?.value !==
-                                                            undefined &&
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value !==
-                                                                null &&
-                                                            u.value >
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value
-                                                            ? "text-red-600"
-                                                            : u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  undefined &&
-                                                              u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  null &&
-                                                              u.value >=
-                                                                  u
-                                                                      .offering_item
-                                                                      ?.quota
-                                                                      ?.value *
-                                                                      0.7
-                                                            ? "text-yellow-500"
-                                                            : "",
-                                                    )}
-                                                >
-                                                    {u.measurement_unit ==
-                                                    "bytes"
-                                                        ? formatBytes(u.value)
-                                                        : u.value}
-                                                </span>
-                                                <span className="text-zinc-400">
-                                                    {u.offering_item?.quota
-                                                        ?.value != undefined &&
-                                                        u.offering_item.quota
-                                                            .value != null && (
-                                                            <span className="text-zinc-400">
-                                                                {` / ${
-                                                                    u
-                                                                        .offering_item
-                                                                        ?.quota
-                                                                        ?.value ==
-                                                                    null
-                                                                        ? "Unlimited"
-                                                                        : u.measurement_unit ==
-                                                                          "bytes"
-                                                                        ? formatBytes(
-                                                                              u
-                                                                                  .offering_item
-                                                                                  ?.quota
-                                                                                  ?.value,
-                                                                          )
-                                                                        : u.value
-                                                                }`}
-                                                            </span>
-                                                        )}
-                                                </span>
-                                            </p>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            )}
+                        </TabsContent>
+                    </>
+                )}
+            </Tabs>
         </div>
     );
 }

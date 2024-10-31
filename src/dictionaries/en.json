@@ -216,7 +216,8 @@
         "assignLicense": "Assign License",
         "showOnAcronis": "Show on Acronis Cyber Protect Cloud",
         "licensed": "Licensed",
-        "licensedUser": "Licensed User"
+        "licensedUser": "Licensed User",
+        "usages": "Usages"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -450,6 +451,43 @@
         }
     },
     "Components": {
+        "Usage": {
+            "workstation_storage": "Workstation Storage",
+            "server_storage": "Server Storage",
+            "vm_storage": "VM Storage",
+            "mailbox_storage": "Mail Storage",
+            "onedrive_storage": "OneDrive Storage",
+            "protected_mailbox_storage": "Protected Mailbox Storage",
+            "protected_one_drive_storage": "Protected OneDrive Storage",
+
+            "adv_security_with_edr": "Advanced Security with EDR",
+            "adv_security_edr_workloads": "Advanced Security with EDR for Workloads",
+            "adv_security_without_edr": "Advanced Security without EDR",
+            
+            "pg_base_workstations": "Workstations",
+            "pg_base_secondary_workstations": "Secondary Workstations",
+            "pg_base_servers": "Servers",
+            "pg_base_secondary_servers": "Secondary Servers",
+            "pg_base_vms": "Virtual Machines",
+            "pg_base_m365_seats": "Microsoft 365 Seats",
+            "pg_base_secondary_m365_seats_shared": "Secondary Microsoft 365 Seats (Shared)",
+            
+            "pg_pack_adv_management": "Advanced Management",
+            "pg_pack_adv_security": "Advanced Security",
+            "pg_pack_adv_email_security": "Advanced Email Security",
+
+            "pw_base_workstations": "Workstations",
+            "pw_base_secondary_workstations": "Secondary Workstations",
+            "pw_base_servers": "Servers",
+            "pw_base_secondary_servers": "Secondary Servers",
+            "pw_base_vms": "Virtual Machines",
+            "pw_base_m365_seats": "Microsoft 365 Seats",
+            "pw_base_c2c_storage": "Cloud-to-Cloud Storage",
+
+            "pw_pack_adv_management": "Advanced Management",
+            "pw_pack_adv_security": "Advanced Security",
+            "pw_pack_adv_dlp": "Advanced Data Loss Prevention"
+        },
         "search": "Search",
         "columns": "Columns",
         "add": "Add",
