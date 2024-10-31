@@ -11,9 +11,9 @@ import { Button } from "@/components/ui/button";
 
 import { LuX } from "react-icons/lu";
 import Skeleton, {
-    DefaultSkeleton,
     TableSkeleton,
 } from "@/components/loaders/Skeleton";
+import Loader from "@/components/loaders/Loader";
 import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
@@ -47,9 +47,9 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
     if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
-            <Skeleton>
-                <DefaultSkeleton />
-            </Skeleton>
+            <div className="h-80">
+                <Loader />
+            </div>
         );
     return (
         <div className="flex flex-col gap-2">
