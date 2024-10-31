@@ -1,5 +1,6 @@
 "use client";
-import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+
 import {
     Carousel,
     CarouselContent,
@@ -8,15 +9,14 @@ import {
     CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-
-import { LuMonitorDot, LuKeyRound, LuDatabase } from "react-icons/lu";
-import PanelCard from "@/components/PanelCard";
-import Needle from "@/components/charts/Needle";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export default function PanelPage() {
     return (
         <div className="w-full space-y-8 mt-4">
-            <h1 className="w-full text-xl text-center font-bold">Welcome to Partner Dashboard</h1>
+            <h1 className="w-full text-xl text-center font-bold">
+                Welcome to Partner Dashboard
+            </h1>
             <div className="max-w-[1024px] m-auto">
                 <Carousel
                     opts={{
@@ -30,17 +30,32 @@ export default function PanelPage() {
                     ]}
                 >
                     <CarouselContent>
-                        {Array.from({ length: 5 }).map((_, index) => (
-                            <CarouselItem key={index} className="lg:basis-1/2">
-                                <Card>
-                                    <CardContent className="flex h-[200px] items-center justify-center p-6">
-                                        <span className="text-3xl font-semibold">
-                                            {index + 1}
-                                        </span>
-                                    </CardContent>
-                                </Card>
-                            </CarouselItem>
-                        ))}
+                        <CarouselItem
+                            key={1}
+                            className="h-[300px] lg:basis-1/2"
+                        >
+                            <AspectRatio ratio={16 / 9}>
+                                <Image
+                                    src="/images/carousel/slide-1.png"
+                                    className="rounded-xl object-cover"
+                                    fill
+                                    alt="Slide 1"
+                                />
+                            </AspectRatio>
+                        </CarouselItem>
+                        <CarouselItem
+                            key={2}
+                            className="h-[300px] lg:basis-1/2"
+                        >
+                            <AspectRatio ratio={16 / 9}>
+                                <Image
+                                    src="/images/carousel/slide-2.png"
+                                    className="rounded-xl object-cover"
+                                    fill
+                                    alt="Slide 2"
+                                />
+                            </AspectRatio>
+                        </CarouselItem>
                     </CarouselContent>
                     <CarouselPrevious />
                     <CarouselNext />
