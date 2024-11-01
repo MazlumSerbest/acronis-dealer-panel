@@ -182,8 +182,8 @@
         "infoCounts": "{chapterCount} Chapters, {lessonCount} Lessons",
         "partnerPanelCourses": "Partner Panel Courses",
         "partnerPanelCoursesDescription": "Courses for partners to learn how to use DBackup Partner Panel",
-        "acronisCloudCourses": "Acronis Cloud Courses",
-        "acronisCloudCoursesDescription": "Courses for partners to learn how to use Acronis Cloud Platform",
+        "acronisCloudCourses": "Acronis Cyber Protect Cloud Courses",
+        "acronisCloudCoursesDescription": "Courses for partners to learn how to use Acronis Cyber Protect Cloud",
         "course": "Course",
         "panel": "Panel",
         "acronis": "Acronis",
@@ -231,7 +231,7 @@
         "limitExceededDescription": "Some of this customers usages are exceeding the quota limit.",
         "tenantInformation": "Tenant Information",
         "customerInformation": "Customer Information",
-        "acronisCloudPlatformEditDescription": "Some information only can be changed from the Acronis Cloud Platform"
+        "acronisCloudPlatformEditDescription": "Some information only can be changed from the Acronis Cyber Protect Cloud"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -311,7 +311,7 @@
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
                 "minLength": "Must be 6 characters long",
-                "description": "This will be used to login to Acronis Cloud Console and must be unique value."
+                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value."
             },
             "email": {
                 "required": "Email is required",
@@ -327,7 +327,7 @@
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
                 "minLength": "Must be 6 characters long",
-                "description": "This will be used to login to Acronis Cloud Console and must be unique value."
+                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value."
             },
             "email": {
                 "required": "Email is required",
@@ -553,12 +553,12 @@
         "general": "General",
         "locations": "Locations",
         "security": "Security",
-        "warningMessage": "These setting are only for information purposes and only can be changed at Acronis Cloud Platform.",
-        "securitySubtitle": "Security settings from Acronis Cloud Platform",
+        "warningMessage": "These setting are only for information purposes and only can be changed at Acronis Cyber Protect Cloud.",
+        "securitySubtitle": "Security settings from Acronis Cyber Protect Cloud",
         "pricing": "Pricing",
-        "pricingSubtitle": "Pricing settings from Acronis Cloud Platform",
+        "pricingSubtitle": "Pricing settings from Acronis Cyber Protect Cloud",
         "branding": "Branding",
-        "brandingSubtitle": "Branding settings from Acronis Cloud Platform"
+        "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud"
     },
     "Messages": {
         "authorizationNeeded": "Authorization Needed.",
