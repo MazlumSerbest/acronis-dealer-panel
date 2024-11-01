@@ -2,101 +2,569 @@
     "General": {
         "": "Test",
         "Pages": {
-            "panel": "Panel",
+            "panel": "Kontrol Paneli",
             "tenants": "Kiracılar",
             "customers": "Müşteriler",
             "licenses": "Lisanslar",
             "products": "Ürünler",
-            "alerts": "Hata Mesajları",
+            "alerts": "Uyarılar",
             "management": "Yönetim",
-            "applications": "Başvurular",
-            "partners": "Partnerler",
+            "applications": "Uygulamalar",
+            "partners": "Ortaklar",
             "users": "Kullanıcılar",
-            "settings": "Ayarlar"
+            "settings": "Ayarlar",
+            "courses": "Kurslar",
+            "learn": "Öğren"
         },
         "yes": "Evet",
         "no": "Hayır",
-        "or": "ya da",
+        "true": "Evet",
+        "false": "Hayır",
+        "or": "veya",
         "and": "ve",
+        "logout": "Çıkış yap",
+        "logoutMessage": "Çıkış yapmak üzeresiniz. Emin misiniz?",
         "cancel": "İptal",
-        "logout": "Çıkış Yap",
-        "logoutMessage": "Kullanıcı çıkışı yapılcak. Devam edilsin mi?",
-        "name": "Ad"
+        "close": "Kapat",
+        "save": "Kaydet",
+        "name": "Ad",
+        "username": "Kullanıcı adı",
+        "login": "Giriş yap",
+        "fullName": "Tam Ad",
+        "id": "Kimlik",
+        "user": "Kullanıcı",
+        "role": "Rol",
+        "kind": "Tür",
+        "actions": "İşlemler",
+        "edit": "Düzenle",
+        "new": "Yeni",
+        "add": "Ekle",
+        "delete": "Sil",
+        "create": "Oluştur",
+        "goToApplication": "Uygulamaya Git",
+        "mfaStatus": "2FA",
+        "enabled": "Etkin",
+        "active": "Aktif",
+        "disabled": "Devre Dışı",
+        "createdAt": "Oluşturulma Tarihi",
+        "createdBy": "Oluşturan",
+        "updatedAt": "Güncellenme Tarihi",
+        "updatedBy": "Güncelleyen",
+        "email": "E-posta",
+        "emailVerified": "E-posta Doğrulandı",
+        "phone": "Telefon",
+        "mobile": "Cep Telefonu",
+        "address": "Adres",
+        "customerType": "Müşteri Türü",
+        "usage": "Kullanım",
+        "emptyContent": "Sonuç bulunamadı.",
+        "partner": "Ortak",
+        "partnerId": "Ortak ID",
+        "customer": "Müşteri",
+        "production": "Üretim",
+        "trial": "Deneme",
+        "suspended": "Askıya Alındı",
+        "twoFactorAuth": "İki Faktörlü Kimlik Doğrulama",
+        "usersCount": "Kullanıcı Sayısı",
+        "mode": "Mod",
+        "currency": "Para Birimi",
+        "companyName": "Şirket Adı",
+        "serviceName": "Hizmet Adı",
+        "platformTermsUrl": "Platform Şartları",
+        "termsUrl": "Şartlar",
+        "privacyPolicyUrl": "Gizlilik Politikası",
+        "openDetail": "Detayı Aç",
+        "general": "Genel",
+        "customers": "Müşteriler",
+        "tenants": "Kiracılar",
+        "licenses": "Lisanslar",
+        "serialNo": "Seri No",
+        "duration": "Süre",
+        "quota": "Kota",
+        "type": "Tür",
+        "types": "Türler",
+        "platformOwned": "Platforma Ait",
+        "title": "Başlık",
+        "acronisTenantId": "Acronis Kiracı ID",
+        "acronisId": "Acronis ID",
+        "companyType": "Şirket Türü",
+        "applicationDate": "Başvuru Tarihi",
+        "approvedAt": "Onaylanma Tarihi",
+        "approvedBy": "Onaylayan",
+        "status": "Durum",
+        "admin": "Yönetici",
+        "dealer": "Bayii",
+        "warning": "uyarı",
+        "language": "Dil",
+        "editProfile": "Profili Düzenle",
+        "otherSettings": "Diğer Ayarlar",
+        "failedToLoad": "Yüklenemedi",
+        "legal": "Yasal",
+        "primary": "Birincil",
+        "billing": "Faturalama",
+        "technical": "Teknik",
+        "management": "Yönetim",
+        "business": "İş",
+        "person": "Kişi",
+        "applicationInformation": "Başvuru Bilgileri",
+        "registrationInformation": "Kayıt Bilgileri",
+        "taxNo": "Vergi No",
+        "taxOffice": "Vergi Dairesi",
+        "city": "Şehir",
+        "district": "İlçe",
+        "postalCode": "Posta Kodu",
+        "example": "Örn.",
+        "select": "Seç",
+        "searchPlaceholder": "Arama...",
+        "noResults": "Sonuç bulunamadı.",
+        "apply": "Uygula",
+        "requiredDocuments": "Gerekli Belgeler",
+        "contract": "Sözleşme",
+        "taxCertificate": "Vergi Belgesi",
+        "signatureCircular": "İmza Sirküleri",
+        "tradeRegistry": "Ticaret Sicili",
+        "errorTitle": "Bir hata oluştu!",
+        "partnerName": "Ortak Adı",
+        "toggleMenu": "Menüyü aç/kapat",
+        "waiting": "Beklemede",
+        "approved": "Onaylandı",
+        "resolved": "Çözüldü",
+        "approveApplication": "Başvuruyu Onayla",
+        "approve": "Onayla",
+        "approveMessage": "Başvuruyu onaylamadan önce bilgilerin doğru olduğundan emin olun. Başvuruyu onaylamak istediğinize emin misiniz?",
+        "createPartner": "Ortak Oluştur",
+        "createPartnerMessage": "Lütfen bu ortak için oluşturulmuş Acronis Müşteri ID'sini aşağıdaki forma girin.",
+        "editApplication": "Başvuruyu Düzenle",
+        "client": "Müşteri",
+        "billingDate": "Fatura Tarihi",
+        "daysUntilNextBillingDate": "(Faturaya kalan gün: {days} gün)",
+        "billingDatePassed": "(Fatura tarihi geçti!)",
+        "exist": "Var",
+        "notExist": "Yok",
+        "createUser": "Kullanıcı Oluştur",
+        "createUserWarning": "İşlemi yaparsanız bu ortak için yeni bir kullanıcı oluşturulacak. Kayıt bilgileri bu kiracıdan alınacak. Devam etmek istediğinize emin misiniz?",
+        "createPartnerWarning": "İşlemi yaparsanız bu kiracı için yeni bir panel ortağı oluşturulacak. Kayıt bilgileri bu kiracıdan alınacak. Devam etmek istediğinize emin misiniz?",
+        "panelPartner": "Panel Ortağı",
+        "panelUser": "Panel Kullanıcısı",
+        "product": "Ürün",
+        "code": "Kod",
+        "model": "Model",
+        "unit": "Birim",
+        "MB": "MB",
+        "GB": "GB",
+        "TB": "TB",
+        "piece": "Adet",
+        "perGB": "Gigabayt Başına",
+        "perWorkload": "İş Yükü Başına",
+        "license": "Lisans",
+        "key": "Anahtar",
+        "assign": "Ata",
+        "assignToPartner": "Ortağa Ata",
+        "customerAcronisId": "Müşteri Acronis ID",
+        "expiresAt": "Bitiş Tarihi",
+        "expiredAt": "Bitiş Tarihi Geçmiş",
+        "assignedAt": "Atanma Tarihi",
+        "activatedAt": "Aktivasyon Tarihi",
+        "assignDescription": "{length} lisans(lar) seçilen ortağa atanacak. İşlemi gerçekleştirmek istediğinize emin misiniz?",
+        "customerNotFound": "Bu Acronis ID ile panel müşterisi bulunamadı. Lisans atamak istiyorsanız lütfen bir müşteri oluşturun.",
+        "registrationNotFound": "Bu Acronis ID ile panel kaydı bulunamadı.",
+        "backToSignIn": "Girişe Dön",
+        "download": "İndir",
+        "legalName": "Yasal Ad",
+        "legalAddress": "Yasal Adres",
+        "shortDescription": "Kısa Açıklama",
+        "description": "Açıklama",
+        "currentLesson": "Güncel Ders",
+        "previous": "Önceki",
+        "next": "Sonraki",
+        "startCourse": "Kursa Başla",
+        "chapterInfo": "Bölümler",
+        "infoCounts": "{chapterCount} Bölüm, {lessonCount} Ders",
+        "partnerPanelCourses": "Ortak Panel Kursları",
+        "partnerPanelCoursesDescription": "DBackup Partner Panelini kullanmayı öğrenmek için ortaklara yönelik kurslar",
+        "acronisCloudCourses": "Acronis Cloud Kursları",
+        "acronisCloudCoursesDescription": "Acronis Cloud Platformunu kullanmayı öğrenmek için ortaklara yönelik kurslar",
+        "course": "Kurs",
+        "panel": "Panel",
+        "acronis": "Acronis",
+        "category": "Kategori",
+        "level": "Seviye",
+        "order": "Sıra",
+        "link": "Bağlantı",
+        "chapter": "Bölüm",
+        "editCourse": "Kursu Düzenle",
+        "editChapter": "Bölümü Düzenle",
+        "courseDetail": "Kurs Detayı",
+        "chapters": "Bölümler",
+        "chapterDetail": "Bölüm Detayı",
+        "lessons": "Dersler",
+        "backToCourse": "Kursa Dön",
+        "backToCourses": "Kurslara Dön",
+        "newLesson": "Yeni Ders",
+        "editLesson": "Dersi Düzenle",
+        "clients": "Müşteriler",
+        "newCustomer": "Yeni Müşteri",
+        "makePartialLicense": "Kısmi Lisans Yap",
+        "assignToCustomer": "Müşteriye Ata",
+        "addLicense": "Lisans Ekle",
+        "addLicenseDescription": "Eklemek istediğiniz lisansların seri numaralarını aşağıya girin. Birden fazla seri numarası girmek için 'Seri No Ekle' düğmesine tıklayın.",
+        "licenseSerialNo": "Lisans Seri No",
+        "addSerialNo": "Seri No Ekle",
+        "partialLicense": "Kısmi Lisans",
+        "partialLicenseDescription": "Bu lisansı kısmi lisans yaparsanız, lisans ilk atamadan sonra etkinleştirilir. Bu lisansın bir kısmını herhangi bir müşteriye atamadığınız sürece, daha sonra normal bir lisansa dönüştürebilirsiniz.",
+        "areYouSure": "İşlemi gerçekleştirmek istediğinize emin misiniz?",
+        "assignLicense": "Lisans Ata",
+        "showOnAcronis": "Acronis Cyber Protect Cloud'da Göster",
+        "licensed": "Lisanslı",
+        "licensedUser": "Lisanslı Kullanıcı",
+        "usages": "Kullanımlar",
+        "totalUsages": "Toplam Kullanım",
+        "total": "Toplam",
+        "noUsageData": "Kullanım verisi bulunmamaktadır.",
+        "welcomeToAdmin": "Yönetici Kontrol Paneline Hoş Geldiniz",
+        "welcomeToPartner": "Ortak Kontrol Paneline Hoş Geldiniz",
+        "storageCardTitle": "Yedekleme Depolama",
+        "storageCardDescriptionPW": "İş yükü başına toplam depolama kullanımını gösterir",
+        "storageCardDescriptionGB": "Gigabayt başına toplam depolama kullanımını gösterir",
+        "storageCardDescription": "Toplam depolama kullanımını gösterir",
+        "limitExceeded": "Limit Aşıldı",
+        "limitExceededDescription": "Bu müşterilerden bazılarının kullanımı kota limitini aşıyor.",
+        "tenantInformation": "Kiracı Bilgileri",
+        "customerInformation": "Müşteri Bilgileri",
+        "acronisCloudPlatformEditDescription": "Bazı bilgiler yalnızca Acronis Cloud Platform'dan değiştirilebilir."
     },
     "SignIn": {
         "signIn": "Giriş Yap",
-        "signInDescription": "Giriş yapmak için e-posta adresinizi giriniz",
-        "emailPlaceholder": "adsoyad@gmail.com",
+        "signInDescription": "Giriş yapmak için aşağıya e-posta adresinizi girin",
+        "emailPlaceholder": "ad@gmail.com",
         "signInWithEmail": "E-posta ile Giriş Yap",
         "makeApplication": "Bayilik Başvurusu Yap",
         "termsOfService": "Hizmet Şartları",
         "privacyPolicy": "Gizlilik Politikası",
         "checkYourEmail": "E-postanızı Kontrol Edin",
-        "checkYourEmailDescription": "E-posta adresinize bir bağlantı gönderdik. Lütfen hesabınıza giriş yapmak için bağlantıyı takip edin.",
+        "checkYourEmailDescription": "E-posta adresinize sihirli bir bağlantı gönderdik. Hesabınıza giriş yapmak için lütfen bağlantıyı takip edin.",
         "Errors": {
             "Error": "Hata!",
-            "Email not found": "E-posta bulunamadı"
+            "emailNotFound": "E-posta bulunamadı!",
+            "accountNotActive": "Hesap aktif değil! Lütfen yönetici ile iletişime geçin.",
+            "MissingCSRF": "CSRF jetonu eksik veya geçersiz.",
+            "Configuration": "Sunucu yapılandırmasında bir sorun var. Lütfen yönetici ile iletişime geçin.",
+            "AccessDenied": "Bu sayfaya erişim izniniz yok. Lütfen yönetici ile iletişime geçin.",
+            "Verification": "Jetonun süresi dolmuş veya daha önce kullanılmış. Lütfen yeni bir tane talep edin."
         }
     },
     "Application": {
         "title": "Başvuru Formu",
-        "description": "Bayilik hesabı başvurusu yapmak için lütfen aşağıdaki formu doldurunuz.",
-        "steps": {
-            "1": "Distinctively incubate unique systems via team building intellectual capital. Rapidiously fashion cross-platform data whereas.",
-            "2": "Objectively envisioneer leading-edge scenarios vis-a-vis distributed niche markets. Credibly restore e-business value rather than premium solutions. Efficiently seize covalent e-services vis-a-vis.",
-            "3": "Distinctively embrace frictionless convergence without B2C portals. Dramatically restore maintainable portals vis-a-vis state of the art methods of empowerment. Appropriately synergize next-generation infrastructures and excellent synergy. Authoritatively cultivate.",
-            "4": "Globally impact progressive channels and installed base innovation. Enthusiastically leverage."
+        "description": "Bayilik hesabı başvurusu için lütfen aşağıdaki formu doldurun.",
+        "successTitle": "Başvurunuz için teşekkür ederiz!",
+        "successDescription": "Başvurunuz başarıyla gönderildi. Onay için lütfen bekleyin. Onay süreci 2-3 iş günü sürebilir.",
+        "Steps": {
+            "1": "Test",
+            "2": "Test",
+            "3": "Test",
+            "4": "Test"
         },
         "Descriptions": {
-            "companyName": "Please enter the legal name of your company",
-            "taxNo": "Please enter the tax number of your company",
-            "taxOffice": "Please select the tax office of your company",
-            "email": "Please enter the email address of your company",
-            "mobile": "Please enter the mobile phone number of your company",
-            "phone": "Please enter the phone number of your company",
-            "address": "Please enter the legal address of your company",
-            "city": "Please select the city of your company",
-            "district": "Please enter the district of your company",
-            "postalCode": "Please enter the postal code of your company",
-            "contract": "Please upload the contract with your signature",
-            "taxCertificate": "Please upload the tax certificate",
-            "signatureCircular": "Please upload the signature circular",
-            "tradeRegistry": "Please upload the trade registry"
+            "parentAcronisId": "Lisanslarınızı satın aldığınız bayiiyi seçin",
+            "companyName": "Şirketinizin yasal adını girin",
+            "taxNo": "Şirketinizin vergi numarasını girin",
+            "taxOffice": "Şirketinizin vergi dairesini seçin",
+            "email": "Şirketinizin iletişim e-posta adresini girin",
+            "mobile": "Şirketinizin iletişim cep telefonunu girin",
+            "phone": "Şirketinizin telefon numarasını girin",
+            "address": "Şirketinizin yasal adresini girin",
+            "city": "Şirketinizin bulunduğu şehri seçin",
+            "district": "Şirketinizin bulunduğu ilçeyi girin",
+            "postalCode": "Şirketinizin posta kodunu girin",
+            "contract": "Yetkili kişinin imzasını içeren sözleşmeyi yükleyin",
+            "taxCertificate": "Vergi belgesini yükleyin",
+            "signatureCircular": "İmza sirkülerini yükleyin",
+            "tradeRegistry": "Ticaret sicil belgesini yükleyin",
+            "personalData": "Kişisel verilerimin işlenmesini kabul ediyorum. Bilgilendirme metnini okudum ve anladım."
+        }
+    },
+    "FormMessages": {
+        "User": {
+            "active": {
+                "description": "Bu değer aktif durumu için geçerlidir. Kullanıcı aktif ise, sisteme giriş yapabilir."
+            },
+            "licensed": {
+                "description": "Bu değer lisanslı durumu için geçerlidir. Kullanıcı lisanslı ise bazı sayfalar bu kullanıcı için değişebilir."
+            },
+            "role": {
+                "required": "Rol zorunludur"
+            },
+            "name": {
+                "required": "Ad zorunludur"
+            },
+            "email": {
+                "required": "E-posta zorunludur",
+                "invalidType": "E-posta geçerli bir e-posta olmalıdır"
+            }
+        },
+        "Partner": {
+            "name": {
+                "required": "Ad zorunludur",
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır"
+            },
+            "login": {
+                "required": "Kullanıcı adı zorunludur",
+                "alreadyTaken": "Kullanıcı adı zaten alınmış",
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır",
+                "description": "Bu, Acronis Cloud Console'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır."
+            },
+            "email": {
+                "required": "E-posta zorunludur",
+                "invalidType": "Geçerli bir e-posta olmalıdır"
+            }
+        },
+        "Customer": {
+            "name": {
+                "required": "Ad zorunludur",
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır"
+            },
+            "login": {
+                "required": "Kullanıcı adı zorunludur",
+                "alreadyTaken": "Kullanıcı adı zaten alınmış",
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır",
+                "description": "Bu, Acronis Cloud Console'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır."
+            },
+            "email": {
+                "required": "E-posta zorunludur",
+                "invalidType": "Geçerli bir e-posta olmalıdır"
+            }
+        },
+        "Product": {},
+        "Course": {
+            "active": {
+                "description": "Bu değer aktif durumu içindir. Kurs aktifse, kurs ortak kullanıcılar tarafından görülebilir."
+            },
+            "name": {
+                "required": "Ad zorunludur",
+                "maxLength": "60 karakter uzunluğunda olmalıdır"
+            },
+            "category": {
+                "required": "Kategori zorunludur"
+            },
+            "duration": {
+                "required": "Süre zorunludur"
+            },
+            "level": {
+                "required": "Seviye zorunludur"
+            },
+            "shortDescription": {
+                "required": "Kısa açıklama zorunludur",
+                "maxLength": "80 karakter uzunluğunda olmalıdır"
+            },
+            "description": {
+                "required": "Açıklama zorunludur"
+            }
+        },
+        "Chapter": {
+            "active": {
+                "description": "Bu değer aktif durumu içindir. Bölüm aktifse, bölüm kurs altında görülebilir."
+            },
+            "name": {
+                "required": "Ad zorunludur",
+                "maxLength": "60 karakter uzunluğunda olmalıdır"
+            },
+            "order": {
+                "required": "Sıra zorunludur",
+                "invalidType": "Geçerli bir sayı olmalıdır"
+            }
+        },
+        "Lesson": {
+            "active": {
+                "description": "Bu değer aktif durumu içindir. Ders aktifse, ders bölüm altında görülebilir."
+            },
+            "name": {
+                "required": "Ad zorunludur",
+                "maxLength": "60 karakter uzunluğunda olmalıdır"
+            },
+            "order": {
+                "required": "Sıra zorunludur",
+                "invalidType": "Geçerli bir sayı olmalıdır"
+            },
+            "link": {
+                "description": "Bu değer youtube video bağlantısı içindir. Bağlantıyı videonun paylaşım butonundan kopyalayabilirsiniz.",
+                "required": "Bağlantı zorunludur",
+                "invalidType": "Geçerli bir URL olmalıdır"
+            },
+            "description": {
+                "required": "Açıklama zorunludur"
+            }
+        },
+        "Application": {
+            "companyType": {
+                "required": "Tip zorunludur"
+            },
+            "parentAcronisId": {
+                "required": "Bayii zorunludur",
+                "description": ""
+            },
+            "name": {
+                "required": "Ad zorunludur",
+                "minLength": "10 karakter uzunluğunda olmalıdır"
+            },
+            "taxNo": {
+                "required": "Vergi No zorunludur",
+                "invalidType": "Geçerli bir sayı olmalıdır",
+                "minLength": "10 karakter uzunluğunda olmalıdır",
+                "maxLength": "11 karakter uzunluğunda olmalıdır"
+            },
+            "taxOffice": {
+                "required": "Vergi Dairesi zorunludur"
+            },
+            "email": {
+                "required": "E-posta zorunludur",
+                "invalidType": "Geçerli bir e-posta olmalıdır"
+            },
+            "mobile": {
+                "required": "Cep Telefonu zorunludur",
+                "length": "10 karakter uzunluğunda olmalıdır",
+                "invalidType": "Geçerli bir telefon numarası olmalıdır"
+            },
+            "phone": {
+                "required": "Telefon zorunludur",
+                "length": "10 karakter uzunluğunda olmalıdır",
+                "invalidType": "Geçerli bir telefon numarası olmalıdır"
+            },
+            "address": {
+                "required": "Adres zorunludur",
+                "minLength": "10 karakter uzunluğunda olmalıdır"
+            },
+            "city": {
+                "required": "Şehir zorunludur"
+            },
+            "district": {
+                "required": "İlçe zorunludur"
+            },
+            "postalCode": {
+                "required": "Posta Kodu zorunludur",
+                "length": "5 karakter uzunluğunda olmalıdır",
+                "invalidType": "Geçerli bir sayı olmalıdır"
+            },
+            "contract": {
+                "required": "Sözleşme zorunludur"
+            },
+            "taxCertificate": {
+                "required": "Vergi Belgesi zorunludur"
+            },
+            "signatureCircular": {
+                "required": "İmza Sirküleri zorunludur"
+            },
+            "tradeRegistry": {
+                "required": "Ticaret Kaydı zorunludur"
+            },
+            "personalData": {
+                "required": "Kişisel verilerin işlenmesini kabul etmelidir"
+            },
+            "turnstile": {
+                "required": "Captcha çözülmelidir"
+            }
         }
     },
     "Components": {
-        "search": "Arama",
-        "columns": "Kolonlar",
+        "Usage": {
+            "workstation_storage": "Çalışma İstasyonu Depolama",
+            "server_storage": "Sunucu Depolama",
+            "vm_storage": "Sanal Makine Depolama",
+            "mailbox_storage": "Mail Depolama",
+            "onedrive_storage": "OneDrive Depolama",
+            "protected_mailbox_storage": "Korunan Mail Depolama",
+            "protected_one_drive_storage": "Korunan OneDrive Depolama",
+            "orphaned_storage": "Yetim Depolama",
+            "adv_security_with_edr": "EDR ile Gelişmiş Güvenlik",
+            "adv_security_edr_workloads": "İş Yükleri için EDR ile Gelişmiş Güvenlik",
+            "adv_security_without_edr": "EDR olmadan Gelişmiş Güvenlik",
+            "pg_base_workstations": "Çalışma İstasyonları",
+            "pg_base_secondary_workstations": "İkincil Çalışma İstasyonları",
+            "pg_base_servers": "Sunucular",
+            "pg_base_secondary_servers": "İkincil Sunucular",
+            "pg_base_vms": "Sanal Makineler",
+            "pg_base_m365_seats": "Microsoft 365 Koltukları",
+            "pg_base_secondary_m365_seats_shared": "İkincil Microsoft 365 Koltukları (Paylaşımlı)",
+            "pg_pack_adv_management": "Gelişmiş Yönetim",
+            "pg_pack_adv_security": "Gelişmiş Güvenlik",
+            "pg_pack_adv_email_security": "Gelişmiş E-posta Güvenliği",
+            "pw_base_workstations": "Çalışma İstasyonları",
+            "pw_base_secondary_workstations": "İkincil Çalışma İstasyonları",
+            "pw_base_servers": "Sunucular",
+            "pw_base_secondary_servers": "İkincil Sunucular",
+            "pw_base_vms": "Sanal Makineler",
+            "pw_base_m365_seats": "Microsoft 365 Koltukları",
+            "pw_base_c2c_storage": "Bulut'tan Bulut'a Depolama",
+            "pw_pack_adv_management": "Gelişmiş Yönetim",
+            "pw_pack_adv_security": "Gelişmiş Güvenlik",
+            "pw_pack_adv_dlp": "Gelişmiş Veri Kaybı Önleme"
+        },
+        "search": "Ara",
+        "columns": "Sütunlar",
         "add": "Ekle",
-        "rowsPerPage": "Sayfa başına satır",
+        "rowsPerPage": "Sayfa başına satır sayısı",
         "searchPlaceholder": "Arama...",
-        "noResults": "Sonuç bulunamadı.",
+        "noResults": "Sonuç yok.",
         "page": "Sayfa",
         "goToFirstPage": "İlk sayfaya git",
         "goToLastPage": "Son sayfaya git",
-        "goToNextPage": "Bir sonraki sayfaya git",
-        "goToPreviousPage": "Bir önceki sayfaya git",
-        "clearSelection": "Seçimi Temizle"
+        "goToNextPage": "Sonraki sayfaya git",
+        "goToPreviousPage": "Önceki sayfaya git",
+        "clearSelection": "Seçimi Temizle",
+        "totalRows": "{selected} adet {length} satır seçildi.",
+        "selectDate": "Bir tarih seçin",
+        "clear": "Temizle",
+        "actions": "Eylemler",
+        "toggleColumns": "Sütunları Değiştir"
     },
     "Dashboard": {
-        "title": "Panel"
+        "title": "Gösterge Paneli"
     },
     "Customers": {
         "title": "Müşteriler"
     },
     "Licenses": {
-        "title": "Lisanslar"
+        "title": "Lisanslar",
+        "unassigned": "Atanmamış",
+        "assigned": "Atanmış",
+        "inactive": "Pasif",
+        "partial": "Kısmi",
+        "active": "Aktif",
+        "completed": "Tamamlanmış",
+        "expired": "Süresi Dolmuş",
+        "status": "Durum"
     },
     "Alerts": {
-        "title": "Hata Mesajları"
+        "title": "Uyarılar"
     },
     "Applications": {
-        "title": "Başvurular"
+        "title": "Uygulamalar",
+        "waiting": "Bekliyor",
+        "approved": "Onaylandı",
+        "resolved": "Çözüldü"
     },
     "Management": {
-        "title": "Yönetim"
+        "title": "Yönetim",
+        "profile": "Profil",
+        "contacts": "İletişim Bilgileri",
+        "users": "Kullanıcılar"
     },
     "Settings": {
-        "title": "Ayarlar"
+        "title": "Ayarlar",
+        "general": "Genel",
+        "locations": "Konumlar",
+        "security": "Güvenlik",
+        "warningMessage": "Bu ayarlar sadece bilgilendirme amaçlıdır ve yalnızca Acronis Cloud Platformu'nda değiştirilebilir.",
+        "securitySubtitle": "Acronis Cloud Platformu'ndan güvenlik ayarları",
+        "pricing": "Fiyatlandırma",
+        "pricingSubtitle": "Acronis Cloud Platformu'ndan fiyatlandırma ayarları",
+        "branding": "Markalama",
+        "brandingSubtitle": "Acronis Cloud Platformu'ndan markalama ayarları"
+    },
+    "Messages": {
+        "authorizationNeeded": "Yetkilendirme Gerekli.",
+        "Application": {
+            "success": "Başvuru başarıyla gönderildi.",
+            "error": "Başvuru gönderilemedi."
+        }
     }
 }

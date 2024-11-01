@@ -178,7 +178,7 @@
         "previous": "Previous",
         "next": "Next",
         "startCourse": "Start Course",
-        "chapterInfo ": "Chapters",
+        "chapterInfo": "Chapters",
         "infoCounts": "{chapterCount} Chapters, {lessonCount} Lessons",
         "partnerPanelCourses": "Partner Panel Courses",
         "partnerPanelCoursesDescription": "Courses for partners to learn how to use DBackup Partner Panel",
@@ -217,7 +217,21 @@
         "showOnAcronis": "Show on Acronis Cyber Protect Cloud",
         "licensed": "Licensed",
         "licensedUser": "Licensed User",
-        "usages": "Usages"
+        "usages": "Usages",
+        "totalUsages": "Total Usages",
+        "total": "Total",
+        "noUsageData": "No usage data is available.",
+        "welcomeToAdmin": "Welcome to Admin Dashboard",
+        "welcomeToPartner": "Welcome to Partner Dashboard",
+        "storageCardTitle": "Backup Storage",
+        "storageCardDescriptionPW": "Shows the total storage usage per workload",
+        "storageCardDescriptionGB": "Shows the total storage usage per gigabyte",
+        "storageCardDescription": "Shows the total storage usage",
+        "limitExceeded": "Limit Exceeded",
+        "limitExceededDescription": "Some of this customers usages are exceeding the quota limit.",
+        "tenantInformation": "Tenant Information",
+        "customerInformation": "Customer Information",
+        "acronisCloudPlatformEditDescription": "Some information only can be changed from the Acronis Cloud Platform"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -233,7 +247,7 @@
             "Error": "Error!",
             "emailNotFound": "Email not found!",
             "accountNotActive": "Account not active! Please contact the administrator.",
-            "MissingCSRF": "",
+            "MissingCSRF": "CSRF token is missing or invalid.",
             "Configuration": "There is a problem with the server configuration. Please contact the administrator.",
             "AccessDenied": "You do not have permission to access this page. Please contact the administrator.",
             "Verification": "The token has expired or has already been used. Please request a new one."
@@ -459,11 +473,10 @@
             "onedrive_storage": "OneDrive Storage",
             "protected_mailbox_storage": "Protected Mailbox Storage",
             "protected_one_drive_storage": "Protected OneDrive Storage",
-
+            "orphaned_storage": "Orphaned Storage",
             "adv_security_with_edr": "Advanced Security with EDR",
             "adv_security_edr_workloads": "Advanced Security with EDR for Workloads",
             "adv_security_without_edr": "Advanced Security without EDR",
-            
             "pg_base_workstations": "Workstations",
             "pg_base_secondary_workstations": "Secondary Workstations",
             "pg_base_servers": "Servers",
@@ -471,11 +484,9 @@
             "pg_base_vms": "Virtual Machines",
             "pg_base_m365_seats": "Microsoft 365 Seats",
             "pg_base_secondary_m365_seats_shared": "Secondary Microsoft 365 Seats (Shared)",
-            
             "pg_pack_adv_management": "Advanced Management",
             "pg_pack_adv_security": "Advanced Security",
             "pg_pack_adv_email_security": "Advanced Email Security",
-
             "pw_base_workstations": "Workstations",
             "pw_base_secondary_workstations": "Secondary Workstations",
             "pw_base_servers": "Servers",
@@ -483,7 +494,6 @@
             "pw_base_vms": "Virtual Machines",
             "pw_base_m365_seats": "Microsoft 365 Seats",
             "pw_base_c2c_storage": "Cloud-to-Cloud Storage",
-
             "pw_pack_adv_management": "Advanced Management",
             "pw_pack_adv_security": "Advanced Security",
             "pw_pack_adv_dlp": "Advanced Data Loss Prevention"
