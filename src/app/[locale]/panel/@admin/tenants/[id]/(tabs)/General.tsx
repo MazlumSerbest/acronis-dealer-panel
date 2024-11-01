@@ -37,7 +37,6 @@ import UsageCard from "@/components/usages/Usage";
 
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { cn } from "@/lib/utils";
 import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -59,8 +58,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [openUserDialog, setOpenUserDialog] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
-    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
+
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
+    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
     const {
         data: partner,
@@ -81,19 +81,19 @@ export default function GeneralTab({ t, tenant }: Props) {
     } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            setUsagesPerGB(
+            setUsagesPerWorkload(
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
-                        u.edition == "pck_per_gigabyte" &&
+                        u.edition == "pck_per_workload" &&
                         u.value > 0 &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
             );
-            setUsagesPerWorkload(
+            setUsagesPerGB(
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
-                        u.edition == "pck_per_workload" &&
+                        u.edition == "pck_per_gigabyte" &&
                         u.value > 0 &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
@@ -147,24 +147,23 @@ export default function GeneralTab({ t, tenant }: Props) {
             ) && (
                 <Alert className="col-span-3" variant="destructive">
                     <LuAlertTriangle className="size-4" />
-                    <AlertTitle>Limit Exceeded</AlertTitle>
+                    <AlertTitle>{t("limitExceeded")}</AlertTitle>
                     <AlertDescription>
-                        Some of this clients usages are exceeding the quota
-                        limit.
+                        {t("limitExceededDescription")}
                     </AlertDescription>
                 </Alert>
             )}
 
-            <div className="col-span-3 md:col-span-2">
+            <div className="col-span-full md:col-span-2">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex flex-row justify-between">
                             <h2 className="flex-none font-medium text-xl">
-                                Tenant Information
+                                {t("tenantInformation")}
                             </h2>
 
                             {partner &&
-                                partner.parentAcronisId ==
+                                tenant.parent_id ==
                                     currentUser?.acronisTenantId && (
                                     <Button
                                         disabled={edit}
@@ -366,24 +365,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                         </form>
                     </Form>
                     {!edit &&
-                        tenant.parent_id == currentUser?.acronisTenantId &&
+                        tenant.kind == "partner" &&
+                        // tenant.parent_id == currentUser?.acronisTenantId &&
                         (!partner || partner?.users?.length == 0) && (
                             <CardFooter className="flex flex-row justify-end gap-2">
-                                {/* <Button
-                                variant="link"
-                                size="default"
-                                className="p-0 text-blue-400"
-                                asChild
-                            >
-                                <Link
-                                    target="_blank"
-                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
-                                >
-                                    {t("showOnAcronis")}
-                                    <LuArrowUpRight className="ml-2 size-4" />
-                                </Link>
-                            </Button> */}
-
                                 {partner && !partner?.users?.length && (
                                     <AlertDialog
                                         open={openUserDialog}
@@ -503,6 +488,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                             tenant?.id,
                                                                         parentAcronisId:
                                                                             tenant?.parent_id,
+                                                                        // parentId:
+                                                                        //     currentUser?.partnerId,
                                                                         name: tenant?.name,
                                                                     },
                                                                 ),
@@ -554,10 +541,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="flex flex-col grid-cols-1 w-full col-span-3 gap-4 justify-between md:col-span-1">
+                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-between">
                     <StorageCard
-                        title="Backup Storage"
-                        description="Shows the storage usage per workload"
+                        title={t("storageCardTitle")}
+                        description={t("storageCardDescriptionPW")}
                         model={t("perWorkload")}
                         usage={
                             usages?.usages?.items?.find(
@@ -575,8 +562,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                     />
                     <StorageCard
-                        title="Backup Storage"
-                        description="Shows the storage usage per gigabyte"
+                        title={t("storageCardTitle")}
+                        description={t("storageCardDescriptionGB")}
                         model={t("perGB")}
                         usage={
                             usages?.usages?.items?.find(
@@ -596,11 +583,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </div>
             )}
 
-            <div className="col-span-3">
+            <div className="col-span-full">
                 <h2 className="font-medium text-xl">{t("usages")}</h2>
             </div>
 
-            <Tabs defaultValue="perWorkload" className="col-span-3">
+            <Tabs defaultValue="perWorkload" className="col-span-full">
                 <TabsList>
                     <TabsTrigger value={"perWorkload"}>
                         {t("perWorkload")}
@@ -616,7 +603,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ) : (
                     <>
                         <TabsContent value={"perWorkload"}>
-                            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
                                         ?.sort((a, b) =>
@@ -641,18 +628,15 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         ))
                                 ) : (
                                     <>
-                                        <div className="flex items-center justify-center col-span-4">
-                                            <p>
-                                                No usage data available for this
-                                                tenant.
-                                            </p>
+                                        <div className="flex items-center justify-center col-span-full">
+                                            <p>{t("noUsageData")}</p>
                                         </div>
                                     </>
                                 )}
                             </div>
                         </TabsContent>
                         <TabsContent value={"perGB"}>
-                            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB
                                         ?.sort((a, b) =>
@@ -677,11 +661,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         ))
                                 ) : (
                                     <>
-                                        <div className="flex items-center justify-center col-span-4">
-                                            <p>
-                                                No usage data available for this
-                                                tenant.
-                                            </p>
+                                        <div className="flex items-center justify-center col-span-full">
+                                            <p>{t("noUsageData")}</p>
                                         </div>
                                     </>
                                 )}

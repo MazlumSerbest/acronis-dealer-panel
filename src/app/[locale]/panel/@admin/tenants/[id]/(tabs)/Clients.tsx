@@ -86,6 +86,16 @@ export default function ClientsTab({ t, clients }: Props) {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "usage",
+            header: t("usage"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("usage");
+
+                return data || "-";
+            },
+        },
+        {
             accessorKey: "created_at",
             header: t("createdAt"),
             enableGlobalFilter: false,

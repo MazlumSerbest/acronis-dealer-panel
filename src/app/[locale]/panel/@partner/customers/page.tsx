@@ -89,7 +89,7 @@ export default function CustomersPage() {
         mode: "onChange",
         defaultValues: {
             kind: "customer",
-        }
+        },
     });
 
     function onSubmit(values: CustomerFormValues) {
@@ -191,6 +191,16 @@ export default function CustomersPage() {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "billingDate",
+            header: t("billingDate"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("billingDate");
+
+                return DateTimeFormat(data);
+            },
+        },
+        {
             accessorKey: "usage",
             header: t("usage"),
             enableGlobalFilter: false,
@@ -284,9 +294,13 @@ export default function CustomersPage() {
                                 ],
                             },
                         ]}
-                        onAddNew={() => {
-                            setOpen(true);
-                        }}
+                        onAddNew={
+                            currentUser?.licensed
+                                ? () => {
+                                      setOpen(true);
+                                  }
+                                : undefined
+                        }
                         onClick={(item) => {
                             router.push("customers/" + item?.original?.id);
                         }}

@@ -42,6 +42,7 @@ export default function UsageCard({
                     : quotaAlmostExceeded
                     ? "border-yellow-500"
                     : "",
+                "flex flex-col"
             )}
         >
             <CardHeader>
@@ -58,7 +59,7 @@ export default function UsageCard({
                 </CardTitle>
                 <CardDescription>{description}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="mt-auto">
                 <p
                     className={cn(
                         quotaExceeded

@@ -20,12 +20,22 @@ export default function TenantsPage() {
     const router = useRouter();
     const { user: currentUser } = useUserStore();
     // const [selected, setSelected] = useState<string[]>([]);
+    const [updatedData, setUpdatedData] = useState(undefined);
 
     const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: async (data) => {
+                let newData;
+                const customers = await fetch(`/api/customer?partnerId=${currentUser?.partnerId}`).then((res) => res.json());
+                const partners = await fetch(`/api/partner?parentAcronisId=${currentUser?.acronisTenantId}`).then((res) => res.json());
+                // newData = data.map(() => {})
+                console.log(partners);
+    
+                setUpdatedData(newData)
+            }
         },
     );
 
@@ -130,6 +140,16 @@ export default function TenantsPage() {
                 return <BoolChip size="size-4" value={data} />;
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "billingDate",
+            header: t("billingDate"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("billingDate");
+
+                return DateTimeFormat(data);
+            },
         },
         {
             accessorKey: "usage",
