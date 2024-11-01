@@ -60,9 +60,9 @@ export default function PanelPage() {
 
     return (
         <div className="w-full space-y-8 mt-4">
-            <h1 className="w-full text-xl text-center font-bold">
+            {/* <h1 className="w-full text-xl text-center font-bold">
                 {t("welcomeToPartner")}
-            </h1>
+            </h1> */}
 
             <div className="max-w-[1024px] m-auto">
                 <Carousel
