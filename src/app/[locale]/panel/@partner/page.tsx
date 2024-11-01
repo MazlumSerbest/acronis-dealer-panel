@@ -1,5 +1,8 @@
 "use client";
+import { useState } from "react";
 import Image from "next/image";
+import useSWR from "swr";
+import { useTranslations } from "next-intl";
 
 import {
     Carousel,
@@ -10,13 +13,57 @@ import {
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+
+import StorageCard from "@/components/usages/Storage";
+import UsageCard from "@/components/usages/Usage";
+
+import useUserStore from "@/store/user";
+import Loader from "@/components/loaders/Loader";
 
 export default function PanelPage() {
+    const t = useTranslations("General");
+    const { user: currentUser } = useUserStore();
+    
+    const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
+    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
+
+    const { data, error } = useSWR(
+        `/api/acronis/usages/${currentUser?.acronisTenantId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: (data) => {
+                if (!currentUser?.licensed) {
+                    setUsagesPerWorkload(
+                        data?.usages?.items?.filter(
+                            (u: TenantUsage) =>
+                                u.edition == "pck_per_workload" &&
+                                u.value > 0 &&
+                                u.usage_name != "storage" &&
+                                u.usage_name != "storage_total",
+                        ),
+                    );
+                }
+                setUsagesPerGB(
+                    data?.usages?.items?.filter(
+                        (u: TenantUsage) =>
+                            u.edition == "pck_per_gigabyte" &&
+                            u.value > 0 &&
+                            u.usage_name != "storage" &&
+                            u.usage_name != "storage_total",
+                    ),
+                );
+            },
+        },
+    );
+
     return (
         <div className="w-full space-y-8 mt-4">
             <h1 className="w-full text-xl text-center font-bold">
-                Welcome to Partner Dashboard
+                {t("welcomeToPartner")}
             </h1>
+
             <div className="max-w-[1024px] m-auto">
                 <Carousel
                     opts={{
@@ -61,117 +108,183 @@ export default function PanelPage() {
                     <CarouselNext />
                 </Carousel>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:mt-0 max-w-[1024px] m-auto">
-                {/* <PanelCard
-                    header="Total Machines"
-                    content={
-                        <h1 className="font-bold text-7xl text-zinc-500">20</h1>
-                    }
-                    icon={
-                        <LuMonitorDot className="text-5xl md:text-6xl text-blue-400/70" />
-                    }
-                />
-                <PanelCard
-                    header="Total License"
-                    content={
-                        <h1 className="font-bold text-7xl text-zinc-500">
-                            150
-                        </h1>
-                    }
-                    icon={
-                        <LuKeyRound className="text-5xl md:text-6xl text-blue-400/70" />
-                    }
-                />
-                <PanelCard
-                    header="Total Location"
-                    content={
-                        <h1 className="font-bold text-7xl text-zinc-500">58</h1>
-                    }
-                    icon={
-                        <LuDatabase className="text-5xl md:text-6xl text-blue-400/70" />
-                    }
-                /> */}
 
-                {/* <PanelCard
-                    header="Total Usage"
-                    content={
-                        <CircularProgress
-                            value={120}
-                            maxValue={500}
-                            showValueLabel={true}
-                            size="lg"
-                            formatOptions={{
-                                style: "unit",
-                                unit: "gigabyte",
-                            }}
-                            classNames={{
-                                svg: "w-32 h-32 drop-shadow-md",
-                                indicator: "text-green-400",
-                                value: "text-2xl font-semibold text-green-400",
-                            }}
+            {!data && !error ? (
+                <div className="h-80">
+                    <Loader />
+                </div>
+            ) : error ? (
+                <div>{t("failedToLoad")}</div>
+            ) : (
+                <div className="container m-auto flex flex-col gap-4">
+                    <h1 className="text-xl font-semibold">
+                        {t("totalUsages")}
+                    </h1>
+
+                    <div className="col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {!currentUser?.licensed && (
+                            <StorageCard
+                                title={t("storageCardTitle")}
+                                description={t("storageCardDescriptionPW")}
+                                model={t("perWorkload")}
+                                usage={
+                                    data?.usages?.items?.find(
+                                        (u: TenantUsage) =>
+                                            u.usage_name == "storage" &&
+                                            u.edition == "pck_per_workload",
+                                    )?.value
+                                }
+                                quota={
+                                    data?.usages?.items?.find(
+                                        (u: TenantUsage) =>
+                                            u.usage_name == "storage" &&
+                                            u.edition == "pck_per_workload",
+                                    )?.offering_item.quota
+                                }
+                            />
+                        )}
+
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={
+                                !currentUser?.licensed
+                                    ? t("storageCardDescriptionGB")
+                                    : t("storageCardDescription")
+                            }
+                            model={!currentUser?.licensed ? t("perGB") : t("total")}
+                            usage={
+                                data?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_gigabyte",
+                                )?.value
+                            }
+                            quota={
+                                data?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_gigabyte",
+                                )?.offering_item.quota
+                            }
                         />
-                    }
-                />
-                <Card className="col-span-1 md:col-span-2 border-b-4 border-zinc-300">
-                    <CardContent className="flex flex-col gap-2 pt-6">
-                        <Progress
-                            label="Total"
-                            showValueLabel={true}
-                            value={90}
-                            classNames={{
-                                label: "text-zinc-500 font-semibold",
-                                indicator: "bg-blue-400",
-                                value: "text-zinc-500",
-                            }}
-                        />
-                        <Progress
-                            label="Expired Licenses"
-                            showValueLabel={true}
-                            value={500}
-                            maxValue={5000}
-                            formatOptions={{
-                                style: "decimal",
-                            }}
-                            classNames={{
-                                label: "text-zinc-500 font-semibold",
-                                indicator: "bg-red-400",
-                                value: "text-zinc-500",
-                            }}
-                        />
-                    </CardContent>
-                </Card>
-                <Card className="col-span-1 md:col-span-2 row-span-2 border-b-4 border-zinc-300">
-                    <CardContent className="flex flex-col p-6 pt-4 items-center gap-2">
-                        <h6 className="text-sm uppercase font-bold text-blue-400">
-                            Daily Error Count
-                        </h6>
-                        <div className="w-96 h-96">
-                            <Needle />
+                    </div>
+
+                    {!currentUser?.licensed ? (
+                        <Tabs
+                            defaultValue="perWorkload"
+                            className="flex flex-col w-full mt-4"
+                        >
+                            <TabsList className="mx-auto">
+                                <TabsTrigger value={"perWorkload"}>
+                                    {t("perWorkload")}
+                                </TabsTrigger>
+                                <TabsTrigger value={"perGB"}>
+                                    {t("perGB")}
+                                </TabsTrigger>
+                            </TabsList>
+                            <TabsContent value="perWorkload">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                    {usagesPerWorkload?.length ? (
+                                        usagesPerWorkload
+                                            ?.sort((a, b) =>
+                                                a.usage_name < b.usage_name
+                                                    ? 1
+                                                    : b.usage_name <
+                                                      a.usage_name
+                                                    ? -1
+                                                    : 0,
+                                            )
+                                            .map((u: TenantUsage, index) => (
+                                                <UsageCard
+                                                    key={index}
+                                                    title={u.name}
+                                                    description={u.usage_name}
+                                                    unit={u.measurement_unit}
+                                                    value={u.value}
+                                                    quota={
+                                                        u.offering_item
+                                                            ?.quota as any
+                                                    }
+                                                />
+                                            ))
+                                    ) : (
+                                        <>
+                                            <div className="flex items-center justify-center col-span-full">
+                                                <p>{t("noUsageData")}</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </TabsContent>
+                            <TabsContent value="perGB">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                    {usagesPerGB?.length ? (
+                                        usagesPerGB
+                                            ?.sort((a, b) =>
+                                                a.usage_name < b.usage_name
+                                                    ? 1
+                                                    : b.usage_name <
+                                                      a.usage_name
+                                                    ? -1
+                                                    : 0,
+                                            )
+                                            .map((u: TenantUsage, index) => (
+                                                <UsageCard
+                                                    key={index}
+                                                    title={u.name}
+                                                    description={u.usage_name}
+                                                    unit={u.measurement_unit}
+                                                    value={u.value}
+                                                    quota={
+                                                        u.offering_item
+                                                            ?.quota as any
+                                                    }
+                                                />
+                                            ))
+                                    ) : (
+                                        <>
+                                            <div className="flex items-center justify-center col-span-full">
+                                                <p>{t("noUsageData")}</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </TabsContent>
+                        </Tabs>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            {usagesPerGB?.length ? (
+                                usagesPerGB
+                                    ?.sort((a, b) =>
+                                        a.usage_name < b.usage_name
+                                            ? 1
+                                            : b.usage_name < a.usage_name
+                                            ? -1
+                                            : 0,
+                                    )
+                                    .map((u: TenantUsage, index) => (
+                                        <UsageCard
+                                            key={index}
+                                            title={u.name}
+                                            description={u.usage_name}
+                                            unit={u.measurement_unit}
+                                            value={u.value}
+                                            quota={
+                                                u.offering_item?.quota as any
+                                            }
+                                        />
+                                    ))
+                            ) : (
+                                <>
+                                    <div className="flex items-center justify-center col-span-full">
+                                        <p>{t("noUsageData")}</p>
+                                    </div>
+                                </>
+                            )}
                         </div>
-                        <LineChart />
-                    </CardContent>
-                </Card>
-                <PanelCard
-                    header="Total Usage"
-                    content={
-                        <CircularProgress
-                            value={120}
-                            maxValue={500}
-                            showValueLabel={true}
-                            size="lg"
-                            formatOptions={{
-                                style: "unit",
-                                unit: "gigabyte",
-                            }}
-                            classNames={{
-                                svg: "w-32 h-32 drop-shadow-md",
-                                indicator: "text-green-400",
-                                value: "text-2xl font-semibold text-green-400",
-                            }}
-                        />
-                    }
-                /> */}
-            </div>
+                    )}
+                </div>
+            )}
         </div>
     );
 }

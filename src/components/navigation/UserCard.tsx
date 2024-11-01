@@ -57,6 +57,7 @@ export default function UserCard() {
                         updateUser({
                             id: data?.id,
                             active: data?.active,
+                            licensed: data?.licensed,
                             role: data?.role,
                             name: data?.name,
                             email: data?.email,
@@ -70,6 +71,7 @@ export default function UserCard() {
                             id: data?.id,
                             partnerId: data?.partnerId,
                             active: data?.active,
+                            licensed: data?.licensed,
                             role: data?.role,
                             name: data?.name,
                             email: data?.email,

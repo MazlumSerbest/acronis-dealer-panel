@@ -17,15 +17,18 @@ import {
 } from "@/components/ui/card";
 import { Form, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
-import NeedleChart from "@/components/charts/Needle";
-import { calculateRemainingDays, formatBytes } from "@/utils/functions";
+import DatePicker from "@/components/DatePicker";
+import BoolChip from "@/components/BoolChip";
+import StorageCard from "@/components/usages/Storage";
+import UsageCard from "@/components/usages/Usage";
+
+import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { cn } from "@/lib/utils";
 import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import DatePicker from "@/components/DatePicker";
 
 type Props = {
     t: Function;
@@ -43,6 +46,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     const { user: currentUser } = useUserStore();
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
+
+    const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
+    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
     const {
         data: customer,
@@ -62,6 +68,26 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate,
     } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         revalidateOnFocus: false,
+        onSuccess: (data) => {
+            setUsagesPerWorkload(
+                data?.usages?.items?.filter(
+                    (u: TenantUsage) =>
+                        u.edition == "pck_per_workload" &&
+                        u.value > 0 &&
+                        u.usage_name != "storage" &&
+                        u.usage_name != "storage_total",
+                ),
+            );
+            setUsagesPerGB(
+                data?.usages?.items?.filter(
+                    (u: TenantUsage) =>
+                        u.edition == "pck_per_gigabyte" &&
+                        u.value > 0 &&
+                        u.usage_name != "storage" &&
+                        u.usage_name != "storage_total",
+                ),
+            );
+        },
     });
 
     //#region Form
@@ -70,12 +96,23 @@ export default function GeneralTab({ t, tenant }: Props) {
     });
 
     async function onSubmit(values: CustomerFormValues) {
-        const newCustomer = {
-            name: tenant?.name,
-            acronisId: tenant?.id,
-            billingDate: values.billingDate?.toISOString(),
-            partnerId: currentUser?.partnerId,
-        };
+        let newCustomer;
+        if (tenant.kind == "customer"){
+            newCustomer = {
+                name: tenant?.name,
+                acronisId: tenant?.id,
+                billingDate: values.billingDate?.toISOString(),
+                partnerId: currentUser?.partnerId,
+            };
+        } else {
+            // Partner
+            newCustomer = {
+                name: tenant?.name,
+                acronisId: tenant?.id,
+                parentAcronisId: tenant?.parent_id,
+                billingDate: values.billingDate?.toISOString(),
+            }
+        }
         const existingCustomer = {
             name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
@@ -127,7 +164,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     //#endregion
 
     return (
-        <div className="grid grid-cols-3 gap-4">
+        <div className="container grid grid-cols-3 gap-4">
             {usages?.usages?.items?.some(
                 (u: TenantUsage) =>
                     u.offering_item?.quota?.value !== null &&
@@ -136,40 +173,52 @@ export default function GeneralTab({ t, tenant }: Props) {
             ) && (
                 <Alert className="col-span-3" variant="destructive">
                     <LuAlertTriangle className="size-4" />
-                    <AlertTitle>Limit Exceeded</AlertTitle>
+                    <AlertTitle>{t("limitExceeded")}</AlertTitle>
                     <AlertDescription>
-                        Some of this customers usages are exceeding the quota
-                        limit.
+                        {t("limitExceededDescription")}
                     </AlertDescription>
                 </Alert>
             )}
 
-            <div className="col-span-3 md:col-span-2">
+            <div className="col-span-full md:col-span-2">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex flex-row justify-between">
                             <h2 className="flex-none font-medium text-xl">
-                                Customer Information
+                                {t("customerInformation")}
                             </h2>
-                            <Button
-                                disabled={edit}
-                                size="sm"
-                                className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                onClick={() => {
-                                    form.reset(customer);
-                                    setEdit(true);
-                                }}
-                            >
-                                <span className="sr-only lg:not-sr-only">
-                                    {t("edit")}
-                                </span>
-                                <LuPencil className="size-4" />
-                            </Button>
+                            {tenant.parent_id ==
+                                currentUser?.acronisTenantId && (
+                                <Button
+                                    disabled={edit}
+                                    size="sm"
+                                    className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                    onClick={() => {
+                                        form.reset(customer);
+                                        setEdit(true);
+                                    }}
+                                >
+                                    <span className="sr-only lg:not-sr-only">
+                                        {t("edit")}
+                                    </span>
+                                    <LuPencil className="size-4" />
+                                </Button>
+                            )}
                         </CardTitle>
-                        {edit && (
+
+                        {edit ? (
                             <CardDescription>
-                                Some information only can be changed from the
-                                Acronis Cloud Platform
+                                {t("acronisCloudPlatformEditDescription")}
+                            </CardDescription>
+                        ) : (
+                            <CardDescription className="hover:underline">
+                                <Link
+                                    target="_blank"
+                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
+                                >
+                                    {t("showOnAcronis")}
+                                    <LuArrowUpRight className="ml-1 size-4 inline-block" />
+                                </Link>
                             </CardDescription>
                         )}
                     </CardHeader>
@@ -179,11 +228,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:items-center *:px-4 *:py-2">
                                 <div>
-                                    <dt className="font-medium">{t("kind")}</dt>
+                                    <dt className="font-medium">{t("name")}</dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {t(tenant?.kind || "")}
+                                        {tenant?.name || "-"}
                                     </dd>
                                 </div>
+
                                 <div>
                                     <dt className="font-medium">
                                         {t("acronisId")}
@@ -195,12 +245,22 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                                 <div>
                                     <dt className="font-medium">
-                                        {t("customerType")}
+                                        {t("enabled")}
                                     </dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {tenant?.customer_type || "-"}
+                                        <BoolChip
+                                            value={tenant?.enabled || false}
+                                        />
                                     </dd>
                                 </div>
+
+                                <div>
+                                    <dt className="font-medium">{t("kind")}</dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {t(tenant?.kind || "")}
+                                    </dd>
+                                </div>
+
                                 <div>
                                     <dt className="font-medium">
                                         {t("email")}
@@ -212,42 +272,60 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                                 <div>
                                     <dt className="font-medium">
-                                        {t("billingDate")}
+                                        {t("mfaStatus")}
                                     </dt>
-                                    {edit ? (
-                                        <FormField
-                                            control={form.control}
-                                            name="billingDate"
-                                            render={({ field }) => (
-                                                <FormItem>
-                                                    <DatePicker field={field} />
-                                                </FormItem>
-                                            )}
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        <BoolChip
+                                            value={
+                                                tenant?.mfa_status == "enabled"
+                                            }
                                         />
-                                    ) : (
-                                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                            {customer?.billingDate
-                                                ? `${DateFormat(
-                                                      customer?.billingDate,
-                                                  )} ${
-                                                      daysUntilNextBillingDate >
-                                                      0
-                                                          ? t(
-                                                                "daysUntilNextBillingDate",
-                                                                {
-                                                                    days: daysUntilNextBillingDate,
-                                                                },
-                                                            )
-                                                          : t(
-                                                                "billingDatePassed",
-                                                            )
-                                                  }`
-                                                : "-"}
-                                        </dd>
-                                    )}
+                                    </dd>
                                 </div>
 
-                                <div>
+                                {tenant.parent_id ==
+                                    currentUser?.acronisTenantId && (
+                                    <div>
+                                        <dt className="font-medium">
+                                            {t("billingDate")}
+                                        </dt>
+                                        {edit ? (
+                                            <FormField
+                                                control={form.control}
+                                                name="billingDate"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <DatePicker
+                                                            field={field}
+                                                        />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        ) : (
+                                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                                {customer?.billingDate
+                                                    ? `${DateFormat(
+                                                          customer?.billingDate,
+                                                      )} ${
+                                                          daysUntilNextBillingDate >
+                                                          0
+                                                              ? t(
+                                                                    "daysUntilNextBillingDate",
+                                                                    {
+                                                                        days: daysUntilNextBillingDate,
+                                                                    },
+                                                                )
+                                                              : t(
+                                                                    "billingDatePassed",
+                                                                )
+                                                      }`
+                                                    : "-"}
+                                            </dd>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* <div>
                                     <dt className="font-medium">
                                         {t("createdAt")}
                                     </dt>
@@ -256,7 +334,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             tenant?.created_at || "",
                                         )}
                                     </dd>
-                                </div>
+                                </div> */}
 
                                 {/* <div>
                         <dt className="font-medium">
@@ -287,7 +365,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
-                    {!edit && (
+                    {/* {!edit && (
                         <CardFooter>
                             <Button
                                 variant="link"
@@ -304,7 +382,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 </Link>
                             </Button>
                         </CardFooter>
-                    )}
+                    )} */}
                 </Card>
             </div>
 
@@ -313,253 +391,174 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="grid grid-cols-1 w-full gap-2 col-span-3 md:col-span-1">
-                    <Card className="w-full">
-                        <CardHeader className="py-4">
-                            <CardTitle className="font-medium text-xl">
-                                Backup Storage
-                            </CardTitle>
-                        </CardHeader>
-                        {/* <Separator /> */}
-                        <CardContent className="flex flex-col p-6 place-items-center">
-                            <NeedleChart
-                                value={
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.value
-                                }
-                                total={
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.offering_item.quota?.value
-                                }
-                            />
-                            <p className="text-center">
-                                {formatBytes(
-                                    usages?.usages?.items?.find(
-                                        (u: TenantUsage) =>
-                                            u.usage_name == "storage" &&
-                                            u.edition == "pck_per_workload",
-                                    )?.value,
-                                )}
-                                <span className="text-zinc-400">
-                                    {" / "}
-                                    {formatBytes(
-                                        usages?.usages?.items?.find(
-                                            (u: TenantUsage) =>
-                                                u.usage_name == "storage" &&
-                                                u.edition == "pck_per_workload",
-                                        )?.offering_item?.quota?.value || 0,
-                                    )}
-                                </span>
-                            </p>
-                        </CardContent>
-                    </Card>
-                    {/* <Card className="w-fit">
-                    <CardHeader className="py-4">
-                            <CardTitle className="font-medium text-xl">
-                                Usages
-                        </CardTitle>
-                    </CardHeader>
-                    <Separator />
-                    <CardContent className="p-6">
-                        <NeedleChart
-                            value={data?.usages?.items?.[1].value}
-                            total={
-                                data?.usages?.items?.[1].offering_item.quota
-                                    .value
+                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-between">
+                    {!currentUser?.licensed && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionPW")}
+                            model={t("perWorkload")}
+                            usage={
+                                usages?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_workload",
+                                )?.value
+                            }
+                            quota={
+                                usages?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_workload",
+                                )?.offering_item.quota
                             }
                         />
-                    </CardContent>
-                </Card> */}
+                    )}
+                    <StorageCard
+                        title={t("storageCardTitle")}
+                        description={
+                            !currentUser?.licensed
+                                ? t("storageCardDescriptionGB")
+                                : t("storageCardDescription")
+                        }
+                        model={!currentUser?.licensed ? t("perGB") : t("total")}
+                        usage={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_gigabyte",
+                            )?.value
+                        }
+                        quota={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_gigabyte",
+                            )?.offering_item.quota
+                        }
+                    />
                 </div>
             )}
 
-            {!usages ? (
-                <div className="col-span-3">
-                    <Skeleton>
-                        <DefaultSkeleton />
-                    </Skeleton>
-                </div>
-            ) : (
-                <Card className="col-span-3">
-                    <CardHeader className="py-4">
-                        <CardTitle className="font-medium text-xl">
-                            Usages
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent className="grid grid-cols-2 divide-x *:px-4">
-                        <div>
-                            <h2 className="flex-none font-medium text-lg text-center">
-                                Per Workload
-                            </h2>
-                            <div className="flex flex-col font-light divide-y">
-                                {usages?.usages?.items
-                                    ?.filter(
-                                        (u: TenantUsage) =>
-                                            u.edition == "pck_per_workload",
-                                    )
-                                    .map((u: TenantUsage) => (
-                                        <div className="p-2" key={u.usage_name}>
-                                            <p className="font-medium">
-                                                {u.name} ({u.usage_name}) :
-                                            </p>
-                                            <p>
-                                                <span
-                                                    className={cn(
-                                                        u.offering_item?.quota
-                                                            ?.value !==
-                                                            undefined &&
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value !==
-                                                                null &&
-                                                            u.value >
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value
-                                                            ? "text-red-600"
-                                                            : u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  undefined &&
-                                                              u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  null &&
-                                                              u.value >=
-                                                                  u
-                                                                      .offering_item
-                                                                      ?.quota
-                                                                      ?.value *
-                                                                      0.7
-                                                            ? "text-yellow-500"
-                                                            : "",
-                                                    )}
-                                                >
-                                                    {u.measurement_unit ==
-                                                    "bytes"
-                                                        ? formatBytes(u.value)
-                                                        : u.value}
-                                                </span>
-                                                {u.offering_item?.quota
-                                                    ?.value != undefined &&
-                                                u.offering_item.quota.value !=
-                                                    null ? (
-                                                    <span className="text-zinc-400">
-                                                        {` / ${
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value == null
-                                                                ? "Unlimited"
-                                                                : u.measurement_unit ==
-                                                                  "bytes"
-                                                                ? formatBytes(
-                                                                      u
-                                                                          .offering_item
-                                                                          ?.quota
-                                                                          ?.value,
-                                                                  )
-                                                                : u.value
-                                                        }`}
-                                                    </span>
-                                                ) : null}
-                                            </p>
-                                        </div>
-                                    ))}
-                            </div>
-                        </div>
+            <div className="col-span-full">
+                <h2 className="font-medium text-xl">{t("usages")}</h2>
+            </div>
 
-                        <div>
-                            <h2 className="flex-none font-medium text-lg text-center">
-                                Per Gigabyte
-                            </h2>
-                            <div className="flex flex-col font-light divide-y">
-                                {usages?.usages?.items
-                                    ?.filter(
-                                        (u: TenantUsage) =>
-                                            u.edition == "pck_per_gigabyte",
-                                    )
-                                    .map((u: TenantUsage) => (
-                                        <div className="p-2" key={u.usage_name}>
-                                            <p className="font-medium">
-                                                {u.name} ({u.usage_name}) :
-                                            </p>
-                                            <p>
-                                                <span
-                                                    className={cn(
-                                                        u.offering_item?.quota
-                                                            ?.value !==
-                                                            undefined &&
-                                                            u.offering_item
-                                                                ?.quota
-                                                                ?.value !==
-                                                                null &&
-                                                            u.value >
-                                                                u.offering_item
-                                                                    ?.quota
-                                                                    ?.value
-                                                            ? "text-red-600"
-                                                            : u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  undefined &&
-                                                              u.offering_item
-                                                                  ?.quota
-                                                                  ?.value !==
-                                                                  null &&
-                                                              u.value >=
-                                                                  u
-                                                                      .offering_item
-                                                                      ?.quota
-                                                                      ?.value *
-                                                                      0.7
-                                                            ? "text-yellow-500"
-                                                            : "",
-                                                    )}
-                                                >
-                                                    {u.measurement_unit ==
-                                                    "bytes"
-                                                        ? formatBytes(u.value)
-                                                        : u.value}
-                                                </span>
-                                                <span className="text-zinc-400">
-                                                    {u.offering_item?.quota
-                                                        ?.value != undefined &&
-                                                        u.offering_item.quota
-                                                            .value != null && (
-                                                            <span className="text-zinc-400">
-                                                                {` / ${
-                                                                    u
-                                                                        .offering_item
-                                                                        ?.quota
-                                                                        ?.value ==
-                                                                    null
-                                                                        ? "Unlimited"
-                                                                        : u.measurement_unit ==
-                                                                          "bytes"
-                                                                        ? formatBytes(
-                                                                              u
-                                                                                  .offering_item
-                                                                                  ?.quota
-                                                                                  ?.value,
-                                                                          )
-                                                                        : u.value
-                                                                }`}
-                                                            </span>
-                                                        )}
-                                                </span>
-                                            </p>
-                                        </div>
-                                    ))}
-                            </div>
+            {!currentUser?.licensed ? (
+                <Tabs defaultValue="perWorkload" className="col-span-full">
+                    <TabsList>
+                        <TabsTrigger value={"perWorkload"}>
+                            {t("perWorkload")}
+                        </TabsTrigger>
+                        <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
+                    </TabsList>
+                    {!usages ? (
+                        <div className="col-span-3 mt-2">
+                            <Skeleton>
+                                <DefaultSkeleton />
+                            </Skeleton>
                         </div>
-                    </CardContent>
-                </Card>
+                    ) : (
+                        <>
+                            <TabsContent value={"perWorkload"}>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                    {usagesPerWorkload?.length ? (
+                                        usagesPerWorkload
+                                            ?.sort((a, b) =>
+                                                a.usage_name < b.usage_name
+                                                    ? 1
+                                                    : b.usage_name <
+                                                      a.usage_name
+                                                    ? -1
+                                                    : 0,
+                                            )
+                                            .map((u: TenantUsage, index) => (
+                                                <UsageCard
+                                                    key={index}
+                                                    title={u.name}
+                                                    description={u.usage_name}
+                                                    unit={u.measurement_unit}
+                                                    value={u.value}
+                                                    quota={
+                                                        u.offering_item
+                                                            ?.quota as any
+                                                    }
+                                                />
+                                            ))
+                                    ) : (
+                                        <>
+                                            <div className="flex items-center justify-center col-span-full">
+                                                <p>{t("noUsageData")}</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </TabsContent>
+                            <TabsContent value={"perGB"}>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                    {usagesPerGB?.length ? (
+                                        usagesPerGB
+                                            ?.sort((a, b) =>
+                                                a.usage_name < b.usage_name
+                                                    ? 1
+                                                    : b.usage_name <
+                                                      a.usage_name
+                                                    ? -1
+                                                    : 0,
+                                            )
+                                            .map((u: TenantUsage, index) => (
+                                                <UsageCard
+                                                    key={index}
+                                                    title={u.name}
+                                                    description={u.usage_name}
+                                                    unit={u.measurement_unit}
+                                                    value={u.value}
+                                                    quota={
+                                                        u.offering_item
+                                                            ?.quota as any
+                                                    }
+                                                />
+                                            ))
+                                    ) : (
+                                        <>
+                                            <div className="flex items-center justify-center col-span-full">
+                                                <p>{t("noUsageData")}</p>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                            </TabsContent>
+                        </>
+                    )}
+                </Tabs>
+            ) : (
+                <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                    {usagesPerGB?.length ? (
+                        usagesPerGB
+                            ?.sort((a, b) =>
+                                a.usage_name < b.usage_name
+                                    ? 1
+                                    : b.usage_name < a.usage_name
+                                    ? -1
+                                    : 0,
+                            )
+                            .map((u: TenantUsage, index) => (
+                                <UsageCard
+                                    key={index}
+                                    title={u.name}
+                                    description={u.usage_name}
+                                    unit={u.measurement_unit}
+                                    value={u.value}
+                                    quota={u.offering_item?.quota as any}
+                                />
+                            ))
+                    ) : (
+                        <>
+                            <div className="flex items-center justify-center col-span-full">
+                                <p>{t("noUsageData")}</p>
+                            </div>
+                        </>
+                    )}
+                </div>
             )}
         </div>
     );
