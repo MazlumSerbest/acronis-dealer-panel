@@ -30,13 +30,13 @@ export const GET = auth(async (req: any, { params }) => {
             Authorization: `Bearer ${token}`,
         };
         const searchParams = new URLSearchParams({
-            parent_id: params?.parentId as string,
+            parent_id: params?.parentAcronisId as string,
             // lod: "basic",
         });
 
         const res = await fetch(
             `${process.env.ACRONIS_API_V2_URL}/tenants?${searchParams}`,
-            // `${process.env.ACRONIS_API_V2_URL}/tenants/${parentId}/children`,
+            // `${process.env.ACRONIS_API_V2_URL}/tenants/${parentAcronisId}/children`,
             {
                 method: "GET",
                 headers: headers,

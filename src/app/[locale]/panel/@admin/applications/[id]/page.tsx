@@ -181,7 +181,8 @@ export default function ApplicationDetail({
             name: values.name,
             login: values.login,
             applicationId: data.id,
-            parent_id: data.parentAcronisId, // ???
+            parent_id: data.parentAcronisId,
+            partnerId: data.partnerId, // ???
             kind: "partner",
             contact: {
                 email: values.email,

@@ -71,7 +71,7 @@ model Partner {
   acronisId       String    @unique
   applicationId   String?   @unique
   parentAcronisId String?
-  parentId        String?
+  // parentId        String?
   active          Boolean   @default(true)
   name            String?
   // email           String
@@ -87,7 +87,7 @@ model Partner {
   customers   Customer[]
   licenses    License[]
   application Application? @relation(fields: [applicationId], references: [id])
-  parent      Partner?     @relation("parent", fields: [parentId], references: [id])
+  parent      Partner?     @relation("parent", fields: [parentAcronisId], references: [acronisId])
   children    Partner[]    @relation("parent")
   users       User[]
 }

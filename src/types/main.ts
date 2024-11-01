@@ -26,7 +26,7 @@ type User = Entity & {
 };
 
 type Partner = Entity & {
-    parentId?: string;
+    // parentId?: string;
     acronisId?: string;
     parentAcronisId?: string;
     applicationId?: string;
