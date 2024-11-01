@@ -47,7 +47,7 @@ export default function LearnPage() {
                                         return (
                                             <CourseCard
                                                 key={course.id}
-                                                id={course.id}
+                                                id={course.id || ""}
                                                 name={course.name}
                                                 description={
                                                     course.shortDescription
@@ -84,7 +84,7 @@ export default function LearnPage() {
                                         return (
                                             <CourseCard
                                                 key={course.id}
-                                                id={course.id}
+                                                id={course.id || ""}
                                                 name={course.name}
                                                 description={
                                                     course.shortDescription

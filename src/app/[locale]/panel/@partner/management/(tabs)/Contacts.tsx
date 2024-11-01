@@ -90,7 +90,7 @@ export default function ContactsTab() {
             onSuccess: (data) => {
                 setContacts(
                     data.contacts.items.filter(
-                        (c: TenantContact) => !c.types.includes("legal"),
+                        (c: TenantContact) => !c.types?.includes("legal"),
                     ),
                 );
             },

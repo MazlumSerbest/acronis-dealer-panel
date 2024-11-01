@@ -110,7 +110,7 @@ export default function CourseDetail({
                                 .map((chapter: Chapter, index: number) => (
                                     <AccordionItem
                                         key={index}
-                                        value={chapter.id}
+                                        value={chapter.id || ""}
                                         className="px-2"
                                     >
                                         <AccordionTrigger className="font-semibold !no-underline px-4">
