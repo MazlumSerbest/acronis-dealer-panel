@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
     zebra = false,
     isLoading = false,
     defaultPageIndex = 0,
-    defaultPageSize = 10,
+    defaultPageSize = 20,
     selectable = false,
     facetedFilters,
     actions,

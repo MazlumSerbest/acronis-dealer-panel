@@ -27,10 +27,15 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
     return (
         <div className="flex items-center justify-between px-2">
             <div className="flex-1 text-sm text-muted-foreground">
-                {tc("totalRows", {
-                    selected: table.getFilteredSelectedRowModel().rows.length,
-                    length: table.getFilteredRowModel().rows.length,
-                })}
+                {table.getFilteredSelectedRowModel().rows.length > 0
+                    ? tc("totalRowsSelected", {
+                          selected:
+                              table.getFilteredSelectedRowModel().rows.length,
+                          length: table.getFilteredRowModel().rows.length,
+                      })
+                    : tc("totalRows", {
+                          length: table.getFilteredRowModel().rows.length,
+                      })}
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
                 <div className="flex items-center space-x-2">
