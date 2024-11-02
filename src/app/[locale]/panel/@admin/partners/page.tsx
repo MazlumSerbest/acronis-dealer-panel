@@ -16,6 +16,8 @@ import {
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import BoolChip from "@/components/BoolChip";
+
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { DateTimeFormat } from "@/utils/date";
@@ -70,6 +72,17 @@ export default function PartnersPage() {
 
                 return data || "-";
             },
+        },
+        {
+            accessorKey: "active",
+            header: t("active"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("active");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
@@ -180,6 +193,16 @@ export default function PartnersPage() {
             data={data || []}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
+            facetedFilters={[
+                {
+                    column: "active",
+                    title: t("active"),
+                    options: [
+                        { value: true, label: t("true") },
+                        { value: false, label: t("false") },
+                    ],
+                },
+            ]}
             // onAddNew={() => {}}
         />
     );
