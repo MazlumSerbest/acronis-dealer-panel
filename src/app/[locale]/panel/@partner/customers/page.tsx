@@ -34,10 +34,11 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { set } from "date-fns";
 
 const customerFormSchema = z.object({
     kind: z.enum(["customer", "partner"]),
@@ -74,6 +75,7 @@ export default function CustomersPage() {
     const { user: currentUser } = useUserStore();
     const [open, setOpen] = useState(false);
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
@@ -93,12 +95,14 @@ export default function CustomersPage() {
     });
 
     function onSubmit(values: CustomerFormValues) {
+        setIsSubmitting(true);
+
         const customer = {
             name: values.name,
             login: values.login,
             parentAcronisId: currentUser?.acronisTenantId,
             partnerId: currentUser?.partnerId,
-            kind: values,
+            kind: values.kind,
             contact: {
                 email: values.email,
             },
@@ -116,12 +120,15 @@ export default function CustomersPage() {
                     });
                     setOpen(false);
                     mutate();
+                    form.reset();
+                    setIsSubmitting(false);
                 } else {
                     toast({
                         variant: "destructive",
                         title: t("errorTitle"),
                         description: res.message,
                     });
+                    setIsSubmitting(false);
                 }
             });
     }
@@ -294,13 +301,9 @@ export default function CustomersPage() {
                                 ],
                             },
                         ]}
-                        onAddNew={
-                            currentUser?.licensed
-                                ? () => {
-                                      setOpen(true);
-                                  }
-                                : undefined
-                        }
+                        onAddNew={() => {
+                            setOpen(true);
+                        }}
                         onClick={(item) => {
                             router.push("customers/" + item?.original?.id);
                         }}
@@ -478,11 +481,17 @@ export default function CustomersPage() {
                                             </Button>
                                         </DialogClose>
                                         <Button
-                                            disabled={loginAlreadyTaken}
+                                            disabled={
+                                                loginAlreadyTaken ||
+                                                isSubmitting
+                                            }
                                             type="submit"
                                             className="bg-green-600 hover:bg-green-600/90"
                                         >
                                             {t("save")}
+                                            {isSubmitting && (
+                                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                                            )}
                                         </Button>
                                     </DialogFooter>
                                 </form>
