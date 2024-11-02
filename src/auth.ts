@@ -1,7 +1,7 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import Sendgrid from "next-auth/providers/sendgrid";
 import ForwardEmail from "next-auth/providers/forwardemail";
-import Nodemailer from "next-auth/providers/nodemailer";
+// import Nodemailer from "next-auth/providers/nodemailer";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/utils/db";
 
@@ -29,10 +29,10 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             apiKey: process.env.AUTH_SENDGRID_KEY,
             maxAge: 5 * 60, // 5 minutes
         }),
-        Nodemailer({
-            server: process.env.EMAIL_SERVER,
-            from: process.env.EMAIL_FROM,
-        }),
+        // Nodemailer({
+        //     server: process.env.EMAIL_SERVER,
+        //     from: process.env.EMAIL_FROM,
+        // }),
         ForwardEmail({
             from: process.env.EMAIL_FROM,
             apiKey: process.env.AUTH_FORWARDEMAIL_KEY,
