@@ -444,7 +444,7 @@ export default function InactiveTab() {
             />
 
             <Dialog open={openAdd} onOpenChange={setOpenAdd}>
-                <DialogContent>
+                <DialogContent className="max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{t("addLicense")}</DialogTitle>
                     </DialogHeader>
@@ -454,6 +454,18 @@ export default function InactiveTab() {
                             onSubmit={addForm.handleSubmit(onSubmitAdd)}
                             autoComplete="off"
                             className="space-y-4"
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    e.preventDefault();
+                                    append({ value: "" });
+                                    // Focus the newly added input after a short delay to allow render
+                                    setTimeout(() => {
+                                        const inputs = document.querySelectorAll('input[name^="serials"]');
+                                        const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+                                        lastInput?.focus();
+                                    }, 0);
+                                }
+                            }}
                         >
                             <div>
                                 {fields.map((field, index) => (
