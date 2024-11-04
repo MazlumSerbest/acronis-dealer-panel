@@ -310,8 +310,10 @@
             "login": {
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
+                "checkFailed": "Failed to check username availability",
                 "minLength": "Must be 6 characters long",
-                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value."
+                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value.",
+                "invalidType": "Must be valid username"
             },
             "email": {
                 "required": "Email is required",
@@ -326,8 +328,10 @@
             "login": {
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
+                "checkFailed": "Failed to check username availability",
                 "minLength": "Must be 6 characters long",
-                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value."
+                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value.",
+                "invalidType": "Must be valid username"
             },
             "email": {
                 "required": "Email is required",

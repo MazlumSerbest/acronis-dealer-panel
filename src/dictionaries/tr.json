@@ -309,9 +309,11 @@
             },
             "login": {
                 "required": "Kullanıcı adı zorunludur",
-                "alreadyTaken": "Kullanıcı adı zaten alınmış",
+                "alreadyTaken": "Bu kullanıcı adı zaten alınmış",
+                "checkFailed": "Kullanıcı adı kontrolü başarısız",
                 "minLength": "En az 6 karakter uzunluğunda olmalıdır",
-                "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır."
+                "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
+                "invalidType": "Geçerli bir kullanıcı adı olmalıdır"
             },
             "email": {
                 "required": "E-posta zorunludur",
@@ -325,9 +327,11 @@
             },
             "login": {
                 "required": "Kullanıcı adı zorunludur",
-                "alreadyTaken": "Kullanıcı adı zaten alınmış",
+                "alreadyTaken": "Bu kullanıcı adı zaten alınmış",
+                "checkFailed": "Kullanıcı adı kontrolü başarısız",
                 "minLength": "En az 6 karakter uzunluğunda olmalıdır",
-                "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır."
+                "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
+                "invalidType": "Geçerli bir kullanıcı adı olmalıdır"
             },
             "email": {
                 "required": "E-posta zorunludur",
@@ -510,8 +514,8 @@
         "goToNextPage": "Sonraki sayfaya git",
         "goToPreviousPage": "Önceki sayfaya git",
         "clearSelection": "Seçimi Temizle",
-        "totalRowsSelected": "{length} satır arasından {selected} seçildi.",
-        "totalRows": "Toplam Satır: {length}",
+        "totalRowsSelected": "{length} kayıt arasından {selected} seçildi.",
+        "totalRows": "Toplam Kayıt: {length}",
         "selectDate": "Bir tarih seçin",
         "clear": "Temizle",
         "actions": "Eylemler",

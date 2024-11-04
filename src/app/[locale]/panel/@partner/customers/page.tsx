@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
@@ -27,18 +27,23 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
+
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuLoader2,
+    LuAlertCircle,
+    LuCheck,
+} from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { set } from "date-fns";
 
 const customerFormSchema = z.object({
     kind: z.enum(["customer", "partner"]),
@@ -53,7 +58,10 @@ const customerFormSchema = z.object({
         .string({
             required_error: "Customer.login.required",
         })
-        .min(6, {
+        .regex(/^[a-zA-Z0-9@!#$%^&*()+=\-[\]\\';,/{}|":<>?~`\s]+$/, {
+            message: "Customer.login.invalidType",
+        })
+        .min(4, {
             message: "Customer.login.minLength",
         }),
     email: z
@@ -76,6 +84,8 @@ export default function CustomersPage() {
     const [open, setOpen] = useState(false);
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loginCheckLoading, setLoginCheckLoading] = useState(false);
+    const [loginValid, setLoginValid] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
@@ -121,15 +131,14 @@ export default function CustomersPage() {
                     setOpen(false);
                     mutate();
                     form.reset();
-                    setIsSubmitting(false);
                 } else {
                     toast({
                         variant: "destructive",
                         title: t("errorTitle"),
                         description: res.message,
                     });
-                    setIsSubmitting(false);
                 }
+                setIsSubmitting(false);
             });
     }
     //#endregion
@@ -238,6 +247,73 @@ export default function CustomersPage() {
             },
         },
     ];
+    //#endregion
+
+    //#region Check Login Debounce
+    const debounce = (fn: Function, delay: number) => {
+        let timeoutId: NodeJS.Timeout;
+        return (...args: any[]) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => fn(...args), delay);
+        };
+    };
+
+    const checkLoginAvailability = useCallback(
+        async (username: string) => {
+            if (username.length < 4) return;
+
+            const loginRegex =
+                /^[a-zA-Z0-9@!#$%^&*()+=\-[\]\\';,/{}|":<>?~`\s]+$/;
+            if (!loginRegex.test(username)) {
+                setLoginValid(false);
+                setLoginAlreadyTaken(false);
+                form.setError("login", {
+                    type: "manual",
+                    message: "Customer.login.invalidType",
+                });
+                return;
+            }
+
+            setLoginValid(false);
+            setLoginAlreadyTaken(false);
+            setLoginCheckLoading(true);
+
+            try {
+                const res = await fetch(
+                    `/api/acronis/users/checkLogin?username=${username}`,
+                );
+                const data = await res.json();
+
+                if (data.ok) {
+                    setLoginAlreadyTaken(false);
+                    setLoginValid(true);
+                    form.clearErrors("login");
+                } else {
+                    setLoginAlreadyTaken(true);
+                    setLoginValid(false);
+                    form.setError("login", {
+                        type: "manual",
+                        message: "Customer.login.alreadyTaken",
+                    });
+                }
+            } catch (error) {
+                setLoginAlreadyTaken(true);
+                setLoginValid(false);
+                form.setError("login", {
+                    type: "manual",
+                    message: "Customer.login.checkFailed",
+                });
+            } finally {
+                setLoginCheckLoading(false);
+            }
+        },
+        [form],
+    );
+
+    const debouncedCheckLogin = useMemo(
+        () => debounce(checkLoginAvailability, 500),
+        [checkLoginAvailability],
+    );
     //#endregion
 
     if (error) return <div>{t("failedToLoad")}</div>;
@@ -394,54 +470,49 @@ export default function CustomersPage() {
                                                     {tf("login.description")}
                                                 </FormDescription>
                                                 <FormControl>
-                                                    <Input
-                                                        {...field}
-                                                        onChange={(v) => {
-                                                            form.setValue(
-                                                                "login",
-                                                                v.target.value,
-                                                            );
-                                                            if (
-                                                                v.target.value
-                                                                    .length > 5
-                                                            )
-                                                                fetch(
-                                                                    `/api/acronis/users/checkLogin?username=${v.target.value}`,
-                                                                )
-                                                                    .then(
-                                                                        (res) =>
-                                                                            res.json(),
-                                                                    )
-                                                                    .then(
-                                                                        (
-                                                                            res,
-                                                                        ) => {
-                                                                            if (
-                                                                                res.ok
-                                                                            ) {
-                                                                                setLoginAlreadyTaken(
-                                                                                    false,
-                                                                                );
-                                                                                form.clearErrors(
-                                                                                    "login",
-                                                                                );
-                                                                            } else {
-                                                                                setLoginAlreadyTaken(
-                                                                                    true,
-                                                                                );
-                                                                                form.setError(
-                                                                                    "login",
-                                                                                    {
-                                                                                        type: "manual",
-                                                                                        message:
-                                                                                            "Customer.login.alreadyTaken",
-                                                                                    },
-                                                                                );
-                                                                            }
-                                                                        },
+                                                    <div className="relative flex items-center">
+                                                        <Input
+                                                            {...field}
+                                                            onChange={(e) => {
+                                                                const value =
+                                                                    e.target
+                                                                        .value;
+                                                                field.onChange(
+                                                                    value,
+                                                                );
+
+                                                                // Reset states if input is too short
+                                                                if (
+                                                                    value.length <
+                                                                    4
+                                                                ) {
+                                                                    setLoginValid(
+                                                                        false,
                                                                     );
-                                                        }}
-                                                    />
+                                                                    setLoginAlreadyTaken(
+                                                                        false,
+                                                                    );
+                                                                    setLoginCheckLoading(
+                                                                        false,
+                                                                    );
+                                                                    return;
+                                                                }
+
+                                                                debouncedCheckLogin(
+                                                                    value,
+                                                                );
+                                                            }}
+                                                        />
+                                                        {loginCheckLoading && (
+                                                            <LuLoader2 className="size-4 animate-spin absolute right-2" />
+                                                        )}
+                                                        {loginAlreadyTaken && (
+                                                            <LuAlertCircle className="size-4 text-destructive absolute right-2" />
+                                                        )}
+                                                        {loginValid && (
+                                                            <LuCheck className="size-4 text-green-600 absolute right-2" />
+                                                        )}
+                                                    </div>
                                                 </FormControl>
                                                 <FormError
                                                     error={
@@ -482,6 +553,7 @@ export default function CustomersPage() {
                                         </DialogClose>
                                         <Button
                                             disabled={
+                                                loginCheckLoading ||
                                                 loginAlreadyTaken ||
                                                 isSubmitting
                                             }
