@@ -84,8 +84,8 @@ export default function GeneralTab({ t, tenant }: Props) {
             setUsagesPerWorkload(
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
-                        u.edition == "pck_per_workload" &&
                         u.value > 0 &&
+                        u.edition == "pck_per_workload" &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
@@ -93,8 +93,8 @@ export default function GeneralTab({ t, tenant }: Props) {
             setUsagesPerGB(
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
-                        u.edition == "pck_per_gigabyte" &&
                         u.value > 0 &&
+                        u.edition == "pck_per_gigabyte" &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),

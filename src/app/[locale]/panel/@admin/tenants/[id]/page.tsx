@@ -29,16 +29,51 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             updateCurrentTenant(data.tenant);
-            trigger();
+            if (data.tenant.kind === "partner") trigger();
         },
     });
 
     const { trigger, isMutating } = useSWRMutation(
-        () => `/api/acronis/tenants/children/${params.id}`,
-        (url: string) => fetch(url).then((res) => res.json()),
+        `/api/acronis/tenants/children/${params.id}`,
+        async (url) => {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch tenant children");
+            return response.json();
+        },
         {
-            onSuccess: (data) => {
-                setChildren(data?.children?.items ?? []);
+            onSuccess: async (data) => {
+                if (!data) return;
+
+                try {
+                    const panelPartnerResponse = await fetch(`/api/partner/${params?.id}`);
+                    const panelPartner = await panelPartnerResponse.json();
+
+                    const [customersResponse, partnersResponse] = await Promise.all([
+                        fetch(`/api/customer?partnerId=${panelPartner?.id}`),
+                        fetch(`/api/partner?parentAcronisId=${params?.id}`)
+                    ]);
+
+                    const [customers, partners] = await Promise.all([
+                        customersResponse.json(),
+                        partnersResponse.json()
+                    ]);
+
+                    const newData = data.map((item: any) => ({
+                        id: item.id,
+                        name: item.name,
+                        kind: item.kind,
+                        enabled: item.enabled,
+                        mfa_status: item.mfa_status,
+                        billingDate: item.kind === "customer" 
+                            ? customers.find((c: Customer) => c.acronisId === item.id)?.billingDate
+                            : partners.find((p: Partner) => p.acronisId === item.id)?.billingDate,
+                        usages: item.usages,
+                    }));
+
+                    setChildren(newData);
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
             },
         },
     );
