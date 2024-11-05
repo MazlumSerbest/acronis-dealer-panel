@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -27,7 +27,7 @@ export default function ActiveTab() {
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
+        // expiresAt: false,
         assignedAt: false,
         createdAt: false,
         createdBy: false,
@@ -100,16 +100,6 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
-
-                return DateTimeFormat(data);
-            },
-        },
-        {
             accessorKey: "assignedAt",
             header: t("assignedAt"),
             enableGlobalFilter: false,
@@ -128,6 +118,30 @@ export default function ActiveTab() {
 
                 return DateTimeFormat(data);
             },
+        },
+        {
+            accessorKey: "completedAt",
+            enableGlobalFilter: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("completedAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("completedAt");
+
+                return DateFormat(data);
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "product",
@@ -203,6 +217,8 @@ export default function ActiveTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
+            // defaultSort="co"
+            defaultSortDirection="desc"
         />
     );
 }
