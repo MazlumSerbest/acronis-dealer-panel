@@ -71,13 +71,27 @@ export default function WaitingTab() {
         },
         {
             accessorKey: "applicationDate",
-            header: t("applicationDate"),
             enableGlobalFilter: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("applicationDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("applicationDate");
 
                 return DateTimeFormat(data);
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
@@ -136,6 +150,8 @@ export default function WaitingTab() {
             columns={columns}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
+            defaultSort="applicationDate"
+            defaultSortDirection="asc"
             facetedFilters={[
                 {
                     column: "companyType",
