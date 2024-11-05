@@ -55,6 +55,8 @@ interface DataTableProps<TData, TValue> {
     isLoading?: boolean;
     defaultPageIndex?: number;
     defaultPageSize?: 10 | 20 | 30 | 40 | 50;
+    defaultSort?: string;
+    defaultSortDirection?: "asc" | "desc";
     selectable?: boolean;
     facetedFilters?: {
         column: string;
@@ -77,6 +79,8 @@ export function DataTable<TData, TValue>({
     isLoading = false,
     defaultPageIndex = 0,
     defaultPageSize = 20,
+    defaultSort = "",
+    defaultSortDirection = "asc",
     selectable = false,
     facetedFilters,
     actions,
@@ -92,7 +96,9 @@ export function DataTable<TData, TValue>({
         useState<VisibilityState>(visibleColumns);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [globalFilter, setGlobalFilter] = useState("");
-    const [sorting, setSorting] = useState<SortingState>([]);
+    const [sorting, setSorting] = useState<SortingState>([
+        { id: defaultSort, desc: defaultSortDirection === "desc" },
+    ]);
 
     const table = useReactTable({
         data,
@@ -106,6 +112,7 @@ export function DataTable<TData, TValue>({
         },
         initialState: {
             columnVisibility: columnVisibility,
+            sorting: sorting,
             pagination: {
                 pageIndex: defaultPageIndex,
                 pageSize: defaultPageSize,
