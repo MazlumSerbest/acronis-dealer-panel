@@ -6,8 +6,12 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
-import { DateTimeFormat } from "@/utils/date";
+
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
+import { formatBytes } from "@/utils/functions";
+import { cn } from "@/lib/utils";
+import useUserStore from "@/store/user";
 
 type Props = {
     t: Function;
@@ -16,6 +20,7 @@ type Props = {
 
 export default function CustomersTab({ t, customers }: Props) {
     const router = useRouter();
+    const { user: currentUser } = useUserStore();
 
     //#region Table
     const visibleColumns = { created_at: false, updated_at: false };
@@ -84,34 +89,115 @@ export default function CustomersTab({ t, customers }: Props) {
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
-        {
-            accessorKey: "usage",
-            header: t("usage"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("usage");
+        // {
+        //     accessorKey: "billingDate",
+        //     enableGlobalFilter: false,
+        //     header: ({ column }) => (
+        //         <div className="flex flex-row items-center">
+        //             {t("billingDate")}
+        //             <Button
+        //                 variant="ghost"
+        //                 className="p-1"
+        //                 onClick={() =>
+        //                     column.toggleSorting(column.getIsSorted() === "asc")
+        //                 }
+        //             >
+        //                 <LuChevronsUpDown className="size-4" />
+        //             </Button>
+        //         </div>
+        //     ),
+        //     cell: ({ row }) => {
+        //         const data: string = row.getValue("billingDate");
 
-                return data || "-";
-            },
-        },
+        //     },
+        //     filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        // },
         {
-            accessorKey: "created_at",
-            header: t("createdAt"),
+            accessorKey: "usages",
             enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("created_at");
+            header: () =>
+                currentUser?.licensed ? (
+                    t("usages")
+                ) : (
+                    <div className="flex flex-col gap-2 py-3">
+                        <span className="mx-auto">{t("totalUsages")}</span>
 
-                return <p>{DateTimeFormat(data)}</p>;
-            },
-        },
-        {
-            accessorKey: "updated_at",
-            header: t("updatedAt"),
-            enableGlobalFilter: false,
+                        <div className="grid grid-cols-2 justify-items-center">
+                            <p className="flex flex-row gap-2">
+                                {t("perWorkload")}
+                            </p>
+                            <p className="flex flex-row gap-2">{t("perGB")}</p>
+                        </div>
+                    </div>
+                ),
             cell: ({ row }) => {
-                const data: string = row.getValue("updated_at");
+                const data: any = row.getValue("usages");
 
-                return <p>{DateTimeFormat(data)}</p>;
+                return currentUser?.licensed ? (
+                    <p>
+                        <span
+                            className={cn(
+                                data?.perGB?.quota &&
+                                    data?.perGB?.value > data?.perGB?.quota
+                                    ? "text-destructive"
+                                    : "",
+                            )}
+                        >
+                            {data?.perGB?.value
+                                ? formatBytes(data?.perGB?.value)
+                                : "-"}
+                        </span>
+                        <span className="text-muted-foreground">
+                            {data?.perGB?.quota
+                                ? ` / ${formatBytes(data?.perGB?.quota)}`
+                                : ""}
+                        </span>
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-2 justify-items-center">
+                        <p className="grid grid-cols-2 justify-items-center gap-2">
+                            <span
+                                className={cn(
+                                    data?.perWorkload?.quota &&
+                                        data?.perWorkload?.value >
+                                            data?.perWorkload?.quota
+                                        ? "text-destructive"
+                                        : "",
+                                )}
+                            >
+                                {data?.perWorkload?.value
+                                    ? formatBytes(data?.perWorkload?.value)
+                                    : "-"}
+                            </span>
+                            <span className="text-muted-foreground">
+                                {data?.perWorkload?.quota
+                                    ? ` / ${formatBytes(
+                                          data?.perWorkload?.quota,
+                                      )}`
+                                    : ""}
+                            </span>
+                        </p>
+                        <p className="grid grid-cols-2 justify-items-center gap-2">
+                            <span
+                                className={cn(
+                                    data?.perGB?.quota &&
+                                        data?.perGB?.value > data?.perGB?.quota
+                                        ? "text-destructive"
+                                        : "",
+                                )}
+                            >
+                                {data?.perGB?.value
+                                    ? formatBytes(data?.perGB?.value)
+                                    : "-"}
+                            </span>
+                            <span className="text-muted-foreground">
+                                {data?.perGB?.quota
+                                    ? ` / ${formatBytes(data?.perGB?.quota)}`
+                                    : ""}
+                            </span>
+                        </p>
+                    </div>
+                );
             },
         },
     ];

@@ -36,7 +36,7 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
 
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import {
     LuChevronsUpDown,
     LuLoader2,
@@ -44,6 +44,8 @@ import {
     LuCheck,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import { formatBytes } from "@/utils/functions";
+import { cn } from "@/lib/utils";
 
 const customerFormSchema = z.object({
     kind: z.enum(["customer", "partner"]),
@@ -81,6 +83,8 @@ export default function CustomersPage() {
     const router = useRouter();
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
+    const [updatedData, setUpdatedData] = useState<any[]>([]);
+
     const [open, setOpen] = useState(false);
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,10 +92,61 @@ export default function CustomersPage() {
     const [loginValid, setLoginValid] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/acronis/tenants/children/${currentUser?.acronisTenantId}`,
+        currentUser?.acronisTenantId
+            ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
+            : null,
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: async (data) => {
+                if (!data) return;
+
+                const [customersResponse, partnersResponse] = await Promise.all(
+                    [
+                        fetch(
+                            `/api/customer?partnerId=${currentUser?.partnerId}`,
+                        ),
+                        fetch(
+                            `/api/partner?parentAcronisId=${currentUser?.acronisTenantId}`,
+                        ),
+                    ],
+                );
+
+                const [customers, partners] = await Promise.all([
+                    customersResponse.json(),
+                    partnersResponse.json(),
+                ]);
+
+                const newData = data.map((item: any) => {
+                    const newItem = {
+                        id: item.id,
+                        name: item.name,
+                        kind: item.kind,
+                        enabled: item.enabled,
+                        mfa_status: item.mfa_status,
+                        billingDate: "",
+                        usages: item.usages,
+                    };
+
+                    if (item.kind === "customer") {
+                        const customer = customers.find(
+                            (customer: Customer) =>
+                                customer.acronisId === item.id,
+                        );
+                        newItem.billingDate =
+                            customer?.billingDate || undefined;
+                    } else if (item.kind === "partner") {
+                        const partner = partners.find(
+                            (partner: Partner) => partner.acronisId === item.id,
+                        );
+                        newItem.billingDate = partner?.billingDate || undefined;
+                    }
+
+                    return newItem;
+                });
+
+                setUpdatedData(newData);
+            },
         },
     );
 
@@ -208,42 +263,114 @@ export default function CustomersPage() {
         },
         {
             accessorKey: "billingDate",
-            header: t("billingDate"),
             enableGlobalFilter: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("billingDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
-            accessorKey: "usage",
-            header: t("usage"),
+            accessorKey: "usages",
             enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("usage");
+            header: () =>
+                currentUser?.licensed ? (
+                    t("usages")
+                ) : (
+                    <div className="flex flex-col gap-2 py-3">
+                        <span className="mx-auto">{t("totalUsages")}</span>
 
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "created_at",
-            header: t("createdAt"),
-            enableGlobalFilter: false,
+                        <div className="grid grid-cols-2 justify-items-center">
+                            <p className="flex flex-row gap-2">
+                                {t("perWorkload")}
+                            </p>
+                            <p className="flex flex-row gap-2">{t("perGB")}</p>
+                        </div>
+                    </div>
+                ),
             cell: ({ row }) => {
-                const data: string = row.getValue("created_at");
+                const data: any = row.getValue("usages");
 
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "updated_at",
-            header: t("updatedAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("updated_at");
-
-                return DateTimeFormat(data);
+                return currentUser?.licensed ? (
+                    <p>
+                        <span
+                            className={cn(
+                                data?.perGB?.quota &&
+                                    data?.perGB?.value > data?.perGB?.quota
+                                    ? "text-destructive"
+                                    : "",
+                            )}
+                        >
+                            {data?.perGB?.value
+                                ? formatBytes(data?.perGB?.value)
+                                : "-"}
+                        </span>
+                        <span className="text-muted-foreground">
+                            {data?.perGB?.quota
+                                ? ` / ${formatBytes(data?.perGB?.quota)}`
+                                : ""}
+                        </span>
+                    </p>
+                ) : (
+                    <div className="grid grid-cols-2 justify-items-center">
+                        <p className="grid grid-cols-2 justify-items-center gap-2">
+                            <span
+                                className={cn(
+                                    data?.perWorkload?.quota &&
+                                        data?.perWorkload?.value >
+                                            data?.perWorkload?.quota
+                                        ? "text-destructive"
+                                        : "",
+                                )}
+                            >
+                                {data?.perWorkload?.value
+                                    ? formatBytes(data?.perWorkload?.value)
+                                    : "-"}
+                            </span>
+                            <span className="text-muted-foreground">
+                                {data?.perWorkload?.quota
+                                    ? ` / ${formatBytes(
+                                          data?.perWorkload?.quota,
+                                      )}`
+                                    : ""}
+                            </span>
+                        </p>
+                        <p className="grid grid-cols-2 justify-items-center gap-2">
+                            <span
+                                className={cn(
+                                    data?.perGB?.quota &&
+                                        data?.perGB?.value > data?.perGB?.quota
+                                        ? "text-destructive"
+                                        : "",
+                                )}
+                            >
+                                {data?.perGB?.value
+                                    ? formatBytes(data?.perGB?.value)
+                                    : "-"}
+                            </span>
+                            <span className="text-muted-foreground">
+                                {data?.perGB?.quota
+                                    ? ` / ${formatBytes(data?.perGB?.quota)}`
+                                    : ""}
+                            </span>
+                        </p>
+                    </div>
+                );
             },
         },
     ];
@@ -328,10 +455,12 @@ export default function CustomersPage() {
                 <>
                     <DataTable
                         zebra
-                        data={data?.children?.items || []}
+                        data={updatedData || data}
                         columns={columns}
                         visibleColumns={visibleColumns}
                         defaultPageSize={50}
+                        defaultSort="name"
+                        defaultSortDirection="asc"
                         isLoading={isLoading}
                         facetedFilters={[
                             {
