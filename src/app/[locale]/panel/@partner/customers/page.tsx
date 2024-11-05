@@ -290,7 +290,9 @@ export default function CustomersPage() {
             enableGlobalFilter: false,
             header: () =>
                 currentUser?.licensed ? (
-                    t("usages")
+                    <div className="flex flex-row justify-center">
+                        {t("usages")}
+                    </div>
                 ) : (
                     <div className="flex flex-col gap-2 py-3">
                         <span className="mx-auto">{t("totalUsages")}</span>
@@ -307,7 +309,7 @@ export default function CustomersPage() {
                 const data: any = row.getValue("usages");
 
                 return currentUser?.licensed ? (
-                    <p>
+                    <div className="flex flex-row justify-center gap-4">
                         <span
                             className={cn(
                                 data?.perGB?.quota &&
@@ -325,7 +327,7 @@ export default function CustomersPage() {
                                 ? ` / ${formatBytes(data?.perGB?.quota)}`
                                 : ""}
                         </span>
-                    </p>
+                    </div>
                 ) : (
                     <div className="grid grid-cols-2 justify-items-center">
                         <p className="grid grid-cols-2 justify-items-center gap-2">

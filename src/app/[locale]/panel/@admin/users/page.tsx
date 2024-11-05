@@ -83,12 +83,16 @@ export default function UsersPage() {
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
     const { data, error, isLoading, mutate } = useSWR(`/api/admin/user`, null, {
-        revalidateOnFocus: false,
+        revalidateOnFocus: false
     });
 
     //#region Form
     const form = useForm<UserFormValues>({
         resolver: zodResolver(userFormSchema),
+        defaultValues: {
+            active: true,
+            licensed: false,
+        },
     });
 
     function onSubmit(values: UserFormValues) {
@@ -105,6 +109,7 @@ export default function UsersPage() {
                         });
                         setOpen(false);
                         mutate();
+                        form.reset();
                     } else {
                         toast({
                             variant: "destructive",
@@ -402,8 +407,7 @@ export default function UsersPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({ active: true });
-                    form.reset({ active: true });
+                    form.reset();
                 }}
             />
 
