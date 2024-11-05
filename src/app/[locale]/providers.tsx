@@ -7,7 +7,12 @@ export function Providers({ children }: { children: React.ReactNode }) {
             <SWRConfig
                 value={{
                     // refreshInterval: 3000,
-                    fetcher: (url: string) => fetch(url).then((res) => res.json()),
+                    fetcher: async (url) => {
+                        const response = await fetch(url);
+                        if (!response.ok)
+                            throw new Error("Failed to fetch data");
+                        return response.json();
+                    },
                 }}
             >
                 {children}

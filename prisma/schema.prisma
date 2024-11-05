@@ -71,12 +71,8 @@ model Partner {
   acronisId       String    @unique
   applicationId   String?   @unique
   parentAcronisId String?
-  // parentId        String?
   active          Boolean   @default(true)
   name            String?
-  // email           String
-  // mobile          String?
-  // phone           String?
   billingDate     DateTime?
 
   createdBy String
