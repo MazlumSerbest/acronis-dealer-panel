@@ -41,6 +41,7 @@ type Partner = Entity & {
 
 type Customer = Entity & {
     name: string;
+    active: boolean;
     partnerId: string;
     acronisId?: string;
     billingDate?: string;
@@ -56,6 +57,7 @@ type License = Entity & {
 };
 
 type Product = Entity & {
+    active: boolean;
     code: string;
     name: string;
     model: "perGB" | "perWorkload";

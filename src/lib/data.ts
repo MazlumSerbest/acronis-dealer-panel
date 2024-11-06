@@ -25,9 +25,12 @@ export async function getCustomers(partnerId?: string, forListBox?: boolean) {
     const tenants = await tenantRes.json();
 
     if (forListBox)
-        return customers.map((c: Customer) => ({
-            id: c.id,
-            name: tenants.items?.find((t: any) => t.id === c.acronisId)?.name,
+        return customers
+            .filter((c: Customer) => c.active)
+            .map((c: Customer) => ({
+                id: c.id,
+                name: tenants.items?.find((t: any) => t.id === c.acronisId)
+                    ?.name,
         }));
     return customers;
 }
@@ -37,9 +40,11 @@ export async function getProducts(forListBox?: boolean) {
     const products = await res.json();
 
     if (forListBox)
-        return products.map((p: Product) => ({
-            id: p.id,
-            name: p?.name,
+        return products
+            .filter((p: Product) => p.active)
+            .map((p: Product) => ({
+                id: p.id,
+                name: p?.name,
         }));
     return products;
 }
