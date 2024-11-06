@@ -68,10 +68,10 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
     const {
-        data: partner,
-        error: partnerError,
-        mutate: partnerMutate,
-    } = useSWR(`/api/admin/partner/${tenant?.id}`, null, {
+        data: panelTenant,
+        error: panelTenantError,
+        mutate: panelTenantMutate,
+    } = useSWR(`/api/admin/${tenant?.kind}/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             const daysDiff = calculateRemainingDays(data.billingDate);
@@ -117,7 +117,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
         };
-        if (partner)
+        if (panelTenant)
             fetch(`/api/admin/partner/${tenant?.id}`, {
                 method: "PUT",
                 body: JSON.stringify(existingPartner),
@@ -128,7 +128,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         toast({
                             description: res.message,
                         });
-                        partnerMutate();
+                        panelTenantMutate();
                         setEdit(false);
                     } else {
                         toast({
@@ -160,8 +160,8 @@ export default function GeneralTab({ t, tenant }: Props) {
             )}
 
             {tenant.parent_id === currentUser?.acronisTenantId &&
-                partner?.billingDate &&
-                (new Date(partner?.billingDate) < new Date() ? (
+                panelTenant?.billingDate &&
+                (new Date(panelTenant?.billingDate) < new Date() ? (
                     <Alert className="col-span-3" variant="destructive">
                         <LuAlertTriangle className="size-4" />
                         <AlertTitle>{t("billingDatePassed")}</AlertTitle>
@@ -192,7 +192,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 {t("tenantInformation")}
                             </h2>
 
-                            {partner &&
+                            {panelTenant &&
                                 tenant.parent_id ==
                                     currentUser?.acronisTenantId && (
                                     <Button
@@ -200,7 +200,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         size="sm"
                                         className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                                         onClick={() => {
-                                            form.reset(partner);
+                                            form.reset(panelTenant);
                                             setEdit(true);
                                         }}
                                     >
@@ -214,10 +214,6 @@ export default function GeneralTab({ t, tenant }: Props) {
                         {edit ? (
                             <></>
                         ) : (
-                            // <CardDescription>
-                            //     Some information only can be changed from the
-                            //     Acronis Cloud Platform
-                            // </CardDescription>
                             <CardDescription className="hover:underline">
                                 <Link
                                     target="_blank"
@@ -228,9 +224,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 </Link>
                             </CardDescription>
                         )}
-                        {/* <CardDescription>Card Description</CardDescription> */}
                     </CardHeader>
-                    {/* <Separator /> */}
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -307,31 +301,31 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         />
                                     ) : (
                                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                            {partner?.billingDate ? (
+                                            {panelTenant?.billingDate ? (
                                                 <div className="flex flex-row gap-1">
                                                     {DateFormat(
-                                                            partner?.billingDate,
-                                                        )}
-                                                        {daysUntilNextBillingDate >
-                                                        0
-                                                            ? ` (${t(
-                                                                  "daysUntilNextBillingDate",
-                                                                  {
-                                                                      days: daysUntilNextBillingDate,
-                                                                  },
-                                                              )})`
-                                                            : ` (${t(
-                                                                  "billingDatePassed",
-                                                              )})`}
-                                                    </div>
-                                                ) : (
-                                                    "-"
-                                                )}
+                                                        panelTenant?.billingDate,
+                                                    )}
+                                                    {daysUntilNextBillingDate >
+                                                    0
+                                                        ? ` (${t(
+                                                              "daysUntilNextBillingDate",
+                                                              {
+                                                                  days: daysUntilNextBillingDate,
+                                                              },
+                                                          )})`
+                                                        : ` (${t(
+                                                              "billingDatePassed",
+                                                          )})`}
+                                                </div>
+                                            ) : (
+                                                "-"
+                                            )}
                                         </dd>
                                     )}
                                 </div>
 
-                                {/* <div>
+                                <div>
                                     <dt className="font-medium">
                                         {t("createdAt")}
                                     </dt>
@@ -340,7 +334,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             tenant?.created_at || "",
                                         )}
                                     </dd>
-                                </div> */}
+                                </div>
 
                                 {tenant.kind == "partner" && (
                                     <>
@@ -349,7 +343,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 {t("panelPartner")}
                                             </dt>
                                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                                <BoolChip value={!!partner} />
+                                                <BoolChip
+                                                    value={!!panelTenant}
+                                                />
                                             </dd>
                                         </div>
 
@@ -360,22 +356,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                                 <BoolChip
                                                     value={
-                                                        partner?.users?.length
+                                                        panelTenant?.users
+                                                            ?.length
                                                     }
                                                 />
                                             </dd>
                                         </div>
                                     </>
                                 )}
-
-                                {/* <div>
-                        <dt className="font-medium">
-                            {t("currency")}
-                        </dt>
-                        <dd className="col-span-1 md:col-span-2 font-light mt-1 sm:mt-0">
-                            {data.tenantInfo.pricing.currency || "-"}
-                        </dd>
-                    </div> */}
                             </CardContent>
                             {edit && (
                                 <CardFooter className="flex flex-row gap-2 justify-end">
@@ -398,11 +386,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                         </form>
                     </Form>
                     {!edit &&
-                        tenant.kind == "partner" &&
-                        // tenant.parent_id == currentUser?.acronisTenantId &&
-                        (!partner || partner?.users?.length == 0) && (
+                        tenant.parent_id == currentUser?.acronisTenantId &&
+                        (!panelTenant || panelTenant?.users?.length == 0) && (
                             <CardFooter className="flex flex-row justify-end gap-2">
-                                {partner && !partner?.users?.length && (
+                                {panelTenant && !panelTenant?.users?.length && (
                                     <AlertDialog
                                         open={openUserDialog}
                                         onOpenChange={setOpenUserDialog}
@@ -437,7 +424,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                 body: JSON.stringify(
                                                                     {
                                                                         partnerId:
-                                                                            partner?.id,
+                                                                            panelTenant?.id,
                                                                         name: tenant?.name,
                                                                         email: tenant
                                                                             ?.contact
@@ -459,7 +446,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                     setOpenUserDialog(
                                                                         false,
                                                                     );
-                                                                    partnerMutate();
+                                                                    panelTenantMutate();
                                                                 } else {
                                                                     toast({
                                                                         variant:
@@ -483,7 +470,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 )}
-                                {!partner && tenant.kind == "partner" && (
+                                {!panelTenant && tenant.kind == "partner" && (
                                     <AlertDialog
                                         open={openPartnerDialog}
                                         onOpenChange={setOpenPartnerDialog}
@@ -521,8 +508,6 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                             tenant?.id,
                                                                         parentAcronisId:
                                                                             tenant?.parent_id,
-                                                                        // parentId:
-                                                                        //     currentUser?.partnerId,
                                                                         name: tenant?.name,
                                                                     },
                                                                 ),
@@ -540,7 +525,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                     setOpenPartnerDialog(
                                                                         false,
                                                                     );
-                                                                    partnerMutate();
+                                                                    panelTenantMutate();
                                                                 } else {
                                                                     toast({
                                                                         variant:
