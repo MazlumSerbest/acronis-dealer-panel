@@ -137,8 +137,8 @@
         "editApplication": "Edit Application",
         "client": "Client",
         "billingDate": "Billing Date",
-        "daysUntilNextBillingDate": "(Days left to billing: {days} days)",
-        "billingDatePassed": "(The billing date has passed!)",
+        "daysUntilNextBillingDate": "Days left to billing: {days}",
+        "billingDatePassed": "The billing date has passed!",
         "exist": "Exist",
         "notExist": "Not Exist",
         "createUser": "Create User",
@@ -231,7 +231,10 @@
         "limitExceededDescription": "Some of this customers usages are exceeding the quota limit.",
         "tenantInformation": "Tenant Information",
         "customerInformation": "Customer Information",
-        "acronisCloudPlatformEditDescription": "Some information only can be changed from the Acronis Cyber Protect Cloud"
+        "acronisCloudPlatformEditDescription": "Some information only can be changed from the Acronis Cyber Protect Cloud",
+        "lessThanTwoWeeksUntilBilling": "Less than two weeks until billing date!",
+        "lessThanTwoWeeksUntilBillingDescription": "The billing date is approaching. Please check the billing date and make sure the payment is made on time.",
+        "billingDatePassedDescription": "The billing date has passed. Please check the billing date."
     },
     "SignIn": {
         "signIn": "Sign In",

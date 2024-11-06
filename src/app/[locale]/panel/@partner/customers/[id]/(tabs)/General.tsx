@@ -27,8 +27,14 @@ import UsageCard from "@/components/usages/Usage";
 
 import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
+import {
+    LuAlertTriangle,
+    LuArrowUpRight,
+    LuInfo,
+    LuPencil,
+} from "react-icons/lu";
 import useUserStore from "@/store/user";
+import { cn } from "@/lib/utils";
 
 type Props = {
     t: Function;
@@ -97,7 +103,7 @@ export default function GeneralTab({ t, tenant }: Props) {
 
     async function onSubmit(values: CustomerFormValues) {
         let newCustomer;
-        if (tenant.kind == "customer"){
+        if (tenant.kind == "customer") {
             newCustomer = {
                 name: tenant?.name,
                 acronisId: tenant?.id,
@@ -111,7 +117,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 acronisId: tenant?.id,
                 parentAcronisId: tenant?.parent_id,
                 billingDate: values.billingDate?.toISOString(),
-            }
+            };
         }
         const existingCustomer = {
             name: tenant?.name,
@@ -179,6 +185,31 @@ export default function GeneralTab({ t, tenant }: Props) {
                     </AlertDescription>
                 </Alert>
             )}
+
+            {tenant.parent_id === currentUser?.acronisTenantId &&
+                customer?.billingDate &&
+                (new Date(customer?.billingDate) < new Date() ? (
+                    <Alert className="col-span-3" variant="destructive">
+                        <LuAlertTriangle className="size-4" />
+                        <AlertTitle>{t("billingDatePassed")}</AlertTitle>
+                        <AlertDescription>
+                            {t("billingDatePassedDescription")}
+                        </AlertDescription>
+                    </Alert>
+                ) : daysUntilNextBillingDate < 15 ? (
+                    <Alert
+                        className="col-span-3 text-yellow-500 border-yellow-500"
+                        variant="default"
+                    >
+                        <LuInfo className="size-4 !text-yellow-500" />
+                        <AlertTitle>
+                            {t("lessThanTwoWeeksUntilBilling")}
+                        </AlertTitle>
+                        <AlertDescription>
+                            {t("lessThanTwoWeeksUntilBillingDescription")}
+                        </AlertDescription>
+                    </Alert>
+                ) : null)}
 
             <div className="col-span-full md:col-span-2">
                 <Card>
@@ -303,47 +334,30 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             />
                                         ) : (
                                             <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                                {customer?.billingDate
-                                                    ? `${DateFormat(
-                                                          customer?.billingDate,
-                                                      )} ${
-                                                          daysUntilNextBillingDate >
-                                                          0
-                                                              ? t(
-                                                                    "daysUntilNextBillingDate",
-                                                                    {
-                                                                        days: daysUntilNextBillingDate,
-                                                                    },
-                                                                )
-                                                              : t(
-                                                                    "billingDatePassed",
-                                                                )
-                                                      }`
-                                                    : "-"}
+                                                {customer?.billingDate ? (
+                                                    <div className="flex flex-row gap-1">
+                                                        {DateFormat(
+                                                            customer?.billingDate,
+                                                        )}
+                                                        {daysUntilNextBillingDate >
+                                                        0
+                                                            ? ` (${t(
+                                                                  "daysUntilNextBillingDate",
+                                                                  {
+                                                                      days: daysUntilNextBillingDate,
+                                                                  },
+                                                              )})`
+                                                            : ` (${t(
+                                                                  "billingDatePassed",
+                                                              )})`}
+                                                    </div>
+                                                ) : (
+                                                    "-"
+                                                )}
                                             </dd>
                                         )}
                                     </div>
                                 )}
-
-                                {/* <div>
-                                    <dt className="font-medium">
-                                        {t("createdAt")}
-                                    </dt>
-                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {DateTimeFormat(
-                                            tenant?.created_at || "",
-                                        )}
-                                    </dd>
-                                </div> */}
-
-                                {/* <div>
-                        <dt className="font-medium">
-                            {t("currency")}
-                        </dt>
-                        <dd className="col-span-1 md:col-span-2 font-light mt-1 sm:mt-0">
-                            {data.tenantInfo.pricing.currency || "-"}
-                        </dd>
-                    </div> */}
                             </CardContent>
                             {edit && (
                                 <CardFooter className="flex flex-row gap-2 justify-end">
@@ -365,24 +379,6 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
-                    {/* {!edit && (
-                        <CardFooter>
-                            <Button
-                                variant="link"
-                                size="default"
-                                className="p-0 text-blue-400"
-                                asChild
-                            >
-                                <Link
-                                    target="_blank"
-                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
-                                >
-                                    {t("showOnAcronis")}
-                                    <LuArrowUpRight className="ml-2 size-4" />
-                                </Link>
-                            </Button>
-                        </CardFooter>
-                    )} */}
                 </Card>
             </div>
 

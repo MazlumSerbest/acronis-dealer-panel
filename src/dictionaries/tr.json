@@ -137,8 +137,8 @@
         "editApplication": "Başvuruyu Düzenle",
         "client": "Müşteri",
         "billingDate": "Faturalama Tarihi",
-        "daysUntilNextBillingDate": "(Faturalamaya kalan gün: {days} gün)",
-        "billingDatePassed": "(Faturalama tarihi geçti!)",
+        "daysUntilNextBillingDate": "Faturalamaya kalan gün: {days}",
+        "billingDatePassed": "Faturalama tarihi geçti!",
         "exist": "Var",
         "notExist": "Yok",
         "createUser": "Kullanıcı Oluştur",
@@ -231,7 +231,10 @@
         "limitExceededDescription": "Bu müşterilerden bazılarının kullanımı kota limitini aşıyor.",
         "tenantInformation": "Kiracı Bilgileri",
         "customerInformation": "Müşteri Bilgileri",
-        "acronisCloudPlatformEditDescription": "Bazı bilgiler yalnızca Acronis Cyber Protect Cloud'dan değiştirilebilir."
+        "acronisCloudPlatformEditDescription": "Bazı bilgiler yalnızca Acronis Cyber Protect Cloud'dan değiştirilebilir.",
+        "lessThanTwoWeeksUntilBilling": "Faturalama tarihine 2 haftadan az kaldı!",
+        "lessThanTwoWeeksUntilBillingDescription": "Faturalama tarihi yaklaşıyor. Lütfen faturalama tarihini kontrol edin.",
+        "billingDatePassedDescription": "Faturalama tarihi geçti. Lütfen faturalama tarihini kontrol edin."
     },
     "SignIn": {
         "signIn": "Giriş Yap",

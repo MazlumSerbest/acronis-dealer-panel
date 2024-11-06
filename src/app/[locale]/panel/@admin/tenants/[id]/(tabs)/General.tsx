@@ -37,7 +37,12 @@ import UsageCard from "@/components/usages/Usage";
 
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuAlertTriangle, LuArrowUpRight, LuPencil } from "react-icons/lu";
+import {
+    LuAlertTriangle,
+    LuArrowUpRight,
+    LuInfo,
+    LuPencil,
+} from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 type Props = {
@@ -153,6 +158,31 @@ export default function GeneralTab({ t, tenant }: Props) {
                     </AlertDescription>
                 </Alert>
             )}
+
+            {tenant.parent_id === currentUser?.acronisTenantId &&
+                partner?.billingDate &&
+                (new Date(partner?.billingDate) < new Date() ? (
+                    <Alert className="col-span-3" variant="destructive">
+                        <LuAlertTriangle className="size-4" />
+                        <AlertTitle>{t("billingDatePassed")}</AlertTitle>
+                        <AlertDescription>
+                            {t("billingDatePassedDescription")}
+                        </AlertDescription>
+                    </Alert>
+                ) : daysUntilNextBillingDate < 15 ? (
+                    <Alert
+                        className="col-span-3 text-yellow-500 border-yellow-500"
+                        variant="default"
+                    >
+                        <LuInfo className="size-4 !text-yellow-500" />
+                        <AlertTitle>
+                            {t("lessThanTwoWeeksUntilBilling")}
+                        </AlertTitle>
+                        <AlertDescription>
+                            {t("lessThanTwoWeeksUntilBillingDescription")}
+                        </AlertDescription>
+                    </Alert>
+                ) : null)}
 
             <div className="col-span-full md:col-span-2">
                 <Card>
@@ -277,23 +307,26 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         />
                                     ) : (
                                         <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                            {partner?.billingDate
-                                                ? `${DateFormat(
-                                                      partner?.billingDate,
-                                                  )} ${
-                                                      daysUntilNextBillingDate >
-                                                      0
-                                                          ? t(
-                                                                "daysUntilNextBillingDate",
-                                                                {
-                                                                    days: daysUntilNextBillingDate,
-                                                                },
-                                                            )
-                                                          : t(
-                                                                "billingDatePassed",
-                                                            )
-                                                  }`
-                                                : "-"}
+                                            {partner?.billingDate ? (
+                                                <div className="flex flex-row gap-1">
+                                                    {DateFormat(
+                                                            partner?.billingDate,
+                                                        )}
+                                                        {daysUntilNextBillingDate >
+                                                        0
+                                                            ? ` (${t(
+                                                                  "daysUntilNextBillingDate",
+                                                                  {
+                                                                      days: daysUntilNextBillingDate,
+                                                                  },
+                                                              )})`
+                                                            : ` (${t(
+                                                                  "billingDatePassed",
+                                                              )})`}
+                                                    </div>
+                                                ) : (
+                                                    "-"
+                                                )}
                                         </dd>
                                     )}
                                 </div>

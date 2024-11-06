@@ -6,6 +6,12 @@ import { useTranslations } from "next-intl";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+    TooltipProvider,
+} from "@/components/ui/tooltip";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
@@ -13,7 +19,12 @@ import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
 
 import { DateFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuInfo,
+    LuAlertCircle,
+    LuAlertTriangle,
+} from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
@@ -167,7 +178,40 @@ export default function TenantsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return DateFormat(data);
+                return (
+                    <div className="flex flex-row gap-2">
+                        {DateFormat(data)}
+                        {data &&
+                            (new Date(data) < new Date() ? (
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <LuAlertTriangle className="size-4 text-destructive" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>{t("billingDatePassed")}</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ) : new Date(data) <
+                              new Date(Date.now() + 12096e5) ? (
+                                <TooltipProvider>
+                                    <Tooltip>
+                                        <TooltipTrigger>
+                                            <LuInfo className="size-4 text-yellow-500" />
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>
+                                                {t(
+                                                    "lessThanTwoWeeksUntilBilling",
+                                                )}
+                                            </p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </TooltipProvider>
+                            ) : null)}
+                    </div>
+                );
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
