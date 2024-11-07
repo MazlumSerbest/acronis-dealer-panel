@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "./ui/button";
 import { FormControl } from "./ui/form";
@@ -41,10 +41,14 @@ export default function DatePicker({ field, placeholder }: Props) {
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
+                    initialFocus
+                    fixedWeeks
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
-                    initialFocus
+                    captionLayout="dropdown-buttons"
+                    fromYear={new Date().getFullYear() - 10}
+                    toYear={new Date().getFullYear() + 20}
                 />
             </PopoverContent>
         </Popover>
