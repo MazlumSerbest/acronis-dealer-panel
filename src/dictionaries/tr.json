@@ -472,6 +472,20 @@
         }
     },
     "Components": {
+        "Months": {
+            "january": "Ocak",
+            "february": "Şubat",
+            "march": "Mart",
+            "april": "Nisan",
+            "may": "Mayıs",
+            "june": "Haziran",
+            "july": "Temmuz",
+            "august": "Ağustos",
+            "september": "Eylül",
+            "october": "Ekim",
+            "november": "Kasım",
+            "december": "Aralık"
+        },
         "Usage": {
             "workstation_storage": "Çalışma İstasyonu Depolama",
             "server_storage": "Sunucu Depolama",
@@ -524,7 +538,8 @@
         "selectDate": "Bir tarih seçin",
         "clear": "Temizle",
         "actions": "Eylemler",
-        "toggleColumns": "Sütunları Değiştir"
+        "toggleColumns": "Sütunları Değiştir",
+        "clearFilters": "Filtreleri Temizle"
     },
     "Dashboard": {
         "title": "Kontrol Paneli"

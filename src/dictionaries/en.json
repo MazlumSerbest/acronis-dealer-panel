@@ -472,6 +472,20 @@
         }
     },
     "Components": {
+        "Months": {
+            "january": "January",
+            "february": "February",
+            "march": "March",
+            "april": "April",
+            "may": "May",
+            "june": "June",
+            "july": "July",
+            "august": "August",
+            "september": "September",
+            "october": "October",
+            "november": "November",
+            "december": "December"
+        },
         "Usage": {
             "workstation_storage": "Workstation Storage",
             "server_storage": "Server Storage",
@@ -524,7 +538,8 @@
         "selectDate": "Pick a date",
         "clear": "Clear",
         "actions": "Actions",
-        "toggleColumns": "Toggle Columns"
+        "toggleColumns": "Toggle Columns",
+        "clearFilters": "Clear Filters"
     },
     "Dashboard": {
         "title": "Dashboard"

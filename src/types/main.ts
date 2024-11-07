@@ -41,7 +41,7 @@ type Partner = Entity & {
 
 type Customer = Entity & {
     name: string;
-    active: boolean;
+    active?: boolean;
     partnerId: string;
     acronisId?: string;
     billingDate?: string;

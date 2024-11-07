@@ -5,6 +5,57 @@ export const dealers = [
     },
 ];
 
+export const months = [
+    {
+        name: "january",
+        key: 0,
+    },
+    {
+        name: "february",
+        key: 1,
+    },
+    {
+        name: "march",
+        key: 2,
+    },
+    {
+        name: "april",
+        key: 3,
+    },
+    {
+        name: "may",
+        key: 4,
+    },
+    {
+        name: "june",
+        key: 5,
+    },
+    {
+        name: "july",
+        key: 6,
+    },
+    {
+        name: "august",
+        key: 7,
+    },
+    {
+        name: "september",
+        key: 8,
+    },
+    {
+        name: "october",
+        key: 9,
+    },
+    {
+        name: "november",
+        key: 10,
+    },
+    {
+        name: "december",
+        key: 11,
+    },
+];
+
 export const cities = [
     {
         name: "Adana",
