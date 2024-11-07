@@ -40,11 +40,7 @@ import { DataTableFacetedFilter } from "./FacetedFilter";
 import { useTranslations } from "next-intl";
 import Loader from "../loaders/Loader";
 import { cn } from "@/lib/utils";
-import {
-    Cross2Icon,
-    MagicWandIcon,
-    PlusIcon,
-} from "@radix-ui/react-icons";
+import { Cross2Icon, MagicWandIcon, PlusIcon } from "@radix-ui/react-icons";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -188,7 +184,9 @@ export function DataTable<TData, TValue>({
                                     className="h-8 gap-2 flex"
                                 >
                                     <MagicWandIcon className="size-4" />
-                                    <span className="">{tc("actions")}</span>
+                                    <span className="sr-only lg:not-sr-only">
+                                        {tc("actions")}
+                                    </span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
@@ -212,7 +210,9 @@ export function DataTable<TData, TValue>({
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
                         >
-                            <span className="">{tc("add")}</span>
+                            <span className="sr-only lg:not-sr-only">
+                                {tc("add")}
+                            </span>
                             <PlusIcon className="size-4" />
                         </Button>
                     )}

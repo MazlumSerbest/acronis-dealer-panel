@@ -16,6 +16,7 @@ import {
 } from "../ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
+import { useTranslations } from "next-intl";
 
 interface DataTableFacetedFilterProps<TData, TValue> {
     column?: Column<TData, TValue>;
@@ -32,6 +33,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     title,
     options,
 }: DataTableFacetedFilterProps<TData, TValue>) {
+    const tc = useTranslations("Components");
     const facets = column?.getFacetedUniqueValues();
     const selectedValues = new Set(column?.getFilterValue() as string[]);
 
@@ -63,7 +65,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                                         variant="secondary"
                                         className="rounded-sm px-1 font-normal"
                                     >
-                                        {selectedValues.size} selected
+                                        {selectedValues.size}
                                     </Badge>
                                 ) : (
                                     options
@@ -89,7 +91,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                 <Command>
                     <CommandInput placeholder={title} />
                     <CommandList>
-                        <CommandEmpty>No results found.</CommandEmpty>
+                        <CommandEmpty>{tc("noResults")}</CommandEmpty>
                         <CommandGroup>
                             {options.map((option) => {
                                 const isSelected = selectedValues.has(
@@ -152,7 +154,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                                         }
                                         className="justify-center text-center"
                                     >
-                                        Clear filters
+                                        {tc("clearFilters")}
                                     </CommandItem>
                                 </CommandGroup>
                             </>

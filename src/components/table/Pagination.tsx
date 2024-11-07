@@ -39,7 +39,9 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
                 <div className="flex items-center space-x-2">
-                    <p className="text-sm font-medium">{tc("rowsPerPage")}</p>
+                    <p className="text-sm font-medium sr-only lg:not-sr-only">
+                        {tc("rowsPerPage")}
+                    </p>
                     <Select
                         value={`${table.getState().pagination.pageSize}`}
                         onValueChange={(value: string) => {

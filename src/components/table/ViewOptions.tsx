@@ -39,7 +39,7 @@ export function DataTableViewOptions<TData>({
                             className="h-8 gap-2 flex"
                         >
                             <MixerHorizontalIcon className="size-4" />
-                            <span className="">
+                            <span className="sr-only lg:not-sr-only">
                                 {tc("columns")}
                             </span>
                         </Button>
