@@ -336,6 +336,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </dd>
                                 </div>
 
+                                <div>
+                                    <dt className="font-medium">
+                                        {t("updatedAt")}
+                                    </dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {DateTimeFormat(
+                                            tenant?.updated_at || "",
+                                        )}
+                                    </dd>
+                                </div>
+
                                 {tenant.kind == "partner" && (
                                     <>
                                         <div>

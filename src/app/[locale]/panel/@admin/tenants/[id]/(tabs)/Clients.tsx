@@ -89,6 +89,7 @@ export default function ClientsTab({ t, clients }: Props) {
         },
         {
             accessorKey: "billingDate",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -113,6 +114,7 @@ export default function ClientsTab({ t, clients }: Props) {
         },
         {
             accessorKey: "usages",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: () => (
                 <div className="flex flex-col gap-2 py-3">
@@ -195,14 +197,14 @@ export default function ClientsTab({ t, clients }: Props) {
                         { value: "customer", label: t("customer") },
                     ],
                 },
-                // {
-                //     column: "mfa_status",
-                //     title: t("mfaStatus"),
-                //     options: [
-                //         { value: "enabled", label: t("enabled") },
-                //         { value: "disabled", label: t("disabled") },
-                //     ],
-                // },
+                {
+                    column: "mfa_status",
+                    title: t("mfaStatus"),
+                    options: [
+                        { value: "enabled", label: t("enabled") },
+                        { value: "disabled", label: t("disabled") },
+                    ],
+                },
                 {
                     column: "enabled",
                     title: t("enabled"),

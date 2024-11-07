@@ -358,6 +358,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         )}
                                     </div>
                                 )}
+
+                                <div>
+                                    <dt className="font-medium">
+                                        {t("createdAt")}
+                                    </dt>
+                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                        {DateTimeFormat(
+                                            tenant?.created_at || "",
+                                        )}
+                                    </dd>
+                                </div>
                             </CardContent>
                             {edit && (
                                 <CardFooter className="flex flex-row gap-2 justify-end">

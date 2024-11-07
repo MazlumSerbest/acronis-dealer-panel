@@ -47,8 +47,8 @@ export default function DatePicker({ field, placeholder }: Props) {
                     selected={field.value}
                     onSelect={field.onChange}
                     captionLayout="dropdown-buttons"
-                    fromYear={new Date().getFullYear() - 10}
-                    toYear={new Date().getFullYear() + 20}
+                    fromYear={new Date().getFullYear() - 5}
+                    toYear={new Date().getFullYear() + 10}
                 />
             </PopoverContent>
         </Popover>

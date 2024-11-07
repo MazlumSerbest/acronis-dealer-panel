@@ -114,6 +114,7 @@ export default function CustomersTab({ t, customers }: Props) {
         // },
         {
             accessorKey: "usages",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: () =>
                 currentUser?.licensed ? (
@@ -213,6 +214,14 @@ export default function CustomersTab({ t, customers }: Props) {
             visibleColumns={visibleColumns}
             defaultPageSize={50}
             facetedFilters={[
+                {
+                    column: "kind",
+                    title: t("kind"),
+                    options: [
+                        { value: "partner", label: t("partner") },
+                        { value: "customer", label: t("customer") },
+                    ],
+                },
                 {
                     column: "mfa_status",
                     title: t("mfaStatus"),

@@ -160,6 +160,7 @@ export default function TenantsPage() {
         },
         {
             accessorKey: "billingDate",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -217,6 +218,7 @@ export default function TenantsPage() {
         },
         {
             accessorKey: "usages",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: () => (
                 <div className="flex flex-col gap-2 py-3">
@@ -311,19 +313,19 @@ export default function TenantsPage() {
                             ],
                         },
                         {
-                            column: "enabled",
-                            title: t("enabled"),
-                            options: [
-                                { value: true, label: t("true") },
-                                { value: false, label: t("false") },
-                            ],
-                        },
-                        {
                             column: "mfa_status",
                             title: t("mfaStatus"),
                             options: [
                                 { value: "enabled", label: t("enabled") },
                                 { value: "disabled", label: t("disabled") },
+                            ],
+                        },
+                        {
+                            column: "enabled",
+                            title: t("enabled"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
                             ],
                         },
                     ]}

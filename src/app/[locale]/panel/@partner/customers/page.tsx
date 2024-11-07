@@ -271,6 +271,7 @@ export default function CustomersPage() {
         },
         {
             accessorKey: "billingDate",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -324,6 +325,7 @@ export default function CustomersPage() {
         },
         {
             accessorKey: "usages",
+            enableHiding: false,
             enableGlobalFilter: false,
             header: () =>
                 currentUser?.licensed ? (
@@ -503,6 +505,20 @@ export default function CustomersPage() {
                         isLoading={isLoading}
                         facetedFilters={[
                             {
+                                column: "kind",
+                                title: t("kind"),
+                                options: [
+                                    {
+                                        value: "customer",
+                                        label: t("customer"),
+                                    },
+                                    {
+                                        value: "partner",
+                                        label: t("partner"),
+                                    },
+                                ],
+                            },
+                            {
                                 column: "mfa_status",
                                 title: t("mfaStatus"),
                                 options: [
@@ -527,20 +543,6 @@ export default function CustomersPage() {
                                     {
                                         value: false,
                                         label: t("false"),
-                                    },
-                                ],
-                            },
-                            {
-                                column: "kind",
-                                title: t("kind"),
-                                options: [
-                                    {
-                                        value: "customer",
-                                        label: t("customer"),
-                                    },
-                                    {
-                                        value: "partner",
-                                        label: t("partner"),
                                     },
                                 ],
                             },
