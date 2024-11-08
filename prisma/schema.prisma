@@ -207,7 +207,7 @@ model Lesson {
   chapter     Chapter  @relation(fields: [chapterId], references: [id])
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+/// Views
 view v_ActiveLicenses {
   id                String    @id
   expiresAt         DateTime?
@@ -219,4 +219,27 @@ view v_ActiveLicenses {
   bytes             BigInt?
   partnerAcronisId  String?
   customerAcronisId String?
+}
+
+view v_License {
+  id                     String    @id
+  productId              String?
+  productName            String?
+  productCode            String?
+  productQuota           Int?
+  productUnit            String?
+  partnerAcronisId       String?
+  partnerName            String?
+  partnerParentAcronisId String?
+  customerAcronisId      String?
+  customerName           String?
+  serialNo               String?
+  expiresAt              DateTime?
+  assignedAt             DateTime?
+  activatedAt            DateTime?
+  completionDate         DateTime? @db.Timestamp(6)
+  createdAt              DateTime?
+  createdBy              String?
+  updatedAt              DateTime?
+  updatedBy              String?
 }

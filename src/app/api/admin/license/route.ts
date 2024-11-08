@@ -21,13 +21,12 @@ export const GET = auth(async (req: any) => {
         const partnerAcronisId = req.nextUrl.searchParams.get("partnerAcronisId");
         const customerAcronisId = req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
-        let include = {};
 
         switch (status) {
             case "unassigned":
                 where = {
-                    partner: { is: null },
-                    customer: { is: null },
+                    partnerAcronisId: null,
+                    customerAcronisId: null,
                     OR: [
                         { expiresAt: null },
                         { expiresAt: { gt: new Date() } },
@@ -36,8 +35,8 @@ export const GET = auth(async (req: any) => {
                 break;
             case "assigned":
                 where = {
-                    partner: { isNot: null },
-                    customer: { is: null },
+                    partnerAcronisId: { isNot: null },
+                    customerAcronisId: null,
                     OR: [
                         { expiresAt: null },
                         { expiresAt: { gt: new Date() } },
@@ -46,8 +45,8 @@ export const GET = auth(async (req: any) => {
                 break;
             case "active":
                 where = {
-                    partner: { isNot: null },
-                    customer: { isNot: null },
+                    partnerAcronisId: { isNot: null },
+                    customerAcronisId: { isNot: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -60,8 +59,8 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    partner: { isNot: null },
-                    customer: { isNot: null },
+                    partnerAcronisId: { isNot: null },
+                    customerAcronisId: { isNot: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -74,39 +73,9 @@ export const GET = auth(async (req: any) => {
                 break;
             case "expired":
                 where = {
-                    // customerAcronisId: { is: null },
+                    // customerAcronisId: null,
                     activatedAt: null,
                     expiresAt: { lt: new Date() },
-                };
-                break;
-            default:
-                break;
-        }
-
-        switch (status) {
-            case "assigned":
-                include = {
-                    partner: {
-                        select: {
-                            name: true,
-                        },
-                    },
-                };
-                break;
-            case "active":
-            case "completed":
-            case "expired":
-                include = {
-                    partner: {
-                        select: {
-                            name: true,
-                        },
-                    },
-                    customer: {
-                        select: {
-                            acronisId: true,
-                        },
-                    },
                 };
                 break;
             default:
@@ -127,18 +96,8 @@ export const GET = auth(async (req: any) => {
             };
         }
 
-        const data = await prisma.license.findMany({
+        const data = await prisma.v_License.findMany({
             where: where,
-            include: {
-                ...include,
-                product: {
-                    select: {
-                        name: true,
-                        quota: true,
-                        unit: true,
-                    },
-                },
-            },
             orderBy: {
                 createdAt: "asc",
             },
