@@ -15,13 +15,9 @@ import { LuChevronsUpDown } from "react-icons/lu";
 export default function ActiveTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
-        `/api/admin/license?status=active`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const { data, error } = useSWR(`/api/admin/license?status=active`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Table
     const visibleColumns = {
@@ -35,7 +31,7 @@ export default function ActiveTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -52,28 +48,14 @@ export default function ActiveTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -81,47 +63,32 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "partner",
-            header: t("partnerName"),
+            accessorKey: "partnerName",
+            header: t("partner"),
             cell: ({ row }) => {
-                const data: Partner = row.getValue("partner");
+                const data: string = row.getValue("partnerName");
 
-                return data.name || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const partner = row.original.partner;
-                    return partner.name
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
+                return data || "-";
             },
         },
         {
-            accessorKey: "customer",
-            header: t("customerAcronisId"),
+            accessorKey: "customerName",
+            header: t("customer"),
             cell: ({ row }) => {
-                const data: Customer = row.getValue("customer");
+                const data: string = row.getValue("customerName");
 
-                return data?.acronisId || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const customer = row.original.customer;
-                    return customer.acronisId
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
+                return data || "-";
             },
         },
         {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
+            accessorKey: "productQuota",
+            header: t("quota"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
 
-                return DateTimeFormat(data);
+                return `${data}${unit || ""}` || "-";
             },
         },
         {
@@ -136,8 +103,22 @@ export default function ActiveTab() {
         },
         {
             accessorKey: "activatedAt",
-            header: t("activatedAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("activatedAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
 
@@ -145,21 +126,27 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "product",
-            header: t("quota"),
+            accessorKey: "completionDate",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("completionDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("completionDate");
 
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateTimeFormat(data);
             },
         },
         {
@@ -218,6 +205,19 @@ export default function ActiveTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
+            defaultSort="completionDate"
+            defaultSortDirection="asc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }

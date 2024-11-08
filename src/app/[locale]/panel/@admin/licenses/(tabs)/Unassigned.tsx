@@ -71,7 +71,7 @@ export default function UnassignedTab() {
         {
             revalidateOnFocus: false,
             onSuccess: (data) => {
-                console.log(data);
+                
             },
         },
     );
@@ -181,9 +181,8 @@ export default function UnassignedTab() {
             ),
         },
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
-            accessorFn: (row) => row.original.product.name,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("name")}
@@ -199,24 +198,37 @@ export default function UnassignedTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
-            },
-            filterFn: (row, columnId, filterValue) => {
-                const product: Product = row.getValue("product");
-
-                return product.name
-                    .toLowerCase()
-                    .includes(filterValue.toLowerCase());
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
+            header:t("serialNo"),
+            cell: ({ row }) => {
+                const data: string = row.getValue("serialNo");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "productQuota",
+            header: t("quota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
+
+                return `${data}${unit|| ""}` || "-";
+            },
+        },
+        {
+            accessorKey: "expiresAt",
+            enableGlobalFilter: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
-                    {t("serialNo")}
+                    {t("expiresAt")}
                     <Button
                         variant="ghost"
                         className="p-1"
@@ -228,36 +240,6 @@ export default function UnassignedTab() {
                     </Button>
                 </div>
             ),
-            cell: ({ row }) => {
-                const data: string = row.getValue("serialNo");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
-            },
-        },
-        {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
-            enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: string = row.getValue("expiresAt");
 
@@ -340,6 +322,17 @@ export default function UnassignedTab() {
                 selectable
                 defaultSort="expiresAt"
                 defaultSortDirection="asc"
+                facetedFilters={[
+                    {
+                        column: "productQuota",
+                        title: t("quota"),
+                        options: [
+                            { value: 25, label: "25GB" },
+                            { value: 50, label: "50GB" },
+                            { value: 100, label: "100GB" },
+                        ],
+                    },
+                ]}
                 actions={
                     selectedIds.length > 0 && [
                         <DropdownMenuItem

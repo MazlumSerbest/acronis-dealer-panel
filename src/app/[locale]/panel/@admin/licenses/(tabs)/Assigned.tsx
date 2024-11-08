@@ -9,23 +9,18 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 
 export default function AssignedTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
-        `/api/admin/license?status=assigned`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const { data, error } = useSWR(`/api/admin/license?status=assigned`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -34,7 +29,7 @@ export default function AssignedTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -51,17 +46,47 @@ export default function AssignedTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
+            header: t("serialNo"),
+            cell: ({ row }) => {
+                const data: string = row.getValue("serialNo");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "partnerName",
+            header: t("partnerName"),
+            cell: ({ row }) => {
+                const data: string = row.getValue("partnerName");
+
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "productQuota",
+            header: t("quota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
+
+                return `${data}${unit || ""}` || "-";
+            },
+        },
+        {
+            accessorKey: "assignedAt",
+            enableGlobalFilter: false,
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
-                    {t("serialNo")}
+                    {t("assignedAt")}
                     <Button
                         variant="ghost"
                         className="p-1"
@@ -74,33 +99,6 @@ export default function AssignedTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("serialNo");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "partner",
-            header: t("partnerName"),
-            cell: ({ row }) => {
-                const data: Partner = row.getValue("partner");
-
-                return data.name || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const partner = row.original.partner;
-                    return partner.name
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
-            },
-        },
-        {
-            accessorKey: "assignedAt",
-            header: t("assignedAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
                 const data: string = row.getValue("assignedAt");
 
                 return DateTimeFormat(data);
@@ -108,30 +106,26 @@ export default function AssignedTab() {
         },
         {
             accessorKey: "expiresAt",
-            header: t("expiresAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("expiresAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("expiresAt");
 
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateFormat(data);
             },
         },
         {
@@ -190,6 +184,19 @@ export default function AssignedTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
+            defaultSort="expiresAt"
+            defaultSortDirection="asc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }
