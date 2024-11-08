@@ -161,8 +161,8 @@
         "assign": "Ata",
         "assignToPartner": "Partnere Ata",
         "customerAcronisId": "Müşteri Acronis ID",
-        "expiresAt": "Son Kullanım Tarihi",
-        "expiredAt": "Son Kullanım Tarihi Geçmiş",
+        "expiresAt": "Son Kullanma Tarihi",
+        "expiredAt": "Son Kullanma Tarihi Geçmiş",
         "assignedAt": "Atanma Tarihi",
         "activatedAt": "Aktivasyon Tarihi",
         "assignDescription": "{length} lisans(lar) seçilen Partnere atanacak. İşlemi gerçekleştirmek istediğinize emin misiniz?",
@@ -234,7 +234,8 @@
         "acronisCloudPlatformEditDescription": "Bazı bilgiler yalnızca Acronis Cyber Protect Cloud'dan değiştirilebilir.",
         "lessThanTwoWeeksUntilBilling": "Faturalama tarihine 2 haftadan az kaldı!",
         "lessThanTwoWeeksUntilBillingDescription": "Faturalama tarihi yaklaşıyor. Lütfen faturalama tarihini kontrol edin.",
-        "billingDatePassedDescription": "Faturalama tarihi geçti. Lütfen faturalama tarihini kontrol edin."
+        "billingDatePassedDescription": "Faturalama tarihi geçti. Lütfen faturalama tarihini kontrol edin.",
+        "completionDate": "Tamamlanma Tarihi"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -555,7 +556,7 @@
         "partial": "Kısmi",
         "active": "Aktif",
         "completed": "Tamamlanmış",
-        "expired": "Son Kullanım Süresi Dolmuş",
+        "expired": "Son Kullanma Süresi Geçmiş",
         "status": "Durum"
     },
     "Alerts": {
