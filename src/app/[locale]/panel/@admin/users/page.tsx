@@ -70,7 +70,7 @@ const userFormSchema = z.object({
             message: "User.email.invalidType",
         }),
     partnerAcronisId: z.string().optional().nullable(),
-    tenantAcronisId: z.string().optional().nullable(),
+    acronisTenantId: z.string().optional().nullable(),
 });
 
 type UserFormValues = z.infer<typeof userFormSchema>;
@@ -101,7 +101,7 @@ export default function UsersPage() {
     function onSubmit(values: UserFormValues) {
         if (isNew) {
             if(values.role === "admin")
-                values.tenantAcronisId = "15229d4a-ff0f-498b-849d-a4f71bdc81a4";
+                values.acronisTenantId = "15229d4a-ff0f-498b-849d-a4f71bdc81a4";
 
             fetch("/api/admin/user", {
                 method: "POST",

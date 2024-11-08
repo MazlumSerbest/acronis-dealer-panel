@@ -61,7 +61,7 @@ import { getCustomers } from "@/lib/data";
 import Combobox from "@/components/Combobox";
 
 const addFormSchema = z.object({
-    partnerAcronisId: z.string().cuid().optional(),
+    partnerAcronisId: z.string().uuid().optional(),
     serials: z.array(
         z.object({
             value: z.string().length(10, {

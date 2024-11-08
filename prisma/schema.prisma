@@ -27,7 +27,7 @@ model User {
   partnerAcronisId String?
   accounts         Account[]
   sessions         Session[]
-  partner          Partner?  @relation(fields: [acronisTenantId], references: [acronisId])
+  partner          Partner?  @relation(fields: [partnerAcronisId], references: [acronisId])
 }
 
 model Account {

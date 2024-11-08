@@ -49,7 +49,7 @@ const licenseFormSchema = z.object({
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
 const assignFormSchema = z.object({
-    partnerAcronisId: z.string().cuid(),
+    partnerAcronisId: z.string().uuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
