@@ -53,7 +53,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuMinus, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
@@ -173,7 +173,6 @@ export default function InactiveTab() {
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -221,7 +220,7 @@ export default function InactiveTab() {
             ),
         },
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -238,32 +237,29 @@ export default function InactiveTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
                 return data || "-";
+            },
+        },
+        {
+            accessorKey: "productQuota",
+            header: t("quota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
+
+                return `${data} ${unit || ""}` || "-";
             },
         },
         {
@@ -278,30 +274,26 @@ export default function InactiveTab() {
         },
         {
             accessorKey: "expiresAt",
-            header: t("expiresAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("expiresAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("expiresAt");
 
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateFormat(data);
             },
         },
         {
@@ -344,47 +336,6 @@ export default function InactiveTab() {
                 return data || "-";
             },
         },
-        // {
-        //     accessorKey: "actions",
-        //     header: "",
-        //     enableGlobalFilter: false,
-        //     enableHiding: false,
-        //     cell: ({ row }) => {
-        //         const data: User = row.original;
-
-        //         return (
-        //             <DropdownMenu>
-        //                 <DropdownMenuTrigger className="flex items-center">
-        //                     <LuMoreHorizontal className="size-4" />
-        //                     {/* <Button
-        //                         aria-haspopup="true"
-        //                         size="icon"
-        //                         variant="ghost"
-        //                     >
-        //                         <LuMoreHorizontal className="size-4" />
-        //                         <span className="sr-only">
-        //                             {t("toggleMenu")}
-        //                         </span>
-        //                     </Button> */}
-        //                 </DropdownMenuTrigger>
-        //                 <DropdownMenuContent align="end">
-        //                     <DropdownMenuLabel>
-        //                         {t("actions")}
-        //                     </DropdownMenuLabel>
-        //                     <DropdownMenuItem
-        //                         onClick={() => {
-        //                             // setIsNew(false);
-        //                             // setOpen(true);
-        //                             // form.reset(data);
-        //                         }}
-        //                     >
-        //                         {t("assignToCustomer")}
-        //                     </DropdownMenuItem>
-        //                 </DropdownMenuContent>
-        //             </DropdownMenu>
-        //         );
-        //     },
-        // },
     ];
     //#endregion
 
@@ -416,6 +367,19 @@ export default function InactiveTab() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
+                defaultSort="expiresAt"
+                defaultSortDirection="desc"
+                facetedFilters={[
+                    {
+                        column: "productQuota",
+                        title: t("quota"),
+                        options: [
+                            { value: 25, label: "25GB" },
+                            { value: 50, label: "50GB" },
+                            { value: 100, label: "100GB" },
+                        ],
+                    },
+                ]}
                 actions={
                     selectedIds.length > 0 && [
                         <DropdownMenuItem
@@ -460,8 +424,13 @@ export default function InactiveTab() {
                                     append({ value: "" });
                                     // Focus the newly added input after a short delay to allow render
                                     setTimeout(() => {
-                                        const inputs = document.querySelectorAll('input[name^="serials"]');
-                                        const lastInput = inputs[inputs.length - 1] as HTMLInputElement;
+                                        const inputs =
+                                            document.querySelectorAll(
+                                                'input[name^="serials"]',
+                                            );
+                                        const lastInput = inputs[
+                                            inputs.length - 1
+                                        ] as HTMLInputElement;
                                         lastInput?.focus();
                                     }, 0);
                                 }

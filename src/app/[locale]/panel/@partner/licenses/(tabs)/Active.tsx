@@ -27,8 +27,6 @@ export default function ActiveTab() {
 
     //#region Table
     const visibleColumns = {
-        // expiresAt: false,
-        assignedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -37,7 +35,7 @@ export default function ActiveTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -54,28 +52,14 @@ export default function ActiveTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -83,20 +67,22 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "customer",
-            header: t("customerAcronisId"),
+            accessorKey: "customerName",
+            header: t("customer"),
             cell: ({ row }) => {
-                const data: Customer = row.getValue("customer");
+                const data: string = row.getValue("customerName");
 
-                return data?.acronisId || "-";
+                return data || "-";
             },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const customer = row.original.customer;
-                    return customer.acronisId
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
+        },
+        {
+            accessorKey: "productQuota",
+            header: t("quota"),
+            cell: ({ row }) => {
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
+
+                return `${data} ${unit || ""}` || "-";
             },
         },
         {
@@ -111,20 +97,11 @@ export default function ActiveTab() {
         },
         {
             accessorKey: "activatedAt",
-            header: t("activatedAt"),
             enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("activatedAt");
-
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "completedAt",
-            enableGlobalFilter: false,
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
-                    {t("completedAt")}
+                    {t("activatedAt")}
                     <Button
                         variant="ghost"
                         className="p-1"
@@ -137,28 +114,33 @@ export default function ActiveTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("completedAt");
+                const data: string = row.getValue("activatedAt");
 
-                return DateFormat(data);
-            },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
+                return DateTimeFormat(data);
             },
         },
         {
-            accessorKey: "product",
-            header: t("unit"),
+            accessorKey: "completionDate",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("completionDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("completionDate");
 
-                return t(data?.unit) || "-";
+                return DateTimeFormat(data);
             },
         },
         {
@@ -217,8 +199,19 @@ export default function ActiveTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
-            // defaultSort="co"
-            defaultSortDirection="desc"
+            defaultSort="completionDate"
+            defaultSortDirection="asc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }

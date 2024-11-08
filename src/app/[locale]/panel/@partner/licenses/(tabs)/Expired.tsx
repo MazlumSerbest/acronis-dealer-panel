@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -27,9 +27,6 @@ export default function ExpiredTab() {
 
     //#region Table
     const visibleColumns = {
-        customerAcronisId: false,
-        assignedAt: false,
-        activatedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -38,7 +35,7 @@ export default function ExpiredTab() {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -55,28 +52,14 @@ export default function ExpiredTab() {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -84,13 +67,14 @@ export default function ExpiredTab() {
             },
         },
         {
-            accessorKey: "expiresAt",
-            header: t("expiredAt"),
+            accessorKey: "productQuota",
+            header: t("quota"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
 
-                return DateTimeFormat(data);
+                return `${data}${unit || ""}` || "-";
             },
         },
         {
@@ -104,31 +88,27 @@ export default function ExpiredTab() {
             },
         },
         {
-            accessorKey: "activatedAt",
-            header: t("activatedAt"),
+            accessorKey: "expiresAt",
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("expiresAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
-                const data: string = row.getValue("activatedAt");
+                const data: string = row.getValue("expiresAt");
 
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateFormat(data);
             },
         },
         {
@@ -187,6 +167,19 @@ export default function ExpiredTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
+            defaultSort="expiresAt"
+            defaultSortDirection="desc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }
