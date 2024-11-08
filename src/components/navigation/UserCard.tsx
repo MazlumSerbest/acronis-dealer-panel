@@ -75,7 +75,7 @@ export default function UserCard() {
                             role: data?.role,
                             name: data?.name,
                             email: data?.email,
-                            acronisTenantId: data?.partner?.acronisId,
+                            acronisTenantId: data?.partnerAcronisId,
                             createdAt: data?.createdAt,
                             createdBy: data?.createdBy,
                             partner: data?.partner,
@@ -95,7 +95,7 @@ export default function UserCard() {
         session?.data?.user,
         updateMainTenant,
         updateUser,
-        user?.partner?.acronisId,
+        user?.partnerAcronisId,
         user?.role,
     ]);
 
