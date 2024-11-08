@@ -21,14 +21,14 @@ export default function CompletedTab({ tenant }: Props) {
     const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            fetch(`/api/license?status=completed&customerId=${data.id}`)
+            fetch(`/api/license?status=completed&customerAcronisId=${data.id}`)
                 .then((res) => res.json())
                 .then((res) => setLicense(res));
         },
     });
 
     // const { data: licenseData, error: licenseError } = useSWR(
-    //     `/api/admin/license?status=completed&partnerId=${?.id}`,
+    //     `/api/admin/license?status=completed&partnerAcronisId=${?.id}`,
     //     null,
     //     {
     //         revalidateOnFocus: false,

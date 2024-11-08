@@ -69,7 +69,7 @@ export default function UserCard() {
                     else
                         updateUser({
                             id: data?.id,
-                            partnerId: data?.partnerId,
+                            partnerAcronisId: data?.partnerAcronisId,
                             active: data?.active,
                             licensed: data?.licensed,
                             role: data?.role,

@@ -18,14 +18,14 @@ export const GET = auth(async (req: any) => {
             });
 
         const status = req.nextUrl.searchParams.get("status");
-        const partnerId = req.nextUrl.searchParams.get("partnerId");
-        const customerId = req.nextUrl.searchParams.get("customerId");
+        const partnerAcronisId = req.nextUrl.searchParams.get("partnerAcronisId");
+        const customerAcronisId = req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
         let include = {};
 
-        // if (!partnerId)
+        // if (!partnerAcronisId)
         //     return NextResponse.json({
-        //         message: tm("noPartnerId"),
+        //         message: tm(""),
         //         status: 400,
         //         ok: false,
         //     });
@@ -92,16 +92,16 @@ export const GET = auth(async (req: any) => {
                 break;
         }
 
-        if (partnerId) {
+        if (partnerAcronisId) {
             where = {
-                partnerId: partnerId,
+                partnerAcronisId: partnerAcronisId,
                 ...where,
             };
         }
 
-        if (customerId) {
+        if (customerAcronisId) {
             where = {
-                customerId: customerId,
+                customerAcronisId: customerAcronisId,
                 ...where,
             };
         }

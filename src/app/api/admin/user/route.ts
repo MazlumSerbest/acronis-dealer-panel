@@ -25,7 +25,7 @@ export const GET = auth(async (req: any) => {
                 email: true,
                 emailVerified: true,
                 role: true,
-                partnerId: true,
+                partnerAcronisId: true,
                 acronisTenantId: true,
                 licensed: true,
                 createdBy: true,

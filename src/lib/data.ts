@@ -1,36 +1,37 @@
-export async function getPartners(forListBox?: boolean) {
-    const res = await fetch("/api/admin/partner");
+export async function getPartners(parentAcronisId?: string, forListBox?: boolean) {
+    const res = await fetch(
+        !parentAcronisId ? `/api/partner` : `/api/partner?parentAcronisId=${parentAcronisId}`,
+    );
     const partners = await res.json();
 
     if (forListBox)
         return partners
             .filter((p: Partner) => p.active)
             .map((p: Partner) => ({
-                id: p.id,
+                id: p.acronisId,
                 name: p?.name,
             }));
     return partners;
 }
 
-export async function getCustomers(partnerId?: string, forListBox?: boolean) {
-    if (!partnerId) return [];
+export async function getCustomers(partnerAcronisId?: string, forListBox?: boolean) {
+    if (!partnerAcronisId) return [];
 
-    const res = await fetch(`/api/customer?partnerId=${partnerId}`);
+    const res = await fetch(`/api/customer?partnerAcronisId=${partnerAcronisId}`);
     const customers = await res.json();
     
-    const uuids = await customers.map((c: Customer) => c.acronisId).join(",");
-    const tenantRes = await fetch(
-        `/api/acronis/tenants?lod=basic&uuids=${uuids}`,
-    );
-    const tenants = await tenantRes.json();
+    // const uuids = await customers.map((c: Customer) => c.acronisId).join(",");
+    // const tenantRes = await fetch(
+    //     `/api/acronis/tenants?lod=basic&uuids=${uuids}`,
+    // );
+    // const tenants = await tenantRes.json();
 
     if (forListBox)
         return customers
             .filter((c: Customer) => c.active)
             .map((c: Customer) => ({
-                id: c.id,
-                name: tenants.items?.find((t: any) => t.id === c.acronisId)
-                    ?.name,
+                id: c.acronisId,
+                name: c.name,
         }));
     return customers;
 }

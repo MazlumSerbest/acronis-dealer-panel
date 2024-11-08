@@ -50,6 +50,7 @@ import FormError from "@/components/FormError";
 import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
+import useUserStore from "@/store/user";
 
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -68,7 +69,8 @@ const userFormSchema = z.object({
         .email({
             message: "User.email.invalidType",
         }),
-    partnerId: z.string().optional().nullable(),
+    partnerAcronisId: z.string().optional().nullable(),
+    tenantAcronisId: z.string().optional().nullable(),
 });
 
 type UserFormValues = z.infer<typeof userFormSchema>;
@@ -76,6 +78,7 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 export default function UsersPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.User");
+    const { user: currentUser } = useUserStore();
     const { toast } = useToast();
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
@@ -83,7 +86,7 @@ export default function UsersPage() {
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
     const { data, error, isLoading, mutate } = useSWR(`/api/admin/user`, null, {
-        revalidateOnFocus: false
+        revalidateOnFocus: false,
     });
 
     //#region Form
@@ -97,6 +100,9 @@ export default function UsersPage() {
 
     function onSubmit(values: UserFormValues) {
         if (isNew) {
+            if(values.role === "admin")
+                values.tenantAcronisId = "15229d4a-ff0f-498b-849d-a4f71bdc81a4";
+
             fetch("/api/admin/user", {
                 method: "POST",
                 body: JSON.stringify(values),
@@ -353,14 +359,18 @@ export default function UsersPage() {
     //#endregion
 
     //#region Data
-    async function getData() {
-        const par: ListBoxItem[] = await getPartners(true);
-        setPartners(par);
-    }
 
     useEffect(() => {
+        async function getData() {
+            const par: ListBoxItem[] = await getPartners(
+                undefined,
+                true,
+            );
+            setPartners(par);
+        }
+        
         getData();
-    }, []);
+    }, [currentUser?.acronisTenantId]);
     //#endregion
 
     if (error) return <div>{t("failedToLoad")}</div>;
@@ -564,7 +574,7 @@ export default function UsersPage() {
 
                                     <FormField
                                         control={form.control}
-                                        name="partnerId"
+                                        name="partnerAcronisId"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>
@@ -572,7 +582,7 @@ export default function UsersPage() {
                                                 </FormLabel>
                                                 <FormControl>
                                                     <Combobox
-                                                        name="partnerId"
+                                                        name="partnerAcronisId"
                                                         data={partners || []}
                                                         form={form}
                                                         field={field}
@@ -590,7 +600,7 @@ export default function UsersPage() {
                                                 <FormError
                                                     error={
                                                         form?.formState?.errors
-                                                            ?.partnerId
+                                                            ?.partnerAcronisId
                                                     }
                                                 />
                                             </FormItem>

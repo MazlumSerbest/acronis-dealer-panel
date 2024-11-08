@@ -161,8 +161,8 @@
         "assign": "Ata",
         "assignToPartner": "Partnere Ata",
         "customerAcronisId": "Müşteri Acronis ID",
-        "expiresAt": "Bitiş Tarihi",
-        "expiredAt": "Bitiş Tarihi Geçmiş",
+        "expiresAt": "Son Kullanım Tarihi",
+        "expiredAt": "Son Kullanım Tarihi Geçmiş",
         "assignedAt": "Atanma Tarihi",
         "activatedAt": "Aktivasyon Tarihi",
         "assignDescription": "{length} lisans(lar) seçilen Partnere atanacak. İşlemi gerçekleştirmek istediğinize emin misiniz?",
@@ -555,7 +555,7 @@
         "partial": "Kısmi",
         "active": "Aktif",
         "completed": "Tamamlanmış",
-        "expired": "Süresi Dolmuş",
+        "expired": "Son Kullanım Süresi Dolmuş",
         "status": "Durum"
     },
     "Alerts": {

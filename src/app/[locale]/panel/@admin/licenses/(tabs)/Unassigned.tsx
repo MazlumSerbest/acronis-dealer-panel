@@ -32,11 +32,12 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import useUserStore from "@/store/user";
 
 const licenseFormSchema = z.object({
     productId: z.string(),
@@ -48,7 +49,7 @@ const licenseFormSchema = z.object({
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
 const assignFormSchema = z.object({
-    partnerId: z.string().cuid(),
+    partnerAcronisId: z.string().cuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
@@ -56,6 +57,8 @@ type AssignFormValues = z.infer<typeof assignFormSchema>;
 export default function UnassignedTab() {
     const t = useTranslations("General");
     const { toast } = useToast();
+    const { user: currentUser } = useUserStore();
+
     const [open, setOpen] = useState(false);
     const [assignOpen, setAssignOpen] = useState(false);
     const [products, setProducts] = useState<ListBoxItem[] | null>(null);
@@ -252,6 +255,16 @@ export default function UnassignedTab() {
             },
         },
         {
+            accessorKey: "expiresAt",
+            header: t("expiresAt"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("expiresAt");
+
+                return DateFormat(data);
+            },
+        },
+        {
             accessorKey: "createdAt",
             header: t("createdAt"),
             enableGlobalFilter: false,
@@ -299,12 +312,15 @@ export default function UnassignedTab() {
         async function getData() {
             const pro: ListBoxItem[] = await getProducts(true);
             setProducts(pro);
-            const par: ListBoxItem[] = await getPartners(true);
+            const par: ListBoxItem[] = await getPartners(
+                currentUser?.acronisTenantId,
+                true,
+            );
             setPartners(par);
         }
 
         getData();
-    }, []);
+    }, [currentUser?.acronisTenantId]);
     //#endregion
 
     if (error) return <div>{t("failedToLoad")}</div>;
@@ -322,6 +338,8 @@ export default function UnassignedTab() {
                 data={data || []}
                 visibleColumns={visibleColumns}
                 selectable
+                defaultSort="expiresAt"
+                defaultSortDirection="asc"
                 actions={
                     selectedIds.length > 0 && [
                         <DropdownMenuItem
@@ -351,9 +369,7 @@ export default function UnassignedTab() {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>
-                            {`${t("add")} ${t("license")}`}
-                        </DialogTitle>
+                        <DialogTitle>{t("addLicense")}</DialogTitle>
                     </DialogHeader>
                     <Form {...form}>
                         <form
@@ -470,7 +486,7 @@ export default function UnassignedTab() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {t("assign")} {t("license")}
+                            {t("assignLicense")}
                         </DialogTitle>
                         <DialogDescription>
                             {t("assignDescription", {
@@ -487,7 +503,7 @@ export default function UnassignedTab() {
                         >
                             <FormField
                                 control={assignForm.control}
-                                name="partnerId"
+                                name="partnerAcronisId"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
@@ -495,7 +511,7 @@ export default function UnassignedTab() {
                                         </FormLabel>
                                         <FormControl>
                                             <Combobox
-                                                name="partnerId"
+                                                name="partnerAcronisId"
                                                 data={partners || []}
                                                 form={assignForm}
                                                 field={field}
@@ -509,7 +525,7 @@ export default function UnassignedTab() {
                                         <FormError
                                             error={
                                                 assignForm?.formState?.errors
-                                                    ?.partnerId
+                                                    ?.partnerAcronisId
                                             }
                                         />
                                     </FormItem>

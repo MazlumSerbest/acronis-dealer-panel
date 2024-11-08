@@ -19,10 +19,14 @@ export const GET = auth(async (req: any) => {
 
         const parentAcronisId = req.nextUrl.searchParams.get("parentAcronisId");
 
-        const data = await prisma.partner.findMany({
-            where: {
+        let where;
+        if (parentAcronisId)
+            where = {
                 parentAcronisId: parentAcronisId,
-            },
+            };
+
+        const data = await prisma.partner.findMany({
+            where: where,
             orderBy: {
                 createdAt: "asc",
             },

@@ -14,7 +14,7 @@ type Path = {
 };
 
 type User = Entity & {
-    partnerId?: string;
+    partnerAcronisId?: string;
     acronisTenantId?: string;
     active: boolean;
     name: string;
@@ -42,13 +42,14 @@ type Partner = Entity & {
 type Customer = Entity & {
     name: string;
     active?: boolean;
-    partnerId: string;
+    partnerAcronisId: string;
     acronisId?: string;
     billingDate?: string;
 };
 
 type License = Entity & {
-    partnerId: string;
+    partnerAcronisId: string;
+    customerAcronisId: string;
     key: string;
     typeSerialNo: string;
     licenseSerialNo: string;
@@ -68,7 +69,6 @@ type Product = Entity & {
 };
 
 type Application = Entity & {
-    partnerId?: string;
     companyType: "business" | "person";
     name: string;
     taxNo: string;

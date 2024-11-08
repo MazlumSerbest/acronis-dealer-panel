@@ -22,7 +22,6 @@ import { DateFormat } from "@/utils/date";
 import {
     LuChevronsUpDown,
     LuInfo,
-    LuAlertCircle,
     LuAlertTriangle,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
@@ -48,7 +47,7 @@ export default function TenantsPage() {
                 const [customersResponse, partnersResponse] = await Promise.all(
                     [
                         fetch(
-                            `/api/customer?partnerId=${currentUser?.partnerId}`,
+                            `/api/customer?partnerAcronisId=${currentUser?.partnerAcronisId}`,
                         ),
                         fetch(
                             `/api/partner?parentAcronisId=${currentUser?.acronisTenantId}`,

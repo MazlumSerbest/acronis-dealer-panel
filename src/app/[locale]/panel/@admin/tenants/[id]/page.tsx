@@ -45,11 +45,8 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
                 if (!data) return;
 
                 try {
-                    const panelPartnerResponse = await fetch(`/api/partner/${params?.id}`);
-                    const panelPartner = await panelPartnerResponse.json();
-
                     const [customersResponse, partnersResponse] = await Promise.all([
-                        fetch(`/api/customer?partnerId=${panelPartner?.id}`),
+                        fetch(`/api/customer?partnerAcronisId=${params?.id}`),
                         fetch(`/api/partner?parentAcronisId=${params?.id}`)
                     ]);
 

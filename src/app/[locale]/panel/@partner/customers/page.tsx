@@ -112,7 +112,7 @@ export default function CustomersPage() {
                 const [customersResponse, partnersResponse] = await Promise.all(
                     [
                         fetch(
-                            `/api/customer?partnerId=${currentUser?.partnerId}`,
+                            `/api/customer?partnerAcronisId=${currentUser?.partnerAcronisId}`,
                         ),
                         fetch(
                             `/api/partner?parentAcronisId=${currentUser?.acronisTenantId}`,
@@ -174,7 +174,7 @@ export default function CustomersPage() {
             name: values.name,
             login: values.login,
             parentAcronisId: currentUser?.acronisTenantId,
-            partnerId: currentUser?.partnerId,
+            partnerAcronisId: currentUser?.partnerAcronisId,
             kind: values.kind,
             contact: {
                 email: values.email,

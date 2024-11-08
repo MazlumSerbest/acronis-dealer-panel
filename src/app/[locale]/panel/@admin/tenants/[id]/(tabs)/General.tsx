@@ -434,8 +434,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                 method: "POST",
                                                                 body: JSON.stringify(
                                                                     {
-                                                                        partnerId:
-                                                                            panelTenant?.id,
+                                                                        partnerAcronisId:
+                                                                            tenant?.id,
                                                                         name: tenant?.name,
                                                                         email: tenant
                                                                             ?.contact

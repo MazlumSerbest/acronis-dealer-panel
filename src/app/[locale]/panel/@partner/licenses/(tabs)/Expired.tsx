@@ -18,7 +18,7 @@ export default function ExpiredTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/license?partnerId=${currentUser?.partnerId}&status=expired`,
+        `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=expired`,
         null,
         {
             revalidateOnFocus: false,

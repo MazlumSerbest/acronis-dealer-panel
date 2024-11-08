@@ -16,12 +16,12 @@ FROM
         "License" l
         LEFT JOIN "Product" pro ON ((pro.id = l."productId"))
       )
-      LEFT JOIN "Partner" par ON ((par.id = l."partnerId"))
+      LEFT JOIN "Partner" par ON ((par.id = l."partnerAcronisId"))
     )
-    LEFT JOIN "Customer" cus ON ((cus.id = l."customerId"))
+    LEFT JOIN "Customer" cus ON ((cus.id = l."customerAcronisId"))
   )
 WHERE
   (
-    (l."customerId" IS NOT NULL)
+    (l."customerAcronisId" IS NOT NULL)
     AND (l."activatedAt" >= (NOW() - '1 year' :: INTERVAL))
   );

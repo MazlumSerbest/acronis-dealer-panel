@@ -21,7 +21,7 @@ export default function ActiveTab({ tenant }: Props) {
     const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            fetch(`/api/license?status=active&customerId=${data.id}`)
+            fetch(`/api/license?status=active&customerAcronisId=${data.id}`)
                 .then((res) => res.json())
                 .then((res) => setLicense(res));
         },

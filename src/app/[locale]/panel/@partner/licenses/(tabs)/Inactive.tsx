@@ -61,7 +61,7 @@ import { getCustomers } from "@/lib/data";
 import Combobox from "@/components/Combobox";
 
 const addFormSchema = z.object({
-    partnerId: z.string().cuid().optional(),
+    partnerAcronisId: z.string().cuid().optional(),
     serials: z.array(
         z.object({
             value: z.string().length(10, {
@@ -78,7 +78,7 @@ const defaultValues: Partial<AddFormValues> = {
 };
 
 const assignFormSchema = z.object({
-    customerId: z.string().cuid(),
+    customerAcronisId: z.string().cuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
@@ -95,7 +95,7 @@ export default function InactiveTab() {
     const [openAssign, setOpenAssign] = useState(false);
 
     const { data, error, mutate } = useSWR(
-        `/api/license?partnerId=${currentUser?.partnerId}&status=inactive`,
+        `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=inactive`,
         null,
         {
             revalidateOnFocus: false,
@@ -115,8 +115,8 @@ export default function InactiveTab() {
     });
 
     function onSubmitAdd(values: AddFormValues) {
-        values.partnerId = currentUser?.partnerId;
-        if (!values.partnerId) return;
+        values.partnerAcronisId = currentUser?.partnerAcronisId;
+        if (!values.partnerAcronisId) return;
 
         fetch("/api/license", {
             method: "PUT",
@@ -392,14 +392,14 @@ export default function InactiveTab() {
     useEffect(() => {
         async function getData() {
             const cus: ListBoxItem[] = await getCustomers(
-                currentUser?.partnerId,
+                currentUser?.partnerAcronisId,
                 true,
             );
             setCustomers(cus);
         }
 
         getData();
-    }, [currentUser?.partnerId]);
+    }, [currentUser?.partnerAcronisId]);
     //#endregion
 
     if (error) return <div>{t("failedToLoad")}</div>;
@@ -556,7 +556,7 @@ export default function InactiveTab() {
                         >
                             <FormField
                                 control={assignForm.control}
-                                name="customerId"
+                                name="customerAcronisId"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
@@ -564,7 +564,7 @@ export default function InactiveTab() {
                                         </FormLabel>
                                         <FormControl>
                                             <Combobox
-                                                name="customerId"
+                                                name="customerAcronisId"
                                                 data={customers || []}
                                                 form={assignForm}
                                                 field={field}
@@ -578,7 +578,7 @@ export default function InactiveTab() {
                                         <FormError
                                             error={
                                                 assignForm?.formState?.errors
-                                                    ?.customerId
+                                                    ?.customerAcronisId
                                             }
                                         />
                                     </FormItem>

@@ -108,7 +108,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 name: tenant?.name,
                 acronisId: tenant?.id,
                 billingDate: values.billingDate?.toISOString(),
-                partnerId: currentUser?.partnerId,
+                partnerAcronisId: tenant?.parent_id,
             };
         } else {
             // Partner

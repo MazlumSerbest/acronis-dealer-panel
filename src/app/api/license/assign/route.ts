@@ -26,7 +26,7 @@ export const PUT = auth(async (req: any) => {
                 },
             },
             data: {
-                customerId: values.customerId,
+                customerAcronisId: values.customerAcronisId,
                 activatedAt: new Date().toISOString(),
                 updatedBy: req.auth.user.email,
                 updatedAt: new Date().toISOString(),

@@ -167,7 +167,7 @@ export const POST = auth(async (req: any, { params }) => {
         } else {
             const customer: Customer = {
                 acronisId: createdTenant.id,
-                partnerId: tenant.partnerId,
+                partnerAcronisId: tenant.partnerAcronisId,
                 name: createdTenant?.name,
                 createdBy: req.auth.user.email,
             };
