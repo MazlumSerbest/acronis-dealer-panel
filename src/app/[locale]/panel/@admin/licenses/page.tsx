@@ -32,15 +32,12 @@ export default function LicensesPage() {
             value={openTab}
             onValueChange={(value) => setOpenTab(value)}
         >
-            <div className="flex flex-row justify-between">
+            <div className="flex flex-row gap-4">
                 <TabsList className="max-w-fit">
                     <TabsTrigger value="unassigned">
                         {tl("unassigned")}
                     </TabsTrigger>
                     <TabsTrigger value="assigned">{tl("assigned")}</TabsTrigger>
-                    {/* <TabsTrigger value="active">{tl("active")}</TabsTrigger>
-                    <TabsTrigger value="completed">{tl("completed")}</TabsTrigger>
-                    <TabsTrigger value="expired">{tl("expired")}</TabsTrigger> */}
                 </TabsList>
                 {openTab == "assigned" && (
                     <div>
@@ -51,7 +48,7 @@ export default function LicensesPage() {
                                 setOpenAssignedTab(value);
                             }}
                         >
-                            <SelectTrigger className="w-52">
+                            <SelectTrigger className="min-w-52">
                                 <SelectValue
                                     className="text-sm"
                                     placeholder={tl("status")}

@@ -18,6 +18,14 @@ type Props = {
 export default function LicensesTab({ t, tenant }: Props) {
     const tl = useTranslations("Licenses");
 
+    const { data, error } = useSWR(
+        `/api/admin/license?${tenant.kind}AcronisId=${tenant.id}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
+
     //#region Table
     const visibleColumns = {
         expiresAt: false,
