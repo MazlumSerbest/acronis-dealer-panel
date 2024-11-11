@@ -166,7 +166,6 @@
         "assignedAt": "Assigned At",
         "activatedAt": "Activated At",
         "assignDescription": "{length} license(s) will be assigned to the selected partner. Are you sure you want to proceed?",
-        "customerNotFound": "There is no panel customer with this Acronis ID. If you want to assign a license please create a customer.",
         "registrationNotFound": "There is no panel registry with this Acronis ID.",
         "backToSignIn": "Back to Sign In",
         "download": "Download",
@@ -557,7 +556,8 @@
         "active": "Active",
         "completed": "Completed",
         "expired": "Expired",
-        "status": "Status"
+        "status": "Status",
+        "passive": "Passive"
     },
     "Alerts": {
         "title": "Alerts"

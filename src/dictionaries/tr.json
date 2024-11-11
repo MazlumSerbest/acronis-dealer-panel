@@ -166,7 +166,6 @@
         "assignedAt": "Atanma Tarihi",
         "activatedAt": "Aktivasyon Tarihi",
         "assignDescription": "{length} lisans(lar) seçilen Partnere atanacak. İşlemi gerçekleştirmek istediğinize emin misiniz?",
-        "customerNotFound": "Bu Acronis ID ile panel müşterisi bulunamadı. Lisans atamak istiyorsanız lütfen bir müşteri oluşturun.",
         "registrationNotFound": "Bu Acronis ID ile panel kaydı bulunamadı.",
         "backToSignIn": "Girişe Dön",
         "download": "İndir",
@@ -557,7 +556,8 @@
         "active": "Aktif",
         "completed": "Tamamlanmış",
         "expired": "Son Kullanma Süresi Geçmiş",
-        "status": "Durum"
+        "status": "Durum",
+        "passive": "Pasif"
     },
     "Alerts": {
         "title": "Uyarılar"
