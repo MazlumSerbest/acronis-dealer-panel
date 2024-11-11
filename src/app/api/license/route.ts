@@ -43,7 +43,7 @@ export const GET = auth(async (req: any) => {
                 break;
             case "active":
                 where = {
-                    customerAcronisId: null,
+                    customerAcronisId: { not: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -56,7 +56,7 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    customerAcronisId: null,
+                    customerAcronisId: { not: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(

@@ -57,7 +57,7 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuMinus, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
-import { getCustomers } from "@/lib/data";
+import { getCustomers, getPartners } from "@/lib/data";
 import Combobox from "@/components/Combobox";
 
 const addFormSchema = z.object({
@@ -77,22 +77,30 @@ const defaultValues: Partial<AddFormValues> = {
     serials: [{ value: "" }],
 };
 
-const assignFormSchema = z.object({
-    customerAcronisId: z.string().cuid(),
+const assignToCustomerFormSchema = z.object({
+    customerAcronisId: z.string().uuid(),
 });
 
-type AssignFormValues = z.infer<typeof assignFormSchema>;
+type AssignToCustomerFormValues = z.infer<typeof assignToCustomerFormSchema>;
 
-export default function InactiveTab() {
+const assignToPartnerFormSchema = z.object({
+    partnerAcronisId: z.string().uuid(),
+});
+
+type AssignToPartnerFormValues = z.infer<typeof assignToPartnerFormSchema>;
+
+export default function PassiveTab() {
     const t = useTranslations("General");
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
-    const [selectedIds, setSelectedIds] = useState<string[]>([]);
-    // const [selected, setSelected] = useState();
-    const [customers, setCustomers] = useState<ListBoxItem[] | null>(null);
 
+    const [customers, setCustomers] = useState<ListBoxItem[] | null>(null);
+    const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
+
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
     const [openAdd, setOpenAdd] = useState(false);
-    const [openAssign, setOpenAssign] = useState(false);
+    const [openAssignToCustomer, setOpenAssignToCustomer] = useState(false);
+    const [openAssignToPartner, setOpenAssignToPartner] = useState(false);
 
     const { data, error, mutate } = useSWR(
         `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=inactive`,
@@ -140,12 +148,12 @@ export default function InactiveTab() {
             });
     }
 
-    const assignForm = useForm<AssignFormValues>({
-        resolver: zodResolver(assignFormSchema),
+    const assignToCustomerForm = useForm<AssignToCustomerFormValues>({
+        resolver: zodResolver(assignToCustomerFormSchema),
     });
 
-    function onSubmitAssign(values: AssignFormValues) {
-        fetch("/api/license/assign", {
+    function onSubmitAssignToCustomer(values: AssignToCustomerFormValues) {
+        fetch("/api/license/assign?kind=customer", {
             method: "PUT",
             body: JSON.stringify({
                 ...values,
@@ -158,7 +166,39 @@ export default function InactiveTab() {
                     toast({
                         description: res.message,
                     });
-                    setOpenAssign(false);
+                    setOpenAssignToCustomer(false);
+                    assignToCustomerForm.reset();
+                    mutate();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+            });
+    }
+
+    const assignToPartnerForm = useForm<AssignToPartnerFormValues>({
+        resolver: zodResolver(assignToPartnerFormSchema),
+    });
+
+    function onSubmitAssignToPartner(values: AssignToPartnerFormValues) {
+        fetch("/api/license/assign?kind=partner", {
+            method: "PUT",
+            body: JSON.stringify({
+                ...values,
+                ids: selectedIds,
+            }),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpenAssignToPartner(false);
+                    assignToPartnerForm.reset();
                     mutate();
                 } else {
                     toast({
@@ -347,6 +387,12 @@ export default function InactiveTab() {
                 true,
             );
             setCustomers(cus);
+
+            const par: ListBoxItem[] = await getPartners(
+                currentUser?.partnerAcronisId,
+                true,
+            );
+            setPartners(par);
         }
 
         getData();
@@ -363,7 +409,8 @@ export default function InactiveTab() {
     return (
         <>
             <DataTable
-                zebra
+                // zebra
+                selectable
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
@@ -383,14 +430,25 @@ export default function InactiveTab() {
                 actions={
                     selectedIds.length > 0 && [
                         <DropdownMenuItem
-                            key="assign"
+                            key="assignToCustomer"
                             onClick={() => {
-                                setOpenAssign(true);
-                                assignForm.reset();
+                                setOpenAssignToCustomer(true);
+                                assignToCustomerForm.reset();
                             }}
                         >
-                            {t("assignToCustomer")}
+                            {t("assignSelectedToCustomer")}
                         </DropdownMenuItem>,
+                        partners && partners?.length > 0 && (
+                            <DropdownMenuItem
+                                key="assignToPartner"
+                                onClick={() => {
+                                    setOpenAssignToPartner(true);
+                                    assignToPartnerForm.reset();
+                                }}
+                            >
+                                {t("assignSelectedToPartner")}
+                            </DropdownMenuItem>
+                        ),
                     ]
                 }
                 selectOnClick={async (table, row) => {
@@ -511,20 +569,30 @@ export default function InactiveTab() {
                 </DialogContent>
             </Dialog>
 
-            <Dialog open={openAssign} onOpenChange={setOpenAssign}>
+            <Dialog
+                open={openAssignToCustomer}
+                onOpenChange={setOpenAssignToCustomer}
+            >
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>{t("assignLicense")}</DialogTitle>
+                        <DialogTitle>{t("assignToCustomer")}</DialogTitle>
+                        {customers && customers?.length === 0 && (
+                            <DialogDescription className="text-destructive">
+                                {t("assignToCustomerError")}
+                            </DialogDescription>
+                        )}
                     </DialogHeader>
 
-                    <Form {...assignForm}>
+                    <Form {...assignToCustomerForm}>
                         <form
-                            onSubmit={assignForm.handleSubmit(onSubmitAssign)}
+                            onSubmit={assignToCustomerForm.handleSubmit(
+                                onSubmitAssignToCustomer,
+                            )}
                             autoComplete="off"
                             className="space-y-4"
                         >
                             <FormField
-                                control={assignForm.control}
+                                control={assignToCustomerForm.control}
                                 name="customerAcronisId"
                                 render={({ field }) => (
                                     <FormItem>
@@ -535,7 +603,7 @@ export default function InactiveTab() {
                                             <Combobox
                                                 name="customerAcronisId"
                                                 data={customers || []}
-                                                form={assignForm}
+                                                form={assignToCustomerForm}
                                                 field={field}
                                                 placeholder={t("select")}
                                                 inputPlaceholder={t(
@@ -546,8 +614,74 @@ export default function InactiveTab() {
                                         </FormControl>
                                         <FormError
                                             error={
-                                                assignForm?.formState?.errors
-                                                    ?.customerAcronisId
+                                                assignToCustomerForm?.formState
+                                                    ?.errors?.customerAcronisId
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("assign")}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog
+                open={openAssignToPartner}
+                onOpenChange={setOpenAssignToPartner}
+            >
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("assignToPartner")}</DialogTitle>
+                    </DialogHeader>
+
+                    <Form {...assignToCustomerForm}>
+                        <form
+                            onSubmit={assignToPartnerForm.handleSubmit(
+                                onSubmitAssignToPartner,
+                            )}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={assignToPartnerForm.control}
+                                name="partnerAcronisId"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("partner")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Combobox
+                                                name="partnerAcronisId"
+                                                data={partners || []}
+                                                form={assignToPartnerForm}
+                                                field={field}
+                                                placeholder={t("select")}
+                                                inputPlaceholder={t(
+                                                    "searchPlaceholder",
+                                                )}
+                                                emptyText={t("noResults")}
+                                            />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                assignToPartnerForm?.formState
+                                                    ?.errors?.partnerAcronisId
                                             }
                                         />
                                     </FormItem>
