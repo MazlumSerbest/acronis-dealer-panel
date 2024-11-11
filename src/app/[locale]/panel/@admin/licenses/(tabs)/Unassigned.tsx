@@ -225,6 +225,7 @@ export default function UnassignedTab() {
         {
             accessorKey: "expiresAt",
             enableGlobalFilter: false,
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("expiresAt")}
@@ -480,7 +481,7 @@ export default function UnassignedTab() {
                     <DialogHeader>
                         <DialogTitle>{t("assignLicense")}</DialogTitle>
                         <DialogDescription>
-                            {t("assignDescription", {
+                            {t("assignSelectedToPartner", {
                                 length: selectedIds.length,
                             })}
                         </DialogDescription>
