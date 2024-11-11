@@ -6,18 +6,19 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DateTimeFormat } from "@/utils/date";
+
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 
 type Props = {
     tenant: Tenant;
 };
 
-export default function CompletedTab({ tenant }: Props) {
+export default function PassiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${tenant.id}&status=completed`,
+        `/api/admin/license?status=assigned&partnerAcronisId=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,
@@ -26,7 +27,6 @@ export default function CompletedTab({ tenant }: Props) {
 
     //#region Table
     const visibleColumns = {
-        assignedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -35,7 +35,7 @@ export default function CompletedTab({ tenant }: Props) {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -52,9 +52,9 @@ export default function CompletedTab({ tenant }: Props) {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
@@ -67,15 +67,6 @@ export default function CompletedTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "customerName",
-            header: t("customer"),
-            cell: ({ row }) => {
-                const data: string = row.getValue("customerName");
-
-                return data || "-";
-            },
-        },
-        {
             accessorKey: "productQuota",
             header: t("quota"),
             enableGlobalFilter: false,
@@ -83,13 +74,27 @@ export default function CompletedTab({ tenant }: Props) {
                 const data: number = row.getValue("productQuota");
                 const unit: string = row.original.productUnit;
 
-                return `${data} ${unit || ""}` || "-";
+                return `${data}${unit || ""}` || "-";
             },
         },
         {
             accessorKey: "assignedAt",
-            header: t("assignedAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("assignedAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("assignedAt");
 
@@ -97,12 +102,12 @@ export default function CompletedTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "activatedAt",
+            accessorKey: "expiresAt",
             enableGlobalFilter: false,
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
-                    {t("activatedAt")}
+                    {t("expiresAt")}
                     <Button
                         variant="ghost"
                         className="p-1"
@@ -115,33 +120,9 @@ export default function CompletedTab({ tenant }: Props) {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("activatedAt");
+                const data: string = row.getValue("expiresAt");
 
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "completionDate",
-            enableGlobalFilter: false,
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("completionDate")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
-            cell: ({ row }) => {
-                const data: string = row.getValue("completionDate");
-
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {
@@ -200,7 +181,7 @@ export default function CompletedTab({ tenant }: Props) {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
-            defaultSort="completionDate"
+            defaultSort="expiresAt"
             defaultSortDirection="asc"
             facetedFilters={[
                 {

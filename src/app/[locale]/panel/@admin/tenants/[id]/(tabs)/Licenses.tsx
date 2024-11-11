@@ -1,14 +1,14 @@
 import useSWR from "swr";
 
-import { ColumnDef } from "@tanstack/react-table";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { LuChevronsUpDown } from "react-icons/lu";
-import { DateTimeFormat } from "@/utils/date";
 import { useTranslations } from "next-intl";
+
+import PassiveTab from "./(licenseTabs)/Passive";
 import ActiveTab from "./(licenseTabs)/Active";
 import CompletedTab from "./(licenseTabs)/Completed";
+import ExpiredTab from "./(licenseTabs)/Expired";
+import Loader from "@/components/loaders/Loader";
 
 type Props = {
     t: Function;
@@ -18,145 +18,47 @@ type Props = {
 export default function LicensesTab({ t, tenant }: Props) {
     const tl = useTranslations("Licenses");
 
-    const { data, error } = useSWR(
-        `/api/admin/license?${tenant.kind}AcronisId=${tenant.id}`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
+    const { data, error, isLoading } = useSWR(
+        `/api/${tenant.kind}/${tenant.id}`,
     );
 
-    //#region Table
-    const visibleColumns = {
-        expiresAt: false,
-        assignedAt: false,
-        createdAt: false,
-        createdBy: false,
-        updatedAt: false,
-        updatedBy: false,
-    };
-
-    const columns: ColumnDef<any, any>[] = [
-        {
-            accessorKey: "product",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("name")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.name || "-";
-            },
-        },
-        {
-            accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
-            cell: ({ row }) => {
-                const data: string = row.getValue("serialNo");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("quota"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
-            },
-        },
-        {
-            accessorKey: "createdAt",
-            header: t("createdAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("createdAt");
-
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "createdBy",
-            header: t("createdBy"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("createdBy");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "updatedAt",
-            header: t("updatedAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("updatedAt");
-
-                return DateTimeFormat(data);
-            },
-        },
-        {
-            accessorKey: "updatedBy",
-            header: t("updatedBy"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("updatedBy");
-
-                return data || "-";
-            },
-        },
-    ];
-    //#endregion
-
-    // if (error) return <div>{t("failedToLoad")}</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
+    if (isLoading)
+        return (
+            <div className="h-80">
+                <Loader />
+            </div>
+        );
+    if (!data) return <div>{t("registrationNotFound")}</div>;
     return (
         <Tabs defaultValue="active" className="flex flex-col w-full">
             <TabsList className="max-w-fit">
+                {tenant.kind === "partner" && (
+                    <TabsTrigger value="passive">{tl("passive")}</TabsTrigger>
+                )}
                 <TabsTrigger value="active">{tl("active")}</TabsTrigger>
                 <TabsTrigger value="completed">{tl("completed")}</TabsTrigger>
+                {tenant.kind === "partner" && (
+                    <TabsTrigger value="expired">{tl("expired")}</TabsTrigger>
+                )}
             </TabsList>
+            {tenant.kind === "partner" && (
+                <TabsContent value="passive">
+                    <PassiveTab tenant={tenant} />
+                </TabsContent>
+            )}
+
             <TabsContent value="active">
                 <ActiveTab tenant={tenant} />
             </TabsContent>
             <TabsContent value="completed">
                 <CompletedTab tenant={tenant} />
             </TabsContent>
+            {tenant.kind === "partner" && (
+                <TabsContent value="expired">
+                    <ExpiredTab tenant={tenant} />
+                </TabsContent>
+            )}
         </Tabs>
     );
 }

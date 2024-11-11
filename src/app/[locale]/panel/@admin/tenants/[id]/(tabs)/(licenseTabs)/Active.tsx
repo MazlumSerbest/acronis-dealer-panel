@@ -1,8 +1,5 @@
-import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -18,29 +15,17 @@ type Props = {
 
 export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
-    const [license, setLicense] = useState();
 
-    const { data, error, isLoading, mutate } = useSWR(
-        `/api/${tenant.kind == "partner" ? "admin/partner" : "customer"}/${
-            tenant?.id
-        }`,
+    const { data, error } = useSWR(
+        `/api/license?partnerAcronisId=${tenant.id}&status=active`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
-                fetch(
-                    `/api/admin/license?status=active&${tenant.kind}Id=${data.id}`,
-                )
-                    .then((res) => res.json())
-                    .then((res) => setLicense(res));
-            },
         },
     );
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
-        assignedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -49,7 +34,7 @@ export default function ActiveTab({ tenant }: Props) {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -66,28 +51,14 @@ export default function ActiveTab({ tenant }: Props) {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -95,47 +66,22 @@ export default function ActiveTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "partner",
-            header: t("partnerName"),
+            accessorKey: "customerName",
+            header: t("customer"),
             cell: ({ row }) => {
-                const data: Partner = row.getValue("partner");
+                const data: string = row.getValue("customerName");
 
-                return data.name || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const partner = row.original.partner;
-                    return partner.name
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
+                return data || "-";
             },
         },
         {
-            accessorKey: "customer",
-            header: t("customerAcronisId"),
+            accessorKey: "productQuota",
+            header: t("quota"),
             cell: ({ row }) => {
-                const data: Customer = row.getValue("customer");
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
 
-                return data?.acronisId || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows.filter((row: any) => {
-                    const customer = row.original.customer;
-                    return customer.acronisId
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
-            },
-        },
-        {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
-
-                return DateTimeFormat(data);
+                return `${data} ${unit || ""}` || "-";
             },
         },
         {
@@ -150,8 +96,22 @@ export default function ActiveTab({ tenant }: Props) {
         },
         {
             accessorKey: "activatedAt",
-            header: t("activatedAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("activatedAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
 
@@ -159,21 +119,27 @@ export default function ActiveTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "product",
-            header: t("quota"),
+            accessorKey: "completionDate",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("completionDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("completionDate");
 
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateTimeFormat(data);
             },
         },
         {
@@ -218,12 +184,8 @@ export default function ActiveTab({ tenant }: Props) {
         },
     ];
     //#endregion
-
-    useEffect(() => {
-        mutate();
-    }, [mutate]);
-
-    if (error) return <div>{t("registrationNotFound")}</div>;
+    
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>
@@ -234,9 +196,21 @@ export default function ActiveTab({ tenant }: Props) {
         <DataTable
             zebra
             columns={columns}
-            data={license || []}
+            data={data || []}
             visibleColumns={visibleColumns}
-            isLoading={isLoading}
+            defaultSort="completionDate"
+            defaultSortDirection="asc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }
