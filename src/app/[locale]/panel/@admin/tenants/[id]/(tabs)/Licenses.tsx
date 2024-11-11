@@ -51,9 +51,11 @@ export default function LicensesTab({ t, tenant }: Props) {
             <TabsContent value="active">
                 <ActiveTab tenant={tenant} />
             </TabsContent>
+            
             <TabsContent value="completed">
                 <CompletedTab tenant={tenant} />
             </TabsContent>
+
             {tenant.kind === "partner" && (
                 <TabsContent value="expired">
                     <ExpiredTab tenant={tenant} />

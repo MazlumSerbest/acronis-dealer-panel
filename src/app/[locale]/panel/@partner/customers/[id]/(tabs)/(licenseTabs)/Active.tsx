@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
@@ -16,21 +15,17 @@ type Props = {
 
 export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
-    const [license, setLicense] = useState();
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/customer/${tenant?.id}`, null, {
-        revalidateOnFocus: false,
-        onSuccess: (data) => {
-            fetch(`/api/license?status=active&customerAcronisId=${data.id}`)
-                .then((res) => res.json())
-                .then((res) => setLicense(res));
+    const { data, error } = useSWR(
+        `/api/license?partnerAcronisId=${tenant.id}&status=active`,
+        null,
+        {
+            revalidateOnFocus: false,
         },
-    });
+    );
 
     //#region Table
     const visibleColumns = {
-        expiresAt: false,
-        assignedAt: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -39,7 +34,7 @@ export default function ActiveTab({ tenant }: Props) {
 
     const columns: ColumnDef<any, any>[] = [
         {
-            accessorKey: "product",
+            accessorKey: "productName",
             enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
@@ -56,28 +51,14 @@ export default function ActiveTab({ tenant }: Props) {
                 </div>
             ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("productName");
 
-                return data?.name || "-";
+                return data || "-";
             },
         },
         {
             accessorKey: "serialNo",
-            enableHiding: false,
-            header: ({ column }) => (
-                <div className="flex flex-row items-center">
-                    {t("serialNo")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
-            ),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -85,13 +66,22 @@ export default function ActiveTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "expiresAt",
-            header: t("expiresAt"),
-            enableGlobalFilter: false,
+            accessorKey: "customerName",
+            header: t("customer"),
             cell: ({ row }) => {
-                const data: string = row.getValue("expiresAt");
+                const data: string = row.getValue("customerName");
 
-                return DateTimeFormat(data);
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "productQuota",
+            header: t("quota"),
+            cell: ({ row }) => {
+                const data: number = row.getValue("productQuota");
+                const unit: string = row.original.productUnit;
+
+                return `${data} ${unit || ""}` || "-";
             },
         },
         {
@@ -106,8 +96,22 @@ export default function ActiveTab({ tenant }: Props) {
         },
         {
             accessorKey: "activatedAt",
-            header: t("activatedAt"),
             enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("activatedAt")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
 
@@ -115,21 +119,27 @@ export default function ActiveTab({ tenant }: Props) {
             },
         },
         {
-            accessorKey: "product",
-            header: t("quota"),
+            accessorKey: "completionDate",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("completionDate")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
-                const data: Product = row.getValue("product");
+                const data: string = row.getValue("completionDate");
 
-                return data?.quota || "-";
-            },
-        },
-        {
-            accessorKey: "product",
-            header: t("unit"),
-            cell: ({ row }) => {
-                const data: Product = row.getValue("product");
-
-                return t(data?.unit) || "-";
+                return DateTimeFormat(data);
             },
         },
         {
@@ -175,11 +185,7 @@ export default function ActiveTab({ tenant }: Props) {
     ];
     //#endregion
 
-    useEffect(() => {
-        mutate();
-    }, [mutate]);
-
-    if (error) return <div>{t("customerNotFound")}</div>;
+    if (error) return <div>{t("failedToLoad")}</div>;
     if (!data)
         return (
             <Skeleton>
@@ -190,9 +196,21 @@ export default function ActiveTab({ tenant }: Props) {
         <DataTable
             zebra
             columns={columns}
-            data={license || []}
+            data={data || []}
             visibleColumns={visibleColumns}
-            isLoading={isLoading}
+            defaultSort="completionDate"
+            defaultSortDirection="asc"
+            facetedFilters={[
+                {
+                    column: "productQuota",
+                    title: t("quota"),
+                    options: [
+                        { value: 25, label: "25GB" },
+                        { value: 50, label: "50GB" },
+                        { value: 100, label: "100GB" },
+                    ],
+                },
+            ]}
         />
     );
 }
