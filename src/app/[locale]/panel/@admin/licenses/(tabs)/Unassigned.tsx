@@ -70,9 +70,6 @@ export default function UnassignedTab() {
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
-                
-            },
         },
     );
 
@@ -93,6 +90,7 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                     setOpen(false);
+                    form.reset();
                     mutate();
                 } else {
                     toast({
@@ -120,6 +118,7 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                     setAssignOpen(false);
+                    assignForm.reset();
                     mutate();
                 } else {
                     toast({
@@ -205,7 +204,7 @@ export default function UnassignedTab() {
         },
         {
             accessorKey: "serialNo",
-            header:t("serialNo"),
+            header: t("serialNo"),
             cell: ({ row }) => {
                 const data: string = row.getValue("serialNo");
 
@@ -220,7 +219,7 @@ export default function UnassignedTab() {
                 const data: number = row.getValue("productQuota");
                 const unit: string = row.original.productUnit;
 
-                return `${data}${unit|| ""}` || "-";
+                return `${data}${unit || ""}` || "-";
             },
         },
         {
@@ -294,6 +293,7 @@ export default function UnassignedTab() {
         async function getData() {
             const pro: ListBoxItem[] = await getProducts(true);
             setProducts(pro);
+
             const par: ListBoxItem[] = await getPartners(
                 currentUser?.acronisTenantId,
                 true,
@@ -316,10 +316,10 @@ export default function UnassignedTab() {
         <>
             <DataTable
                 // zebra
+                selectable
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
-                selectable
                 defaultSort="expiresAt"
                 defaultSortDirection="asc"
                 facetedFilters={[
@@ -478,9 +478,7 @@ export default function UnassignedTab() {
             <Dialog open={assignOpen} onOpenChange={setAssignOpen}>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>
-                            {t("assignLicense")}
-                        </DialogTitle>
+                        <DialogTitle>{t("assignLicense")}</DialogTitle>
                         <DialogDescription>
                             {t("assignDescription", {
                                 length: selectedIds.length,

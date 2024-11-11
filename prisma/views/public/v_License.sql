@@ -28,5 +28,5 @@ FROM
       )
       LEFT JOIN "Partner" par ON ((l."partnerAcronisId" = par."acronisId"))
     )
-    LEFT JOIN "Customer" cus ON ((l."partnerAcronisId" = cus."acronisId"))
+    LEFT JOIN "Customer" cus ON ((l."customerAcronisId" = cus."acronisId"))
   );
