@@ -234,7 +234,10 @@
         "lessThanTwoWeeksUntilBilling": "Faturalama tarihine 2 haftadan az kaldı!",
         "lessThanTwoWeeksUntilBillingDescription": "Faturalama tarihi yaklaşıyor. Lütfen faturalama tarihini kontrol edin.",
         "billingDatePassedDescription": "Faturalama tarihi geçti. Lütfen faturalama tarihini kontrol edin.",
-        "completionDate": "Tamamlanma Tarihi"
+        "completionDate": "Tamamlanma Tarihi",
+        "assignSelectedToCustomer": "Seçilenleri Müşteriye Ata",
+        "assignToCustomerError": "Lisansı atamak için müşteri bulunamadı. Lütfen önce müşteri oluşturun!",
+        "assignSelectedToPartner": "Seçilenleri Partnere Ata"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

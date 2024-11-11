@@ -234,7 +234,10 @@
         "lessThanTwoWeeksUntilBilling": "Less than two weeks until billing date!",
         "lessThanTwoWeeksUntilBillingDescription": "The billing date is approaching. Please check the billing date and make sure the payment is made on time.",
         "billingDatePassedDescription": "The billing date has passed. Please check the billing date.",
-        "completionDate": "Completion Date"
+        "completionDate": "Completion Date",
+        "assignSelectedToCustomer": "Assign Selected to Customer",
+        "assignToCustomerError": "There is no customer to assign the license. Please create a customer first!",
+        "assignSelectedToPartner": "Assign Selected to Partner"
     },
     "SignIn": {
         "signIn": "Sign In",
