@@ -114,7 +114,6 @@ export default function PassiveTab() {
     const addForm = useForm<AddFormValues>({
         resolver: zodResolver(addFormSchema),
         defaultValues,
-        // mode: "onChange",
     });
 
     const { fields, append, remove } = useFieldArray({
@@ -459,10 +458,10 @@ export default function PassiveTab() {
                             .rows.map((r: any) => r.original?.id),
                     );
                 }}
-                onAddNew={() => {
-                    setOpenAdd(true);
-                    addForm.reset();
-                }}
+                // onAddNew={() => {
+                //     setOpenAdd(true);
+                //     addForm.reset();
+                // }}
             />
 
             <Dialog open={openAdd} onOpenChange={setOpenAdd}>
@@ -576,9 +575,15 @@ export default function PassiveTab() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t("assignToCustomer")}</DialogTitle>
-                        {customers && customers?.length === 0 && (
+                        {customers?.length === 0 ? (
                             <DialogDescription className="text-destructive">
                                 {t("assignToCustomerError")}
+                            </DialogDescription>
+                        ) : (
+                            <DialogDescription>
+                                {t("assignToCustomerDescription", {
+                                    length: selectedIds.length,
+                                })}
                             </DialogDescription>
                         )}
                     </DialogHeader>
@@ -647,6 +652,11 @@ export default function PassiveTab() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t("assignToPartner")}</DialogTitle>
+                        <DialogDescription>
+                            {t("assignToPartnerDescription", {
+                                length: selectedIds.length,
+                            })}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <Form {...assignToCustomerForm}>
