@@ -497,6 +497,7 @@
             "mailbox_storage": "Mail Storage",
             "onedrive_storage": "OneDrive Storage",
             "protected_mailbox_storage": "Protected Mailbox Storage",
+            "unprotected_mailbox_storage": "Unprotected Mailbox Storage",
             "protected_one_drive_storage": "Protected OneDrive Storage",
             "orphaned_storage": "Orphaned Storage",
             "adv_security_with_edr": "Advanced Security with EDR",

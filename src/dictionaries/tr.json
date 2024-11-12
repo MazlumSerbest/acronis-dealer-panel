@@ -266,10 +266,10 @@
         "successTitle": "Başvurunuz için teşekkür ederiz!",
         "successDescription": "Başvurunuz başarıyla gönderildi. Onay için lütfen bekleyin. Onay süreci 2-3 iş günü sürebilir.",
         "Steps": {
-            "1": "Test",
-            "2": "Test",
-            "3": "Test",
-            "4": "Test"
+            "1": "Adım 1",
+            "2": "Adım 2",
+            "3": "Adım 3",
+            "4": "Adım 4"
         },
         "Descriptions": {
             "parentAcronisId": "Lisanslarınızı satın aldığınız bayiiyi seçin",
@@ -497,6 +497,7 @@
             "mailbox_storage": "Mail Depolama",
             "onedrive_storage": "OneDrive Depolama",
             "protected_mailbox_storage": "Korunan Mail Depolama",
+            "unprotected_mailbox_storage": "Korunmayan Mail Depolama",
             "protected_one_drive_storage": "Korunan OneDrive Depolama",
             "orphaned_storage": "Yetim Depolama",
             "adv_security_with_edr": "EDR ile Gelişmiş Güvenlik",
