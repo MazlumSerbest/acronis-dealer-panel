@@ -64,10 +64,10 @@ export default function PanelPage() {
                 {t("welcomeToPartner")}
             </h1> */}
 
-            <div className="max-w-[1024px] m-auto">
+            <div className="container px-12">
                 <Carousel
                     opts={{
-                        align: "start",
+                        align: "center",
                         loop: true,
                     }}
                     plugins={[
@@ -79,7 +79,7 @@ export default function PanelPage() {
                     <CarouselContent>
                         <CarouselItem
                             key={1}
-                            className="h-[300px] lg:basis-1/2"
+                            className="flex items-center min-h-[200px] md:basis-1/2"
                         >
                             <AspectRatio ratio={16 / 9}>
                                 <Image
@@ -92,7 +92,7 @@ export default function PanelPage() {
                         </CarouselItem>
                         <CarouselItem
                             key={2}
-                            className="h-[300px] lg:basis-1/2"
+                            className="flex items-center min-h-[200px] md:basis-1/2"
                         >
                             <AspectRatio ratio={16 / 9}>
                                 <Image
