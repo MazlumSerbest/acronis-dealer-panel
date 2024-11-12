@@ -342,7 +342,7 @@ export default function UnassignedTab() {
                                 setAssignOpen(true);
                             }}
                         >
-                            {t("assignToPartner")}
+                            {t("assignSelectedToPartner")}
                         </DropdownMenuItem>,
                     ]
                 }
@@ -481,7 +481,7 @@ export default function UnassignedTab() {
                     <DialogHeader>
                         <DialogTitle>{t("assignLicense")}</DialogTitle>
                         <DialogDescription>
-                            {t("assignSelectedToPartner", {
+                            {t("assignToPartnerDescription", {
                                 length: selectedIds.length,
                             })}
                         </DialogDescription>

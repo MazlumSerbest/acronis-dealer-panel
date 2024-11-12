@@ -121,7 +121,7 @@ type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 export default function ApplicationDetail({
     params,
 }: {
-    params: { id: string };
+    params: { applicationId: string };
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Partner");
@@ -134,7 +134,7 @@ export default function ApplicationDetail({
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
 
     const { data, error, mutate } = useSWR(
-        `/api/admin/application/${params.id}`,
+        `/api/admin/application/${params.applicationId}`,
         null,
         {
             revalidateOnFocus: false,
@@ -149,7 +149,7 @@ export default function ApplicationDetail({
     });
 
     function onSubmit(values: ApplicationFormValues) {
-        fetch(`/api/admin/application/${params.id}`, {
+        fetch(`/api/admin/application/${params.applicationId}`, {
             method: "PUT",
             body: JSON.stringify(values),
             headers: { "Content-Type": "application/json" },

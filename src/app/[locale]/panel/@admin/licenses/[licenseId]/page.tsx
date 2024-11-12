@@ -23,12 +23,12 @@ import { DateFormat } from "@/utils/date";
 export default function LicenseDetail({
     params,
 }: {
-    params: { id: string };
+    params: { licenseId: string };
 }) {
     const t = useTranslations("General");
 
     const { data, error, isLoading, mutate } = useSWR(
-        `/api/license/${params.id}`,
+        `/api/license/${params.licenseId}`,
         null,
         {
             revalidateOnFocus: false,

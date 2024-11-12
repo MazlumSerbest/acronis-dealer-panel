@@ -18,14 +18,14 @@ import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
 
-export default function TenantDetail({ params }: { params: { id: string } }) {
+export default function TenantDetail({ params }: { params: { acronisId: string } }) {
     const t = useTranslations("General");
     const { currentTenant, updateCurrentTenant } = useAcronisStore();
     const router = useRouter();
     const [children, setChildren] = useState(undefined);
 
     //#region Fetch Data
-    const { data, error } = useSWR(`/api/acronis/tenants/${params.id}`, null, {
+    const { data, error } = useSWR(`/api/acronis/tenants/${params.acronisId}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             updateCurrentTenant(data.tenant);
@@ -34,7 +34,7 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
     });
 
     const { trigger, isMutating } = useSWRMutation(
-        `/api/acronis/tenants/children/${params.id}`,
+        `/api/acronis/tenants/children/${params.acronisId}`,
         async (url) => {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Failed to fetch tenant children");
@@ -46,8 +46,8 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
 
                 try {
                     const [customersResponse, partnersResponse] = await Promise.all([
-                        fetch(`/api/customer?partnerAcronisId=${params?.id}`),
-                        fetch(`/api/partner?parentAcronisId=${params?.id}`)
+                        fetch(`/api/customer?partnerAcronisId=${params?.acronisId}`),
+                        fetch(`/api/partner?parentAcronisId=${params?.acronisId}`)
                     ]);
 
                     const [customers, partners] = await Promise.all([
@@ -101,16 +101,16 @@ export default function TenantDetail({ params }: { params: { id: string } }) {
             </div>
             <div className="w-full">
                 <Tabs defaultValue="general" className="flex flex-col w-full">
-                    <TabsList className="mx-auto *:md:w-[200px] mb-2">
-                        <TabsTrigger value="general" className="">
+                    <TabsList className="mx-auto *:md:w-[200px] *:w-full mb-2">
+                        <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
                         {currentTenant?.kind == "partner" && (
-                            <TabsTrigger value="clients" className="w-full">
+                            <TabsTrigger value="clients">
                                 {t("clients")}
                             </TabsTrigger>
                         )}
-                        <TabsTrigger value="licenses" className="w-full">
+                        <TabsTrigger value="licenses">
                             {t("licenses")}
                         </TabsTrigger>
                     </TabsList>
