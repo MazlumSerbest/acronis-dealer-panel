@@ -45,6 +45,7 @@
         "mfaStatus": "2FA",
         "enabled": "Etkin",
         "active": "Aktif",
+        "passive": "Pasif",
         "disabled": "Devre Dışı",
         "createdAt": "Oluşturulma Tarihi",
         "createdBy": "Oluşturan Kullanıcı",
@@ -223,7 +224,7 @@
         "noUsageData": "Kullanım verisi bulunmamaktadır.",
         "welcomeToAdmin": "Yönetici Paneline Hoş Geldiniz",
         "welcomeToPartner": "Partner Paneline Hoş Geldiniz",
-        "storageCardTitle": "Yedekleme Depolama",
+        "storageCardTitle": "Yedek Depolama Alanı",
         "storageCardDescriptionPW": "İş yükü başına toplam depolama kullanımı",
         "storageCardDescriptionGB": "Gigabayt başına toplam depolama kullanımı",
         "storageCardDescription": "Toplam depolama kullanımını gösterir",
@@ -238,7 +239,11 @@
         "completionDate": "Tamamlanma Tarihi",
         "assignSelectedToCustomer": "Seçilenleri Müşteriye Ata",
         "assignToCustomerError": "Lisansı atamak için müşteri bulunamadı. Lütfen önce müşteri oluşturun!",
-        "assignSelectedToPartner": "Seçilenleri Partnere Ata"
+        "assignSelectedToPartner": "Seçilenleri Partnere Ata",
+        "totalLicense": "Toplam Lisans: {total}",
+        "totalLicenseChartDescription": "Panele kayıtlı lisansların sayısı",
+        "activeLicenseChartDescription": "Müşterilerinize ait aktif lisansların sayısı",
+        "passiveLicenseChartDescription": "Panele kayıtlı atanmış ve atanmamış lisansların toplamı"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

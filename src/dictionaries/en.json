@@ -45,6 +45,7 @@
         "mfaStatus": "2FA",
         "enabled": "Enabled",
         "active": "Active",
+        "passive": "Passive",
         "disabled": "Disabled",
         "createdAt": "Created At",
         "createdBy": "Created By",
@@ -238,7 +239,11 @@
         "completionDate": "Completion Date",
         "assignSelectedToCustomer": "Assign Selected to Customer",
         "assignToCustomerError": "There is no customer to assign the license. Please create a customer first!",
-        "assignSelectedToPartner": "Assign Selected to Partner"
+        "assignSelectedToPartner": "Assign Selected to Partner",
+        "totalLicense": "Total License: {total}",
+        "totalLicenseChartDescription": "Number of licenses registered in the panel",
+        "activeLicenseChartDescription": "Number of active licenses of your customers",
+        "passiveLicenseChartDescription": "Total number of assigned and unassigned licenses registered in the panel"
     },
     "SignIn": {
         "signIn": "Sign In",
