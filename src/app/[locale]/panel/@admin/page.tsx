@@ -1,5 +1,6 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
@@ -20,11 +21,17 @@ import UsageCard from "@/components/usages/Usage";
 
 import useUserStore from "@/store/user";
 import Loader from "@/components/loaders/Loader";
+import LicenseCard from "@/components/usages/License";
 
 export default function PanelPage() {
     const t = useTranslations("General");
+    const router = useRouter();
     const { user: currentUser } = useUserStore();
-    
+
+    const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
+    const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
+    const [passiveLicenseCount, setPassiveLicenseCount] = useState<number>(0);
+
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
@@ -33,7 +40,30 @@ export default function PanelPage() {
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
+                const active = await fetch(
+                    `/api/admin/license/count?status=active`,
+                );
+                const activeCount = await active.json();
+                setActiveLicenseCount(activeCount.count);
+
+                const assigned = await fetch(
+                    `/api/admin/license/count?status=assigned`,
+                );
+                const assignedCount = await assigned.json();
+                const unassigned = await fetch(
+                    `/api/admin/license/count?status=unassigned`,
+                );
+                const unassignedCount = await unassigned.json();
+                setPassiveLicenseCount(
+                    assignedCount.count + unassignedCount.count,
+                );
+                setTotalLicenseCount(
+                    activeCount.count +
+                        assignedCount.count +
+                        unassignedCount.count,
+                );
+
                 setUsagesPerWorkload(
                     data?.usages?.items?.filter(
                         (u: TenantUsage) =>
@@ -115,11 +145,45 @@ export default function PanelPage() {
                 <div>{t("failedToLoad")}</div>
             ) : (
                 <div className="container m-auto flex flex-col gap-4">
+                    <h1 className="text-xl font-semibold">{t("licenses")}</h1>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-items-center gap-4">
+                        <LicenseCard
+                            title={t("total")}
+                            description={t("totalLicenseChartDescription")}
+                            label={t("license")}
+                            color="rgba(96, 165, 250, 0.91)"
+                            total={totalLicenseCount}
+                            value={totalLicenseCount}
+                            onClick={() => {
+                                router.push("/panel/licenses");
+                            }}
+                        />
+
+                        <LicenseCard
+                            title={t("active")}
+                            description={t("activeLicenseChartDescription")}
+                            label={t("license")}
+                            color="rgba(22, 163, 74, 0.9)"
+                            total={totalLicenseCount}
+                            value={activeLicenseCount}
+                        />
+
+                        <LicenseCard
+                            title={t("passive")}
+                            description={t("passiveLicenseChartDescription")}
+                            label={t("license")}
+                            color="rgba(239, 68, 68, 0.91)"
+                            total={totalLicenseCount}
+                            value={passiveLicenseCount}
+                        />
+                    </div>
+
                     <h1 className="text-xl font-semibold">
                         {t("totalUsages")}
                     </h1>
 
-                    <div className="col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <StorageCard
                             title={t("storageCardTitle")}
                             description={t("storageCardDescriptionPW")}
