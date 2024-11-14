@@ -16,12 +16,12 @@ import Autoplay from "embla-carousel-autoplay";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
-import StorageCard from "@/components/usages/Storage";
-import UsageCard from "@/components/usages/Usage";
+import StorageCard from "@/components/cards/Storage";
+import UsageCard from "@/components/cards/Usage";
+import LicenseCard from "@/components/cards/License";
 
 import useUserStore from "@/store/user";
-import Loader from "@/components/loaders/Loader";
-import LicenseCard from "@/components/usages/License";
+import { chartColors } from "@/lib/constants";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -41,6 +41,25 @@ export default function PanelPage() {
         {
             revalidateOnFocus: false,
             onSuccess: async (data) => {
+                setUsagesPerWorkload(
+                    data?.usages?.items?.filter(
+                        (u: TenantUsage) =>
+                            u.edition == "pck_per_workload" &&
+                            u.value > 0 &&
+                            u.usage_name != "storage" &&
+                            u.usage_name != "storage_total",
+                    ),
+                );
+                setUsagesPerGB(
+                    data?.usages?.items?.filter(
+                        (u: TenantUsage) =>
+                            u.edition == "pck_per_gigabyte" &&
+                            u.value > 0 &&
+                            u.usage_name != "storage" &&
+                            u.usage_name != "storage_total",
+                    ),
+                );
+
                 const active = await fetch(
                     `/api/admin/license/count?status=active`,
                 );
@@ -62,25 +81,6 @@ export default function PanelPage() {
                     activeCount.count +
                         assignedCount.count +
                         unassignedCount.count,
-                );
-
-                setUsagesPerWorkload(
-                    data?.usages?.items?.filter(
-                        (u: TenantUsage) =>
-                            u.edition == "pck_per_workload" &&
-                            u.value > 0 &&
-                            u.usage_name != "storage" &&
-                            u.usage_name != "storage_total",
-                    ),
-                );
-                setUsagesPerGB(
-                    data?.usages?.items?.filter(
-                        (u: TenantUsage) =>
-                            u.edition == "pck_per_gigabyte" &&
-                            u.value > 0 &&
-                            u.usage_name != "storage" &&
-                            u.usage_name != "storage_total",
-                    ),
                 );
             },
         },
@@ -137,11 +137,7 @@ export default function PanelPage() {
                 </Carousel>
             </div>
 
-            {!data && !error ? (
-                <div className="h-80">
-                    <Loader />
-                </div>
-            ) : error ? (
+            {error ? (
                 <div>{t("failedToLoad")}</div>
             ) : (
                 <div className="container m-auto flex flex-col gap-4">
@@ -152,7 +148,7 @@ export default function PanelPage() {
                             title={t("total")}
                             description={t("totalLicenseChartDescription")}
                             label={t("license")}
-                            color="rgba(96, 165, 250, 0.91)"
+                            color={chartColors.blue}
                             total={totalLicenseCount}
                             value={totalLicenseCount}
                             onClick={() => {
@@ -164,7 +160,7 @@ export default function PanelPage() {
                             title={t("active")}
                             description={t("activeLicenseChartDescription")}
                             label={t("license")}
-                            color="rgba(22, 163, 74, 0.9)"
+                            color={chartColors.green}
                             total={totalLicenseCount}
                             value={activeLicenseCount}
                         />
@@ -173,13 +169,13 @@ export default function PanelPage() {
                             title={t("passive")}
                             description={t("passiveLicenseChartDescription")}
                             label={t("license")}
-                            color="rgba(239, 68, 68, 0.91)"
+                            color={chartColors.red}
                             total={totalLicenseCount}
                             value={passiveLicenseCount}
                         />
                     </div>
 
-                    <h1 className="text-xl font-semibold">
+                    <h1 className="text-xl font-semibold mt-4">
                         {t("totalUsages")}
                     </h1>
 

@@ -1,3 +1,10 @@
+export const chartColors = {
+    blue: "rgba(96, 165, 250, 0.9)",
+    green: "rgba(22, 163, 74, 0.9)",
+    red: "rgba(239, 68, 68, 0.9)",
+    yellow: "rgba(250, 204, 21, 0.9)",
+}
+
 export const dealers = [
     {
         acronisId: "08726e91-e5ee-4ffe-84e2-e7ce3d0efaee",

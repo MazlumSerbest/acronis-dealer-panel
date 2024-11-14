@@ -6,6 +6,7 @@ import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Toaster } from "@/components/ui/toaster";
 import NextTopLoader from "nextjs-toploader";
+import { chartColors } from "@/lib/constants";
 
 const locales = ["en", "tr"];
 
@@ -31,7 +32,7 @@ export default async function LocaleLayout({
         <html lang={locale} className="light">
             <body className={inter.className}>
                 <NextTopLoader
-                    color="rgb(96 165 250)"
+                    color={chartColors.blue}
                     showSpinner={false}
                     easing="ease"
                 />
