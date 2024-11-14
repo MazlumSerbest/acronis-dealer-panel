@@ -16,6 +16,7 @@ import {
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import { formatBytes } from "@/utils/functions";
+import { chartColors } from "@/lib/constants";
 
 type Props = {
     title: string;
@@ -39,12 +40,12 @@ export default function StorageCard({ title, description, model, usage, quota }:
         usage: {
             label: "Usage",
             color: withoutQuota
-                ? "rgba(96, 165, 250, 0.91)"
-                : "rgba(239, 68, 68, 0.91)",
+                ? chartColors.blue
+                : chartColors.red,
         },
         available: {
             label: "Available",
-            color: "rgba(22, 163, 74, 0.9)",
+            color: chartColors.green,
         },
     } satisfies ChartConfig;
 

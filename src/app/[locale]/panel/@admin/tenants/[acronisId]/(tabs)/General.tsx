@@ -32,8 +32,8 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import DatePicker from "@/components/DatePicker";
-import StorageCard from "@/components/usages/Storage";
-import UsageCard from "@/components/usages/Usage";
+import StorageCard from "@/components/cards/Storage";
+import UsageCard from "@/components/cards/Usage";
 
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";

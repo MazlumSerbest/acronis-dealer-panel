@@ -55,7 +55,7 @@ export default function LicenseCard({
     return (
         <Card
             className={cn(
-                "z-50 flex flex-col min-w-80",
+                "z-50 flex flex-col min-w-80 max-w-min",
                 onClick && "hover:cursor-pointer",
             )}
             onClick={onClick}
@@ -68,23 +68,24 @@ export default function LicenseCard({
             <CardContent className="pt-3">
                 <ChartContainer
                     config={chartConfig}
+                    onClick={onClick}
                     className={cn(
                         "mx-auto aspect-square max-h-[200px]",
                         onClick && "hover:cursor-pointer",
                     )}
-                    onClick={onClick}
                 >
                     <RadialBarChart
                         data={chartData}
                         endAngle={(360 / total) * value}
                         innerRadius={80}
                         outerRadius={140}
+                        className={cn(onClick && "*:hover:cursor-pointer")}
                     >
                         <PolarGrid
                             gridType="circle"
                             radialLines={false}
                             stroke="none"
-                            className="first:fill-muted last:fill-background"
+                            className="first:fill-muted last:fill-background "
                             polarRadius={[86, 74]}
                         />
                         <RadialBar dataKey="value" background />

@@ -15,8 +15,8 @@ import Autoplay from "embla-carousel-autoplay";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
-import StorageCard from "@/components/usages/Storage";
-import UsageCard from "@/components/usages/Usage";
+import StorageCard from "@/components/cards/Storage";
+import UsageCard from "@/components/cards/Usage";
 
 import useUserStore from "@/store/user";
 import Loader from "@/components/loaders/Loader";
@@ -121,7 +121,7 @@ export default function PanelPage() {
                         {t("totalUsages")}
                     </h1>
 
-                    <div className="col-span-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {!currentUser?.licensed && (
                             <StorageCard
                                 title={t("storageCardTitle")}
