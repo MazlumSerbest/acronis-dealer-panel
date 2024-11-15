@@ -152,7 +152,7 @@ export default function PassiveTab() {
     });
 
     function onSubmitAssignToCustomer(values: AssignToCustomerFormValues) {
-        fetch("/api/license/assign?kind=customer", {
+        fetch(`/api/license/assign?kind=customer&from=${currentUser?.partnerAcronisId}`, {
             method: "PUT",
             body: JSON.stringify({
                 ...values,
@@ -183,7 +183,7 @@ export default function PassiveTab() {
     });
 
     function onSubmitAssignToPartner(values: AssignToPartnerFormValues) {
-        fetch("/api/license/assign?kind=partner", {
+        fetch(`/api/license/assign?kind=partner&from=${currentUser?.partnerAcronisId}`, {
             method: "PUT",
             body: JSON.stringify({
                 ...values,

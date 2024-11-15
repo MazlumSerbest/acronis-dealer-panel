@@ -19,6 +19,7 @@ export const PUT = auth(async (req: any) => {
 
         const values = await req.json();
         const kind = req.nextUrl.searchParams.get("kind");
+        const from = req.nextUrl.searchParams.get("from");
         let data;
 
         if (kind === "customer") {
@@ -44,6 +45,18 @@ export const PUT = auth(async (req: any) => {
                 updatedBy: req.auth.user.email,
                 updatedAt: new Date().toISOString(),
             },
+        });
+
+        await prisma.licenseHistory.createMany({
+            data: values.ids.map((id: string) => ({
+                licenseId: id,
+                previousPartnerAcronisId: kind === "customer" ? null : from,
+                partnerAcronisId: kind === "customer" ? from : values.partnerAcronisId,
+                customerAcronisId: kind === "customer" ? values.customerAcronisId : null,
+                action: kind === "customer" ? "activation" : "assignment",
+                createdBy: req.auth.user.email,
+                createdAt: new Date().toISOString(),
+            })),
         });
 
         if (updatedLicenses && updatedLicenses.count > 0) {

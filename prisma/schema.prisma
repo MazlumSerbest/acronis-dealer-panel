@@ -67,23 +67,26 @@ model VerificationToken {
 }
 
 model Partner {
-  id              String       @id @default(cuid())
-  acronisId       String       @unique
+  id              String    @id @default(cuid())
+  acronisId       String    @unique
   createdBy       String
-  createdAt       DateTime     @default(now())
+  createdAt       DateTime  @default(now())
   updatedBy       String?
-  updatedAt       DateTime     @updatedAt
-  active          Boolean      @default(true)
-  applicationId   String?      @unique
+  updatedAt       DateTime  @updatedAt
+  active          Boolean   @default(true)
+  applicationId   String?   @unique
   billingDate     DateTime?
   parentAcronisId String?
   name            String?
-  customers       Customer[]
-  licenses        License[]
-  application     Application? @relation(fields: [applicationId], references: [id])
-  parent          Partner?     @relation("parent", fields: [parentAcronisId], references: [acronisId])
-  children        Partner[]    @relation("parent")
-  users           User[]
+
+  customers              Customer[]
+  licenses               License[]
+  application            Application?     @relation(fields: [applicationId], references: [id])
+  parent                 Partner?         @relation("parent", fields: [parentAcronisId], references: [acronisId])
+  children               Partner[]        @relation("parent")
+  users                  User[]
+  licenseHistory         LicenseHistory[]
+  assignedLicenseHistory LicenseHistory[] @relation("assignHistory")
 }
 
 model Customer {
@@ -97,8 +100,10 @@ model Customer {
   active           Boolean   @default(true)
   name             String?
   partnerAcronisId String
-  partner          Partner   @relation(fields: [partnerAcronisId], references: [acronisId])
-  licenses         License[]
+
+  partner        Partner          @relation(fields: [partnerAcronisId], references: [acronisId])
+  licenses       License[]
+  licenseHistory LicenseHistory[]
 }
 
 model License {
@@ -115,9 +120,28 @@ model License {
   assignedAt        DateTime?
   customerAcronisId String?
   partnerAcronisId  String?
-  customer          Customer? @relation(fields: [customerAcronisId], references: [acronisId])
-  partner           Partner?  @relation(fields: [partnerAcronisId], references: [acronisId])
-  product           Product   @relation(fields: [productId], references: [id])
+
+  customer Customer?        @relation(fields: [customerAcronisId], references: [acronisId])
+  partner  Partner?         @relation(fields: [partnerAcronisId], references: [acronisId])
+  product  Product          @relation(fields: [productId], references: [id])
+  history  LicenseHistory[]
+}
+
+model LicenseHistory {
+  id                       String  @id @default(cuid())
+  licenseId                String
+  previousPartnerAcronisId String?
+  partnerAcronisId         String
+  customerAcronisId        String?
+  action                   String
+
+  createdAt DateTime @default(now())
+  createdBy String
+
+  license         License   @relation(fields: [licenseId], references: [id])
+  previousPartner Partner?  @relation("assignHistory", fields: [previousPartnerAcronisId], references: [acronisId])
+  partner         Partner  @relation(fields: [partnerAcronisId], references: [acronisId])
+  customer        Customer? @relation(fields: [customerAcronisId], references: [acronisId])
 }
 
 model Product {

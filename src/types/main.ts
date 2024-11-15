@@ -57,6 +57,17 @@ type License = Entity & {
     activatedAt?: string;
 };
 
+type LicenseHistory = {
+    id: string;
+    licenseId: string;
+    partnerAcronisId: string;
+    previousPartnerAcronisId?: string;
+    customerAcronisId?: string;
+    action: "firstAssignment" | "assignment" | "activation";
+    createdBy: string;
+    createdAt: string;
+};
+
 type Product = Entity & {
     active: boolean;
     code: string;

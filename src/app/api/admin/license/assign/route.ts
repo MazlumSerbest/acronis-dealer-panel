@@ -33,6 +33,16 @@ export const PUT = auth(async (req: any) => {
             },
         });
 
+        await prisma.licenseHistory.createMany({
+            data: values.ids.map((id: string) => ({
+                licenseId: id,
+                partnerAcronisId: values.partnerAcronisId,
+                action: "firstAssignment",
+                createdBy: req.auth.user.email,
+                createdAt: new Date().toISOString(),
+            })),
+        });
+
         if (updatedLicenses && updatedLicenses.count > 0) {
             return NextResponse.json({
                 message: "Lisans(lar) başarıyla atandı!",
