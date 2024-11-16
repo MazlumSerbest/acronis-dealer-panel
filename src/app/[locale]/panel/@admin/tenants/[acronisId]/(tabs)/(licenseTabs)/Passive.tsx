@@ -8,7 +8,8 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
+import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 
 type Props = {
     tenant: Tenant;
@@ -164,6 +165,22 @@ export default function PassiveTab({ tenant }: Props) {
 
                 return data || "-";
             },
+        },
+        {
+            accessorKey: "actions",
+            header: "",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <div className="flex flex-row gap-2">
+                    <LicenseHistorySheet
+                        licenseId={row.original.id}
+                        trigger={
+                            <LuHistory className="size-4 hover:cursor-pointer hover:text-blue-500" />
+                        }
+                    />
+                </div>
+            ),
         },
     ];
     //#endregion
