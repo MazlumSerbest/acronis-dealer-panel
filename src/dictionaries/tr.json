@@ -549,7 +549,12 @@
         "clear": "Temizle",
         "actions": "Eylemler",
         "toggleColumns": "Sütunları Değiştir",
-        "clearFilters": "Filtreleri Temizle"
+        "clearFilters": "Filtreleri Temizle",
+        "history": "Geçmiş",
+        "licenseHistory": "Lisans Geçmişi",
+        "firstAssignment": "İlk Atama",
+        "assignment": "Atama",
+        "activation": "Aktivasyon"
     },
     "Dashboard": {
         "title": "Kontrol Paneli"

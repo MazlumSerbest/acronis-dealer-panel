@@ -549,7 +549,12 @@
         "clear": "Clear",
         "actions": "Actions",
         "toggleColumns": "Toggle Columns",
-        "clearFilters": "Clear Filters"
+        "clearFilters": "Clear Filters",
+        "history": "History",
+        "licenseHistory": "License History",
+        "firstAssignment": "First Assignment",
+        "assignment": "Assignment",
+        "activation": "Activation"
     },
     "Dashboard": {
         "title": "Dashboard"
