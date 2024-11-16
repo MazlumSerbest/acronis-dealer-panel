@@ -243,7 +243,8 @@
         "totalLicense": "Toplam Lisans: {total}",
         "totalLicenseChartDescription": "Panele kayıtlı lisansların sayısı",
         "activeLicenseChartDescription": "Müşterilerinize ait aktif lisansların sayısı",
-        "passiveLicenseChartDescription": "Panele kayıtlı atanmış ve atanmamış lisansların toplamı"
+        "passiveLicenseChartDescription": "Panele kayıtlı atanmış ve atanmamış lisansların toplamı",
+        "remainingDays": "Kalan Gün"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

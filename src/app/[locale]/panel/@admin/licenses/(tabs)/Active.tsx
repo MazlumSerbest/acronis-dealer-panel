@@ -9,6 +9,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
+import { calculateRemainingDays } from "@/utils/functions";
 
 export default function ActiveTab() {
     const t = useTranslations("General");
@@ -145,6 +146,16 @@ export default function ActiveTab() {
                 const data: string = row.getValue("completionDate");
 
                 return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const completionDate: string = row.getValue("completionDate");  
+
+                return calculateRemainingDays(completionDate);
             },
         },
         {

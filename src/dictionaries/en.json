@@ -243,7 +243,8 @@
         "totalLicense": "Total License: {total}",
         "totalLicenseChartDescription": "Number of licenses registered in the panel",
         "activeLicenseChartDescription": "Number of active licenses of your customers",
-        "passiveLicenseChartDescription": "Total number of assigned and unassigned licenses registered in the panel"
+        "passiveLicenseChartDescription": "Total number of assigned and unassigned licenses registered in the panel",
+        "remainingDays": "Remaining Days"
     },
     "SignIn": {
         "signIn": "Sign In",

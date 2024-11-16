@@ -44,10 +44,10 @@ export function calculateDaysUntilAnniversary(date: string) {
 
 export function calculateRemainingDays(date: string) {
     const today = new Date();
-    const anniversary = new Date(date);
+    const lastDate = new Date(date);
 
     // Calculate the difference in time (in milliseconds)   
-    const timeDiff = anniversary.getTime() - today.getTime();
+    const timeDiff = lastDate.getTime() - today.getTime();
     // Convert the difference from milliseconds to days
     const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24));
     return daysDiff;

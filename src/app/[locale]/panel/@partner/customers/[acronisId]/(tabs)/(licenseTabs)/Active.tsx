@@ -8,6 +8,7 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
+import { calculateRemainingDays } from "@/utils/functions";
 
 type Props = {
     tenant: Tenant;
@@ -140,6 +141,16 @@ export default function ActiveTab({ tenant }: Props) {
                 const data: string = row.getValue("completionDate");
 
                 return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const completionDate: string = row.getValue("completionDate");  
+
+                return calculateRemainingDays(completionDate);
             },
         },
         {

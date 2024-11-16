@@ -12,6 +12,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import { calculateRemainingDays } from "@/utils/functions";
 
 export default function ActiveTab() {
     const t = useTranslations("General");
@@ -141,6 +142,16 @@ export default function ActiveTab() {
                 const data: string = row.getValue("completionDate");
 
                 return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const completionDate: string = row.getValue("completionDate");  
+
+                return calculateRemainingDays(completionDate);
             },
         },
         {

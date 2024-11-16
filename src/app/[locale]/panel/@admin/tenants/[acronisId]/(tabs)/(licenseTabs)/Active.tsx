@@ -7,7 +7,9 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
+import { calculateRemainingDays } from "@/utils/functions";
+import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 
 type Props = {
     tenant: Tenant;
@@ -143,6 +145,16 @@ export default function ActiveTab({ tenant }: Props) {
             },
         },
         {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const completionDate: string = row.getValue("completionDate");  
+
+                return calculateRemainingDays(completionDate);
+            },
+        },
+        {
             accessorKey: "createdAt",
             header: t("createdAt"),
             enableGlobalFilter: false,
@@ -181,6 +193,22 @@ export default function ActiveTab({ tenant }: Props) {
 
                 return data || "-";
             },
+        },
+        {
+            accessorKey: "actions",
+            header: "",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <div className="flex flex-row gap-2">
+                    <LicenseHistorySheet
+                        licenseId={row.original.id}
+                        trigger={
+                            <LuHistory className="size-4 hover:cursor-pointer hover:text-blue-500" />
+                        }
+                    />
+                </div>
+            ),
         },
     ];
     //#endregion
