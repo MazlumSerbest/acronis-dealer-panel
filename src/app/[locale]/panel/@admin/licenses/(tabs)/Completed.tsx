@@ -1,16 +1,14 @@
-import { useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
 
 export default function CompletedTab() {
     const t = useTranslations("General");
@@ -188,6 +186,22 @@ export default function CompletedTab() {
 
                 return data || "-";
             },
+        },
+        {
+            accessorKey: "actions",
+            header: "",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            cell: ({ row }) => (
+                <div className="flex flex-row gap-2">
+                    <LicenseHistorySheet
+                        licenseId={row.original.id}
+                        trigger={
+                            <LuHistory className="size-4 hover:cursor-pointer hover:text-blue-500" />
+                        }
+                    />
+                </div>
+            ),
         },
     ];
     //#endregion
