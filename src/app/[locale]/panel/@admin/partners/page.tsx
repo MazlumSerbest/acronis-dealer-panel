@@ -26,9 +26,19 @@ export default function PartnersPage() {
     const t = useTranslations("General");
     const router = useRouter();
     const { user: currentUser } = useUserStore();
+    const [partners, setPartners] = useState<Partner[]>([]);
 
     const { data, error, isLoading } = useSWR(`/api/admin/partner`, null, {
         revalidateOnFocus: false,
+        onSuccess: (data) => {
+            setPartners(
+                data.filter(
+                    (partner: Partner) =>
+                        partner.acronisId !==
+                        "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
+                ),
+            );
+        },
     });
 
     //#region Table
@@ -190,7 +200,7 @@ export default function PartnersPage() {
         <DataTable
             zebra
             columns={columns}
-            data={data || []}
+            data={partners}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
             facetedFilters={[
@@ -203,7 +213,6 @@ export default function PartnersPage() {
                     ],
                 },
             ]}
-            // onAddNew={() => {}}
         />
     );
 }
