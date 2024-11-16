@@ -117,7 +117,7 @@ export default function ActiveTab() {
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {
@@ -141,7 +141,7 @@ export default function ActiveTab() {
             cell: ({ row }) => {
                 const data: string = row.getValue("completionDate");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {

@@ -99,7 +99,7 @@ export default function PassiveTab({ tenant }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("assignedAt");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {

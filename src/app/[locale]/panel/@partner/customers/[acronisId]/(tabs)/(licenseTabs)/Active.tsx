@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DateTimeFormat } from "@/utils/date";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { calculateRemainingDays } from "@/utils/functions";
 
@@ -116,7 +116,7 @@ export default function ActiveTab({ tenant }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {
@@ -140,7 +140,7 @@ export default function ActiveTab({ tenant }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("completionDate");
 
-                return DateTimeFormat(data);
+                return DateFormat(data);
             },
         },
         {
