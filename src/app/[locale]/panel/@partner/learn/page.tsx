@@ -4,7 +4,7 @@ import useSWR from "swr";
 
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-import CourseCard from "@/components/CourseCard";
+import CourseCard from "@/components/cards/CourseCard";
 import { useTranslations } from "next-intl";
 import Loader from "@/components/loaders/Loader";
 
