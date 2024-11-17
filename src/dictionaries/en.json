@@ -351,7 +351,25 @@
                 "invalidType": "Must be a valid email"
             }
         },
-        "Product": {},
+        "Product": {
+            "active": {
+                "description": "This value is for the active status. If the product is active, the product can be seen on license creation."
+            },
+            "name": {
+                "required": "Name is required",
+                "minLength": "Must be 3 characters long"
+            },
+            "code": {
+                "required": "Code is required",
+                "minLength": "Must be 3 characters long"
+            },
+            "model": {
+                "required": "Model is required"
+            },
+            "unit": {
+                "required": "Unit is required"
+            }
+        },
         "Course": {
             "active": {
                 "description": "This value is for the active status. If the course is active, the course can be seen by the partner users."

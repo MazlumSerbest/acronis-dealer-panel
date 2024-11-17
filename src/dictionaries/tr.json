@@ -351,7 +351,25 @@
                 "invalidType": "Geçerli bir e-posta olmalıdır"
             }
         },
-        "Product": {},
+        "Product": {
+            "active": {
+                "description": "Bu değer aktif durumu içindir. Ürün aktifse, lisans oluşturulurken seçilebilir."
+            },
+            "name": {
+                "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır"
+            },
+            "code": {
+                "required": "Kod zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır"
+            },
+            "model": {
+                "required": "Model zorunludur"
+            },
+            "unit": {
+                "required": "Birim zorunludur"
+            }
+        },
         "Course": {
             "active": {
                 "description": "Bu değer aktif durumu içindir. Kurs aktifse, kurs partner kullanıcıları tarafından görülebilir."

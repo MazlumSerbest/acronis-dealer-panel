@@ -52,15 +52,19 @@ import FormError from "@/components/FormError";
 const productFormSchema = z.object({
     id: z.string().optional(),
     active: z.boolean(),
-    name: z.string({
-        required_error: "Product.name.required",
-    }),
-    code: z.string({
-        required_error: "Product.code.required",
-    }),
-    model: z.enum(["perGB", "perWorkload"]).optional(),
+    name: z
+        .string({
+            required_error: "Product.name.required",
+        })
+        .min(3, "Product.name.minLength"),
+    code: z
+        .string({
+            required_error: "Product.code.required",
+        })
+        .min(3, "Product.code.minLength"),
+    model: z.enum(["perGB", "perWorkload"]),
     quota: z.coerce.number().optional(),
-    unit: z.enum(["MB", "GB", "TB", "piece"]).optional(),
+    unit: z.enum(["MB", "GB", "TB", "piece"]).optional().nullable(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -72,13 +76,21 @@ export default function ProductsPage() {
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
 
-    const { data, error, isLoading, mutate } = useSWR(`/api/admin/product`, null, {
-        revalidateOnFocus: false,
-    });
+    const { data, error, isLoading, mutate } = useSWR(
+        `/api/admin/product`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
 
     //#region Form
     const form = useForm<ProductFormValues>({
         resolver: zodResolver(productFormSchema),
+        defaultValues: {
+            active: true,
+            model: "perGB",
+        },
     });
 
     function onSubmit(values: ProductFormValues) {
@@ -95,6 +107,7 @@ export default function ProductsPage() {
                         });
                         setOpen(false);
                         mutate();
+                        form.reset({ active: true, model: "perGB" });
                     } else {
                         toast({
                             variant: "destructive",
@@ -116,6 +129,7 @@ export default function ProductsPage() {
                         });
                         setOpen(false);
                         mutate();
+                        form.reset({ active: true, model: "perGB" });
                     } else {
                         toast({
                             variant: "destructive",
@@ -357,8 +371,7 @@ export default function ProductsPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({ active: true });
-                    form.reset({ active: true });
+                    form.reset({ active: true, model: "perGB" });
                 }}
             />
 
@@ -510,7 +523,7 @@ export default function ProductsPage() {
                                         <FormLabel>{t("unit")}</FormLabel>
                                         <Select
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
+                                            // defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
