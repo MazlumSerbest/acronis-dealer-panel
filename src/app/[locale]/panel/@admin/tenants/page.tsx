@@ -34,6 +34,7 @@ export default function TenantsPage() {
     const { user: currentUser } = useUserStore();
     const [updatedData, setUpdatedData] = useState(undefined);
 
+    // #region Fetch Data
     const { data, error, isLoading } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
@@ -92,6 +93,7 @@ export default function TenantsPage() {
             },
         },
     );
+    // #endregion
 
     //#region Table
     const visibleColumns = {};
