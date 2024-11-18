@@ -31,10 +31,10 @@ import {
     LuAlertTriangle,
     LuArrowUpRight,
     LuInfo,
+    LuLoader2,
     LuPencil,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { cn } from "@/lib/utils";
 
 type Props = {
     t: Function;
@@ -50,12 +50,15 @@ type CustomerFormValues = z.infer<typeof customerFormSchema>;
 export default function GeneralTab({ t, tenant }: Props) {
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
-    const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
+
+    const [edit, setEdit] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    // #region Fetch Data
     const {
         data: customer,
         error: customerError,
@@ -95,6 +98,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             );
         },
     });
+    // #endregion
 
     //#region Form
     const form = useForm<CustomerFormValues>({
@@ -102,6 +106,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     });
 
     async function onSubmit(values: CustomerFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         let newCustomer;
         if (tenant.kind == "customer") {
             newCustomer = {
@@ -144,6 +151,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
         else
             fetch(`/api/${tenant?.kind}`, {
@@ -165,6 +174,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
     }
     //#endregion
@@ -381,10 +392,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         {t("cancel")}
                                     </Button>
                                     <Button
+                                        disabled={submitting}
                                         type="submit"
                                         className="bg-green-600 hover:bg-green-600/90"
                                     >
                                         {t("save")}
+                                        {submitting && (
+                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        )}
                                     </Button>
                                 </CardFooter>
                             )}

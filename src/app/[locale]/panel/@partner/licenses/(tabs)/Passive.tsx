@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useFieldArray, useForm } from "react-hook-form";
@@ -11,14 +10,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import {
     Dialog,
     DialogClose,
@@ -37,24 +29,13 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
-import {
-    AlertDialog,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-    AlertDialogDescription,
-    AlertDialogCancel,
-} from "@/components/ui/alert-dialog";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuMinus, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMinus } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
 import { getCustomers, getPartners } from "@/lib/data";
@@ -65,7 +46,7 @@ const addFormSchema = z.object({
     serials: z.array(
         z.object({
             value: z.string().length(10, {
-                message: "Lütfen geçerli bir lisans kodu giriniz.",
+                message: "",
             }),
         }),
     ),
@@ -101,6 +82,7 @@ export default function PassiveTab() {
     const [openAdd, setOpenAdd] = useState(false);
     const [openAssignToCustomer, setOpenAssignToCustomer] = useState(false);
     const [openAssignToPartner, setOpenAssignToPartner] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const { data, error, mutate } = useSWR(
         `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=inactive`,
@@ -124,6 +106,8 @@ export default function PassiveTab() {
     function onSubmitAdd(values: AddFormValues) {
         values.partnerAcronisId = currentUser?.partnerAcronisId;
         if (!values.partnerAcronisId) return;
+        if (submitting) return;
+        setSubmitting(true);
 
         fetch("/api/license", {
             method: "PUT",
@@ -144,6 +128,7 @@ export default function PassiveTab() {
                         description: res.message,
                     });
                 }
+                setSubmitting(false);
             });
     }
 
@@ -152,13 +137,19 @@ export default function PassiveTab() {
     });
 
     function onSubmitAssignToCustomer(values: AssignToCustomerFormValues) {
-        fetch(`/api/license/assign?kind=customer&from=${currentUser?.partnerAcronisId}`, {
-            method: "PUT",
-            body: JSON.stringify({
-                ...values,
-                ids: selectedIds,
-            }),
-        })
+        if (submitting) return;
+        setSubmitting(true);
+
+        fetch(
+            `/api/license/assign?kind=customer&from=${currentUser?.partnerAcronisId}`,
+            {
+                method: "PUT",
+                body: JSON.stringify({
+                    ...values,
+                    ids: selectedIds,
+                }),
+            },
+        )
             .then((res) => res.json())
             .then((res) => {
                 if (res.ok) {
@@ -175,6 +166,7 @@ export default function PassiveTab() {
                         description: res.message,
                     });
                 }
+                setSubmitting(false);
             });
     }
 
@@ -183,13 +175,19 @@ export default function PassiveTab() {
     });
 
     function onSubmitAssignToPartner(values: AssignToPartnerFormValues) {
-        fetch(`/api/license/assign?kind=partner&from=${currentUser?.partnerAcronisId}`, {
-            method: "PUT",
-            body: JSON.stringify({
-                ...values,
-                ids: selectedIds,
-            }),
-        })
+        if (submitting) return;
+        setSubmitting(true);
+
+        fetch(
+            `/api/license/assign?kind=partner&from=${currentUser?.partnerAcronisId}`,
+            {
+                method: "PUT",
+                body: JSON.stringify({
+                    ...values,
+                    ids: selectedIds,
+                }),
+            },
+        )
             .then((res) => res.json())
             .then((res) => {
                 if (res.ok) {
@@ -206,6 +204,8 @@ export default function PassiveTab() {
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
     // #endregion
@@ -557,10 +557,14 @@ export default function PassiveTab() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("add")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -634,10 +638,14 @@ export default function PassiveTab() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("assign")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -705,10 +713,14 @@ export default function PassiveTab() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("assign")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

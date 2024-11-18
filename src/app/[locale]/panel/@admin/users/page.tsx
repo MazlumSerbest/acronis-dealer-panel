@@ -47,7 +47,7 @@ import BoolChip from "@/components/BoolChip";
 import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
 import useUserStore from "@/store/user";
@@ -80,8 +80,10 @@ export default function UsersPage() {
     const tf = useTranslations("FormMessages.User");
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
+
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
@@ -99,8 +101,11 @@ export default function UsersPage() {
     });
 
     function onSubmit(values: UserFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         if (isNew) {
-            if(values.role === "admin")
+            if (values.role === "admin")
                 values.acronisTenantId = "15229d4a-ff0f-498b-849d-a4f71bdc81a4";
 
             fetch("/api/admin/user", {
@@ -123,6 +128,8 @@ export default function UsersPage() {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
         } else {
             fetch(`/api/admin/user/${values.id}`, {
@@ -144,6 +151,8 @@ export default function UsersPage() {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
         }
     }
@@ -362,13 +371,10 @@ export default function UsersPage() {
 
     useEffect(() => {
         async function getData() {
-            const par: ListBoxItem[] = await getPartners(
-                undefined,
-                true,
-            );
+            const par: ListBoxItem[] = await getPartners(undefined, true);
             setPartners(par);
         }
-        
+
         getData();
     }, [currentUser?.acronisTenantId]);
     //#endregion
@@ -616,10 +622,14 @@ export default function UsersPage() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

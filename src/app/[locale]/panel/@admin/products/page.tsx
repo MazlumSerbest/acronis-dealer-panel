@@ -45,7 +45,7 @@ import { Switch } from "@/components/ui/switch";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import FormError from "@/components/FormError";
 
@@ -73,8 +73,10 @@ export default function ProductsPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Product");
     const { toast } = useToast();
+
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/product`,
@@ -94,6 +96,9 @@ export default function ProductsPage() {
     });
 
     function onSubmit(values: ProductFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         if (isNew) {
             fetch("/api/admin/product", {
                 method: "POST",
@@ -115,6 +120,8 @@ export default function ProductsPage() {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
         } else {
             fetch(`/api/admin/product/${values.id}`, {
@@ -137,6 +144,8 @@ export default function ProductsPage() {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
         }
     }
@@ -567,10 +576,14 @@ export default function ProductsPage() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

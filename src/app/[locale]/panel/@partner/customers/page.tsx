@@ -95,10 +95,11 @@ export default function CustomersPage() {
 
     const [open, setOpen] = useState(false);
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
-    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [loginCheckLoading, setLoginCheckLoading] = useState(false);
     const [loginValid, setLoginValid] = useState(false);
 
+    // #region Fetch Data
     const { data, error, isLoading, mutate } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
@@ -157,6 +158,7 @@ export default function CustomersPage() {
             },
         },
     );
+    // #endregion
 
     //#region Form
     const form = useForm<CustomerFormValues>({
@@ -168,7 +170,8 @@ export default function CustomersPage() {
     });
 
     function onSubmit(values: CustomerFormValues) {
-        setIsSubmitting(true);
+        if (submitting) return;
+        setSubmitting(true);
 
         const customer = {
             name: values.name,
@@ -201,7 +204,8 @@ export default function CustomersPage() {
                         description: res.message,
                     });
                 }
-                setIsSubmitting(false);
+
+                setSubmitting(false);
             });
     }
     //#endregion
@@ -725,13 +729,13 @@ export default function CustomersPage() {
                                             disabled={
                                                 loginCheckLoading ||
                                                 loginAlreadyTaken ||
-                                                isSubmitting
+                                                submitting
                                             }
                                             type="submit"
                                             className="bg-green-600 hover:bg-green-600/90"
                                         >
                                             {t("save")}
-                                            {isSubmitting && (
+                                            {submitting && (
                                                 <LuLoader2 className="size-4 animate-spin ml-2" />
                                             )}
                                         </Button>

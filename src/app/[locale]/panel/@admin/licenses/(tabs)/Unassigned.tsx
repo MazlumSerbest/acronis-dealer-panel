@@ -33,7 +33,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -63,6 +63,8 @@ export default function UnassignedTab() {
     const [assignOpen, setAssignOpen] = useState(false);
     const [products, setProducts] = useState<ListBoxItem[] | null>(null);
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
+    const [submitting, setSubmitting] = useState(false);
+
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const { data, error, mutate } = useSWR(
@@ -79,6 +81,9 @@ export default function UnassignedTab() {
     });
 
     function onSubmit(values: LicenseFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         fetch("/api/admin/license", {
             method: "POST",
             body: JSON.stringify(values),
@@ -99,6 +104,8 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
 
@@ -107,6 +114,9 @@ export default function UnassignedTab() {
     });
 
     function onSubmitAssign(values: AssignFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         fetch("/api/admin/license/assign", {
             method: "PUT",
             body: JSON.stringify({ ...values, ids: selectedIds }),
@@ -127,6 +137,8 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
     // #endregion
@@ -465,10 +477,14 @@ export default function UnassignedTab() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("add")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>
@@ -531,10 +547,14 @@ export default function UnassignedTab() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("assign")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

@@ -49,7 +49,7 @@ import FormError from "@/components/FormError";
 
 import Chapters from "./Chapters";
 import Link from "next/link";
-import { LuChevronLeft } from "react-icons/lu";
+import { LuChevronLeft, LuLoader2 } from "react-icons/lu";
 
 const courseFormSchema = z.object({
     id: z.string().cuid(),
@@ -92,7 +92,9 @@ export default function CourseDetail({
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Course");
     const { toast } = useToast();
+
     const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/course/${params.courseId}`,
@@ -108,6 +110,9 @@ export default function CourseDetail({
     });
 
     function onSubmit(values: CourseFormValues) {
+        if(submitting) return;
+        setSubmitting(true);
+
         fetch(`/api/admin/course/${params.courseId}`, {
             method: "PUT",
             body: JSON.stringify(values),
@@ -128,6 +133,8 @@ export default function CourseDetail({
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
     //#endregion
@@ -401,10 +408,14 @@ export default function CourseDetail({
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

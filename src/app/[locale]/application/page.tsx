@@ -34,7 +34,7 @@ import Logo from "@/components/navigation/Logo";
 import FormError from "@/components/FormError";
 
 import { cities, dealers } from "@/lib/constants";
-import { LuBuilding2, LuUser } from "react-icons/lu";
+import { LuBuilding2, LuLoader2, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 import DealerContract from "./dealerContract";
@@ -125,7 +125,9 @@ export default function Application() {
     const locale = useLocale();
     const t = useTranslations("General");
     const ta = useTranslations("Application");
+
     const [success, setSuccess] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     //#region Form
     const form = useForm<ApplicationFormValues>({
@@ -133,6 +135,9 @@ export default function Application() {
     });
 
     function onSubmit(values: ApplicationFormValues) {
+        if(submitting) return;
+        setSubmitting(true);
+
         const formData = new FormData();
         formData.append("companyType", values.companyType);
         formData.append("name", values.name);
@@ -166,6 +171,7 @@ export default function Application() {
                         description: res.message,
                     });
                 }
+                setSubmitting(false);
             });
     }
     //#endregion
@@ -918,11 +924,15 @@ export default function Application() {
                         <CardFooter className="flex flex-row gap-2">
                             <div className="flex-1"></div>
                             <Button
+                                disabled={submitting}
                                 size="default"
                                 type="submit"
                                 className="bg-blue-400 hover:bg-blue-400/90"
                             >
                                 {t("apply")}
+                                {submitting && (
+                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                )}
                             </Button>
                         </CardFooter>
                     </form>

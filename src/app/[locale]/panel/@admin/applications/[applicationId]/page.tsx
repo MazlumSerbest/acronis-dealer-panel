@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
 import { useToast } from "@/components/ui/use-toast";
-import { set, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -21,8 +21,6 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-    DialogTrigger,
-    DialogDescription,
     DialogClose,
 } from "@/components/ui/dialog";
 import {
@@ -50,6 +48,7 @@ import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
 import { DateTimeFormat } from "@/utils/date";
 import { cities } from "@/lib/constants";
+import { LuLoader2 } from "react-icons/lu";
 
 const applicationFormSchema = z.object({
     name: z
@@ -133,12 +132,13 @@ export default function ApplicationDetail({
     const [tenantName, setTenantName] = useState("");
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
 
+    const [submitting, setSubmitting] = useState(false);
+
     const { data, error, mutate } = useSWR(
         `/api/admin/application/${params.applicationId}`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {},
         },
     );
 
@@ -149,6 +149,9 @@ export default function ApplicationDetail({
     });
 
     function onSubmit(values: ApplicationFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         fetch(`/api/admin/application/${params.applicationId}`, {
             method: "PUT",
             body: JSON.stringify(values),
@@ -169,6 +172,8 @@ export default function ApplicationDetail({
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
 
@@ -177,6 +182,9 @@ export default function ApplicationDetail({
     });
 
     function onSubmitPartner(values: PartnerFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         const partner = {
             name: values.name,
             login: values.login,
@@ -208,29 +216,9 @@ export default function ApplicationDetail({
                         description: res.message,
                     });
                 }
-            });
 
-        // fetch("/api/admin/partner", {
-        //     method: "POST",
-        //     body: JSON.stringify(partner),
-        //     headers: { "Content-Type": "application/json" },
-        // })
-        //     .then((res) => res.json())
-        //     .then((res) => {
-        //         if (res.ok) {
-        //             toast({
-        //                 description: res.message,
-        //             });
-        //             setOpenCreatePartner(false);
-        //             mutate();
-        //         } else {
-        //             toast({
-        //                 variant: "destructive",
-        //                 title: t("errorTitle"),
-        //                 description: res.message,
-        //             });
-        //         }
-        //     });
+                setSubmitting(false);
+            });
     }
     //#endregion
 
@@ -600,12 +588,16 @@ export default function ApplicationDetail({
                                                     </DialogClose>
                                                     <Button
                                                         disabled={
-                                                            loginAlreadyTaken
+                                                            loginAlreadyTaken ||
+                                                            submitting
                                                         }
                                                         type="submit"
                                                         className="bg-blue-400 hover:bg-blue-400/90"
                                                     >
                                                         {t("create")}
+                                                        {submitting && (
+                                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                        )}
                                                     </Button>
                                                 </DialogFooter>
                                             </form>
@@ -765,10 +757,14 @@ export default function ApplicationDetail({
                                                         </Button>
                                                     </DialogClose>
                                                     <Button
+                                                        disabled={submitting}
                                                         type="submit"
                                                         className="bg-green-600 hover:bg-green-600/90"
                                                     >
                                                         {t("save")}
+                                                        {submitting && (
+                                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                        )}
                                                     </Button>
                                                 </DialogFooter>
                                             </form>

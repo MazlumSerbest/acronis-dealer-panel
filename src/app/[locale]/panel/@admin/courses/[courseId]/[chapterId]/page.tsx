@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -41,7 +40,7 @@ import FormError from "@/components/FormError";
 import BoolChip from "@/components/BoolChip";
 import Lessons from "./Lessons";
 import Link from "next/link";
-import { LuChevronLeft } from "react-icons/lu";
+import { LuChevronLeft, LuLoader2 } from "react-icons/lu";
 
 const chapterFormSchema = z.object({
     id: z.string().cuid(),
@@ -68,7 +67,9 @@ export default function ChapterDetail({
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Chapter");
     const { toast } = useToast();
+
     const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/chapter/${params.chapterId}`,
@@ -84,6 +85,9 @@ export default function ChapterDetail({
     });
 
     function onSubmit(values: ChapterFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         fetch(`/api/admin/chapter/${params.chapterId}`, {
             method: "PUT",
             body: JSON.stringify(values),
@@ -104,6 +108,8 @@ export default function ChapterDetail({
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
     //#endregion
@@ -117,11 +123,14 @@ export default function ChapterDetail({
         );
     return (
         <>
-            <Link href={`/panel/courses/${params.courseId}`} className="flex flex-row gap-1 font-medium hover:underline ">
+            <Link
+                href={`/panel/courses/${params.courseId}`}
+                className="flex flex-row gap-1 font-medium hover:underline "
+            >
                 <LuChevronLeft className="size-6" />
                 {t("backToCourse")}
             </Link>
-            
+
             <Card>
                 <CardHeader>
                     <CardTitle className="font-medium text-xl">
@@ -243,10 +252,14 @@ export default function ChapterDetail({
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

@@ -47,7 +47,7 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const courseFormSchema = z.object({
@@ -85,7 +85,9 @@ export default function CoursesPage() {
     const t = useTranslations("General");
     const router = useRouter();
     const { toast } = useToast();
+
     const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/course`,
@@ -101,6 +103,9 @@ export default function CoursesPage() {
     });
 
     function onSubmit(values: CourseFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         fetch("/api/admin/course", {
             method: "POST",
             body: JSON.stringify(values),
@@ -121,6 +126,8 @@ export default function CoursesPage() {
                         description: res.message,
                     });
                 }
+
+                setSubmitting(false);
             });
     }
     //#endregion
@@ -465,10 +472,14 @@ export default function CoursesPage() {
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

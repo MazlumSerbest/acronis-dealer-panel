@@ -41,6 +41,7 @@ import {
     LuAlertTriangle,
     LuArrowUpRight,
     LuInfo,
+    LuLoader2,
     LuPencil,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
@@ -61,12 +62,14 @@ export default function GeneralTab({ t, tenant }: Props) {
     const { user: currentUser } = useUserStore();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    // #region Fetch Data
     const {
         data: panelTenant,
         error: panelTenantError,
@@ -106,6 +109,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             );
         },
     });
+    // #endregion
 
     //#region Form
     const form = useForm<PartnerFormValues>({
@@ -113,6 +117,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     });
 
     async function onSubmit(values: PartnerFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         const existingPartner = {
             name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
@@ -137,6 +144,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
+
+                    setSubmitting(false);
                 });
     }
     //#endregion
@@ -387,10 +396,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         {t("cancel")}
                                     </Button>
                                     <Button
+                                        disabled={submitting}
                                         type="submit"
                                         className="bg-green-600 hover:bg-green-600/90"
                                     >
                                         {t("save")}
+                                        {submitting && (
+                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        )}
                                     </Button>
                                 </CardFooter>
                             )}
@@ -426,8 +439,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     </Button>
                                                 </AlertDialogCancel>
                                                 <Button
+                                                    disabled={submitting}
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
+                                                        if (submitting) return;
+                                                        setSubmitting(true);
+
                                                         fetch(
                                                             `/api/admin/user`,
                                                             {
@@ -472,10 +489,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                         false,
                                                                     );
                                                                 }
+
+                                                                setSubmitting(
+                                                                    false,
+                                                                );
                                                             });
                                                     }}
                                                 >
                                                     {t("create")}
+                                                    {submitting && (
+                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    )}
                                                 </Button>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
@@ -507,8 +531,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     </Button>
                                                 </AlertDialogCancel>
                                                 <Button
+                                                    disabled={submitting}
                                                     className="bg-blue-400 hover:bg-blue-400/90"
                                                     onClick={() => {
+                                                        if (submitting) return;
+                                                        setSubmitting(true);
+
                                                         fetch(
                                                             `/api/admin/partner`,
                                                             {
@@ -551,10 +579,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                         false,
                                                                     );
                                                                 }
+
+                                                                setSubmitting(
+                                                                    false,
+                                                                );
                                                             });
                                                     }}
                                                 >
                                                     {t("create")}
+                                                    {submitting && (
+                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    )}
                                                 </Button>
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
