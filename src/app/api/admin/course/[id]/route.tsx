@@ -61,7 +61,7 @@ export const PUT = auth(async (req: any, { params }) => {
         course.updatedAt = new Date().toISOString();
         course.updatedBy = req.auth.user.email;
 
-        const updatedCourse = await prisma.chapter.update({
+        const updatedCourse = await prisma.course.update({
             data: course,
             where: {
                 id: params?.id as string,

@@ -336,6 +336,8 @@ export default function Lessons({
                         data={lessons || []}
                         visibleColumns={visibleColumns}
                         isLoading={isLoading}
+                        defaultSort="order"
+                        defaultSortDirection="asc"
                         facetedFilters={[
                             {
                                 column: "active",

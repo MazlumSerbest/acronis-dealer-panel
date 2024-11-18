@@ -269,6 +269,8 @@ export default function Chapters({
                         data={chapters || []}
                         visibleColumns={visibleColumns}
                         isLoading={isLoading}
+                        defaultSort="order"
+                        defaultSortDirection="asc"
                         facetedFilters={[
                             {
                                 column: "active",
