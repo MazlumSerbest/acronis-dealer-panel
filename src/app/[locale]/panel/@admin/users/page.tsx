@@ -96,7 +96,7 @@ export default function UsersPage() {
         resolver: zodResolver(userFormSchema),
         defaultValues: {
             active: true,
-            licensed: false,
+            licensed: true,
         },
     });
 
@@ -423,7 +423,7 @@ export default function UsersPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset();
+                    form.reset({ active: true, licensed: true });
                 }}
             />
 

@@ -178,7 +178,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             {t("billingDatePassedDescription")}
                         </AlertDescription>
                     </Alert>
-                ) : daysUntilNextBillingDate < 15 ? (
+                ) : daysUntilNextBillingDate &&
+                  daysUntilNextBillingDate < 15 ? (
                     <Alert
                         className="col-span-3 text-yellow-500 border-yellow-500"
                         variant="default"
