@@ -24,7 +24,7 @@ export const GET = auth(async (req: any) => {
             req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
 
-        // if (!partnerAcronisId) return;
+        if (!partnerAcronisId && !customerAcronisId) return;
 
         switch (status) {
             case "inactive":

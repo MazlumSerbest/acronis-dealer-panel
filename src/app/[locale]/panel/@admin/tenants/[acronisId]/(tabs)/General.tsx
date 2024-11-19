@@ -741,6 +741,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                         description={t("expiredSmallCardDescription")}
                     />
                 )}
+
+                <div className="col-span-full text-sm text-muted-foreground">
+                            <sup>*</sup>
+                            {t("licenseCardWarning")}
+                </div>
             </div>
 
             <div className="col-span-full">
