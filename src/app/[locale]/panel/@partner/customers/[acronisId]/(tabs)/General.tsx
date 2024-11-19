@@ -33,8 +33,13 @@ import {
     LuInfo,
     LuLoader2,
     LuPencil,
+    LuShield,
+    LuShieldAlert,
+    LuShieldCheck,
+    LuShieldOff,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import SmallCard from "@/components/cards/SmallCard";
 
 type Props = {
     t: Function;
@@ -58,6 +63,12 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
+    const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
+    const [completedLicenseCount, setCompletedLicenseCount] =
+        useState<number>(0);
+    const [expiredLicenseCount, setExpiredLicenseCount] = useState<number>(0);
+
     // #region Fetch Data
     const {
         data: customer,
@@ -77,7 +88,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate,
     } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
         revalidateOnFocus: false,
-        onSuccess: (data) => {
+        onSuccess: async (data) => {
             setUsagesPerWorkload(
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
@@ -96,6 +107,44 @@ export default function GeneralTab({ t, tenant }: Props) {
                         u.usage_name != "storage_total",
                 ),
             );
+
+            if (tenant.kind === "partner" && currentUser?.licensed) {
+                const inactive = await fetch(
+                    `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
+                );
+                const inactiveCount = await inactive.json();
+                setInactiveLicenseCount(inactiveCount.count);
+
+                const active = await fetch(
+                    `/api/license/count?status=active&partnerAcronisId=${tenant.id}`,
+                );
+                const activeCount = await active.json();
+                setActiveLicenseCount(activeCount.count);
+
+                const completed = await fetch(
+                    `/api/license/count?status=completed&partnerAcronisId=${tenant.id}`,
+                );
+                const completedCount = await completed.json();
+                setCompletedLicenseCount(completedCount.count);
+
+                const expired = await fetch(
+                    `/api/license/count?status=expired&partnerAcronisId=${tenant.id}`,
+                );
+                const expiredCount = await expired.json();
+                setExpiredLicenseCount(expiredCount.count);
+            } else if (tenant.kind === "customer" && currentUser?.licensed) {
+                const active = await fetch(
+                    `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
+                );
+                const activeCount = await active.json();
+                setActiveLicenseCount(activeCount.count);
+
+                const completed = await fetch(
+                    `/api/license/count?status=completed&customerAcronisId=${tenant.id}`,
+                );
+                const completedCount = await completed.json();
+                setCompletedLicenseCount(completedCount.count);
+            }
         },
     });
     // #endregion
@@ -459,6 +508,62 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                     />
                 </div>
+            )}
+
+            {currentUser?.licensed && (
+                <>
+                    <div className="col-span-full">
+                        <h2 className="font-medium text-xl">{t("licenses")}</h2>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 col-span-full">
+                        {tenant.kind == "partner" && (
+                            <SmallCard
+                                title={t("passive")}
+                                icon={
+                                    <LuShield className="size-5 text-muted-foreground" />
+                                }
+                                value={inactiveLicenseCount}
+                                description={t("passiveSmallCardDescription")}
+                            />
+                        )}
+
+                        <SmallCard
+                            title={t("active")}
+                            icon={
+                                <LuShieldCheck className="size-5 text-muted-foreground" />
+                            }
+                            value={activeLicenseCount}
+                            description={t("activeSmallCardDescription")}
+                        />
+                        <SmallCard
+                            title={t("completed")}
+                            icon={
+                                <LuShieldAlert className="size-5 text-muted-foreground" />
+                            }
+                            value={completedLicenseCount}
+                            description={t("completedSmallCardDescription")}
+                        />
+
+                        {tenant.kind === "partner" && (
+                            <SmallCard
+                                title={t("expired")}
+                                icon={
+                                    <LuShieldOff className="size-5 text-muted-foreground" />
+                                }
+                                value={expiredLicenseCount}
+                                description={t("expiredSmallCardDescription")}
+                            />
+                        )}
+                    </div>
+
+                    {tenant.kind === "partner" && (
+                        <div className="col-span-full text-sm text-muted-foreground">
+                            <sup>*</sup>
+                            {t("licenseCardWarning")}
+                        </div>
+                    )}
+                </>
             )}
 
             <div className="col-span-full">

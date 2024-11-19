@@ -19,21 +19,34 @@ import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 
 import useUserStore from "@/store/user";
-import Loader from "@/components/loaders/Loader";
+import SmallCard from "@/components/cards/SmallCard";
+import {
+    LuShield,
+    LuShieldAlert,
+    LuShieldCheck,
+    LuShieldOff,
+} from "react-icons/lu";
 
 export default function PanelPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
-    
+
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
+    const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
+    const [completedLicenseCount, setCompletedLicenseCount] =
+        useState<number>(0);
+    const [expiredLicenseCount, setExpiredLicenseCount] = useState<number>(0);
+
     const { data, error } = useSWR(
-        `/api/acronis/usages/${currentUser?.acronisTenantId}`,
+        currentUser?.acronisTenantId &&
+            `/api/acronis/usages/${currentUser?.acronisTenantId}`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
+            onSuccess: async (data) => {
                 if (!currentUser?.licensed) {
                     setUsagesPerWorkload(
                         data?.usages?.items?.filter(
@@ -54,6 +67,32 @@ export default function PanelPage() {
                             u.usage_name != "storage_total",
                     ),
                 );
+
+                if (currentUser?.licensed) {
+                    const inactive = await fetch(
+                        `/api/license/count?status=inactive&partnerAcronisId=${currentUser?.partnerAcronisId}`,
+                    );
+                    const inactiveCount = await inactive.json();
+                    setInactiveLicenseCount(inactiveCount.count);
+
+                    const active = await fetch(
+                        `/api/license/count?status=active&partnerAcronisId=${currentUser?.partnerAcronisId}`,
+                    );
+                    const activeCount = await active.json();
+                    setActiveLicenseCount(activeCount.count);
+
+                    const completed = await fetch(
+                        `/api/license/count?status=completed&partnerAcronisId=${currentUser?.partnerAcronisId}`,
+                    );
+                    const completedCount = await completed.json();
+                    setCompletedLicenseCount(completedCount.count);
+
+                    const expired = await fetch(
+                        `/api/license/count?status=expired&partnerAcronisId=${currentUser?.partnerAcronisId}`,
+                    );
+                    const expiredCount = await expired.json();
+                    setExpiredLicenseCount(expiredCount.count);
+                }
             },
         },
     );
@@ -109,14 +148,66 @@ export default function PanelPage() {
                 </Carousel>
             </div>
 
-            {!data && !error ? (
-                <div className="h-80">
-                    <Loader />
-                </div>
-            ) : error ? (
+            {error ? (
                 <div>{t("failedToLoad")}</div>
             ) : (
                 <div className="container m-auto flex flex-col gap-4">
+                    {currentUser?.licensed && (
+                        <>
+                            <h1 className="text-xl font-semibold">
+                                {t("licenses")}
+                            </h1>
+
+                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                                <SmallCard
+                                    title={t("passive")}
+                                    value={inactiveLicenseCount}
+                                    icon={
+                                        <LuShield className="size-5 text-muted-foreground" />
+                                    }
+                                    description={t(
+                                        "passiveSmallCardDescription",
+                                    )}
+                                />
+                                <SmallCard
+                                    title={t("active")}
+                                    value={activeLicenseCount}
+                                    icon={
+                                        <LuShieldCheck className="size-5 text-muted-foreground" />
+                                    }
+                                    description={t(
+                                        "activeSmallCardDescription",
+                                    )}
+                                />
+                                <SmallCard
+                                    title={t("completed")}
+                                    value={completedLicenseCount}
+                                    icon={
+                                        <LuShieldAlert className="size-5 text-muted-foreground" />
+                                    }
+                                    description={t(
+                                        "completedSmallCardDescription",
+                                    )}
+                                />
+                                <SmallCard
+                                    title={t("expired")}
+                                    value={expiredLicenseCount}
+                                    icon={
+                                        <LuShieldOff className="size-5 text-muted-foreground" />
+                                    }
+                                    description={t(
+                                        "expiredSmallCardDescription",
+                                    )}
+                                />
+
+                                <div className="col-span-full text-sm text-muted-foreground">
+                                    <sup>*</sup>
+                                    {t("licenseCardWarning")}
+                                </div>
+                            </div>
+                        </>
+                    )}
+
                     <h1 className="text-xl font-semibold">
                         {t("totalUsages")}
                     </h1>
@@ -151,7 +242,9 @@ export default function PanelPage() {
                                     ? t("storageCardDescriptionGB")
                                     : t("storageCardDescription")
                             }
-                            model={!currentUser?.licensed ? t("perGB") : t("total")}
+                            model={
+                                !currentUser?.licensed ? t("perGB") : t("total")
+                            }
                             usage={
                                 data?.usages?.items?.find(
                                     (u: TenantUsage) =>
