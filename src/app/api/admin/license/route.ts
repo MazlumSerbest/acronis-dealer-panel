@@ -18,8 +18,10 @@ export const GET = auth(async (req: any) => {
             });
 
         const status = req.nextUrl.searchParams.get("status");
-        const partnerAcronisId = req.nextUrl.searchParams.get("partnerAcronisId");
-        const customerAcronisId = req.nextUrl.searchParams.get("customerAcronisId");
+        const partnerAcronisId =
+            req.nextUrl.searchParams.get("partnerAcronisId");
+        const customerAcronisId =
+            req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
 
         switch (status) {
@@ -46,7 +48,9 @@ export const GET = auth(async (req: any) => {
             case "active":
                 where = {
                     partnerAcronisId: { not: null },
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -60,7 +64,9 @@ export const GET = auth(async (req: any) => {
             case "completed":
                 where = {
                     partnerAcronisId: { not: null },
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -85,13 +91,6 @@ export const GET = auth(async (req: any) => {
         if (partnerAcronisId) {
             where = {
                 partnerAcronisId: partnerAcronisId,
-                ...where,
-            };
-        }
-
-        if (customerAcronisId) {
-            where = {
-                customerAcronisId: customerAcronisId,
                 ...where,
             };
         }

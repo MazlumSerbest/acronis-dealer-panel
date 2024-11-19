@@ -18,7 +18,7 @@ export default function PassiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${tenant.id}&status=inactive`,
+        `/api/license?status=inactive&partnerAcronisId=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,

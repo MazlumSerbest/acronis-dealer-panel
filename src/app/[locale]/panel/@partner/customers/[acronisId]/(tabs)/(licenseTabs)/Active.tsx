@@ -17,8 +17,10 @@ type Props = {
 export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
+    console.log(tenant);
+
     const { data, error } = useSWR(
-        `/api/license?${tenant.kind}AcronisId=${tenant.id}&status=active`,
+        `/api/license?status=active&${tenant.kind}AcronisId=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,

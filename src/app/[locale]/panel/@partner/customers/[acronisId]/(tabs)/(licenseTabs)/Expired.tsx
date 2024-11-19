@@ -17,7 +17,7 @@ export default function ExpiredTab({ tenant }: Props) {
     const t = useTranslations("General");
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${tenant.id}&status=expired`,
+        `/api/license?status=expired&partnerAcronisId=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,

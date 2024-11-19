@@ -24,7 +24,7 @@ export const GET = auth(async (req: any) => {
             req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
 
-        if (!partnerAcronisId) return;
+        // if (!partnerAcronisId) return;
 
         switch (status) {
             case "inactive":
@@ -38,7 +38,9 @@ export const GET = auth(async (req: any) => {
                 break;
             case "active":
                 where = {
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -51,7 +53,9 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -75,13 +79,6 @@ export const GET = auth(async (req: any) => {
         if (partnerAcronisId) {
             where = {
                 partnerAcronisId: partnerAcronisId,
-                ...where,
-            };
-        }
-
-        if (customerAcronisId) {
-            where = {
-                customerAcronisId: customerAcronisId,
                 ...where,
             };
         }

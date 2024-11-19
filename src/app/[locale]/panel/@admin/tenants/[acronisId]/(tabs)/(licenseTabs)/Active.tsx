@@ -19,7 +19,7 @@ export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${tenant.id}&status=active`,
+        `/api/license?status=active&${tenant.kind}AcronisId=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,

@@ -77,10 +77,11 @@ export default function PanelPage() {
                 const active = await fetch(
                     `/api/admin/license/count?status=active`,
                 );
+                console.log(active);
                 const activeCount = await active.json();
                 setActiveLicenseCount(activeCount.count);
 
-                await setTotalLicenseCount(
+                setTotalLicenseCount(
                     activeCount.count +
                         assignedCount.count +
                         unassignedCount.count,

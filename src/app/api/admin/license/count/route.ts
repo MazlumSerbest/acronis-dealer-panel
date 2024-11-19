@@ -48,7 +48,9 @@ export const GET = auth(async (req: any) => {
             case "active":
                 where = {
                     partnerAcronisId: { not: null },
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -62,7 +64,9 @@ export const GET = auth(async (req: any) => {
             case "completed":
                 where = {
                     partnerAcronisId: { not: null },
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -87,13 +91,6 @@ export const GET = auth(async (req: any) => {
         if (partnerAcronisId) {
             where = {
                 partnerAcronisId: partnerAcronisId,
-                ...where,
-            };
-        }
-
-        if (customerAcronisId) {
-            where = {
-                customerAcronisId: customerAcronisId,
                 ...where,
             };
         }

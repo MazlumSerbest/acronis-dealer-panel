@@ -105,7 +105,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
                         u.value > 0 &&
-                        u.edition == "pck_per_workload" &&
+                        u.edition === "pck_per_workload" &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
@@ -114,37 +114,49 @@ export default function GeneralTab({ t, tenant }: Props) {
                 data?.usages?.items?.filter(
                     (u: TenantUsage) =>
                         u.value > 0 &&
-                        u.edition == "pck_per_gigabyte" &&
+                        u.edition === "pck_per_gigabyte" &&
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
             );
 
-            if (tenant.kind == "partner") {
+            if (tenant.kind === "partner") {
                 const inactive = await fetch(
                     `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
                 );
                 const inactiveCount = await inactive.json();
                 setInactiveLicenseCount(inactiveCount.count);
 
+                const active = await fetch(
+                    `/api/license/count?status=active&partnerAcronisId=${tenant.id}`,
+                );
+                const activeCount = await active.json();
+                setActiveLicenseCount(activeCount.count);
+
+                const completed = await fetch(
+                    `/api/license/count?status=completed&partnerAcronisId=${tenant.id}`,
+                );
+                const completedCount = await completed.json();
+                setCompletedLicenseCount(completedCount.count);
+
                 const expired = await fetch(
                     `/api/license/count?status=expired&partnerAcronisId=${tenant.id}`,
                 );
                 const expiredCount = await expired.json();
                 setExpiredLicenseCount(expiredCount.count);
+            } else {
+                const active = await fetch(
+                    `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
+                );
+                const activeCount = await active.json();
+                setActiveLicenseCount(activeCount.count);
+
+                const completed = await fetch(
+                    `/api/license/count?status=completed&customerAcronisId=${tenant.id}`,
+                );
+                const completedCount = await completed.json();
+                setCompletedLicenseCount(completedCount.count);
             }
-
-            const active = await fetch(
-                `/api/license/count?status=active&${tenant.kind}AcronisId=${tenant.id}`,
-            );
-            const activeCount = await active.json();
-            setActiveLicenseCount(activeCount.count);
-
-            const completed = await fetch(
-                `/api/license/count?status=completed&${tenant.kind}AcronisId=${tenant.id}`,
-            );
-            const completedCount = await completed.json();
-            setCompletedLicenseCount(completedCount.count);
         },
     });
     // #endregion
