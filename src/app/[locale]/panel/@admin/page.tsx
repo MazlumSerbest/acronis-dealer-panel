@@ -18,10 +18,10 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
-import LicenseCard from "@/components/cards/License";
 
 import useUserStore from "@/store/user";
-import { chartColors } from "@/lib/constants";
+import SmallCard from "@/components/cards/SmallCard";
+import { LuShield, LuShieldCheck, LuShieldOff, LuSigma } from "react-icons/lu";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -29,8 +29,10 @@ export default function PanelPage() {
     const { user: currentUser } = useUserStore();
 
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
+    const [unassignedLicenseCount, setUnassignedLicenseCount] =
+        useState<number>(0);
+    const [assignedLicenseCount, setAssignedLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
-    const [passiveLicenseCount, setPassiveLicenseCount] = useState<number>(0);
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
@@ -60,24 +62,25 @@ export default function PanelPage() {
                     ),
                 );
 
+                const assigned = await fetch(
+                    `/api/admin/license/count?status=assigned`,
+                );
+                const assignedCount = await assigned.json();
+                setAssignedLicenseCount(assignedCount.count);
+
+                const unassigned = await fetch(
+                    `/api/admin/license/count?status=unassigned`,
+                );
+                const unassignedCount = await unassigned.json();
+                setUnassignedLicenseCount(unassignedCount.count);
+
                 const active = await fetch(
                     `/api/admin/license/count?status=active`,
                 );
                 const activeCount = await active.json();
                 setActiveLicenseCount(activeCount.count);
 
-                const assigned = await fetch(
-                    `/api/admin/license/count?status=assigned`,
-                );
-                const assignedCount = await assigned.json();
-                const unassigned = await fetch(
-                    `/api/admin/license/count?status=unassigned`,
-                );
-                const unassignedCount = await unassigned.json();
-                setPassiveLicenseCount(
-                    assignedCount.count + unassignedCount.count,
-                );
-                setTotalLicenseCount(
+                await setTotalLicenseCount(
                     activeCount.count +
                         assignedCount.count +
                         unassignedCount.count,
@@ -143,35 +146,38 @@ export default function PanelPage() {
                 <div className="container m-auto flex flex-col gap-4">
                     <h1 className="text-xl font-semibold">{t("licenses")}</h1>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 justify-items-center gap-4">
-                        <LicenseCard
+                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                        <SmallCard
                             title={t("total")}
-                            description={t("totalLicenseChartDescription")}
-                            label={t("license")}
-                            color={chartColors.blue}
-                            total={totalLicenseCount}
                             value={totalLicenseCount}
-                            onClick={() => {
-                                router.push("/panel/licenses");
-                            }}
+                            icon={
+                                <LuSigma className="size-5 text-muted-foreground" />
+                            }
+                            description={t("totalSmallCardDescription")}
                         />
-
-                        <LicenseCard
+                        <SmallCard
+                            title={t("unassigned")}
+                            value={unassignedLicenseCount}
+                            icon={
+                                <LuShieldOff className="size-5 text-muted-foreground" />
+                            }
+                            description={t("unassignedSmallCardDescription")}
+                        />
+                        <SmallCard
+                            title={t("assigned")}
+                            value={assignedLicenseCount}
+                            icon={
+                                <LuShield className="size-5 text-muted-foreground" />
+                            }
+                            description={t("assignedSmallCardDescription")}
+                        />
+                        <SmallCard
                             title={t("active")}
-                            description={t("activeLicenseChartDescription")}
-                            label={t("license")}
-                            color={chartColors.green}
-                            total={totalLicenseCount}
                             value={activeLicenseCount}
-                        />
-
-                        <LicenseCard
-                            title={t("passive")}
-                            description={t("passiveLicenseChartDescription")}
-                            label={t("license")}
-                            color={chartColors.red}
-                            total={totalLicenseCount}
-                            value={passiveLicenseCount}
+                            icon={
+                                <LuShieldCheck className="size-5 text-muted-foreground" />
+                            }
+                            description={t("activeSmallCardDescription")}
                         />
                     </div>
 
