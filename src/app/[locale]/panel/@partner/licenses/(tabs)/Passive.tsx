@@ -85,7 +85,7 @@ export default function PassiveTab() {
     const [submitting, setSubmitting] = useState(false);
 
     const { data, error, mutate } = useSWR(
-        `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=inactive`,
+        `/api/license?status=inactive&partnerAcronisId=${currentUser?.partnerAcronisId}`,
         null,
         {
             revalidateOnFocus: false,

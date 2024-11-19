@@ -16,7 +16,7 @@ export default function ActiveTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=active`,
+        `/api/license?status=active&partnerAcronisId=${currentUser?.partnerAcronisId}`,
         null,
         {
             revalidateOnFocus: false,

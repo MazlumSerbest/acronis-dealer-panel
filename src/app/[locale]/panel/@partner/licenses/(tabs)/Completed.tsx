@@ -15,7 +15,7 @@ export default function CompletedTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/license?partnerAcronisId=${currentUser?.partnerAcronisId}&status=completed`,
+        `/api/license?status=completed&partnerAcronisId=${currentUser?.partnerAcronisId}`,
         null,
         {
             revalidateOnFocus: false,

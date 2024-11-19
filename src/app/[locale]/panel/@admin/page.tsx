@@ -38,7 +38,8 @@ export default function PanelPage() {
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
     const { data, error } = useSWR(
-        `/api/acronis/usages/${currentUser?.acronisTenantId}`,
+        currentUser?.acronisTenantId &&
+            `/api/acronis/usages/${currentUser?.acronisTenantId}`,
         null,
         {
             revalidateOnFocus: false,
