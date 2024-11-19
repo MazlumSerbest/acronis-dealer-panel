@@ -252,7 +252,8 @@
         "completedSmallCardDescription": "Total number of completed licenses",
         "expiredSmallCardDescription": "Total number of expired licenses",
         "unassignedSmallCardDescription": "Total number of unassigned licenses",
-        "assignedSmallCardDescription": "Total number of assigned licenses"
+        "assignedSmallCardDescription": "Total number of assigned licenses",
+        "licenseCardWarning": "Licenses which assigned to sub partners are not included in these numbers! These licenses can be shown at sub partners detail page."
     },
     "SignIn": {
         "signIn": "Sign In",

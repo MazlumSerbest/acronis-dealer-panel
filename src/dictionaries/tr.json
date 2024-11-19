@@ -252,7 +252,8 @@
         "completedSmallCardDescription": "Toplam tamamlanmış lisans sayısı",
         "expiredSmallCardDescription": "Toplam son kullanma tarihi geçmiş lisans sayısı",
         "unassignedSmallCardDescription": "Toplam atanmamış lisans sayısı",
-        "assignedSmallCardDescription": "Toplam atanmış lisans sayısı"
+        "assignedSmallCardDescription": "Toplam atanmış lisans sayısı",
+        "licenseCardWarning": "Alt bayiye atanmış lisanslar burada gösterilmez! Bu lisanslar, alt bayinin detay sayfasında görüntülenir."
     },
     "SignIn": {
         "signIn": "Giriş Yap",
