@@ -241,10 +241,18 @@
         "assignToCustomerError": "There is no customer to assign the license. Please create a customer first!",
         "assignSelectedToPartner": "Assign Selected to Partner",
         "totalLicense": "Total License: {total}",
-        "totalLicenseChartDescription": "Number of licenses registered in the panel",
-        "activeLicenseChartDescription": "Number of active licenses of your customers",
-        "passiveLicenseChartDescription": "Total number of assigned and unassigned licenses registered in the panel",
-        "remainingDays": "Remaining Days"
+        "remainingDays": "Remaining Days",
+        "completed": "Completed",
+        "expired": "Expired",
+        "assigned": "Assigned",
+        "unassigned": "Unassigned",
+        "totalSmallCardDescription": "Total number of licenses",
+        "passiveSmallCardDescription": "Total number of passive licenses",
+        "activeSmallCardDescription": "Total number of active licenses",
+        "completedSmallCardDescription": "Total number of completed licenses",
+        "expiredSmallCardDescription": "Total number of expired licenses",
+        "unassignedSmallCardDescription": "Total number of unassigned licenses",
+        "assignedSmallCardDescription": "Total number of assigned licenses"
     },
     "SignIn": {
         "signIn": "Sign In",

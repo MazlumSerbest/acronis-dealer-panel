@@ -241,10 +241,18 @@
         "assignToCustomerError": "Lisansı atamak için müşteri bulunamadı. Lütfen önce müşteri oluşturun!",
         "assignSelectedToPartner": "Seçilenleri Partnere Ata",
         "totalLicense": "Toplam Lisans: {total}",
-        "totalLicenseChartDescription": "Panele kayıtlı lisansların sayısı",
-        "activeLicenseChartDescription": "Müşterilerinize ait aktif lisansların sayısı",
-        "passiveLicenseChartDescription": "Panele kayıtlı atanmış ve atanmamış lisansların toplamı",
-        "remainingDays": "Kalan Gün"
+        "remainingDays": "Kalan Gün",
+        "completed": "Tamamlanmış",
+        "expired": "Son Kullanma Tarihi Geçmiş",
+        "assigned": "Atanmış",
+        "unassigned": "Atanmamış",
+        "totalSmallCardDescription": "Toplam lisans sayısı",
+        "passiveSmallCardDescription": "Toplam pasif lisans sayısı",
+        "activeSmallCardDescription": "Toplam aktif lisans sayısı",
+        "completedSmallCardDescription": "Toplam tamamlanmış lisans sayısı",
+        "expiredSmallCardDescription": "Toplam son kullanma tarihi geçmiş lisans sayısı",
+        "unassignedSmallCardDescription": "Toplam atanmamış lisans sayısı",
+        "assignedSmallCardDescription": "Toplam atanmış lisans sayısı"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
