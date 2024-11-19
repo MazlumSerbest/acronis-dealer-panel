@@ -368,7 +368,6 @@ export default function UsersPage() {
     //#endregion
 
     //#region Data
-
     useEffect(() => {
         async function getData() {
             const par: ListBoxItem[] = await getPartners(undefined, true);

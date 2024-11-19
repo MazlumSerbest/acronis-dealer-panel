@@ -2,13 +2,14 @@ import useSWR from "swr";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+import Loader from "@/components/loaders/Loader";
+
 import { useTranslations } from "next-intl";
 
 import PassiveTab from "./(licenseTabs)/Passive";
 import ActiveTab from "./(licenseTabs)/Active";
 import CompletedTab from "./(licenseTabs)/Completed";
 import ExpiredTab from "./(licenseTabs)/Expired";
-import Loader from "@/components/loaders/Loader";
 
 type Props = {
     t: Function;
@@ -20,6 +21,10 @@ export default function LicensesTab({ t, tenant }: Props) {
 
     const { data, error, isLoading } = useSWR(
         `/api/${tenant.kind}/${tenant.id}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
     );
 
     if (error) return <div>{t("failedToLoad")}</div>;
@@ -51,7 +56,7 @@ export default function LicensesTab({ t, tenant }: Props) {
             <TabsContent value="active">
                 <ActiveTab tenant={tenant} />
             </TabsContent>
-            
+
             <TabsContent value="completed">
                 <CompletedTab tenant={tenant} />
             </TabsContent>

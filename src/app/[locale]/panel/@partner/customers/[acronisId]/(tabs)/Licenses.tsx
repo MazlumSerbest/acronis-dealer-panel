@@ -20,6 +20,13 @@ export default function LicensesTab({ t, tenant }: Props) {
 
     const { data, error, isLoading } = useSWR(
         `/api/${tenant.kind}/${tenant.id}`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: (data) => {
+                
+            }
+        },
     );
 
     if (error) return <div>{t("failedToLoad")}</div>;
