@@ -1,3 +1,4 @@
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -17,6 +18,10 @@ type Props = {
 };
 
 export default function LicensesTab({ t, tenant }: Props) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const status = searchParams.get("status") || "active";
+    const pathname = usePathname();
     const tl = useTranslations("Licenses");
 
     const { data, error, isLoading } = useSWR(
@@ -36,7 +41,14 @@ export default function LicensesTab({ t, tenant }: Props) {
         );
     if (!data) return <div>{t("registrationNotFound")}</div>;
     return (
-        <Tabs defaultValue="active" className="flex flex-col w-full">
+        <Tabs
+            defaultValue="active"
+            value={status}
+            onValueChange={(value) =>
+                router.push(`${pathname}?tab=licenses&status=${value}`)
+            }
+            className="flex flex-col w-full"
+        >
             <TabsList className="max-w-fit">
                 {tenant.kind === "partner" && (
                     <TabsTrigger value="passive">{tl("passive")}</TabsTrigger>

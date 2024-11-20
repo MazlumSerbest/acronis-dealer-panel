@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
     Select,
@@ -21,16 +22,22 @@ import CompletedTab from "./(tabs)/Completed";
 import ExpiredTab from "./(tabs)/Expired";
 
 export default function LicensesPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get("tab") || "unassigned";
+    const status = searchParams.get("status") || "active";
+    const pathname = usePathname();
+
     const tl = useTranslations("Licenses");
-    const [openTab, setOpenTab] = useState("unassigned");
-    const [openAssignedTab, setOpenAssignedTab] = useState("active");
 
     return (
         <Tabs
             defaultValue="unassigned"
+            value={tab}
             className="flex flex-col w-full"
-            value={openTab}
-            onValueChange={(value) => setOpenTab(value)}
+            onValueChange={(value) =>
+                router.push(`/panel/licenses?tab=${value}`)
+            }
         >
             <div className="flex flex-row gap-4">
                 <TabsList className="max-w-fit">
@@ -39,14 +46,15 @@ export default function LicensesPage() {
                     </TabsTrigger>
                     <TabsTrigger value="assigned">{tl("assigned")}</TabsTrigger>
                 </TabsList>
-                {openTab == "assigned" && (
+                {tab === "assigned" && (
                     <div>
                         <Select
-                            defaultValue="active"
-                            onValueChange={(value) => {
-                                setOpenTab("assigned");
-                                setOpenAssignedTab(value);
-                            }}
+                            value={status}
+                            onValueChange={(value) =>
+                                router.push(
+                                    `${pathname}?tab=assigned&status=${value}`,
+                                )
+                            }
                         >
                             <SelectTrigger className="min-w-52">
                                 <SelectValue
@@ -80,7 +88,7 @@ export default function LicensesPage() {
                 <UnassignedTab />
             </TabsContent>
             <TabsContent value="assigned" className="mt-0">
-                <Tabs value={openAssignedTab}>
+                <Tabs defaultValue="active" value={status}>
                     <TabsContent value="assigned">
                         <AssignedTab />
                     </TabsContent>
