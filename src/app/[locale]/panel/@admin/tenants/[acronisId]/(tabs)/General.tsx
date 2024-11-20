@@ -1,3 +1,4 @@
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import useSWR from "swr";
@@ -34,9 +35,11 @@ import BoolChip from "@/components/BoolChip";
 import DatePicker from "@/components/DatePicker";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
+import SmallCard from "@/components/cards/SmallCard";
 
-import { calculateRemainingDays, formatBytes } from "@/utils/functions";
+import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
+import useUserStore from "@/store/user";
 import {
     LuAlertTriangle,
     LuArrowUpRight,
@@ -46,11 +49,8 @@ import {
     LuShield,
     LuShieldAlert,
     LuShieldCheck,
-    LuShieldClose,
     LuShieldOff,
 } from "react-icons/lu";
-import useUserStore from "@/store/user";
-import SmallCard from "@/components/cards/SmallCard";
 
 type Props = {
     t: Function;
@@ -64,6 +64,8 @@ const partnerFormSchema = z.object({
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
+    const router = useRouter();
+    const pathname = usePathname();
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
@@ -731,6 +733,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                         value={inactiveLicenseCount}
                         description={t("passiveSmallCardDescription")}
+                        onClick={() =>
+                            router.push(
+                                `${pathname}?tab=licenses&status=passive`,
+                            )
+                        }
                     />
                 )}
 
@@ -741,6 +748,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                     }
                     value={activeLicenseCount}
                     description={t("activeSmallCardDescription")}
+                    onClick={() =>
+                        router.push(`${pathname}?tab=licenses&status=active`)
+                    }
                 />
                 <SmallCard
                     title={t("completed")}
@@ -749,6 +759,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                     }
                     value={completedLicenseCount}
                     description={t("completedSmallCardDescription")}
+                    onClick={() =>
+                        router.push(`${pathname}?tab=licenses&status=completed`)
+                    }
                 />
 
                 {tenant.kind === "partner" && (
@@ -759,6 +772,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                         value={expiredLicenseCount}
                         description={t("expiredSmallCardDescription")}
+                        onClick={() =>
+                            router.push(
+                                `${pathname}?tab=licenses&status=expired`,
+                            )
+                        }
                     />
                 )}
             </div>

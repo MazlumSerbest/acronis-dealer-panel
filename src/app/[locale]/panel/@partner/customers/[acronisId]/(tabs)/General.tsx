@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import useSWR from "swr";
 import { useForm } from "react-hook-form";
@@ -24,6 +25,7 @@ import DatePicker from "@/components/DatePicker";
 import BoolChip from "@/components/BoolChip";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
+import SmallCard from "@/components/cards/SmallCard";
 
 import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
@@ -39,7 +41,6 @@ import {
     LuShieldOff,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import SmallCard from "@/components/cards/SmallCard";
 
 type Props = {
     t: Function;
@@ -53,6 +54,8 @@ const customerFormSchema = z.object({
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
+    const router = useRouter();
+    const pathname = usePathname();
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
@@ -325,14 +328,6 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </dd>
                                 </div>
 
-                                <div>
-                                    <dt className="font-medium">{t("name")}</dt>
-                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {customer?.partner.name || "-"}
-                                    </dd>
-                                </div>
-
-
                                 {tenant.kind == "partner" ? (
                                     <div>
                                         <dt className="font-medium">
@@ -544,6 +539,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 }
                                 value={inactiveLicenseCount}
                                 description={t("passiveSmallCardDescription")}
+                                onClick={() =>
+                                    router.push(
+                                        `${pathname}?tab=licenses&status=passive`,
+                                    )
+                                }
                             />
                         )}
 
@@ -554,6 +554,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                             }
                             value={activeLicenseCount}
                             description={t("activeSmallCardDescription")}
+                            onClick={() =>
+                                router.push(
+                                    `${pathname}?tab=licenses&status=active`,
+                                )
+                            }
                         />
                         <SmallCard
                             title={t("completed")}
@@ -562,6 +567,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                             }
                             value={completedLicenseCount}
                             description={t("completedSmallCardDescription")}
+                            onClick={() =>
+                                router.push(
+                                    `${pathname}?tab=licenses&status=completed`,
+                                )
+                            }
                         />
 
                         {tenant.kind === "partner" && (
@@ -572,6 +582,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 }
                                 value={expiredLicenseCount}
                                 description={t("expiredSmallCardDescription")}
+                                onClick={() =>
+                                    router.push(
+                                        `${pathname}?tab=licenses&status=expired`,
+                                    )
+                                }
                             />
                         )}
                     </div>

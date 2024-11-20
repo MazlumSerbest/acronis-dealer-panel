@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
-import { DateFormat, DateTimeFormat } from "@/utils/date";
+import { DateFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
 import { formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
