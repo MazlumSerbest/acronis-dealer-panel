@@ -28,18 +28,20 @@ export default function LicensesTab({ t, tenant }: Props) {
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {},
         },
     );
 
-    if (error) return <div>{t("failedToLoad")}</div>;
     if (isLoading)
         return (
             <div className="h-80">
                 <Loader />
             </div>
         );
-    if (!data) return <div>{t("registrationNotFound")}</div>;
+    if (!data)
+        return (
+            <div className="text-center mt-4">{t("registrationNotFound")}</div>
+        );
+    if (error) return <div>{t("failedToLoad")}</div>;
     return (
         <Tabs
             defaultValue="active"

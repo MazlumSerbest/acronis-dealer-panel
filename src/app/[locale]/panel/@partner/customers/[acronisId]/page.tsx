@@ -106,7 +106,7 @@ export default function CustomerDetail({
         );
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex w-full items-end gap-2">
+            <div className="container flex w-full items-center gap-2">
                 <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2 truncate">
                     {currentTenant?.name || ""}
                 </h1>
@@ -129,6 +129,7 @@ export default function CustomerDetail({
                     <LuChevronRight className="size-6 text-muted-foreground" />
                 </Button>
             </div>
+            
             <div className="w-full">
                 <Tabs
                     defaultValue="general"
