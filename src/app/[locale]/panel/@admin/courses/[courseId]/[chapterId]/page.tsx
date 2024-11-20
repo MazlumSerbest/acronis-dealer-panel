@@ -123,13 +123,19 @@ export default function ChapterDetail({
         );
     return (
         <>
-            <Link
-                href={`/panel/courses/${params.courseId}`}
-                className="flex flex-row gap-1 font-medium hover:underline "
-            >
-                <LuChevronLeft className="size-6" />
-                {t("backToCourse")}
-            </Link>
+            <div className="w-full">
+                <Button
+                    size="sm"
+                    variant="link"
+                    className="text-sm text-muted-foreground underline-muted-foreground"
+                    asChild
+                >
+                    <Link href={`/panel/courses/${params.courseId}`}>
+                        <LuChevronLeft className="size-4 mr-1" />
+                        {t("backToCourse")}
+                    </Link>
+                </Button>
+            </div>
 
             <Card>
                 <CardHeader>

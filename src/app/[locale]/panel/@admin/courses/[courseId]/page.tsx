@@ -110,7 +110,7 @@ export default function CourseDetail({
     });
 
     function onSubmit(values: CourseFormValues) {
-        if(submitting) return;
+        if (submitting) return;
         setSubmitting(true);
 
         fetch(`/api/admin/course/${params.courseId}`, {
@@ -148,13 +148,19 @@ export default function CourseDetail({
         );
     return (
         <>
-            <Link
-                href={`/panel/courses`}
-                className="flex flex-row gap-1 font-medium hover:underline "
-            >
-                <LuChevronLeft className="size-6" />
-                {t("backToCourses")}
-            </Link>
+            <div className="w-full">
+                <Button
+                    size="sm"
+                    variant="link"
+                    className="text-sm text-muted-foreground underline-muted-foreground"
+                    asChild
+                >
+                    <Link href={`/panel/courses`}>
+                        <LuChevronLeft className="size-4 mr-1" />
+                        {t("backToCourses")}
+                    </Link>
+                </Button>
+            </div>
 
             <Card>
                 <CardHeader>
