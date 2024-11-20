@@ -1,59 +1,74 @@
 "use client";
-import React, { Suspense, useState } from "react";
+import React, { useState } from "react";
 import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import useAcronisStore from "@/store/acronis";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
-import { LuX } from "react-icons/lu";
-import Skeleton, {
-    TableSkeleton,
-} from "@/components/loaders/Skeleton";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Loader from "@/components/loaders/Loader";
 import CustomersTab from "./(tabs)/Customers";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
 
-export default function CustomerDetail({ params }: { params: { acronisId: string } }) {
-    const t = useTranslations("General");
-    const { currentTenant, updateCurrentTenant } = useAcronisStore();
+export default function CustomerDetail({
+    params,
+}: {
+    params: { acronisId: string };
+}) {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get("tab") || "general";
+    const pathname = usePathname();
+    const t = useTranslations("General");
+
+    const { currentTenant, updateCurrentTenant } = useAcronisStore();
     const [children, setChildren] = useState(undefined);
 
     //#region Fetch Data
-    const { data, error } = useSWR(`/api/acronis/tenants/${params.acronisId}`, null, {
-        revalidateOnFocus: false,
-        onSuccess: (data) => {
-            updateCurrentTenant(data.tenant);
-            if (data.tenant.kind === "partner") trigger();
+    const { data, error } = useSWR(
+        `/api/acronis/tenants/${params.acronisId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: (data) => {
+                updateCurrentTenant(data.tenant);
+                if (data.tenant.kind === "partner") trigger();
+            },
         },
-    });
+    );
 
     const { trigger, isMutating } = useSWRMutation(
         `/api/acronis/tenants/children/${params.acronisId}`,
         async (url) => {
             const response = await fetch(url);
-            if (!response.ok) throw new Error("Failed to fetch tenant children");
+            if (!response.ok)
+                throw new Error("Failed to fetch tenant children");
             return response.json();
         },
         {
-            onSuccess: async(data) => {
+            onSuccess: async (data) => {
                 if (!data) return;
-                
 
                 try {
-                    const [customersResponse, partnersResponse] = await Promise.all([
-                        fetch(`/api/customer?partnerAcronisId=${params?.acronisId}`),
-                        fetch(`/api/partner?parentAcronisId=${params?.acronisId}`)
-                    ]);
+                    const [customersResponse, partnersResponse] =
+                        await Promise.all([
+                            fetch(
+                                `/api/customer?partnerAcronisId=${params?.acronisId}`,
+                            ),
+                            fetch(
+                                `/api/partner?parentAcronisId=${params?.acronisId}`,
+                            ),
+                        ]);
 
                     const [customers, partners] = await Promise.all([
                         customersResponse.json(),
-                        partnersResponse.json()
+                        partnersResponse.json(),
                     ]);
 
                     const newData = data.map((item: any) => ({
@@ -62,9 +77,14 @@ export default function CustomerDetail({ params }: { params: { acronisId: string
                         kind: item.kind,
                         enabled: item.enabled,
                         mfa_status: item.mfa_status,
-                        billingDate: item.kind === "customer" 
-                            ? customers.find((c: Customer) => c.acronisId === item.id)?.billingDate
-                            : partners.find((p: Partner) => p.acronisId === item.id)?.billingDate,
+                        billingDate:
+                            item.kind === "customer"
+                                ? customers.find(
+                                      (c: Customer) => c.acronisId === item.id,
+                                  )?.billingDate
+                                : partners.find(
+                                      (p: Partner) => p.acronisId === item.id,
+                                  )?.billingDate,
                         usages: item.usages,
                     }));
 
@@ -86,22 +106,38 @@ export default function CustomerDetail({ params }: { params: { acronisId: string
         );
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex w-full items-end">
+            <div className="flex w-full items-end gap-2">
                 <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2 truncate">
                     {currentTenant?.name || ""}
                 </h1>
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
                     onClick={() => {
                         router.back();
                     }}
                 >
-                    <LuX className="text-3xl text-zinc-500" />
+                    <LuChevronLeft className="size-6 text-muted-foreground" />
+                </Button>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                        router.forward();
+                    }}
+                >
+                    <LuChevronRight className="size-6 text-muted-foreground" />
                 </Button>
             </div>
             <div className="w-full">
-                <Tabs defaultValue="general" className="flex flex-col w-full">
+                <Tabs
+                    defaultValue="general"
+                    value={tab}
+                    onValueChange={(value) =>
+                        router.push(`${pathname}?tab=${value}`)
+                    }
+                    className="flex flex-col w-full"
+                >
                     <TabsList className="mx-auto  *:md:w-[200px] *:w-full mb-2">
                         <TabsTrigger value="general">
                             {t("general")}

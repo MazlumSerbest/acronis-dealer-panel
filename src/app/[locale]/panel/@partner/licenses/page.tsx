@@ -1,4 +1,5 @@
 "use client";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,10 +9,19 @@ import CompletedTab from "./(tabs)/Completed";
 import ExpiredTab from "./(tabs)/Expired";
 
 export default function LicensesPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const tab = searchParams.get("tab") || "active";
+    const pathname = usePathname();
     const tl = useTranslations("Licenses");
 
     return (
-        <Tabs defaultValue="active" className="flex flex-col w-full">
+        <Tabs
+            defaultValue="active"
+            value={tab}
+            onValueChange={(value) => router.push(`${pathname}?tab=${value}`)}
+            className="flex flex-col w-full"
+        >
             <TabsList className="max-w-fit">
                 <TabsTrigger value="passive">{tl("passive")}</TabsTrigger>
                 <TabsTrigger value="active">{tl("active")}</TabsTrigger>
