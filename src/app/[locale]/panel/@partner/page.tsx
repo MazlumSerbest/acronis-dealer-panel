@@ -170,7 +170,11 @@ export default function PanelPage() {
                                     description={t(
                                         "passiveSmallCardDescription",
                                     )}
-                                    onClick={() => router.push("panel/licenses?tab=passive")}
+                                    onClick={() =>
+                                        router.push(
+                                            "panel/licenses?tab=passive",
+                                        )
+                                    }
                                 />
                                 <SmallCard
                                     title={t("active")}
@@ -181,7 +185,9 @@ export default function PanelPage() {
                                     description={t(
                                         "activeSmallCardDescription",
                                     )}
-                                    onClick={() => router.push("panel/licenses?tab=active")}
+                                    onClick={() =>
+                                        router.push("panel/licenses?tab=active")
+                                    }
                                 />
                                 <SmallCard
                                     title={t("completed")}
@@ -192,7 +198,11 @@ export default function PanelPage() {
                                     description={t(
                                         "completedSmallCardDescription",
                                     )}
-                                    onClick={() => router.push("panel/licenses?tab=completed")}
+                                    onClick={() =>
+                                        router.push(
+                                            "panel/licenses?tab=completed",
+                                        )
+                                    }
                                 />
                                 <SmallCard
                                     title={t("expired")}
@@ -203,13 +213,17 @@ export default function PanelPage() {
                                     description={t(
                                         "expiredSmallCardDescription",
                                     )}
-                                    onClick={() => router.push("panel/licenses?tab=expired")}
+                                    onClick={() =>
+                                        router.push(
+                                            "panel/licenses?tab=expired",
+                                        )
+                                    }
                                 />
+                            </div>
 
-                                <div className="col-span-full text-sm text-muted-foreground">
-                                    <sup>*</sup>
-                                    {t("licenseCardWarning")}
-                                </div>
+                            <div className="col-span-full text-sm text-muted-foreground">
+                                <sup>*</sup>
+                                {t("licenseCardWarning")}
                             </div>
                         </>
                     )}
