@@ -20,7 +20,14 @@ export const GET = auth(async (req: any, { params }) => {
         const data = await prisma.customer.findUnique({
             where: {
                 acronisId: params?.acronisId as string,
-            }
+            },
+            include: {
+                partner: {
+                    select: {
+                        name: true,
+                    },
+                }
+            },
         });
 
         return NextResponse.json(data);

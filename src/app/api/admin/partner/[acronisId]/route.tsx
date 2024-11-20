@@ -27,9 +27,14 @@ export const GET = auth(async (req: any, { params }) => {
                         id: true,
                         name: true,
                         email: true,
-                    }
-                }
-            }
+                    },
+                },
+                parent: {
+                    select: {
+                        name: true,
+                    },
+                },
+            },
         });
 
         return NextResponse.json(data);

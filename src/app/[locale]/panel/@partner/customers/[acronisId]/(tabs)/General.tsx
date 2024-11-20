@@ -326,13 +326,32 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 </div>
 
                                 <div>
-                                    <dt className="font-medium">
-                                        {t("acronisId")}
-                                    </dt>
+                                    <dt className="font-medium">{t("name")}</dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
-                                        {tenant?.id || "-"}
+                                        {customer?.partner.name || "-"}
                                     </dd>
                                 </div>
+
+
+                                {tenant.kind == "partner" ? (
+                                    <div>
+                                        <dt className="font-medium">
+                                            {t("upperPartner")}
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                            {customer?.parent.name || "-"}
+                                        </dd>
+                                    </div>
+                                ) : (
+                                    <div>
+                                        <dt className="font-medium">
+                                            {t("partnerName")}
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                            {customer?.partner.name || "-"}
+                                        </dd>
+                                    </div>
+                                )}
 
                                 <div>
                                     <dt className="font-medium">
