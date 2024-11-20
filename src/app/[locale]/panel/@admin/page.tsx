@@ -21,7 +21,7 @@ import UsageCard from "@/components/cards/Usage";
 
 import useUserStore from "@/store/user";
 import SmallCard from "@/components/cards/SmallCard";
-import { LuShield, LuShieldCheck, LuShieldOff, LuSigma } from "react-icons/lu";
+import { LuShield, LuShieldCheck, LuShieldQuestion, LuSigma } from "react-icons/lu";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -162,7 +162,7 @@ export default function PanelPage() {
                             title={t("unassigned")}
                             value={unassignedLicenseCount}
                             icon={
-                                <LuShieldOff className="size-5 text-muted-foreground" />
+                                <LuShieldQuestion className="size-5 text-muted-foreground" />
                             }
                             description={t("unassignedSmallCardDescription")}
                             onClick={() => router.push("panel/licenses")}

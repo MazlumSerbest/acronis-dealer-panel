@@ -106,28 +106,30 @@ export default function TenantDetail({
         );
     return (
         <div className="flex flex-col gap-2">
-            <div className="container flex w-full items-center gap-2">
-                <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2 truncate">
+            <div className="container relative flex w-full items-center gap-2">
+                <h1 className="flex-1 font-semibold text-2xl text-blue-400 text-center mt-4 md:mt-2 truncate">
                     {currentTenant?.name || ""}
                 </h1>
-                <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => {
-                        router.back();
-                    }}
-                >
-                    <LuChevronLeft className="size-6 text-muted-foreground" />
-                </Button>
-                <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => {
-                        router.forward();
-                    }}
-                >
-                    <LuChevronRight className="size-6 text-muted-foreground" />
-                </Button>
+                <div className="hidden sm:flex sm:absolute right-0 gap-2">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                            router.back();
+                        }}
+                    >
+                        <LuChevronLeft className="size-6 text-muted-foreground" />
+                    </Button>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                            router.forward();
+                        }}
+                    >
+                        <LuChevronRight className="size-6 text-muted-foreground" />
+                    </Button>
+                </div>
             </div>
             <div className="w-full">
                 <Tabs
