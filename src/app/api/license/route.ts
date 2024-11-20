@@ -24,12 +24,7 @@ export const GET = auth(async (req: any) => {
             req.nextUrl.searchParams.get("customerAcronisId");
         let where = {};
 
-        // if (!partnerAcronisId)
-        //     return NextResponse.json({
-        //         message: tm(""),
-        //         status: 400,
-        //         ok: false,
-        //     });
+        if (!partnerAcronisId && !customerAcronisId) return;
 
         switch (status) {
             case "inactive":
@@ -43,7 +38,9 @@ export const GET = auth(async (req: any) => {
                 break;
             case "active":
                 where = {
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         gte: new Date(
@@ -56,7 +53,9 @@ export const GET = auth(async (req: any) => {
                 break;
             case "completed":
                 where = {
-                    customerAcronisId: { not: null },
+                    customerAcronisId: customerAcronisId
+                        ? customerAcronisId
+                        : { not: null },
                     activatedAt: {
                         not: null,
                         lt: new Date(
@@ -84,13 +83,6 @@ export const GET = auth(async (req: any) => {
             };
         }
 
-        if (customerAcronisId) {
-            where = {
-                customerAcronisId: customerAcronisId,
-                ...where,
-            };
-        }
-
         const data = await prisma.v_License.findMany({
             where: where,
             orderBy: {
@@ -99,6 +91,53 @@ export const GET = auth(async (req: any) => {
         });
 
         return NextResponse.json(data);
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
+
+export const PUT = auth(async (req: any) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (!req.auth)
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+
+        const values = await req.json();
+        const serials = values.serials.map(
+            (serial: { value: string }) => serial.value,
+        );
+
+        const where = {
+            AND: [
+                {
+                    serialNo: {
+                        in: serials,
+                    },
+                },
+                {
+                    OR: [
+                        {
+                            partnerAcronisId: null,
+                        },
+                        {
+                            partnerAcronisId: values.partnerAcronisId,
+                        },
+                    ],
+                },
+            ],
+        };
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

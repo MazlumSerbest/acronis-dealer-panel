@@ -9,7 +9,7 @@ import useAcronisStore from "@/store/acronis";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
-import { LuX } from "react-icons/lu";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Loader from "@/components/loaders/Loader";
 import ClientsTab from "./(tabs)/Clients";
@@ -106,18 +106,27 @@ export default function TenantDetail({
         );
     return (
         <div className="flex flex-col gap-2">
-            <div className="flex w-full items-end">
+            <div className="flex w-full items-end gap-2">
                 <h1 className="flex-1 font-semibold text-xl text-blue-400 mt-4 md:mt-2 truncate">
                     {currentTenant?.name || ""}
                 </h1>
                 <Button
-                    variant="ghost"
+                    variant="outline"
                     size="icon"
                     onClick={() => {
                         router.back();
                     }}
                 >
-                    <LuX className="text-3xl text-zinc-500" />
+                    <LuChevronLeft className="size-6 text-muted-foreground" />
+                </Button>
+                <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => {
+                        router.forward();
+                    }}
+                >
+                    <LuChevronRight className="size-6 text-muted-foreground" />
                 </Button>
             </div>
             <div className="w-full">
