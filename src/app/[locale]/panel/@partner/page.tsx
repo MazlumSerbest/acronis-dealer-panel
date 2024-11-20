@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
@@ -29,6 +30,7 @@ import {
 
 export default function PanelPage() {
     const t = useTranslations("General");
+    const router = useRouter();
     const { user: currentUser } = useUserStore();
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
@@ -168,6 +170,7 @@ export default function PanelPage() {
                                     description={t(
                                         "passiveSmallCardDescription",
                                     )}
+                                    onClick={() => router.push("panel/licenses?tab=passive")}
                                 />
                                 <SmallCard
                                     title={t("active")}
@@ -178,6 +181,7 @@ export default function PanelPage() {
                                     description={t(
                                         "activeSmallCardDescription",
                                     )}
+                                    onClick={() => router.push("panel/licenses?tab=active")}
                                 />
                                 <SmallCard
                                     title={t("completed")}
@@ -188,6 +192,7 @@ export default function PanelPage() {
                                     description={t(
                                         "completedSmallCardDescription",
                                     )}
+                                    onClick={() => router.push("panel/licenses?tab=completed")}
                                 />
                                 <SmallCard
                                     title={t("expired")}
@@ -198,6 +203,7 @@ export default function PanelPage() {
                                     description={t(
                                         "expiredSmallCardDescription",
                                     )}
+                                    onClick={() => router.push("panel/licenses?tab=expired")}
                                 />
 
                                 <div className="col-span-full text-sm text-muted-foreground">

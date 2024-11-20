@@ -156,6 +156,7 @@ export default function PanelPage() {
                                 <LuSigma className="size-5 text-muted-foreground" />
                             }
                             description={t("totalSmallCardDescription")}
+                            onClick={() => router.push("panel/licenses")}
                         />
                         <SmallCard
                             title={t("unassigned")}
@@ -164,6 +165,7 @@ export default function PanelPage() {
                                 <LuShieldOff className="size-5 text-muted-foreground" />
                             }
                             description={t("unassignedSmallCardDescription")}
+                            onClick={() => router.push("panel/licenses")}
                         />
                         <SmallCard
                             title={t("assigned")}
@@ -172,6 +174,7 @@ export default function PanelPage() {
                                 <LuShield className="size-5 text-muted-foreground" />
                             }
                             description={t("assignedSmallCardDescription")}
+                            onClick={() => router.push("panel/licenses?tab=assigned&status=assigned")}
                         />
                         <SmallCard
                             title={t("active")}
@@ -180,6 +183,7 @@ export default function PanelPage() {
                                 <LuShieldCheck className="size-5 text-muted-foreground" />
                             }
                             description={t("activeSmallCardDescription")}
+                            onClick={() => router.push("panel/licenses?tab=assigned&status=active")}
                         />
                     </div>
 
