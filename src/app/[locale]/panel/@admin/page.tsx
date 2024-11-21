@@ -21,7 +21,12 @@ import UsageCard from "@/components/cards/Usage";
 
 import useUserStore from "@/store/user";
 import SmallCard from "@/components/cards/SmallCard";
-import { LuShield, LuShieldCheck, LuShieldQuestion, LuSigma } from "react-icons/lu";
+import {
+    LuShield,
+    LuShieldCheck,
+    LuShieldQuestion,
+    LuSigma,
+} from "react-icons/lu";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -174,7 +179,11 @@ export default function PanelPage() {
                                 <LuShield className="size-5 text-muted-foreground" />
                             }
                             description={t("assignedSmallCardDescription")}
-                            onClick={() => router.push("panel/licenses?tab=assigned&status=assigned")}
+                            onClick={() =>
+                                router.push(
+                                    "panel/licenses?tab=assigned&status=assigned",
+                                )
+                            }
                         />
                         <SmallCard
                             title={t("active")}
@@ -183,7 +192,11 @@ export default function PanelPage() {
                                 <LuShieldCheck className="size-5 text-muted-foreground" />
                             }
                             description={t("activeSmallCardDescription")}
-                            onClick={() => router.push("panel/licenses?tab=assigned&status=active")}
+                            onClick={() =>
+                                router.push(
+                                    "panel/licenses?tab=assigned&status=active",
+                                )
+                            }
                         />
                     </div>
 
@@ -245,7 +258,7 @@ export default function PanelPage() {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="perWorkload">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
                                         ?.sort((a, b) =>
@@ -278,7 +291,7 @@ export default function PanelPage() {
                             </div>
                         </TabsContent>
                         <TabsContent value="perGB">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB
                                         ?.sort((a, b) =>

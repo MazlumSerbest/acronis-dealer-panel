@@ -296,7 +296,7 @@ export default function PanelPage() {
                                 </TabsTrigger>
                             </TabsList>
                             <TabsContent value="perWorkload">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                     {usagesPerWorkload?.length ? (
                                         usagesPerWorkload
                                             ?.sort((a, b) =>
@@ -330,7 +330,7 @@ export default function PanelPage() {
                                 </div>
                             </TabsContent>
                             <TabsContent value="perGB">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                     {usagesPerGB?.length ? (
                                         usagesPerGB
                                             ?.sort((a, b) =>

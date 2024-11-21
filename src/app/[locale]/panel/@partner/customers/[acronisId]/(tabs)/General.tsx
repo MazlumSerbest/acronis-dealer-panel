@@ -39,8 +39,10 @@ import {
     LuShieldAlert,
     LuShieldCheck,
     LuShieldOff,
+    LuSigma,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
+import { set } from "date-fns";
 
 type Props = {
     t: Function;
@@ -71,6 +73,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [completedLicenseCount, setCompletedLicenseCount] =
         useState<number>(0);
     const [expiredLicenseCount, setExpiredLicenseCount] = useState<number>(0);
+    const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
 
     // #region Fetch Data
     const {
@@ -111,7 +114,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ),
             );
 
-            if (tenant.kind === "partner" && currentUser?.licensed) {
+            if (currentUser?.licensed && tenant.kind === "partner") {
                 const inactive = await fetch(
                     `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
                 );
@@ -135,7 +138,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                 );
                 const expiredCount = await expired.json();
                 setExpiredLicenseCount(expiredCount.count);
-            } else if (tenant.kind === "customer" && currentUser?.licensed) {
+
+                setTotalLicenseCount(inactiveCount.count + activeCount.count);
+            } else if (currentUser?.licensed && tenant.kind === "customer") {
                 const active = await fetch(
                     `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
                 );
@@ -476,7 +481,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-between">
+                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-start">
                     {!currentUser?.licensed && (
                         <StorageCard
                             title={t("storageCardTitle")}
@@ -498,6 +503,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             }
                         />
                     )}
+
                     <StorageCard
                         title={t("storageCardTitle")}
                         description={
@@ -521,6 +527,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )?.offering_item.quota
                         }
                     />
+
+                    {currentUser?.licensed && (
+                        <SmallCard
+                            title={t("totalLicense")}
+                            icon={
+                                <LuSigma className="size-5 text-muted-foreground" />
+                            }
+                            value={totalLicenseCount}
+                            description={`${t("totalSmallCardDescription")} (${t("active")} ${t("and")} ${t("passive")})`}
+                        />
+                    )}
                 </div>
             )}
 
@@ -621,7 +638,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     ) : (
                         <>
                             <TabsContent value={"perWorkload"}>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                     {usagesPerWorkload?.length ? (
                                         usagesPerWorkload
                                             ?.sort((a, b) =>
@@ -655,7 +672,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 </div>
                             </TabsContent>
                             <TabsContent value={"perGB"}>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                     {usagesPerGB?.length ? (
                                         usagesPerGB
                                             ?.sort((a, b) =>

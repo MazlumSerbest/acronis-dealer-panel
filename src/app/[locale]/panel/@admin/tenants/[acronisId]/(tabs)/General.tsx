@@ -678,7 +678,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-between">
+                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-start">
                     <StorageCard
                         title={t("storageCardTitle")}
                         description={t("storageCardDescriptionPW")}
@@ -698,6 +698,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )?.offering_item.quota
                         }
                     />
+
                     <StorageCard
                         title={t("storageCardTitle")}
                         description={t("storageCardDescriptionGB")}
@@ -808,7 +809,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ) : (
                     <>
                         <TabsContent value={"perWorkload"}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
                                         ?.sort((a, b) =>
@@ -841,7 +842,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             </div>
                         </TabsContent>
                         <TabsContent value={"perGB"}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB
                                         ?.sort((a, b) =>

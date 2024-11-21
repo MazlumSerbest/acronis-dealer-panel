@@ -8,6 +8,16 @@ import {
     CardTitle,
 } from "../ui/card";
 import { cn } from "@/lib/utils";
+import {
+    LuBox,
+    LuComputer,
+    LuDatabase,
+    LuDatabaseBackup,
+    LuInbox,
+    LuMailbox,
+    LuMonitor,
+    LuServer,
+} from "react-icons/lu";
 
 type Props = {
     title: string;
@@ -17,6 +27,7 @@ type Props = {
     quota: {
         value: number | null;
     };
+    icon?: React.ReactNode;
 };
 
 export default function UsageCard({
@@ -25,6 +36,7 @@ export default function UsageCard({
     unit,
     value,
     quota,
+    icon,
 }: Props) {
     const t = useTranslations("Components.Usage");
 
@@ -42,10 +54,10 @@ export default function UsageCard({
                     : quotaAlmostExceeded
                     ? "border-yellow-500"
                     : "",
-                "flex flex-col"
+                "flex flex-col",
             )}
         >
-            <CardHeader>
+            <CardHeader className="flex flex-row justify-between space-y-0 pb-2 gap-1">
                 <CardTitle
                     className={cn(
                         quotaExceeded
@@ -53,28 +65,89 @@ export default function UsageCard({
                             : quotaAlmostExceeded
                             ? "text-yellow-500"
                             : "",
+                        "text-sm font-medium",
                     )}
                 >
                     {t(title)}
                 </CardTitle>
-                <CardDescription>{description}</CardDescription>
+                <div>
+                    {description?.includes("server") ? (
+                        <LuServer
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) : description?.includes("workstation") ? (
+                        <LuMonitor
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) : description?.includes("vm") ? (
+                        <LuBox
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) : 
+                    description?.includes("mailbox") ? (
+                        <LuInbox
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) :
+                    (
+                        <LuDatabaseBackup
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    )}
+                </div>
             </CardHeader>
             <CardContent className="mt-auto">
-                <p
+                <div
                     className={cn(
                         quotaExceeded
                             ? "text-destructive"
                             : quotaAlmostExceeded
                             ? "text-yellow-500"
                             : "",
-                        "text-2xl",
+                        "text-2xl font-bold",
                     )}
                 >
                     {formatedValue}
                     <span className="text-base text-muted-foreground ml-2">
                         {quota?.value ? `/ ${formatedQuota}` : ""}
                     </span>
-                </p>
+                </div>
+                <p className="text-xs text-muted-foreground">{description}</p>
             </CardContent>
         </Card>
     );
