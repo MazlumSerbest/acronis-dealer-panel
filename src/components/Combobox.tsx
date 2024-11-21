@@ -42,7 +42,7 @@ export default function Combobox({
     const [open, setOpen] = useState(false);
 
     return (
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={open} onOpenChange={setOpen} modal>
             <PopoverTrigger asChild>
                 <Button
                     variant="outline"
@@ -61,7 +61,7 @@ export default function Combobox({
                     <LuChevronsUpDown className="ml-2 size-3 shrink-0 opacity-50" />
                 </Button>
             </PopoverTrigger>
-            <PopoverContent className="p-0 min-w-[350px]">
+            <PopoverContent className="p-0 min-w-[350px] overflow-auto">
                 <Command>
                     <CommandInput placeholder={inputPlaceholder} />
                     <CommandList>
