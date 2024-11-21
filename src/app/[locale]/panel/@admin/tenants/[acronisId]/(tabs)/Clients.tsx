@@ -88,6 +88,22 @@ export default function ClientsTab({ t, clients }: Props) {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "licensed",
+            header: t("licensed"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("licensed");
+                const kind: string = row.getValue("kind");
+
+                return kind === "partner" ? (
+                    <BoolChip size="size-4" value={data} />
+                ) : (
+                    "-"
+                );
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
             accessorKey: "billingDate",
             enableHiding: false,
             enableGlobalFilter: false,
@@ -208,6 +224,14 @@ export default function ClientsTab({ t, clients }: Props) {
                 {
                     column: "enabled",
                     title: t("enabled"),
+                    options: [
+                        { value: true, label: t("true") },
+                        { value: false, label: t("false") },
+                    ],
+                },
+                {
+                    column: "licensed",
+                    title: t("licensed"),
                     options: [
                         { value: true, label: t("true") },
                         { value: false, label: t("false") },

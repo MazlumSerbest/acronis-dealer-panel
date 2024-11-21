@@ -68,6 +68,7 @@ export default function TenantsPage() {
                         kind: item.kind,
                         enabled: item.enabled,
                         mfa_status: item.mfa_status,
+                        licensed: null,
                         billingDate: "",
                         usages: item.usages,
                     };
@@ -84,6 +85,7 @@ export default function TenantsPage() {
                             (partner: Partner) => partner.acronisId === item.id,
                         );
                         newItem.billingDate = partner?.billingDate || undefined;
+                        newItem.licensed = partner?.licensed || undefined;
                     }
 
                     return newItem;
@@ -156,6 +158,17 @@ export default function TenantsPage() {
                 const data: string = row.getValue("mfa_status");
 
                 return <BoolChip size="size-4" value={data === "enabled"} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "licensed",
+            header: t("licensed"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("licensed");
+
+                return <BoolChip size="size-4" value={data} />;
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -324,6 +337,14 @@ export default function TenantsPage() {
                         {
                             column: "enabled",
                             title: t("enabled"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
+                            ],
+                        },
+                        {
+                            column: "licensed",
+                            title: t("licensed"),
                             options: [
                                 { value: true, label: t("true") },
                                 { value: false, label: t("false") },

@@ -179,6 +179,7 @@ export default function CustomersPage() {
             parentAcronisId: currentUser?.acronisTenantId,
             partnerAcronisId: currentUser?.partnerAcronisId,
             kind: values.kind,
+            licensed: currentUser?.licensed,
             contact: {
                 email: values.email,
             },

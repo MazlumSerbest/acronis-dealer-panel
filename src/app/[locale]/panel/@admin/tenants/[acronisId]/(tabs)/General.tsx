@@ -29,6 +29,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
@@ -73,6 +75,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [submitting, setSubmitting] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
+    const [licensed, setLicensed] = useState<boolean>(true);
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
@@ -597,6 +600,25 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     {t("createPartnerWarning")}
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
+
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <Label htmlFor="licensed" className="text-sm font-medium">
+                                                        {t("licensed")}
+                                                    </Label>
+                                                    <p className="text-[0.8rem] text-muted-foreground">
+                                                        {t(
+                                                            "licensedDescription",
+                                                        )}
+                                                    </p>
+                                                </div>
+                                                <Switch
+                                                    id="licensed"
+                                                    checked={licensed}
+                                                    onCheckedChange={setLicensed}
+                                                />
+                                            </div>
+
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel asChild>
                                                     <Button variant="outline">
@@ -621,6 +643,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                         parentAcronisId:
                                                                             tenant?.parent_id,
                                                                         name: tenant?.name,
+                                                                        licensed:
+                                                                            licensed,
                                                                     },
                                                                 ),
                                                             },

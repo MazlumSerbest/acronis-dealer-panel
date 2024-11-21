@@ -77,6 +77,12 @@ export default function TenantDetail({
                         kind: item.kind,
                         enabled: item.enabled,
                         mfa_status: item.mfa_status,
+                        licensed:
+                            item.kind === "partner"
+                                ? partners.find(
+                                      (p: Partner) => p.acronisId === item.id,
+                                  )?.licensed
+                                : null,
                         billingDate:
                             item.kind === "customer"
                                 ? customers.find(

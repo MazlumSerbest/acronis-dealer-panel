@@ -149,6 +149,7 @@ export const POST = auth(async (req: any, { params }) => {
                 acronisId: createdTenant.id,
                 parentAcronisId: createdTenant.parent_id,
                 name: createdTenant?.name,
+                licensed: tenant.licensed,
                 applicationId: tenant.applicationId,
                 createdBy: req.auth.user.email,
             };

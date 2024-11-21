@@ -192,6 +192,7 @@ export default function ApplicationDetail({
             parent_id: data.parentAcronisId,
             partnerId: data.partnerId, // ???
             kind: "partner",
+            licensed: true,
             contact: {
                 email: values.email,
             },
