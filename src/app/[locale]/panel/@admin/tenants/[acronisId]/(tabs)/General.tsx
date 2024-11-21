@@ -52,6 +52,7 @@ import {
     LuShieldAlert,
     LuShieldCheck,
     LuShieldOff,
+    LuSigma,
 } from "react-icons/lu";
 
 type Props = {
@@ -85,6 +86,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [completedLicenseCount, setCompletedLicenseCount] =
         useState<number>(0);
     const [expiredLicenseCount, setExpiredLicenseCount] = useState<number>(0);
+    const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
 
     // #region Fetch Data
     const {
@@ -94,6 +96,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     } = useSWR(`/api/admin/${tenant?.kind}/${tenant?.id}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
+            console.log(data);
             const daysDiff = calculateRemainingDays(data.billingDate);
             seDaysUntilNextBillingDate(daysDiff);
         },
@@ -125,7 +128,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ),
             );
 
-            if (tenant.kind === "partner") {
+            if (panelTenant?.licensed && tenant.kind === "partner") {
                 const inactive = await fetch(
                     `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
                 );
@@ -149,7 +152,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                 );
                 const expiredCount = await expired.json();
                 setExpiredLicenseCount(expiredCount.count);
-            } else {
+
+                setTotalLicenseCount(inactiveCount.count + activeCount.count);
+            } else if (panelTenant?.licensed && tenant.kind === "customer") {
                 const active = await fetch(
                     `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
                 );
@@ -603,7 +608,10 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                                             <div className="flex items-center justify-between">
                                                 <div>
-                                                    <Label htmlFor="licensed" className="text-sm font-medium">
+                                                    <Label
+                                                        htmlFor="licensed"
+                                                        className="text-sm font-medium"
+                                                    >
                                                         {t("licensed")}
                                                     </Label>
                                                     <p className="text-[0.8rem] text-muted-foreground">
@@ -615,7 +623,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                 <Switch
                                                     id="licensed"
                                                     checked={licensed}
-                                                    onCheckedChange={setLicensed}
+                                                    onCheckedChange={
+                                                        setLicensed
+                                                    }
                                                 />
                                             </div>
 
@@ -703,25 +713,27 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Skeleton>
             ) : (
                 <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-start">
-                    <StorageCard
-                        title={t("storageCardTitle")}
-                        description={t("storageCardDescriptionPW")}
-                        model={t("perWorkload")}
-                        usage={
-                            usages?.usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_workload",
-                            )?.value
-                        }
-                        quota={
-                            usages?.usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_workload",
-                            )?.offering_item.quota
-                        }
-                    />
+                    {!panelTenant?.licensed && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionPW")}
+                            model={t("perWorkload")}
+                            usage={
+                                usages?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_workload",
+                                )?.value
+                            }
+                            quota={
+                                usages?.usages?.items?.find(
+                                    (u: TenantUsage) =>
+                                        u.usage_name == "storage" &&
+                                        u.edition == "pck_per_workload",
+                                )?.offering_item.quota
+                            }
+                        />
+                    )}
 
                     <StorageCard
                         title={t("storageCardTitle")}
@@ -742,6 +754,19 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )?.offering_item.quota
                         }
                     />
+
+                    {panelTenant?.licensed && (
+                        <SmallCard
+                            title={t("totalLicense")}
+                            icon={
+                                <LuSigma className="size-5 text-muted-foreground" />
+                            }
+                            value={totalLicenseCount}
+                            description={`${t(
+                                "totalSmallCardDescription",
+                            )} (${t("active")} ${t("and")} ${t("passive")})`}
+                        />
+                    )}
                 </div>
             )}
 
@@ -817,11 +842,16 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <h2 className="font-medium text-xl">{t("usages")}</h2>
             </div>
 
-            <Tabs defaultValue="perWorkload" className="col-span-full">
+            <Tabs
+                defaultValue={!panelTenant?.licensed ? "perWorkload" : "perGB"}
+                className="col-span-full"
+            >
                 <TabsList>
-                    <TabsTrigger value={"perWorkload"}>
-                        {t("perWorkload")}
-                    </TabsTrigger>
+                    {!panelTenant?.licensed && (
+                        <TabsTrigger value={"perWorkload"}>
+                            {t("perWorkload")}
+                        </TabsTrigger>
+                    )}
                     <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
                 </TabsList>
                 {!usages ? (
