@@ -390,6 +390,7 @@ export default function PassiveTab() {
             const par: ListBoxItem[] = await getPartners(
                 currentUser?.partnerAcronisId,
                 true,
+                true
             );
             setPartners(par);
         }

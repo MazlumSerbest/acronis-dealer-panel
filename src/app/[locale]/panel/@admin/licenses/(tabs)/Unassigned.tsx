@@ -310,6 +310,7 @@ export default function UnassignedTab() {
             const par: ListBoxItem[] = await getPartners(
                 currentUser?.acronisTenantId,
                 true,
+                true
             );
             setPartners(par);
         }
