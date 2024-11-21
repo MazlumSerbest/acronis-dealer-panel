@@ -55,7 +55,6 @@ import useUserStore from "@/store/user";
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
     active: z.boolean(),
-    licensed: z.boolean(),
     role: z.enum(["admin", "partner"], {
         required_error: "User.role.required",
     }),
@@ -96,7 +95,6 @@ export default function UsersPage() {
         resolver: zodResolver(userFormSchema),
         defaultValues: {
             active: true,
-            licensed: true,
         },
     });
 
@@ -144,6 +142,7 @@ export default function UsersPage() {
                         });
                         setOpen(false);
                         mutate();
+                        form.reset();
                     } else {
                         toast({
                             variant: "destructive",
@@ -259,17 +258,6 @@ export default function UsersPage() {
                 const emailVerified: boolean = data?.length > 0;
                 return <BoolChip size="size-4" value={emailVerified} />;
             },
-        },
-        {
-            accessorKey: "licensed",
-            header: t("licensedUser"),
-            enableGlobalFilter: false,
-            cell: ({ row }) => {
-                const data: boolean = row.getValue("licensed");
-
-                return <BoolChip size="size-4" value={data} />;
-            },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "active",
@@ -403,14 +391,6 @@ export default function UsersPage() {
                         ],
                     },
                     {
-                        column: "licensed",
-                        title: t("licensed"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                    {
                         column: "active",
                         title: t("active"),
                         options: [
@@ -422,7 +402,7 @@ export default function UsersPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({ active: true, licensed: true });
+                    form.reset({ active: true });
                 }}
             />
 
@@ -430,9 +410,7 @@ export default function UsersPage() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {isNew
-                                ? `${t("new")} ${t("user")}`
-                                : `${t("edit")} ${t("user")}`}
+                            {isNew ? t("newUser") : t("editUser")}
                         </DialogTitle>
                     </DialogHeader>
 
@@ -550,33 +528,6 @@ export default function UsersPage() {
 
                             {form.watch("role") === "partner" && (
                                 <>
-                                    <FormField
-                                        control={form.control}
-                                        name="licensed"
-                                        render={({ field }) => (
-                                            <FormItem className="flex flex-row items-center justify-between">
-                                                <div className="space-y-0.5">
-                                                    <FormLabel>
-                                                        {t("licensedUser")}
-                                                    </FormLabel>
-                                                    <FormDescription>
-                                                        {tf(
-                                                            "licensed.description",
-                                                        )}
-                                                    </FormDescription>
-                                                </div>
-                                                <FormControl>
-                                                    <Switch
-                                                        checked={field.value}
-                                                        onCheckedChange={
-                                                            field.onChange
-                                                        }
-                                                    />
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-
                                     <FormField
                                         control={form.control}
                                         name="partnerAcronisId"

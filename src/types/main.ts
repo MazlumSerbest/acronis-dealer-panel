@@ -31,6 +31,7 @@ type Partner = Entity & {
     parentAcronisId?: string;
     applicationId?: string;
     name: string;
+    licensed: boolean;
     active?: boolean;
     billingDate?: string;
     application?: Application;

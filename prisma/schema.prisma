@@ -23,7 +23,7 @@ model User {
   acronisTenantId  String?
   language         String?   @default("tr")
   deleted          Boolean   @default(false)
-  licensed         Boolean   @default(false)
+  // licensed         Boolean   @default(false)
   partnerAcronisId String?
   accounts         Account[]
   sessions         Session[]
@@ -78,6 +78,7 @@ model Partner {
   billingDate     DateTime?
   parentAcronisId String?
   name            String?
+  licensed        Boolean   @default(true)
 
   customers              Customer[]
   licenses               License[]

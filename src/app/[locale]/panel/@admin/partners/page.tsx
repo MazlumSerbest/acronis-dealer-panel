@@ -3,6 +3,10 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -13,33 +17,105 @@ import {
     DropdownMenuLabel,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Dialog,
+    DialogHeader,
+    DialogTitle,
+    DialogContent,
+    DialogClose,
+    DialogFooter,
+} from "@/components/ui/dialog";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { DateTimeFormat } from "@/utils/date";
+import { Switch } from "@/components/ui/switch";
+
+const partnerFormSchema = z.object({
+    acronisId: z.string().uuid().optional(),
+    active: z.boolean(),
+    licensed: z.boolean(),
+});
+
+type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 export default function PartnersPage() {
     const t = useTranslations("General");
+    const tf = useTranslations("FormMessages.Partner");
     const router = useRouter();
-    const { user: currentUser } = useUserStore();
+    const { toast } = useToast();
     const [partners, setPartners] = useState<Partner[]>([]);
 
-    const { data, error, isLoading } = useSWR(`/api/admin/partner`, null, {
-        revalidateOnFocus: false,
-        onSuccess: (data) => {
-            setPartners(
-                data.filter(
-                    (partner: Partner) =>
-                        partner.acronisId !==
-                        "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
-                ),
-            );
+    const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+
+    const { data, error, isLoading, mutate } = useSWR(
+        `/api/admin/partner`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: (data) => {
+                setPartners(
+                    data.filter(
+                        (partner: Partner) =>
+                            partner.acronisId !==
+                            "15229d4a-ff0f-498b-849d-a4f71bdc81a4",
+                    ),
+                );
+            },
+        },
+    );
+
+    //#region Form
+    const form = useForm<PartnerFormValues>({
+        resolver: zodResolver(partnerFormSchema),
+        defaultValues: {
+            // active: true,
+            // licensed: true,
         },
     });
+
+    function onSubmit(values: PartnerFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
+        fetch(`/api/admin/partner/${values.acronisId}`, {
+            method: "PUT",
+            body: JSON.stringify(values),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpen(false);
+                    mutate();
+                    form.reset();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+
+                setSubmitting(false);
+            });
+    }
+    //#endregion
 
     //#region Table
     const visibleColumns = {
@@ -82,6 +158,17 @@ export default function PartnersPage() {
 
                 return data || "-";
             },
+        },
+        {
+            accessorKey: "licensed",
+            header: t("licensedPartner"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("licensed");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "active",
@@ -173,9 +260,8 @@ export default function PartnersPage() {
                             )}
                             <DropdownMenuItem
                                 onClick={() => {
-                                    // setIsNew(false);
-                                    // setOpen(true);
-                                    // form.reset(data);
+                                    setOpen(true);
+                                    form.reset(data);
                                 }}
                             >
                                 {t("edit")}
@@ -197,22 +283,110 @@ export default function PartnersPage() {
             </Skeleton>
         );
     return (
-        <DataTable
-            zebra
-            columns={columns}
-            data={partners}
-            visibleColumns={visibleColumns}
-            isLoading={isLoading}
-            facetedFilters={[
-                {
-                    column: "active",
-                    title: t("active"),
-                    options: [
-                        { value: true, label: t("true") },
-                        { value: false, label: t("false") },
-                    ],
-                },
-            ]}
-        />
+        <>
+            <DataTable
+                zebra
+                columns={columns}
+                data={partners}
+                visibleColumns={visibleColumns}
+                isLoading={isLoading}
+                facetedFilters={[
+                    {
+                        column: "licensed",
+                        title: t("licensed"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
+                    {
+                        column: "active",
+                        title: t("active"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
+                ]}
+            />
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("editPartner")}</DialogTitle>
+                    </DialogHeader>
+
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="active"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>{t("active")}</FormLabel>
+                                            <FormDescription>
+                                                {tf("active.description")}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="licensed"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>
+                                                {t("licensedPartner")}
+                                            </FormLabel>
+                                            <FormDescription>
+                                                {tf("licensed.description")}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    disabled={submitting}
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+        </>
     );
 }

@@ -31,7 +31,6 @@ export const GET = auth(async (req: any, { params }) => {
                 partnerAcronisId: true,
                 acronisTenantId: true,
                 role: true,
-                licensed: true,
                 createdBy: true,
                 createdAt: true,
                 updatedBy: true,
@@ -40,6 +39,7 @@ export const GET = auth(async (req: any, { params }) => {
                     select: {
                         name: true,
                         acronisId: true,
+                        licensed: true,
                         // application: {
                         //     select: {
                         //         name: true,
