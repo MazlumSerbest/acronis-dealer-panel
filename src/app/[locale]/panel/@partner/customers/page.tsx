@@ -318,7 +318,11 @@ export default function CustomersPage() {
                                             <LuInfo className="size-4 text-yellow-500" />
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>{t("lessThanTwoWeeksUntilBilling")}</p>
+                                            <p>
+                                                {t(
+                                                    "lessThanTwoWeeksUntilBilling",
+                                                )}
+                                            </p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </TooltipProvider>
@@ -489,7 +493,12 @@ export default function CustomersPage() {
     );
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("customers")} />

@@ -56,7 +56,12 @@ export default function CourseDetail({
     );
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (!course)
         return (
             <div className="h-80">

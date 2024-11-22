@@ -209,7 +209,12 @@ export default function GeneralTab({ t, tenant }: Props) {
     }
     //#endregion
 
-    if (usagesError) return <div>{t("failedToLoad")}</div>;
+    if (usagesError)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     return (
         <div className="container grid grid-cols-3 gap-4">
             {usages?.usages?.items?.some(

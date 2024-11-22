@@ -19,11 +19,7 @@ import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
 
 import { DateFormat } from "@/utils/date";
-import {
-    LuChevronsUpDown,
-    LuInfo,
-    LuAlertTriangle,
-} from "react-icons/lu";
+import { LuChevronsUpDown, LuInfo, LuAlertTriangle } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
@@ -299,7 +295,12 @@ export default function TenantsPage() {
     ];
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("tenants")} />

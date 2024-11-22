@@ -366,7 +366,12 @@ export default function UsersPage() {
     }, [currentUser?.acronisTenantId]);
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (!data)
         return (
             <Skeleton>

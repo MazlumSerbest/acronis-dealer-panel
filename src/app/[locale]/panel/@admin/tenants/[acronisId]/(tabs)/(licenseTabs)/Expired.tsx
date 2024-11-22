@@ -17,7 +17,6 @@ type Props = {
 export default function ExpiredTab({ tenant }: Props) {
     const t = useTranslations("General");
 
-   
     const { data, error } = useSWR(
         `/api/license?status=expired&${tenant.kind}AcronisId=${tenant.id}`,
         null,
@@ -171,7 +170,12 @@ export default function ExpiredTab({ tenant }: Props) {
     ];
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (!data)
         return (
             <Skeleton>

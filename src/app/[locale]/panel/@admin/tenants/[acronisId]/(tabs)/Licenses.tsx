@@ -40,9 +40,16 @@ export default function LicensesTab({ t, tenant }: Props) {
         );
     if (!data)
         return (
-            <div className="text-center mt-4">{t("registrationNotFound")}</div>
+            <div className="flex min-h-24 justify-center items-center">
+                {t("registrationNotFound")}
+            </div>
         );
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     return (
         <Tabs
             defaultValue="active"

@@ -151,7 +151,9 @@ export default function PanelPage() {
             </div>
 
             {error ? (
-                <div>{t("failedToLoad")}</div>
+                <div className="flex min-h-24 justify-center items-center">
+                    {t("failedToLoad")}
+                </div>
             ) : (
                 <div className="container m-auto flex flex-col gap-4">
                     {currentUser?.licensed && (

@@ -146,7 +146,7 @@ export default function ActiveTab() {
             header: t("remainingDays"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const completionDate: string = row.getValue("completionDate");  
+                const completionDate: string = row.getValue("completionDate");
 
                 return calculateRemainingDays(completionDate);
             },
@@ -194,7 +194,12 @@ export default function ActiveTab() {
     ];
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (!data)
         return (
             <Skeleton>

@@ -390,7 +390,7 @@ export default function PassiveTab() {
             const par: ListBoxItem[] = await getPartners(
                 currentUser?.partnerAcronisId,
                 true,
-                true
+                true,
             );
             setPartners(par);
         }
@@ -399,7 +399,12 @@ export default function PassiveTab() {
     }, [currentUser?.partnerAcronisId]);
     //#endregion
 
-    if (error) return <div>{t("failedToLoad")}</div>;
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (!data)
         return (
             <Skeleton>
