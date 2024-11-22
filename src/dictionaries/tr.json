@@ -324,7 +324,8 @@
                 "required": "Rol zorunludur"
             },
             "name": {
-                "required": "Ad zorunludur"
+                "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır"
             },
             "email": {
                 "required": "E-posta zorunludur",
@@ -398,7 +399,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
-                "maxLength": "60 karakter uzunluğunda olmalıdır"
+                "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "category": {
                 "required": "Kategori zorunludur"
@@ -411,7 +412,7 @@
             },
             "shortDescription": {
                 "required": "Kısa açıklama zorunludur",
-                "maxLength": "80 karakter uzunluğunda olmalıdır"
+                "maxLength": "En fazla 80 karakter uzunluğunda olmalıdır"
             },
             "description": {
                 "required": "Açıklama zorunludur"
@@ -423,7 +424,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
-                "maxLength": "60 karakter uzunluğunda olmalıdır"
+                "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "order": {
                 "required": "Sıra zorunludur",
@@ -436,7 +437,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
-                "maxLength": "60 karakter uzunluğunda olmalıdır"
+                "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "order": {
                 "required": "Sıra zorunludur",
@@ -461,13 +462,13 @@
             },
             "name": {
                 "required": "Ad zorunludur",
-                "minLength": "10 karakter uzunluğunda olmalıdır"
+                "minLength": "En az 10 karakter uzunluğunda olmalıdır"
             },
             "taxNo": {
                 "required": "Vergi No zorunludur",
                 "invalidType": "Geçerli bir sayı olmalıdır",
-                "minLength": "10 karakter uzunluğunda olmalıdır",
-                "maxLength": "11 karakter uzunluğunda olmalıdır"
+                "minLength": "En az 10 karakter uzunluğunda olmalıdır",
+                "maxLength": "En fazla 11 karakter uzunluğunda olmalıdır"
             },
             "taxOffice": {
                 "required": "Vergi Dairesi zorunludur"
@@ -488,7 +489,7 @@
             },
             "address": {
                 "required": "Adres zorunludur",
-                "minLength": "10 karakter uzunluğunda olmalıdır"
+                "minLength": "En az 10 karakter uzunluğunda olmalıdır"
             },
             "city": {
                 "required": "Şehir zorunludur"

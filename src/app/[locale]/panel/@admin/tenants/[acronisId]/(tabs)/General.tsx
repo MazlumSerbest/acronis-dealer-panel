@@ -16,7 +16,13 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { Form, FormField, FormItem } from "@/components/ui/form";
+import {
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -55,6 +61,8 @@ import {
     LuShieldOff,
     LuSigma,
 } from "react-icons/lu";
+import { Input } from "@/components/ui/input";
+import FormError from "@/components/FormError";
 
 type Props = {
     t: Function;
@@ -66,6 +74,23 @@ const partnerFormSchema = z.object({
 });
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
+
+const userFormSchema = z.object({
+    name: z.string({
+        required_error: "User.name.required",
+    }).min(3, {
+        message: "User.name.minLength",
+    }),
+    email: z
+        .string({
+            required_error: "User.email.required",
+        })
+        .email({
+            message: "User.email.invalidType",
+        }),
+});
+
+type UserFormValues = z.infer<typeof userFormSchema>;
 
 export default function GeneralTab({ t, tenant }: Props) {
     const router = useRouter();
@@ -207,6 +232,47 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                     setSubmitting(false);
                 });
+    }
+
+    const userForm = useForm<UserFormValues>({
+        resolver: zodResolver(userFormSchema),
+        defaultValues: {
+            name: tenant?.name,
+            email: tenant?.contact?.email,
+        },
+    });
+
+    async function onSubmitUser(values: UserFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
+        fetch(`/api/admin/user`, {
+            method: "POST",
+            body: JSON.stringify({
+                partnerAcronisId: tenant?.id,
+                name: values.name,
+                email: values.email,
+                role: "partner",
+            }),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpenUserDialog(false);
+                    panelTenantMutate();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+
+                setSubmitting(false);
+            });
     }
     //#endregion
 
@@ -549,76 +615,92 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     {t("createUserWarning")}
                                                 </AlertDialogDescription>
                                             </AlertDialogHeader>
-                                            <AlertDialogFooter>
-                                                <AlertDialogCancel asChild>
-                                                    <Button variant="outline">
-                                                        {t("close")}
-                                                    </Button>
-                                                </AlertDialogCancel>
-                                                <Button
-                                                    disabled={submitting}
-                                                    className="bg-blue-400 hover:bg-blue-400/90"
-                                                    onClick={() => {
-                                                        if (submitting) return;
-                                                        setSubmitting(true);
 
-                                                        fetch(
-                                                            `/api/admin/user`,
-                                                            {
-                                                                method: "POST",
-                                                                body: JSON.stringify(
-                                                                    {
-                                                                        partnerAcronisId:
-                                                                            tenant?.id,
-                                                                        name: tenant?.name,
-                                                                        email: tenant
-                                                                            ?.contact
-                                                                            ?.email,
-                                                                        role: "partner",
-                                                                    },
-                                                                ),
-                                                            },
-                                                        )
-                                                            .then((res) =>
-                                                                res.json(),
-                                                            )
-                                                            .then((res) => {
-                                                                if (res.ok) {
-                                                                    toast({
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenUserDialog(
-                                                                        false,
-                                                                    );
-                                                                    panelTenantMutate();
-                                                                } else {
-                                                                    toast({
-                                                                        variant:
-                                                                            "destructive",
-                                                                        title: t(
-                                                                            "errorTitle",
-                                                                        ),
-                                                                        description:
-                                                                            res.message,
-                                                                    });
-                                                                    setOpenPartnerDialog(
-                                                                        false,
-                                                                    );
-                                                                }
-
-                                                                setSubmitting(
-                                                                    false,
-                                                                );
-                                                            });
-                                                    }}
-                                                >
-                                                    {t("create")}
-                                                    {submitting && (
-                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                            <Form {...userForm}>
+                                                <form
+                                                    onSubmit={userForm.handleSubmit(
+                                                        onSubmitUser,
                                                     )}
-                                                </Button>
-                                            </AlertDialogFooter>
+                                                    autoComplete="off"
+                                                    className="space-y-4"
+                                                >
+                                                    <FormField
+                                                        control={
+                                                            userForm.control
+                                                        }
+                                                        name="name"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                    {t("name")}
+                                                                </FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        {...field}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormError
+                                                                    error={
+                                                                        userForm
+                                                                            ?.formState
+                                                                            ?.errors
+                                                                            ?.name
+                                                                    }
+                                                                />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <FormField
+                                                        control={
+                                                            userForm.control
+                                                        }
+                                                        name="email"
+                                                        render={({ field }) => (
+                                                            <FormItem>
+                                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                                    {t("email")}
+                                                                </FormLabel>
+                                                                <FormControl>
+                                                                    <Input
+                                                                        {...field}
+                                                                    />
+                                                                </FormControl>
+                                                                <FormError
+                                                                    error={
+                                                                        userForm
+                                                                            ?.formState
+                                                                            ?.errors
+                                                                            ?.email
+                                                                    }
+                                                                />
+                                                            </FormItem>
+                                                        )}
+                                                    />
+
+                                                    <AlertDialogFooter>
+                                                        <AlertDialogCancel
+                                                            asChild
+                                                        >
+                                                            <Button variant="outline">
+                                                                {t("close")}
+                                                            </Button>
+                                                        </AlertDialogCancel>
+                                                        <Button
+                                                            disabled={
+                                                                submitting
+                                                            }
+                                                            type="submit"
+                                                            className="bg-blue-400 hover:bg-blue-400/90"
+                                                        >
+                                                            {t("create")}
+                                                            {submitting && (
+                                                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                            )}
+                                                        </Button>
+                                                    </AlertDialogFooter>
+                                                </form>
+                                            </Form>
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 )}

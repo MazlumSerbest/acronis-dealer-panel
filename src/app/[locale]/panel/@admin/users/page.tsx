@@ -72,6 +72,8 @@ const userFormSchema = z.object({
     }),
     name: z.string({
         required_error: "User.name.required",
+    }).min(3, {
+        message: "User.name.minLength",
     }),
     email: z
         .string({

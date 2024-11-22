@@ -324,7 +324,8 @@
                 "required": "Role is required"
             },
             "name": {
-                "required": "Name is required"
+                "required": "Name is required",
+                "minLength": "Must be at least 3 characters long"
             },
             "email": {
                 "required": "Email is required",
@@ -334,13 +335,13 @@
         "Partner": {
             "name": {
                 "required": "Name is required",
-                "minLength": "Must be 6 characters long"
+                "minLength": "Must be at least 6 characters long"
             },
             "login": {
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
                 "checkFailed": "Failed to check username availability",
-                "minLength": "Must be 6 characters long",
+                "minLength": "Must be at least 6 characters long",
                 "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value.",
                 "invalidType": "Must be valid username"
             },
@@ -358,13 +359,13 @@
         "Customer": {
             "name": {
                 "required": "Name is required",
-                "minLength": "Must be 6 characters long"
+                "minLength": "Must be at least 6 characters long"
             },
             "login": {
                 "required": "Login is required",
                 "alreadyTaken": "Username is already taken",
                 "checkFailed": "Failed to check username availability",
-                "minLength": "Must be 6 characters long",
+                "minLength": "Must be at least 6 characters long",
                 "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value.",
                 "invalidType": "Must be valid username"
             },
@@ -379,11 +380,11 @@
             },
             "name": {
                 "required": "Name is required",
-                "minLength": "Must be 3 characters long"
+                "minLength": "Must be at least 3 characters long"
             },
             "code": {
                 "required": "Code is required",
-                "minLength": "Must be 3 characters long"
+                "minLength": "Must be at least 3 characters long"
             },
             "model": {
                 "required": "Model is required"
@@ -398,7 +399,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be 60 characters long"
+                "maxLength": "Must be under 60 characters long"
             },
             "category": {
                 "required": "Category is required"
@@ -411,7 +412,7 @@
             },
             "shortDescription": {
                 "required": "Short Description is required",
-                "maxLength": "Must be 80 characters long"
+                "maxLength": "Must be under 80 characters long"
             },
             "description": {
                 "required": "Description is required"
@@ -423,7 +424,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be 60 characters long"
+                "maxLength": "Must be under 60 characters long"
             },
             "order": {
                 "required": "Order is required",
@@ -436,7 +437,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be 60 characters long"
+                "maxLength": "Must be under 60 characters long"
             },
             "order": {
                 "required": "Order is required",
@@ -461,13 +462,13 @@
             },
             "name": {
                 "required": "Name is required",
-                "minLength": "Must be 10 characters long"
+                "minLength": "Must be at least 10 characters long"
             },
             "taxNo": {
                 "required": "Tax No is required",
                 "invalidType": "Must be a valid number",
-                "minLength": "Must be 10 characters long",
-                "maxLength": "Must be 11 characters long"
+                "minLength": "Must be at least 10 characters long",
+                "maxLength": "Must be more than 11 characters long"
             },
             "taxOffice": {
                 "required": "Tax Office is required"
@@ -488,7 +489,7 @@
             },
             "address": {
                 "required": "Address is required",
-                "minLength": "Must be 10 characters long"
+                "minLength": "Must be at least 10 characters long"
             },
             "city": {
                 "required": "City is required"
