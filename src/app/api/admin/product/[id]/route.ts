@@ -30,7 +30,7 @@ export const GET = auth(async (req: any, { params }) => {
                 updatedAt: true,
                 quota: true,
                 unit: true,
-                edition: true
+                edition: true,
             },
             where: {
                 id: params?.id as string,
@@ -97,6 +97,48 @@ export const PUT = auth(async (req: any, { params }) => {
         } else {
             return NextResponse.json({
                 message: "Ürün güncellenemedi!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
+
+export const DELETE = auth(async (req: any, { params }) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (req.auth.user.role !== "admin")
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+        
+        const deletedProduct = await prisma.product.delete({
+            where: {
+                id: params?.id as string,
+            },
+        });
+
+        if (deletedProduct.id) {
+            return NextResponse.json({
+                message: "Ürün başarıyla silindi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Ürün silinirken hata oluştu!",
                 status: 400,
                 ok: false,
             });

@@ -89,3 +89,45 @@ export const PUT = auth(async (req: any, { params }) => {
         });
     }
 });
+
+export const DELETE = auth(async (req: any, { params }) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (req.auth.user.role !== "admin")
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+        
+        const deletedCourse = await prisma.course.delete({
+            where: {
+                id: params?.id as string,
+            },
+        });
+
+        if (deletedCourse.id) {
+            return NextResponse.json({
+                message: "Kurs başarıyla silindi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Kurs silinirken hata oluştu!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
