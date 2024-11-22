@@ -141,7 +141,7 @@ model LicenseHistory {
 
   license         License   @relation(fields: [licenseId], references: [id])
   previousPartner Partner?  @relation("assignHistory", fields: [previousPartnerAcronisId], references: [acronisId])
-  partner         Partner  @relation(fields: [partnerAcronisId], references: [acronisId])
+  partner         Partner   @relation(fields: [partnerAcronisId], references: [acronisId])
   customer        Customer? @relation(fields: [customerAcronisId], references: [acronisId])
 }
 
@@ -213,7 +213,7 @@ model Chapter {
   updatedBy String?
   updatedAt DateTime @updatedAt
   order     Int
-  course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
   lessons   Lesson[]
 }
 
@@ -229,7 +229,7 @@ model Lesson {
   updatedBy   String?
   updatedAt   DateTime @updatedAt
   order       Int
-  chapter     Chapter  @relation(fields: [chapterId], references: [id])
+  chapter     Chapter  @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 }
 
 /// Views
