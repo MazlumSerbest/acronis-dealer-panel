@@ -324,7 +324,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     tenant?.id || "",
                                                 );
                                                 toast({
-                                                    title: t("copiedToClipboard"),
+                                                    title: t(
+                                                        "copiedToClipboard",
+                                                    ),
                                                 });
                                             }}
                                         />
@@ -401,7 +403,25 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             name="billingDate"
                                             render={({ field }) => (
                                                 <FormItem>
-                                                    <DatePicker field={field} />
+                                                    <DatePicker
+                                                        field={field}
+                                                        from={
+                                                            new Date(
+                                                                new Date().setMonth(
+                                                                    new Date().getMonth() -
+                                                                        6,
+                                                                ),
+                                                            )
+                                                        }
+                                                        to={
+                                                            new Date(
+                                                                new Date().setFullYear(
+                                                                    new Date().getFullYear() +
+                                                                        4,
+                                                                ),
+                                                            )
+                                                        }
+                                                    />
                                                 </FormItem>
                                             )}
                                         />

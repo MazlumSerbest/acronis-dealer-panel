@@ -407,6 +407,22 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                     <FormItem>
                                                         <DatePicker
                                                             field={field}
+                                                            from={
+                                                                new Date(
+                                                                    new Date().setMonth(
+                                                                        new Date().getMonth() -
+                                                                            6,
+                                                                    ),
+                                                                )
+                                                            }
+                                                            to={
+                                                                new Date(
+                                                                    new Date().setFullYear(
+                                                                        new Date().getFullYear() +
+                                                                            4,
+                                                                    ),
+                                                                )
+                                                            }
                                                         />
                                                     </FormItem>
                                                 )}
@@ -535,7 +551,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 <LuSigma className="size-5 text-muted-foreground" />
                             }
                             value={totalLicenseCount}
-                            description={`${t("totalSmallCardDescription")} (${t("active")} ${t("and")} ${t("passive")})`}
+                            description={`${t(
+                                "totalSmallCardDescription",
+                            )} (${t("active")} ${t("and")} ${t("passive")})`}
                         />
                     )}
                 </div>

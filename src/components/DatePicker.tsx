@@ -12,9 +12,16 @@ import { cn } from "@/lib/utils";
 type Props = {
     field: any;
     placeholder?: string;
+    from?: Date;
+    to?: Date;
 };
 
-export default function DatePicker({ field, placeholder }: Props) {
+export default function DatePicker({
+    field,
+    placeholder,
+    from = new Date(),
+    to = new Date(new Date().setFullYear(new Date().getFullYear() + 10)),
+}: Props) {
     const tc = useTranslations("Components");
 
     return (
@@ -47,8 +54,10 @@ export default function DatePicker({ field, placeholder }: Props) {
                     selected={field.value}
                     onSelect={field.onChange}
                     captionLayout="dropdown-buttons"
-                    fromYear={new Date().getFullYear() - 5}
-                    toYear={new Date().getFullYear() + 10}
+                    fromDate={from}
+                    toDate={to}
+                    // fromYear={new Date().getFullYear() - 5}
+                    // toYear={new Date().getFullYear() + 10}
                 />
             </PopoverContent>
         </Popover>
