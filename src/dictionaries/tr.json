@@ -217,6 +217,8 @@
         "partialLicense": "Kısmi Lisans",
         "partialLicenseDescription": "Bu lisansı kısmi lisans yaparsanız, lisans ilk atamadan sonra etkinleştirilir. Bu lisansın bir kısmını herhangi bir müşteriye atamadığınız sürece, daha sonra normal bir lisansa dönüştürebilirsiniz.",
         "areYouSure": "İşlemi gerçekleştirmek istediğinize emin misiniz?",
+        "areYouSureDescription": "Bu işlem geri alınamaz. Seçilen kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?", 
+        "selectedItem": "Seçilen: {name}",
         "assignLicense": "Lisans Ata",
         "showOnAcronis": "Acronis Cyber Protect Cloud'da Göster",
         "licensed": "Lisanslı",
@@ -259,7 +261,8 @@
         "unassignedSmallCardDescription": "Toplam atanmamış lisans sayısı",
         "assignedSmallCardDescription": "Toplam atanmış lisans sayısı",
         "licenseCardWarning": "Alt bayiye atanmış lisanslar burada gösterilmez! Bu lisanslar, alt bayinin detay sayfasında görüntülenir.",
-        "upperPartner": "Üst Partner"
+        "upperPartner": "Üst Partner",
+        "copiedToClipboard": "Panoya kopyalandı!"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

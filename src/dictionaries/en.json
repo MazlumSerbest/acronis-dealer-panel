@@ -217,6 +217,8 @@
         "partialLicense": "Partial License",
         "partialLicenseDescription": "If you make this a partial license, the license activated after the first assignment. As long as you do not assign part of this license to any customer, you can convert it to a regular license later.",
         "areYouSure": "Are you sure you want to proceed?",
+        "areYouSureDescription": "This action cannot be undone. This will permanently delete the selected item. Are you sure you want to proceed?",
+        "selectedItem": "Selected Item: {name}",
         "assignLicense": "Assign License",
         "showOnAcronis": "Show on Acronis Cyber Protect Cloud",
         "licensed": "Licensed",
@@ -259,7 +261,8 @@
         "unassignedSmallCardDescription": "Total number of unassigned licenses",
         "assignedSmallCardDescription": "Total number of assigned licenses",
         "licenseCardWarning": "Licenses which assigned to sub partners are not included in these numbers! These licenses can be shown at sub partners detail page.",
-        "upperPartner": "Upper Partner"
+        "upperPartner": "Upper Partner",
+        "copiedToClipboard": "Copied to clipboard!"
     },
     "SignIn": {
         "signIn": "Sign In",
