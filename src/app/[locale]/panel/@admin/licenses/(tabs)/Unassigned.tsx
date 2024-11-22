@@ -362,7 +362,7 @@ export default function UnassignedTab() {
                                 setAssignOpen(true);
                             }}
                         >
-                            {t("assignSelectedToPartner")}
+                            {t("assignToPartner")}
                         </DropdownMenuItem>,
                     ]
                 }

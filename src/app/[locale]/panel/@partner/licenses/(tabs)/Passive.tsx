@@ -443,7 +443,7 @@ export default function PassiveTab() {
                                 assignToCustomerForm.reset();
                             }}
                         >
-                            {t("assignSelectedToCustomer")}
+                            {t("assignToCustomer")}
                         </DropdownMenuItem>,
                         partners && partners?.length > 0 && (
                             <DropdownMenuItem
@@ -453,7 +453,7 @@ export default function PassiveTab() {
                                     assignToPartnerForm.reset();
                                 }}
                             >
-                                {t("assignSelectedToPartner")}
+                                {t("assignToPartner")}
                             </DropdownMenuItem>
                         ),
                     ]
