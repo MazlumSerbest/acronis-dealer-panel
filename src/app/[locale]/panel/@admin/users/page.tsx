@@ -321,7 +321,7 @@ export default function UsersPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 hover:cursor-pointer hover:text-blue-500" />
+                            <LuMoreHorizontal className="size-4 text-muted-foreground hover:cursor-pointer hover:text-blue-500" />
                             {/* <Button
                                 aria-haspopup="true"
                                 size="icon"
