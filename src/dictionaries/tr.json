@@ -595,7 +595,8 @@
         "licenseHistory": "Lisans Geçmişi",
         "firstAssignment": "İlk Atama",
         "assignment": "Atama",
-        "activation": "Aktivasyon"
+        "activation": "Aktivasyon",
+        "noLicenseHistory": "Lisans geçmişi bulunamadı."
     },
     "Dashboard": {
         "title": "Kontrol Paneli"

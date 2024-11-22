@@ -595,7 +595,8 @@
         "licenseHistory": "License History",
         "firstAssignment": "First Assignment",
         "assignment": "Assignment",
-        "activation": "Activation"
+        "activation": "Activation",
+        "noLicenseHistory": "There is no license history."
     },
     "Dashboard": {
         "title": "Dashboard"
