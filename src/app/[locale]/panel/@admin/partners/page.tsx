@@ -160,6 +160,21 @@ export default function PartnersPage() {
             },
         },
         {
+            accessorKey: "parent",
+            header: t("upperPartner"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const parent: Partner = row.getValue("parent");
+
+                return (
+                    (parent?.acronisId ===
+                    "15229d4a-ff0f-498b-849d-a4f71bdc81a4"
+                        ? "-"
+                        : parent?.name) || "-"
+                );
+            },
+        },
+        {
             accessorKey: "licensed",
             header: t("licensedPartner"),
             enableGlobalFilter: false,
@@ -232,7 +247,7 @@ export default function PartnersPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 hover:cursor-pointer hover:text-blue-500" />
+                            <LuMoreHorizontal className="size-4 text-muted-foreground hover:cursor-pointer hover:text-blue-500" />
                             {/* <Button
                                 aria-haspopup="true"
                                 size="icon"
@@ -266,7 +281,7 @@ export default function PartnersPage() {
                             >
                                 {t("edit")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
+                            {/* <DropdownMenuItem>{t("delete")}</DropdownMenuItem> */}
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

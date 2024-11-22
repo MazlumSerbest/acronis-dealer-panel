@@ -29,6 +29,12 @@ export const GET = auth(async (req: any) => {
                         email: true,
                     },
                 },
+                parent: {
+                    select: {
+                        acronisId: true,
+                        name: true,
+                    },
+                }
             },
         });
 
