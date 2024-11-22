@@ -208,9 +208,7 @@ export default function UserCard() {
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel asChild>
-                            <Button variant="secondary">{t("close")}</Button>
-                        </AlertDialogCancel>
+                        <AlertDialogCancel>{t("close")}</AlertDialogCancel>
                         <AlertDialogAction asChild>
                             <Button
                                 variant="destructive"

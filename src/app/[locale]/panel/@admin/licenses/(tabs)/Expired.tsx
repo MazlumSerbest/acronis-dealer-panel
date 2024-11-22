@@ -162,7 +162,7 @@ export default function ExpiredTab() {
                     <LicenseHistorySheet
                         licenseId={row.original.id}
                         trigger={
-                            <LuHistory className="size-4 text-muted-foreground hover:cursor-pointer hover:text-blue-500" />
+                            <LuHistory className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
                         }
                     />
                 </div>

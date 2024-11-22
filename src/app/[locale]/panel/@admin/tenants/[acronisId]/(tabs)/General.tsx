@@ -45,6 +45,7 @@ import useUserStore from "@/store/user";
 import {
     LuAlertTriangle,
     LuArrowUpRight,
+    LuCopy,
     LuInfo,
     LuLoader2,
     LuPencil,
@@ -314,8 +315,19 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     <dt className="font-medium">
                                         {t("acronisId")}
                                     </dt>
-                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                    <dd className="flex flex-row items-center gap-2 col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
                                         {tenant?.id || "-"}
+                                        <LuCopy
+                                            className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60"
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(
+                                                    tenant?.id || "",
+                                                );
+                                                toast({
+                                                    title: t("copiedToClipboard"),
+                                                });
+                                            }}
+                                        />
                                     </dd>
                                 </div>
 
@@ -520,7 +532,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel asChild>
                                                     <Button variant="outline">
-                                                        {t("cancel")}
+                                                        {t("close")}
                                                     </Button>
                                                 </AlertDialogCancel>
                                                 <Button
@@ -636,7 +648,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             <AlertDialogFooter>
                                                 <AlertDialogCancel asChild>
                                                     <Button variant="outline">
-                                                        {t("cancel")}
+                                                        {t("close")}
                                                     </Button>
                                                 </AlertDialogCancel>
                                                 <Button

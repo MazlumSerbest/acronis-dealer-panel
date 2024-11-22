@@ -362,7 +362,7 @@ export default function ApplicationDetail({
                                     <AlertDialogFooter>
                                         <AlertDialogCancel asChild>
                                             <Button variant="outline">
-                                                {t("cancel")}
+                                                {t("close")}
                                             </Button>
                                         </AlertDialogCancel>
                                         <Button
