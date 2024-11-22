@@ -22,7 +22,7 @@ export default async function Error({
     const error = searchParams?.error;
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen gap-10">
+        <div className="container flex flex-col items-center justify-center h-screen gap-10">
             <Card className="max-w-[660px]">
                 <CardHeader>
                     <CardTitle className="text-3xl text-destructive">

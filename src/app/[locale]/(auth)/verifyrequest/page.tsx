@@ -12,7 +12,7 @@ export default async function VerifyRequest() {
     const ts = await getTranslations("SignIn");
 
     return (
-        <div className="flex flex-col items-center justify-center h-screen gap-10">
+        <div className="container flex flex-col items-center justify-center h-screen gap-10">
             <Card className="max-w-[660px]">
                 <CardHeader>
                     <CardTitle className="text-3xl text-blue-400">{ts("checkYourEmail")}</CardTitle>
