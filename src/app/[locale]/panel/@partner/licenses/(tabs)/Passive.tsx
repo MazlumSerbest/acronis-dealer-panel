@@ -33,13 +33,13 @@ import {
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import Combobox from "@/components/Combobox";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2, LuMinus } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
 import { getCustomers, getPartners } from "@/lib/data";
-import Combobox from "@/components/Combobox";
 
 const addFormSchema = z.object({
     partnerAcronisId: z.string().uuid().optional(),
@@ -156,6 +156,7 @@ export default function PassiveTab() {
                     toast({
                         description: res.message,
                     });
+                    setSelectedIds([]);
                     setOpenAssignToCustomer(false);
                     assignToCustomerForm.reset();
                     mutate();
@@ -194,6 +195,7 @@ export default function PassiveTab() {
                     toast({
                         description: res.message,
                     });
+                    setSelectedIds([]);
                     setOpenAssignToPartner(false);
                     assignToPartnerForm.reset();
                     mutate();

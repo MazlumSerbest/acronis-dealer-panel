@@ -27,16 +27,17 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import DatePicker from "@/components/DatePicker";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
+
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import useUserStore from "@/store/user";
 
 const licenseFormSchema = z.object({
@@ -127,6 +128,7 @@ export default function UnassignedTab() {
                     toast({
                         description: res.message,
                     });
+                    setSelectedIds([]);
                     setAssignOpen(false);
                     assignForm.reset();
                     mutate();
