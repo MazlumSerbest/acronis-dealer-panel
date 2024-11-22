@@ -115,7 +115,7 @@ model License {
   createdAt         DateTime  @default(now())
   updatedBy         String?
   updatedAt         DateTime  @updatedAt
-  serialNo          String    @unique
+  serialNo          String?   @unique
   productId         String
   expiresAt         DateTime?
   assignedAt        DateTime?

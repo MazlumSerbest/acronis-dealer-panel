@@ -79,6 +79,11 @@ export default function UnassignedTab() {
     // #region Form
     const form = useForm<LicenseFormValues>({
         resolver: zodResolver(licenseFormSchema),
+        defaultValues: {
+            expiresAt: new Date(
+                new Date().setFullYear(new Date().getFullYear() + 2),
+            ),
+        },
     });
 
     function onSubmit(values: LicenseFormValues) {
