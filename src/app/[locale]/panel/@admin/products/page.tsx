@@ -41,13 +41,24 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import FormError from "@/components/FormError";
 import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
-import FormError from "@/components/FormError";
 
 const productFormSchema = z.object({
     id: z.string().optional(),
@@ -300,7 +311,7 @@ export default function ProductsPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 text-muted-foreground hover:cursor-pointer hover:text-blue-500" />
+                            <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
                             {/* <Button
                                 aria-haspopup="true"
                                 size="icon"
@@ -325,7 +336,74 @@ export default function ProductsPage() {
                             >
                                 {t("edit")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
+
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                    >
+                                        {t("delete")}
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            {t("areYouSure")}
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            {t("areYouSureDescription")}
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+
+                                    <div className="text-sm text-muted-foreground">
+                                        {t("selectedItem", { name: data.name })}
+                                    </div>
+
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            {t("close")}
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction asChild>
+                                            <Button
+                                                variant="destructive"
+                                                className="bg-destructive hover:bg-destructive/90"
+                                                onClick={() => {
+                                                    fetch(
+                                                        `/api/admin/product/${data.id}`,
+                                                        {
+                                                            method: "DELETE",
+                                                        },
+                                                    )
+                                                        .then((res) =>
+                                                            res.json(),
+                                                        )
+                                                        .then((res) => {
+                                                            if (res.ok) {
+                                                                toast({
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                mutate();
+                                                            } else {
+                                                                toast({
+                                                                    variant:
+                                                                        "destructive",
+                                                                    title: t(
+                                                                        "errorTitle",
+                                                                    ),
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                            }
+                                                        });
+                                                }}
+                                            >
+                                                {t("delete")}
+                                            </Button>
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );

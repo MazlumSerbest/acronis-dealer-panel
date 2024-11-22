@@ -43,6 +43,17 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
@@ -76,7 +87,8 @@ const lessonFormSchema = z.object({
         .string({
             // required_error: "Lesson.description.required",
         })
-        .optional().nullable(),
+        .optional()
+        .nullable(),
 });
 
 type LessonFormValues = z.infer<typeof lessonFormSchema>;
@@ -289,15 +301,6 @@ export default function Lessons({
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4" />
-                            {/* <Button
-                             aria-haspopup="true"
-                             size="icon"
-                             variant="ghost"
-                         >
-                             <span className="sr-only">
-                                 {t("toggleMenu")}
-                             </span>
-                         </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -312,7 +315,74 @@ export default function Lessons({
                             >
                                 {t("edit")}
                             </DropdownMenuItem>
-                            <DropdownMenuItem>{t("delete")}</DropdownMenuItem>
+
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem
+                                        onSelect={(e) => e.preventDefault()}
+                                    >
+                                        {t("delete")}
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            {t("areYouSure")}
+                                        </AlertDialogTitle>
+                                        <AlertDialogDescription>
+                                            {t("areYouSureDescription")}
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+
+                                    <div className="text-sm text-muted-foreground">
+                                        {t("selectedItem", { name: data.name })}
+                                    </div>
+
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            {t("close")}
+                                        </AlertDialogCancel>
+                                        <AlertDialogAction asChild>
+                                            <Button
+                                                variant="destructive"
+                                                className="bg-destructive hover:bg-destructive/90"
+                                                onClick={() => {
+                                                    fetch(
+                                                        `/api/admin/lesson/${data.id}`,
+                                                        {
+                                                            method: "DELETE",
+                                                        },
+                                                    )
+                                                        .then((res) =>
+                                                            res.json(),
+                                                        )
+                                                        .then((res) => {
+                                                            if (res.ok) {
+                                                                toast({
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                                mutate();
+                                                            } else {
+                                                                toast({
+                                                                    variant:
+                                                                        "destructive",
+                                                                    title: t(
+                                                                        "errorTitle",
+                                                                    ),
+                                                                    description:
+                                                                        res.message,
+                                                                });
+                                                            }
+                                                        });
+                                                }}
+                                            >
+                                                {t("delete")}
+                                            </Button>
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 );
@@ -470,7 +540,11 @@ export default function Lessons({
                                             {t("description")}
                                         </FormLabel>
                                         <FormControl>
-                                            <Textarea {...field} value={field.value ?? ''} rows={4} />
+                                            <Textarea
+                                                {...field}
+                                                value={field.value ?? ""}
+                                                rows={4}
+                                            />
                                         </FormControl>
                                         <FormError
                                             error={
