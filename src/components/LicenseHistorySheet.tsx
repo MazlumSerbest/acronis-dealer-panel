@@ -45,7 +45,7 @@ export function LicenseHistorySheet({ licenseId, trigger }: Props) {
                             </SheetTitle>
                         </SheetHeader>
                         <div className="flex flex-col items-center justify-center h-full gap-4 text-sm overflow-y-auto">
-                            {data.length ? (
+                            {data?.length ? (
                                 data?.map((item: any, index: number) => (
                                     <div
                                         key={index}

@@ -18,7 +18,7 @@ export default function SmallCard({ title, icon, value, description, onClick }: 
             </CardHeader>
             <CardContent>
                 <div className="text-2xl font-bold">
-                    {value.toLocaleString()}
+                    {value?.toLocaleString()}
                 </div>
                 <p className="text-xs text-muted-foreground">{description}</p>
             </CardContent>
