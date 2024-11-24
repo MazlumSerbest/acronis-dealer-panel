@@ -62,31 +62,31 @@ export default function LicenseDetail({
                     <div className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
                         <div>
                             <dt className="font-medium">{t("productName")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.product.name || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("serialNo")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.serialNo || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("quota")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.product.quota || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("unit")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.product.unit || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("activatedAt")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {DateFormat(data.activatedAt) || "-"}
                             </dd>
                         </div>

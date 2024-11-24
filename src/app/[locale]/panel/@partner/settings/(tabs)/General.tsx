@@ -72,7 +72,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("usersCount")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.mfa?.users_count}
                         </dd>
                     </div>
@@ -94,13 +94,13 @@ export default function GeneralTab() {
                 <CardContent className="flex flex-col divide-y text-sm leading-6">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("mode")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {t(data.tenantInfo?.pricing.mode || "")}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("currency")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.pricing?.currency || "-"}
                         </dd>
                     </div>
@@ -122,19 +122,19 @@ export default function GeneralTab() {
                 <CardContent className="flex flex-col divide-y text-sm leading-6">
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("companyName")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.company_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("serviceName")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.service_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("platformTermsUrl")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0 truncate">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0 truncate">
                             {data.tenantInfo?.branding?.platform_terms_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"
@@ -157,7 +157,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("termsUrl")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.terms_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"
@@ -177,7 +177,7 @@ export default function GeneralTab() {
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("privacyPolicyUrl")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenantInfo?.branding?.privacy_policy_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"

@@ -257,7 +257,7 @@ export default function ApplicationDetail({
                         {
                             <div>
                                 <dt className="font-medium">{t("status")}</dt>
-                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                     {!data.approvedAt && !data.partner
                                         ? t("waiting")
                                         : data.approvedAt && !data.partner
@@ -270,68 +270,68 @@ export default function ApplicationDetail({
                         }
                         <div>
                             <dt className="font-medium">{t("companyName")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.name || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("companyType")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {t(data.companyType) || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("taxNo")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.taxNo || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("taxOffice")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.taxOffice || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("email")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.email || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("mobile")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data?.mobile ? "+90" + data.phone : "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("phone")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data?.phone ? "+90" + data.phone : "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("address")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.address || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("city")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {citiesList.find((c) => c.id == data.city)
                                     ?.name || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("district")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.district || "-"}
                             </dd>
                         </div>
                         <div>
                             <dt className="font-medium">{t("postalCode")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {data.postalCode || "-"}
                             </dd>
                         </div>
@@ -702,7 +702,7 @@ export default function ApplicationDetail({
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <div className="relative flex items-center">
-                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground text-sm">
                                                                         +90
                                                                     </span>
                                                                     <Input
@@ -734,7 +734,7 @@ export default function ApplicationDetail({
                                                             </FormLabel>
                                                             <FormControl>
                                                                 <div className="relative flex items-center">
-                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground text-sm">
                                                                         +90
                                                                     </span>
                                                                     <Input
@@ -796,7 +796,7 @@ export default function ApplicationDetail({
                             <dt className="font-medium">
                                 {t("applicationDate")}
                             </dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                 {DateTimeFormat(data.applicationDate) || "-"}
                             </dd>
                         </div>
@@ -805,7 +805,7 @@ export default function ApplicationDetail({
                                 <dt className="font-medium">
                                     {t("approvedAt")}
                                 </dt>
-                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                     {DateTimeFormat(data.approvedAt) || "-"}
                                 </dd>
                             </div>
@@ -815,7 +815,7 @@ export default function ApplicationDetail({
                                 <dt className="font-medium">
                                     {t("approvedBy")}
                                 </dt>
-                                <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                     {data.approvedBy || "-"}
                                 </dd>
                             </div>
@@ -826,7 +826,7 @@ export default function ApplicationDetail({
                                     <dt className="font-medium">
                                         {t("partnerId")}
                                     </dt>
-                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                    <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                         {data.partner.id || "-"}
                                     </dd>
                                 </div>
@@ -834,7 +834,7 @@ export default function ApplicationDetail({
                                     <dt className="font-medium">
                                         {t("acronisId")}
                                     </dt>
-                                    <dd className="col-span-1 md:col-span-2 font-light text-zinc-600 mt-1 sm:mt-0">
+                                    <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                         {data.partner.acronisId || "-"}
                                     </dd>
                                 </div>

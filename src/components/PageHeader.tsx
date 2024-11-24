@@ -16,7 +16,7 @@ export default function PageHeader(props: Props) {
     return (
         <div>
             <div className="flex mt-3 md:mt-0 mb-2">
-                {/* <FiArrowLeft className="text-3xl text-zinc-500 cursor-pointer m-auto mr-4" onClick={() => router.back()}/> */}
+                {/* <FiArrowLeft className="text-3xl text-foreground cursor-pointer m-auto mr-4" onClick={() => router.back()}/> */}
                 <h1 className="truncate text-3xl font-semibold text-blue-400">
                     {title}
                 </h1>
@@ -27,7 +27,7 @@ export default function PageHeader(props: Props) {
                         size="icon"
                         onClick={() => router.back()}
                     >
-                        <LuX className="text-3xl text-zinc-500 m-auto mr-4" />
+                        <LuX className="text-3xl text-foreground m-auto mr-4" />
                     </Button>
                 ) : null}
             </div>

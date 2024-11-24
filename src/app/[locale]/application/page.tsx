@@ -539,7 +539,7 @@ export default function Application() {
                                             <FormLabel>{t("mobile")}</FormLabel>
                                             <FormControl>
                                                 <div className="relative flex items-center">
-                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground text-sm">
                                                         +90
                                                     </span>
                                                     <Input
@@ -569,7 +569,7 @@ export default function Application() {
                                             <FormLabel>{t("phone")}</FormLabel>
                                             <FormControl>
                                                 <div className="relative flex items-center">
-                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-zinc-400 text-sm">
+                                                    <span className="absolute left-2 top-1/2 -translate-y-1/2 transform text-muted-foreground text-sm">
                                                         +90
                                                     </span>
                                                     <Input

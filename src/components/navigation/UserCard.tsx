@@ -49,6 +49,8 @@ export default function UserCard() {
     const { updateMainTenant } = useAcronisStore();
 
     useEffect(() => {
+        if (!session) return router.push("/");
+
         if (session?.data?.user) {
             fetch(`/api/admin/user/${session?.data?.user?.email ?? ""}`)
                 .then((res) => res.json())
@@ -126,7 +128,7 @@ export default function UserCard() {
                             <p className="truncate text-sm font-bold text-blue-400 group-hover:underline group-hover:cursor-pointer">
                                 {user?.name}
                             </p>
-                            <p className="truncate text-xs text-zinc-600">
+                            <p className="truncate text-xs text-foreground">
                                 {user?.email}
                             </p>
                         </div>
@@ -197,7 +199,7 @@ export default function UserCard() {
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon">
-                        <LuLogOut className="size-6 text-zinc-600" />
+                        <LuLogOut className="size-6 text-foreground" />
                     </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent className="sm:max-w-[425px]">
