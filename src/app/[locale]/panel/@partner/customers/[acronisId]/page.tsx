@@ -110,7 +110,7 @@ export default function CustomerDetail({
         <div className="flex flex-col gap-2">
             <div className="container relative flex w-full items-center gap-2">
                 <h1 className="flex-1 font-semibold text-2xl text-blue-400 text-center mt-4 md:mt-2 truncate">
-                    {data?.name || ""}
+                    {data?.tenant?.name || ""}
                 </h1>
                 <div className="hidden sm:flex sm:absolute right-0 gap-2">
                     <Button
@@ -147,7 +147,7 @@ export default function CustomerDetail({
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
-                        {data?.kind == "partner" && (
+                        {data?.tenant?.kind == "partner" && (
                             <TabsTrigger value="customers">
                                 {t("customers")}
                             </TabsTrigger>
