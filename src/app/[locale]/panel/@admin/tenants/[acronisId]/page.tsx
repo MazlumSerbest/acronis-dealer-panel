@@ -4,7 +4,6 @@ import useSWR from "swr";
 import useSWRMutation from "swr/mutation";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
-import useAcronisStore from "@/store/acronis";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -27,7 +26,6 @@ export default function TenantDetail({
     const pathname = usePathname();
     const t = useTranslations("General");
 
-    const { currentTenant, updateCurrentTenant } = useAcronisStore();
     const [children, setChildren] = useState(undefined);
 
     //#region Fetch Data
@@ -37,7 +35,6 @@ export default function TenantDetail({
         {
             revalidateOnFocus: false,
             onSuccess: (data) => {
-                updateCurrentTenant(data.tenant);
                 if (data.tenant.kind === "partner") trigger();
             },
         },
@@ -119,7 +116,7 @@ export default function TenantDetail({
         <div className="flex flex-col gap-2">
             <div className="container relative flex w-full items-center gap-2">
                 <h1 className="flex-1 font-semibold text-2xl text-blue-400 text-center mt-4 md:mt-2 truncate">
-                    {currentTenant?.name || ""}
+                    {data?.name || ""}
                 </h1>
                 <div className="hidden sm:flex sm:absolute right-0 gap-2">
                     <Button
@@ -155,7 +152,7 @@ export default function TenantDetail({
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
-                        {currentTenant?.kind == "partner" && (
+                        {data?.kind == "partner" && (
                             <TabsTrigger value="clients">
                                 {t("clients")}
                             </TabsTrigger>
