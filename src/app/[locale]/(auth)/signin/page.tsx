@@ -45,6 +45,10 @@ export default async function SignIn({
                     <form
                         action={async (formData) => {
                             "use server";
+
+                            if (formData.get("email") === "")
+                                return redirect("/signin?error=emailRequired");
+
                             // await signIn("forwardemail", formData);
                             // await signIn("nodemailer", formData);
                             await signIn("sendgrid", formData);
