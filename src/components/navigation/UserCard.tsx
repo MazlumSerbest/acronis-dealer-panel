@@ -96,7 +96,7 @@ export default function UserCard() {
                     .then((res) => res.json())
                     .then((data) => updateMainTenant(data?.tenant));
         }
-    }, [session]);
+    }, [session, updateMainTenant, updateUser, user?.partnerAcronisId]);
 
     // if (error) return <div>failed to load</div>;
     if (!user)
