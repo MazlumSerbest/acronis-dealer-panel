@@ -44,6 +44,15 @@ export const GET = auth(async (req: any) => {
                         },
                     },
                 },
+                sessions: {
+                    take: 1,
+                    select: {
+                        createdAt: true,
+                    },
+                    orderBy: {
+                        createdAt: "desc",
+                    },
+                },
             },
             orderBy: {
                 createdAt: "asc",

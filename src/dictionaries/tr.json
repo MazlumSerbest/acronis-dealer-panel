@@ -268,7 +268,8 @@
         "companyPhone": "Şirket Telefonu",
         "companyLegalAddress": "Şirket Yasal Adresi",
         "totalNumberOfEmployees": "Toplam Çalışan Sayısı",
-        "companyWebsite": "Şirket Web Sitesi"
+        "companyWebsite": "Şirket Web Sitesi",
+        "lastLogin": "Son Giriş Tarihi"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

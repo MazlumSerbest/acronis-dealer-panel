@@ -268,7 +268,8 @@
         "companyPhone": "Company Phone",
         "companyLegalAddress": "Company Legal Address",
         "totalNumberOfEmployees": "Total Number of Employees",
-        "companyWebsite": "Company Website"
+        "companyWebsite": "Company Website",
+        "lastLogin": "Last Login"
     },
     "SignIn": {
         "signIn": "Sign In",

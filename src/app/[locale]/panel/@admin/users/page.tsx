@@ -257,11 +257,18 @@ export default function UsersPage() {
                 });
             },
         },
-        // {
-        //     accessorKey: "acronisTenantId",
-        //     header: t("acronisTenantId"),
-        //     enableGlobalFilter: false,
-        // },
+        {
+            accessorKey: "sessions",
+            header: t("lastLogin"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: any[] = row.getValue("sessions");
+
+                return data?.length > 0
+                    ? DateTimeFormat(data[0].createdAt)
+                    : "-";
+            },
+        },
         {
             accessorKey: "emailVerified",
             header: t("emailVerified"),
