@@ -89,29 +89,6 @@ export default function CustomersTab({ t, customers }: Props) {
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
-        // {
-        //     accessorKey: "billingDate",
-        //     enableGlobalFilter: false,
-        //     header: ({ column }) => (
-        //         <div className="flex flex-row items-center">
-        //             {t("billingDate")}
-        //             <Button
-        //                 variant="ghost"
-        //                 className="p-1"
-        //                 onClick={() =>
-        //                     column.toggleSorting(column.getIsSorted() === "asc")
-        //                 }
-        //             >
-        //                 <LuChevronsUpDown className="size-4" />
-        //             </Button>
-        //         </div>
-        //     ),
-        //     cell: ({ row }) => {
-        //         const data: string = row.getValue("billingDate");
-
-        //     },
-        //     filterFn: (row, id, value) => value.includes(row.getValue(id)),
-        // },
         {
             accessorKey: "usages",
             enableHiding: false,

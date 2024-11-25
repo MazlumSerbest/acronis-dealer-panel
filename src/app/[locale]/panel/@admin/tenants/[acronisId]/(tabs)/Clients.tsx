@@ -8,7 +8,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import { DateFormat } from "@/utils/date";
 import { LuChevronsUpDown } from "react-icons/lu";
-import { formatBytes } from "@/utils/functions";
+import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -127,6 +127,17 @@ export default function ClientsTab({ t, clients }: Props) {
                 return DateFormat(data);
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("billingDate");
+                const remainingDays = calculateRemainingDays(data);
+
+                return data ? (remainingDays > 0 ? remainingDays : "0") : "-";
+            },
         },
         {
             accessorKey: "usages",

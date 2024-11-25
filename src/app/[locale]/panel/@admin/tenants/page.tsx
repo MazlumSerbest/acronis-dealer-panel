@@ -21,7 +21,7 @@ import PageHeader from "@/components/PageHeader";
 import { DateFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuInfo, LuAlertTriangle } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { formatBytes } from "@/utils/functions";
+import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
 export default function TenantsPage() {
@@ -225,6 +225,17 @@ export default function TenantsPage() {
                 );
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "remainingDays",
+            header: t("remainingDays"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("billingDate");
+                const remainingDays = calculateRemainingDays(data);
+
+                return data ? (remainingDays > 0 ? remainingDays : "0") : "-";
+            },
         },
         {
             accessorKey: "usages",
