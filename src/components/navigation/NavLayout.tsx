@@ -18,11 +18,10 @@ import useUserStore from "@/store/user";
 
 export default function NavLayout() {
     const t = useTranslations("General");
-    const [showSidebar, setShowSidebar] = useState(false);
+    const pathName = usePathname();
     const { user: currentUser } = useUserStore();
     const { userTenant } = useAcronisStore();
-
-    const pathName = usePathname();
+    const [showSidebar, setShowSidebar] = useState(false);
 
     const ref = useRef(null);
     useOnClickOutside(ref, (_) => {
@@ -41,7 +40,7 @@ export default function NavLayout() {
                     onClick={() => setShowSidebar(true)}
                     onTouchEnd={() => setShowSidebar(true)}
                 >
-                    <LuMenu className="size-7 text-zinc-600" />
+                    <LuMenu className="size-7 text-foreground" />
                 </Button>
                 {userTenant ? (
                     <div className="flex flex-1 w-1/2 items-center justify-center">
@@ -73,7 +72,7 @@ export default function NavLayout() {
                                 ? "Admin Panel"
                                 : "Partner Panel"}
                         </h1>
-                        <h2 className="text-sm font-semibold text-zinc-600">
+                        <h2 className="text-sm font-semibold text-foreground">
                             {currentUser?.role == "partner" && userTenant.name}
                         </h2>
                     </div>
@@ -114,7 +113,7 @@ export default function NavLayout() {
                                                     p.path,
                                                 ) && p.path != "/panel"
                                                     ? "*:text-blue-400"
-                                                    : "*:text-zinc-600")
+                                                    : "*:text-foreground")
                                             }
                                         >
                                             {p.icon}
@@ -151,7 +150,7 @@ export default function NavLayout() {
                                             (withoutLocale.includes(p.path) &&
                                             p.path != "/panel"
                                                 ? "*:text-blue-400"
-                                                : "*:text-zinc-600")
+                                                : "*:text-foreground")
                                         }
                                     >
                                         {p.icon}

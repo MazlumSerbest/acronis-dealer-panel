@@ -11,14 +11,10 @@ export default async function PanelLayout({
     partner: React.ReactNode;
 }) {
     const session = await auth();
-    if (!session) {
-        const url = "/api/auth/signin";
-        return redirect(url);
-    }
 
-    if (!session) return <></>;
+    if (!session) return redirect("/api/auth/signin");
     return (
-        <SessionProvider>
+        <SessionProvider refetchOnWindowFocus>
             <main className="flex">
                 <NavLayout />
                 <div className="relative flex-1 flex flex-col gap-2 h-dvh overflow-auto p-2 pb-4 pt-16 lg:p-4 lg:pt-4">

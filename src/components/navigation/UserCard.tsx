@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, redirect } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
@@ -15,12 +15,6 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "../ui/button";
-
-import { useLocale, useTranslations } from "next-intl";
-import { LuLogOut } from "react-icons/lu";
-import useUserStore from "@/store/user";
-import useAcronisStore from "@/store/acronis";
-import { getFullNameInitials } from "@/lib/utils";
 import {
     Sheet,
     SheetContent,
@@ -39,6 +33,12 @@ import {
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 
+import { useLocale, useTranslations } from "next-intl";
+import { LuLogOut } from "react-icons/lu";
+import useUserStore from "@/store/user";
+import useAcronisStore from "@/store/acronis";
+import { getFullNameInitials } from "@/lib/utils";
+
 export default function UserCard() {
     const t = useTranslations("General");
     const locale = useLocale();
@@ -49,13 +49,14 @@ export default function UserCard() {
     const { updateMainTenant } = useAcronisStore();
 
     useEffect(() => {
-        if (!session) return router.push("/");
+        if (!session) return redirect("/api/auth/signin");
+        const sessionUser = session?.data?.user;
 
-        if (session?.data?.user) {
-            fetch(`/api/admin/user/${session?.data?.user?.email ?? ""}`)
+        if (sessionUser) {
+            fetch(`/api/admin/user/${sessionUser.email ?? ""}`)
                 .then((res) => res.json())
                 .then((data) => {
-                    if (user?.role === "admin")
+                    if (data?.role === "admin")
                         updateUser({
                             id: data?.id,
                             active: data?.active,
@@ -83,23 +84,19 @@ export default function UserCard() {
                             partner: data?.partner,
                         });
                 });
-        }
 
-        if (user?.role === "admin")
-            fetch(`/api/acronis/tenants/15229d4a-ff0f-498b-849d-a4f71bdc81a4`)
-                .then((res) => res.json())
-                .then((data) => updateMainTenant(data?.tenant));
-        else if (user?.partnerAcronisId)
-            fetch(`/api/acronis/tenants/${user?.partnerAcronisId}`)
-                .then((res) => res.json())
-                .then((data) => updateMainTenant(data?.tenant));
-    }, [
-        session?.data?.user,
-        updateMainTenant,
-        updateUser,
-        user?.partnerAcronisId,
-        user?.role,
-    ]);
+            if (sessionUser.role === "admin")
+                fetch(
+                    `/api/acronis/tenants/15229d4a-ff0f-498b-849d-a4f71bdc81a4`,
+                )
+                    .then((res) => res.json())
+                    .then((data) => updateMainTenant(data?.tenant));
+            else if (user?.partnerAcronisId)
+                fetch(`/api/acronis/tenants/${user?.partnerAcronisId}`)
+                    .then((res) => res.json())
+                    .then((data) => updateMainTenant(data?.tenant));
+        }
+    }, [session]);
 
     // if (error) return <div>failed to load</div>;
     if (!user)
