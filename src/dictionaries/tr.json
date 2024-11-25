@@ -31,7 +31,7 @@
         "username": "Kullanıcı adı",
         "login": "Giriş yap",
         "fullName": "Tam Ad",
-        "id": "Kimlik",
+        "id": "Id",
         "user": "Kullanıcı",
         "role": "Rol",
         "kind": "Tip",
@@ -260,7 +260,15 @@
         "assignedSmallCardDescription": "Toplam atanmış lisans sayısı",
         "licenseCardWarning": "Alt bayiye atanmış lisanslar burada gösterilmez! Bu lisanslar, alt bayinin detay sayfasında görüntülenir.",
         "upperPartner": "Üst Partner",
-        "copiedToClipboard": "Panoya kopyalandı!"
+        "copiedToClipboard": "Panoya kopyalandı!",
+        "companyInformation": "Şirket Bilgileri",
+        "legalCompanyName": "Yasal Şirket Adı",
+        "taxId": "Vergi No",
+        "companyEmail": "Şirket E-postası",
+        "companyPhone": "Şirket Telefonu",
+        "companyLegalAddress": "Şirket Yasal Adresi",
+        "totalNumberOfEmployees": "Toplam Çalışan Sayısı",
+        "companyWebsite": "Şirket Web Sitesi"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -274,6 +282,7 @@
         "checkYourEmailDescription": "E-posta adresinize magic link gönderdik. Hesabınıza giriş yapmak için lütfen bağlantıyı takip edin.",
         "Errors": {
             "Error": "Hata!",
+            "emailRequired": "E-posta giriniz!",
             "emailNotFound": "E-posta bulunamadı!",
             "accountNotActive": "Hesap aktif değil! Lütfen yönetici ile iletişime geçin.",
             "MissingCSRF": "CSRF jetonu eksik veya geçersiz.",

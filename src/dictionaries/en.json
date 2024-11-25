@@ -260,7 +260,15 @@
         "assignedSmallCardDescription": "Total number of assigned licenses",
         "licenseCardWarning": "Licenses which assigned to sub partners are not included in these numbers! These licenses can be shown at sub partners detail page.",
         "upperPartner": "Upper Partner",
-        "copiedToClipboard": "Copied to clipboard!"
+        "copiedToClipboard": "Copied to clipboard!",
+        "companyInformation": "Company Information",
+        "legalCompanyName": "Legal Company Name",
+        "taxId": "Tax ID",
+        "companyEmail": "Company Email",
+        "companyPhone": "Company Phone",
+        "companyLegalAddress": "Company Legal Address",
+        "totalNumberOfEmployees": "Total Number of Employees",
+        "companyWebsite": "Company Website"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -274,6 +282,7 @@
         "checkYourEmailDescription": "We have sent a magic link to your email address. Please follow the link to sign in to your account.",
         "Errors": {
             "Error": "Error!",
+            "emailRequired": "Email is required!",
             "emailNotFound": "Email not found!",
             "accountNotActive": "Account not active! Please contact the administrator.",
             "MissingCSRF": "CSRF token is missing or invalid.",

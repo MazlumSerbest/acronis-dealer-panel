@@ -37,38 +37,38 @@ export default function ProfileTab() {
             <Card className="w-full">
                 <CardHeader>
                     <CardTitle className="font-medium text-xl">
-                        Company Information
+                        {t("companyInformation")}
                     </CardTitle>
                     {/* <CardDescription>Card Description</CardDescription> */}
                 </CardHeader>
 
                 <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
                     <div>
-                        <dt className="font-medium">Legal Company Name</dt>
+                        <dt className="font-medium">{t("legalCompanyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.name || "-"}
                         </dd>
                     </div>
                     <div>
-                        <dt className="font-medium">Tax ID</dt>
+                        <dt className="font-medium">{t("taxId")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.contact?.title || "-"}
                         </dd>
                     </div>
                     <div>
-                        <dt className="font-medium">Company Email</dt>
+                        <dt className="font-medium">{t("companyEmail")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.contact?.email || "-"}
                         </dd>
                     </div>
                     <div>
-                        <dt className="font-medium">Company Phone</dt>
+                        <dt className="font-medium">{t("companyPhone")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.contact?.phone || "-"}
                         </dd>
                     </div>
                     <div>
-                        <dt className="font-medium">Company Legal Address</dt>
+                        <dt className="font-medium">{t("companyLegalAddress")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {!data.tenant?.contact?.address1 &&
                             !data.tenant?.contact?.address2
@@ -80,14 +80,14 @@ export default function ProfileTab() {
                     </div>
                     <div>
                         <dt className="font-medium">
-                            Total Number of Employees
+                            {t("totalNumberOfEmployees")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.contact?.organization_size || "-"}
                         </dd>
                     </div>
                     <div>
-                        <dt className="font-medium">Company Website</dt>
+                        <dt className="font-medium">{t("companyWebsite")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.tenant?.contact?.website || "-"}
                         </dd>
