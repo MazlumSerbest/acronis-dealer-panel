@@ -61,11 +61,35 @@ export default function NavLayout() {
                     (!showSidebar ? " -translate-x-full" : "")
                 }
             >
-                <Logo width={46} height={64} />
+                <div className="flex flex-row gap-4 items-center">
+                    <div className="min-w-fit">
+                        <Logo width={38} height={42} />
+                    </div>
+                    {userTenant ? (
+                        <div className="flex flex-col w-52 gap-1 m-auto">
+                            <h1 className="text-lg font-semibold text-blue-400">
+                                {currentUser?.role == "admin"
+                                    ? "Admin Panel"
+                                    : "Partner Panel"}
+                            </h1>
+                            {currentUser?.role == "partner" && (
+                                <h2 className="text-sm font-semibold text-muted-foreground">
+                                    {userTenant.name}dasd asdasd  asdasd
+                                </h2>
+                            )}
+                        </div>
+                    ) : (
+                        <div className="animate-pulse flex items-center">
+                            <div className="w-full h-6 bg-slate-200 rounded"></div>
+                        </div>
+                    )}
+                </div>
+
+                {/* <Logo width={46} height={64} /> */}
 
                 <Separator />
 
-                {userTenant ? (
+                {/* {userTenant ? (
                     <div className="flex flex-col w-52 gap-1">
                         <h1 className="text-lg font-semibold text-blue-400">
                             {currentUser?.role == "admin"
@@ -80,7 +104,7 @@ export default function NavLayout() {
                     <div className="animate-pulse flex items-center">
                         <div className="w-full h-6 bg-slate-200 rounded"></div>
                     </div>
-                )}
+                )} */}
                 <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
                     {currentUser?.role == "admin" ? (
                         <>
@@ -91,8 +115,9 @@ export default function NavLayout() {
                                 return (
                                     <Button
                                         variant={
-                                            withoutLocale.includes(p.path) &&
-                                            p.path != "/panel"
+                                            p.path === withoutLocale ||
+                                            (p.path != "/panel" &&
+                                                withoutLocale.includes(p.path))
                                                 ? "secondary"
                                                 : "ghost"
                                         }
@@ -109,9 +134,11 @@ export default function NavLayout() {
                                             }
                                             className={
                                                 "group flex flex-row w-full justify-items-start gap-2 " +
-                                                (withoutLocale.includes(
-                                                    p.path,
-                                                ) && p.path != "/panel"
+                                                (p.path === withoutLocale ||
+                                                (p.path != "/panel" &&
+                                                    withoutLocale.includes(
+                                                        p.path,
+                                                    ))
                                                     ? "*:text-blue-400"
                                                     : "*:text-foreground")
                                             }
@@ -133,8 +160,9 @@ export default function NavLayout() {
                             return (
                                 <Button
                                     variant={
-                                        withoutLocale.includes(p.path) &&
-                                        p.path != "/panel"
+                                        p.path === withoutLocale ||
+                                        (p.path != "/panel" &&
+                                            withoutLocale.includes(p.path))
                                             ? "secondary"
                                             : "ghost"
                                     }
@@ -147,8 +175,9 @@ export default function NavLayout() {
                                         onTouchEnd={() => setShowSidebar(false)}
                                         className={
                                             "group flex flex-row w-full justify-items-start gap-2 " +
-                                            (withoutLocale.includes(p.path) &&
-                                            p.path != "/panel"
+                                            (p.path === withoutLocale ||
+                                            (p.path != "/panel" &&
+                                                withoutLocale.includes(p.path))
                                                 ? "*:text-blue-400"
                                                 : "*:text-foreground")
                                         }
