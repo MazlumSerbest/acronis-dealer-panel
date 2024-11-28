@@ -66,15 +66,15 @@ export default function NavLayout() {
                         <Logo width={38} height={42} />
                     </div>
                     {userTenant ? (
-                        <div className="flex flex-col w-52 gap-1 m-auto">
+                        <div className="flex flex-col w-52 gap-1 max-w-fit overflow-hidden">
                             <h1 className="text-lg font-semibold text-blue-400">
                                 {currentUser?.role == "admin"
                                     ? "Admin Panel"
                                     : "Partner Panel"}
                             </h1>
                             {currentUser?.role == "partner" && (
-                                <h2 className="text-sm font-semibold text-muted-foreground">
-                                    {userTenant.name}dasd asdasd  asdasd
+                                <h2 className="text-sm font-semibold text-muted-foreground truncate">
+                                    {userTenant.name}
                                 </h2>
                             )}
                         </div>

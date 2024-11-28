@@ -11,10 +11,7 @@ export default async function Error({
     searchParams?: { [key: string]: string | string[] | undefined };
 }) {
     const session = await auth();
-    if (session) {
-        const url = "/panel";
-        return redirect(url);
-    }
+    if (session) return redirect("/panel");
 
     const t = await getTranslations("General");
     const ts = await getTranslations("SignIn.Errors");
@@ -38,9 +35,7 @@ export default async function Error({
                     {error != "Configuration" && (
                         <div className="flex justify-center">
                             <Button variant="outline" size="lg" asChild>
-                                <Link href="/signin">
-                                    {t("backToSignIn")}
-                                </Link>
+                                <Link href="/signin">{t("backToSignIn")}</Link>
                             </Button>
                         </div>
                     )}

@@ -15,21 +15,13 @@ export default async function SignIn({
 }) {
     const search = new URLSearchParams(searchParams);
     const session = await auth();
-    if (session) {
-        const url = "/panel";
-        return redirect(url);
-    }
+    if (session) return redirect("/panel");
     const t = await getTranslations("General");
     const ts = await getTranslations("SignIn");
 
     return (
         <div className="flex flex-col h-dvh pt-12 sm:pt-20 px-4 sm:px-0">
             <div className="mx-auto flex flex-col w-full justify-center space-y-6 sm:w-[350px]">
-                {/* <div className="text-center mt-8">
-                    <h1 className="text-2xl font-semibold tracking-tight text-blue-400">
-                        DBackup Dealer Panel
-                    </h1>
-                </div> */}
                 <Logo height={120} width={120} />
 
                 <div className="flex flex-col space-y-2 text-center">
