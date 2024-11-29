@@ -269,7 +269,9 @@
         "companyLegalAddress": "Company Legal Address",
         "totalNumberOfEmployees": "Total Number of Employees",
         "companyWebsite": "Company Website",
-        "lastLogin": "Last Login"
+        "lastLogin": "Last Login",
+        "customerCount": "Customer Count",
+        "subPartnerCount": "Sub Partner Count"
     },
     "SignIn": {
         "signIn": "Sign In",

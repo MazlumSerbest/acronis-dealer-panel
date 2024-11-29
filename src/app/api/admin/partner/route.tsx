@@ -34,6 +34,12 @@ export const GET = auth(async (req: any) => {
                         acronisId: true,
                         name: true,
                     },
+                },
+                _count: {
+                    select: {
+                        customers: true,
+                        children: true,
+                    },
                 }
             },
         });

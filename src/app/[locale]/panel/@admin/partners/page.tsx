@@ -42,6 +42,7 @@ import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { DateTimeFormat } from "@/utils/date";
 import { Switch } from "@/components/ui/switch";
+import { sub } from "date-fns";
 
 const partnerFormSchema = z.object({
     acronisId: z.string().uuid().optional(),
@@ -119,6 +120,7 @@ export default function PartnersPage() {
 
     //#region Table
     const visibleColumns = {
+        subPartnerCount: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -172,6 +174,26 @@ export default function PartnersPage() {
                         ? "-"
                         : parent?.name) || "-"
                 );
+            },
+        },
+        // {
+        //     accessorKey: "_count",
+        //     header: t("subPartnerCount"),
+        //     enableGlobalFilter: false,
+        //     cell: ({ row }) => {
+        //         const count: { children: number } = row.getValue("_count");
+
+        //         return count.children || "-";
+        //     },
+        // },
+        {
+            accessorKey: "_count",
+            header: t("customerCount"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const count: { customers: number } = row.getValue("_count");
+
+                return count.customers || "-";
             },
         },
         {
