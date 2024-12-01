@@ -330,7 +330,6 @@ export default function CustomersPage() {
                     </div>
                 );
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "remainingDays",

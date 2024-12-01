@@ -224,7 +224,6 @@ export default function TenantsPage() {
                     </div>
                 );
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "remainingDays",
