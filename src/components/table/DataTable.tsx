@@ -64,6 +64,11 @@ interface DataTableProps<TData, TValue> {
     selectOnClick?: (table: any, item: any) => any;
     onClick?: (item: any) => any;
     onDoubleClick?: (item: any) => any;
+    onSearchEnter?: (
+        table: any,
+        value: string,
+        setValue: (value: string) => void,
+    ) => any;
 }
 
 export function DataTable<TData, TValue>({
@@ -84,6 +89,7 @@ export function DataTable<TData, TValue>({
     selectOnClick,
     onClick,
     onDoubleClick,
+    onSearchEnter,
 }: DataTableProps<TData, TValue>) {
     const tc = useTranslations("Components");
 
@@ -104,6 +110,7 @@ export function DataTable<TData, TValue>({
             columnVisibility,
             rowSelection,
             globalFilter,
+
             // columnFilters,
         },
         initialState: {
@@ -142,6 +149,19 @@ export function DataTable<TData, TValue>({
                         placeholder={tc("searchPlaceholder")}
                         value={globalFilter ?? ""}
                         onChange={(e) => setGlobalFilter(e.target.value)}
+                        onKeyDown={(e) => {
+                            if (
+                                e.key === "Enter" &&
+                                onSearchEnter &&
+                                selectable
+                            ) {
+                                onSearchEnter(
+                                    table,
+                                    globalFilter,
+                                    setGlobalFilter,
+                                );
+                            }
+                        }}
                         className="max-w-sm min-w-max"
                     />
 
@@ -260,7 +280,7 @@ export function DataTable<TData, TValue>({
                                         <TableRow
                                             key={row.id}
                                             data-state={
-                                                row.getIsSelected() &&
+                                                row?.getIsSelected() &&
                                                 "selected"
                                             }
                                             className={cn(

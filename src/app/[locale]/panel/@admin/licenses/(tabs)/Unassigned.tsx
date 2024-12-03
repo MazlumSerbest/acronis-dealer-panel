@@ -39,6 +39,7 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
+import { set } from "date-fns";
 
 const licenseFormSchema = z.object({
     productId: z.string(),
@@ -414,6 +415,21 @@ export default function UnassignedTab() {
                             .getSelectedRowModel()
                             .rows.map((r: any) => r.original?.id),
                     );
+                }}
+                onSearchEnter={(table, value, setValue) => {
+                    const license = data?.find(
+                        (d: License) => d.serialNo === value,
+                    );
+                    if (license) {
+                        const selected: any = table
+                            .getRowModel()
+                            .rows.find(
+                                (row: any) => row.original.serialNo === value,
+                            );
+
+                        selected.toggleSelected(true);
+                        setValue("");
+                    }
                 }}
                 onAddNew={() => {
                     setOpen(true);

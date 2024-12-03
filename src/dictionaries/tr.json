@@ -597,7 +597,7 @@
         "goToNextPage": "Sonraki sayfaya git",
         "goToPreviousPage": "Önceki sayfaya git",
         "clearSelection": "Seçimi Temizle",
-        "totalRowsSelected": "{length} kayıt arasından {selected} seçildi.",
+        "totalRowsSelected": "{length} kayıt arasından {selected} tanesi seçildi.",
         "totalRows": "Toplam Kayıt: {length}",
         "selectDate": "Bir tarih seçin",
         "clear": "Temizle",
