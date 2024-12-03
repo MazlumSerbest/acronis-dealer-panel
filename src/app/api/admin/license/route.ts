@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
+import { generateLicenseKey } from "@/utils/functions";
 import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any) => {
@@ -126,45 +127,61 @@ export const POST = auth(async (req: any) => {
                 ok: false,
             });
 
-        const license = await req.json();
-        license.createdBy = req.auth.user.email;
+        // const license = await req.json();
+        // license.createdBy = req.auth.user.email;
 
-        const checkSerial = await prisma.license.findUnique({
-            where: {
-                serialNo: license.serialNo,
-            },
-        });
-        if (checkSerial)
-            return NextResponse.json({
-                message: tm("licenseSerialExists"),
-                status: 400,
-                ok: false,
+        // const checkSerial = await prisma.license.findUnique({
+        //     where: {
+        //         serialNo: license.serialNo,
+        //     },
+        // });
+        // if (checkSerial)
+        //     return NextResponse.json({
+        //         message: tm("licenseSerialExists"),
+        //         status: 400,
+        //         ok: false,
+        //     });
+
+        // const checkKey = await prisma.license.findUnique({
+        //     where: {
+        //         key: license.key,
+        //     },
+        // });
+        // if (checkKey)
+        //     return NextResponse.json({
+        //         message: tm("licenseKeyExists"),
+        //         status: 400,
+        //         ok: false,
+        //     });
+
+        const request = await req.json();
+        let licenses = [];
+
+        for (let i = 0; i < request.piece; i++) {
+            licenses.push({
+                productId: request.productId,
+                serialNo: Math.floor(Math.random() * 10000000).toString(),
+                key: generateLicenseKey(),
+                expiresAt: request.expiresAt,
+                createdBy: req.auth.user.email,
             });
+        }
 
-        const checkKey = await prisma.license.findUnique({
-            where: {
-                key: license.key,
-            },
+        const newLicenses = await prisma.license.createMany({
+            data: licenses as any[],
+            skipDuplicates: true,
         });
-        if (checkKey)
-            return NextResponse.json({
-                message: tm("licenseKeyExists"),
-                status: 400,
-                ok: false,
-            });
 
-        const newLicense = await prisma.license.create({
-            data: license,
-        });
-        if (newLicense.id) {
+        if (newLicenses.count === licenses.length) {
             return NextResponse.json({
-                message: "Lisans başarıyla kaydedildi!",
+                data: licenses,
+                message: "Lisanslar başarıyla kaydedildi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Lisans kaydedilemedi!",
+                message: "Lisanslar kaydedilemedi!",
                 status: 400,
                 ok: false,
             });

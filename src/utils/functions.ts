@@ -7,6 +7,22 @@ export function CopyToClipboard(text: string, message?: string) {
     toast({ title: message ?? "Panoya Kopyalandı!" });
 }
 
+export function generateLicenseKey() {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let key = "";
+
+    // Her gruptan 4 karakter oluştur, grupları "-" ile ayır
+    for (let i = 0; i < 3; i++) {
+        let group = "";
+        for (let j = 0; j < 4; j++) {
+            group += chars[Math.floor(Math.random() * chars.length)];
+        }
+        key += i < 2 ? group + "-" : group; // Son grupta "-" ekleme
+    }
+
+    return key;
+}
+
 export function formatBytes(a: any, b = 2) {
     if (!+a) return "0 Bytes";
     const c = 0 > b ? 0 : b,

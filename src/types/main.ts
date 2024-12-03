@@ -49,12 +49,12 @@ type Customer = Entity & {
 };
 
 type License = Entity & {
-    partnerAcronisId: string;
-    customerAcronisId: string;
+    productId: string;
+    partnerAcronisId?: string;
+    customerAcronisId?: string;
     key: string;
-    typeSerialNo: string;
-    licenseSerialNo: string;
-    boughtAt?: string;
+    serialNo: string;
+    expiresAt?: string;
     activatedAt?: string;
 };
 

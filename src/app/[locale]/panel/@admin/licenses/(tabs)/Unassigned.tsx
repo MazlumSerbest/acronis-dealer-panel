@@ -42,8 +42,9 @@ import useUserStore from "@/store/user";
 
 const licenseFormSchema = z.object({
     productId: z.string(),
-    serialNo: z.string(),
-    key: z.string(),
+    piece: z.coerce.number().min(1).max(2000),
+    // serialNo: z.string(),
+    // key: z.string(),
     expiresAt: z.date().optional(),
 });
 
@@ -80,6 +81,7 @@ export default function UnassignedTab() {
     const form = useForm<LicenseFormValues>({
         resolver: zodResolver(licenseFormSchema),
         defaultValues: {
+            piece: 100,
             expiresAt: new Date(
                 new Date().setFullYear(new Date().getFullYear() + 2),
             ),
@@ -100,6 +102,39 @@ export default function UnassignedTab() {
                     toast({
                         description: res.message,
                     });
+
+                    // CSV Export
+                    const headers = "product,serialNo,key,expiresAt";
+                    const rows = res.data.map((obj: any) => {
+                        return [
+                            products?.find((p) => p.id === obj.productId)?.name,
+                            obj.serialNo,
+                            obj.key,
+                            DateFormat(obj.expiresAt),
+                        ].join(",");
+                    });
+                    const csvContent = [headers, ...rows].join("\n");
+
+                    const blob = new Blob([csvContent], {
+                        type: "text/csv;charset=utf-8;",
+                    });
+
+                    const csvLink = document.createElement("a");
+                    const url = URL.createObjectURL(blob);
+                    csvLink.setAttribute("href", url);
+                    csvLink.setAttribute(
+                        "download",
+                        `${
+                            products?.find((p) => p.id === values.productId)
+                                ?.name
+                        } List - ${DateTimeFormat(
+                            new Date().toISOString(),
+                        )}.csv`,
+                    );
+                    document.body.appendChild(csvLink);
+                    csvLink.click();
+                    document.body.removeChild(csvLink);
+
                     setOpen(false);
                     form.reset();
                     mutate();
@@ -346,8 +381,9 @@ export default function UnassignedTab() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
-                defaultSort="expiresAt"
-                defaultSortDirection="asc"
+                defaultPageSize={50}
+                defaultSort="createdAt"
+                defaultSortDirection="desc"
                 facetedFilters={[
                     {
                         column: "productQuota",
@@ -429,6 +465,26 @@ export default function UnassignedTab() {
 
                             <FormField
                                 control={form.control}
+                                name="piece"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("piece")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input type="number" {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.piece
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* <FormField
+                                control={form.control}
                                 name="serialNo"
                                 render={({ field }) => (
                                     <FormItem>
@@ -446,9 +502,9 @@ export default function UnassignedTab() {
                                         />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
 
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="key"
                                 render={({ field }) => (
@@ -464,7 +520,7 @@ export default function UnassignedTab() {
                                         />
                                     </FormItem>
                                 )}
-                            />
+                            /> */}
 
                             <FormField
                                 control={form.control}
