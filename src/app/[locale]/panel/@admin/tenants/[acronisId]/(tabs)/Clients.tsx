@@ -7,7 +7,6 @@ import {
     Tooltip,
     TooltipTrigger,
     TooltipContent,
-    TooltipProvider,
 } from "@/components/ui/tooltip";
 
 import { DataTable } from "@/components/table/DataTable";
@@ -135,32 +134,26 @@ export default function ClientsTab({ t, clients }: Props) {
                         {DateFormat(data)}
                         {data &&
                             (new Date(data) < new Date() ? (
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <LuAlertTriangle className="size-4 text-destructive" />
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>{t("billingDatePassed")}</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <LuAlertTriangle className="size-4 text-destructive" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{t("billingDatePassed")}</p>
+                                    </TooltipContent>
+                                </Tooltip>
                             ) : new Date(data) <
                               new Date(Date.now() + 12096e5) ? (
-                                <TooltipProvider>
-                                    <Tooltip>
-                                        <TooltipTrigger>
-                                            <LuInfo className="size-4 text-yellow-500" />
-                                        </TooltipTrigger>
-                                        <TooltipContent>
-                                            <p>
-                                                {t(
-                                                    "lessThanTwoWeeksUntilBilling",
-                                                )}
-                                            </p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                </TooltipProvider>
+                                <Tooltip>
+                                    <TooltipTrigger>
+                                        <LuInfo className="size-4 text-yellow-500" />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>
+                                            {t("lessThanTwoWeeksUntilBilling")}
+                                        </p>
+                                    </TooltipContent>
+                                </Tooltip>
                             ) : null)}
                     </div>
                 );
