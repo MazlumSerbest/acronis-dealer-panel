@@ -429,6 +429,7 @@ export default function UnassignedTab() {
 
                         selected.toggleSelected(true);
                         setValue("");
+                        setSelectedIds([license.id, ...selectedIds]);
                     }
                 }}
                 onAddNew={() => {
