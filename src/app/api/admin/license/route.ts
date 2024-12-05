@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
-import { generateLicenseKey } from "@/utils/functions";
+import { generateCuid, generateLicenseKey } from "@/utils/functions";
 import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any) => {
@@ -160,7 +160,7 @@ export const POST = auth(async (req: any) => {
         for (let i = 0; i < request.piece; i++) {
             licenses.push({
                 productId: request.productId,
-                serialNo: Math.floor(Math.random() * 10000000).toString(),
+                serialNo: generateCuid(),
                 key: generateLicenseKey(),
                 expiresAt: request.expiresAt,
                 createdBy: req.auth.user.email,

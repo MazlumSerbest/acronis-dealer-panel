@@ -139,7 +139,7 @@ model LicenseHistory {
   createdAt DateTime @default(now())
   createdBy String
 
-  license         License   @relation(fields: [licenseId], references: [id])
+  license         License   @relation(fields: [licenseId], references: [id], onDelete: Cascade)
   previousPartner Partner?  @relation("assignHistory", fields: [previousPartnerAcronisId], references: [acronisId])
   partner         Partner   @relation(fields: [partnerAcronisId], references: [acronisId])
   customer        Customer? @relation(fields: [customerAcronisId], references: [acronisId])

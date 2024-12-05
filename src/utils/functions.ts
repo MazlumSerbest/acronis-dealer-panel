@@ -23,6 +23,19 @@ export function generateLicenseKey() {
     return key;
 }
 
+export function generateCuid() {
+    const getRandomChar = () => {
+        const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+        return chars[Math.floor(Math.random() * chars.length)];
+    };
+
+    const timestamp = Date.now().toString(36); // 36 tabanında zaman damgası
+    const counter = (Math.random() * 100000).toFixed(0).padStart(5, "0"); // 5 haneli sayaç
+    const randomBlock = Array.from({ length: 5 }, getRandomChar).join(""); // 5 rastgele karakter
+
+    return `c${timestamp}${counter}${randomBlock}`; // c ile başlayan benzersiz ID
+}
+
 export function formatBytes(a: any, b = 2) {
     if (!+a) return "0 Bytes";
     const c = 0 > b ? 0 : b,
