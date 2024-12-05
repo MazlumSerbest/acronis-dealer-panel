@@ -41,31 +41,44 @@ import useUserStore from "@/store/user";
 import { cn } from "@/lib/utils";
 import { getCustomers, getPartners } from "@/lib/data";
 
-const addFormSchema = z.object({
-    partnerAcronisId: z.string().uuid().optional(),
-    serials: z.array(
-        z.object({
-            value: z.string().length(10, {
-                message: "",
-            }),
-        }),
-    ),
-});
+// const addFormSchema = z.object({
+//     partnerAcronisId: z.string().uuid().optional(),
+//     serials: z.array(
+//         z.object({
+//             value: z.string().length(10, {
+//                 message: "",
+//             }),
+//         }),
+//     ),
+// });
 
-type AddFormValues = z.infer<typeof addFormSchema>;
+// type AddFormValues = z.infer<typeof addFormSchema>;
 
-const defaultValues: Partial<AddFormValues> = {
-    serials: [{ value: "" }],
-};
+// const defaultValues: Partial<AddFormValues> = {
+//     serials: [{ value: "" }],
+// };
 
 const assignToCustomerFormSchema = z.object({
-    customerAcronisId: z.string().uuid(),
+    customerAcronisId: z
+        .string({
+            required_error: "License.customerAcronisId.required",
+        })
+        .uuid(),
+    key: z
+        .string({
+            required_error: "License.key.required",
+        })
+        .regex(/^[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/, "License.key.regex"),
 });
 
 type AssignToCustomerFormValues = z.infer<typeof assignToCustomerFormSchema>;
 
 const assignToPartnerFormSchema = z.object({
-    partnerAcronisId: z.string().uuid(),
+    partnerAcronisId: z
+        .string({
+            required_error: "License.partnerAcronisId.required",
+        })
+        .uuid(),
 });
 
 type AssignToPartnerFormValues = z.infer<typeof assignToPartnerFormSchema>;
@@ -79,7 +92,7 @@ export default function PassiveTab() {
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
-    const [openAdd, setOpenAdd] = useState(false);
+    // const [openAdd, setOpenAdd] = useState(false);
     const [openAssignToCustomer, setOpenAssignToCustomer] = useState(false);
     const [openAssignToPartner, setOpenAssignToPartner] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -93,44 +106,45 @@ export default function PassiveTab() {
     );
 
     // #region Form
-    const addForm = useForm<AddFormValues>({
-        resolver: zodResolver(addFormSchema),
-        defaultValues,
-    });
 
-    const { fields, append, remove } = useFieldArray({
-        name: "serials",
-        control: addForm.control,
-    });
+    // const addForm = useForm<AddFormValues>({
+    //     resolver: zodResolver(addFormSchema),
+    //     defaultValues,
+    // });
 
-    function onSubmitAdd(values: AddFormValues) {
-        values.partnerAcronisId = currentUser?.partnerAcronisId;
-        if (!values.partnerAcronisId) return;
-        if (submitting) return;
-        setSubmitting(true);
+    // const { fields, append, remove } = useFieldArray({
+    //     name: "serials",
+    //     control: addForm.control,
+    // });
 
-        fetch("/api/license", {
-            method: "PUT",
-            body: JSON.stringify(values),
-        })
-            .then((res) => res.json())
-            .then((res) => {
-                if (res.ok) {
-                    toast({
-                        description: res.message,
-                    });
-                    setOpenAdd(false);
-                    mutate();
-                } else {
-                    toast({
-                        variant: "destructive",
-                        title: t("errorTitle"),
-                        description: res.message,
-                    });
-                }
-                setSubmitting(false);
-            });
-    }
+    // function onSubmitAdd(values: AddFormValues) {
+    //     values.partnerAcronisId = currentUser?.partnerAcronisId;
+    //     if (!values.partnerAcronisId) return;
+    //     if (submitting) return;
+    //     setSubmitting(true);
+
+    //     fetch("/api/license", {
+    //         method: "PUT",
+    //         body: JSON.stringify(values),
+    //     })
+    //         .then((res) => res.json())
+    //         .then((res) => {
+    //             if (res.ok) {
+    //                 toast({
+    //                     description: res.message,
+    //                 });
+    //                 setOpenAdd(false);
+    //                 mutate();
+    //             } else {
+    //                 toast({
+    //                     variant: "destructive",
+    //                     title: t("errorTitle"),
+    //                     description: res.message,
+    //                 });
+    //             }
+    //             setSubmitting(false);
+    //         });
+    // }
 
     const assignToCustomerForm = useForm<AssignToCustomerFormValues>({
         resolver: zodResolver(assignToCustomerFormSchema),
@@ -439,8 +453,18 @@ export default function PassiveTab() {
                         <DropdownMenuItem
                             key="assignToCustomer"
                             onClick={() => {
-                                setOpenAssignToCustomer(true);
-                                assignToCustomerForm.reset();
+                                if (selectedIds.length === 1) {
+                                    setOpenAssignToCustomer(true);
+                                    assignToCustomerForm.reset();
+                                } else {
+                                    toast({
+                                        variant: "destructive",
+                                        title: t("errorTitle"),
+                                        description: t(
+                                            "moreThanOneLicenseError",
+                                        ),
+                                    });
+                                }
                             }}
                         >
                             {t("assignToCustomer")}
@@ -466,13 +490,25 @@ export default function PassiveTab() {
                             .rows.map((r: any) => r.original?.id),
                     );
                 }}
-                // onAddNew={() => {
-                //     setOpenAdd(true);
-                //     addForm.reset();
-                // }}
+                onSearchEnter={(table, value, setValue) => {
+                    const license = data?.find(
+                        (d: License) => d.serialNo === value,
+                    );
+                    if (license) {
+                        const selected: any = table
+                            .getRowModel()
+                            .rows.find(
+                                (row: any) => row.original.serialNo === value,
+                            );
+
+                        selected.toggleSelected(true);
+                        setValue("");
+                        setSelectedIds([license.id, ...selectedIds]);
+                    }
+                }}
             />
 
-            <Dialog open={openAdd} onOpenChange={setOpenAdd}>
+            {/* <Dialog open={openAdd} onOpenChange={setOpenAdd}>
                 <DialogContent className="max-h-[90vh] overflow-y-auto">
                     <DialogHeader>
                         <DialogTitle>{t("addLicense")}</DialogTitle>
@@ -578,7 +614,7 @@ export default function PassiveTab() {
                         </form>
                     </Form>
                 </DialogContent>
-            </Dialog>
+            </Dialog> */}
 
             <Dialog
                 open={openAssignToCustomer}
@@ -608,6 +644,10 @@ export default function PassiveTab() {
                             autoComplete="off"
                             className="space-y-4"
                         >
+                            {/* <FormField
+
+                            /> */}
+
                             <FormField
                                 control={assignToCustomerForm.control}
                                 name="customerAcronisId"
@@ -633,6 +673,36 @@ export default function PassiveTab() {
                                             error={
                                                 assignToCustomerForm?.formState
                                                     ?.errors?.customerAcronisId
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={assignToCustomerForm.control}
+                                name="key"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("licenseKey")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                onChange={(e) =>
+                                                    assignToCustomerForm.setValue(
+                                                        "key",
+                                                        e.target.value.toUpperCase(),
+                                                    )
+                                                }
+                                                placeholder="A1B2-C3D4-E5F6"
+                                            />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                assignToCustomerForm?.formState
+                                                    ?.errors?.key
                                             }
                                         />
                                     </FormItem>

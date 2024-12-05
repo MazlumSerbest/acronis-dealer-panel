@@ -27,6 +27,19 @@ export const PUT = auth(async (req: any) => {
                 customerAcronisId: values.customerAcronisId,
                 activatedAt: new Date().toISOString(),
             };
+
+            const keyCheck = await prisma.license.findFirst({
+                where: {
+                    id: values.ids[0],
+                }
+            })
+
+            if (keyCheck?.key != values.key)
+                return NextResponse.json({
+                    message: "Hatalı lisans anahtarı!",
+                    status: 400,
+                    ok: false,
+                });
         } else if (kind === "partner") {
             data = {
                 partnerAcronisId: values.partnerAcronisId,
