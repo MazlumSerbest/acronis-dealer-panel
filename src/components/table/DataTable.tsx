@@ -284,7 +284,7 @@ export function DataTable<TData, TValue>({
                                                 "selected"
                                             }
                                             className={cn(
-                                                "select-none",
+                                                "select-text",
                                                 zebra && "odd:bg-zinc-100/50",
                                                 (onClick ||
                                                     onDoubleClick ||
