@@ -284,7 +284,7 @@ export function DataTable<TData, TValue>({
                                                 "selected"
                                             }
                                             className={cn(
-                                                "select-text",
+                                                "select-none",
                                                 zebra && "odd:bg-zinc-100/50",
                                                 (onClick ||
                                                     onDoubleClick ||
@@ -307,7 +307,10 @@ export function DataTable<TData, TValue>({
                                             {row
                                                 .getVisibleCells()
                                                 .map((cell) => (
-                                                    <TableCell key={cell.id}>
+                                                    <TableCell
+                                                        key={cell.id}
+                                                        className="select-all"
+                                                    >
                                                         {flexRender(
                                                             cell.column
                                                                 .columnDef.cell,
