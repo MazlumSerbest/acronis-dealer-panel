@@ -271,7 +271,9 @@
         "companyWebsite": "Company Website",
         "lastLogin": "Last Login",
         "customerCount": "Customer Count",
-        "subPartnerCount": "Sub Partner Count"
+        "subPartnerCount": "Sub Partner Count",
+        "licenseKey": "License Key",
+        "moreThanOneLicenseError": "Can't assign multiple licenses to a customer at once."
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -403,6 +405,26 @@
             },
             "unit": {
                 "required": "Unit is required"
+            }
+        },
+        "License": {
+            "productId": {
+                "required": "Product is required"
+            },
+            "piece": {
+                "required": "Piece is required",
+                "minLength": "Must be between 1 and 2000",
+                "maxLength": "Must be between 1 and 2000"
+            },
+            "partnerAcronisId": {
+                "required": "Partner is required"
+            },
+            "customerAcronisId": {
+                "required": "Customer is required"
+            },
+            "key": {
+                "required": "License key is required",
+                "regex": "Must be a valid key"
             }
         },
         "Course": {

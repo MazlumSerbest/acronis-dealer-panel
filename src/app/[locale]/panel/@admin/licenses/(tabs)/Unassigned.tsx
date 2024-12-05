@@ -39,20 +39,26 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
-import { set } from "date-fns";
 
 const licenseFormSchema = z.object({
-    productId: z.string(),
-    piece: z.coerce.number().min(1).max(2000),
-    // serialNo: z.string(),
-    // key: z.string(),
+    productId: z.string({
+        required_error: "License.productId.required",
+    }),
+    piece: z.coerce
+        .number({
+            required_error: "License.piece.required",
+        })
+        .min(1, "License.piece.minLength")
+        .max(2000, "License.piece.maxLength"),
     expiresAt: z.date().optional(),
 });
 
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
 const assignFormSchema = z.object({
-    partnerAcronisId: z.string().uuid(),
+    partnerAcronisId: z.string({
+        required_error: "License.partnerAcronisId.required",
+    }).uuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
@@ -500,50 +506,11 @@ export default function UnassignedTab() {
                                 )}
                             />
 
-                            {/* <FormField
-                                control={form.control}
-                                name="serialNo"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("serialNo")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.serialNo
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            /> */}
-
-                            {/* <FormField
-                                control={form.control}
-                                name="key"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("key")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={form?.formState?.errors?.key}
-                                        />
-                                    </FormItem>
-                                )}
-                            /> */}
-
                             <FormField
                                 control={form.control}
                                 name="expiresAt"
                                 render={({ field }) => (
-                                    <FormItem className="">
+                                    <FormItem>
                                         <FormLabel>{t("expiresAt")}</FormLabel>
                                         <DatePicker field={field} />
                                         <FormError

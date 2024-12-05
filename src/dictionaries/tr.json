@@ -271,7 +271,9 @@
         "companyWebsite": "Şirket Web Sitesi",
         "lastLogin": "Son Giriş Tarihi",
         "customerCount": "Müşteri Sayısı",
-        "subPartnerCount": "Alt Partner Sayısı"
+        "subPartnerCount": "Alt Partner Sayısı",
+        "licenseKey": "Lisans Anahtarı",
+        "moreThanOneLicenseError": "Müşteriye aynı anda birden fazla lisans atanamaz!"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -403,6 +405,26 @@
             },
             "unit": {
                 "required": "Birim zorunludur"
+            }
+        },
+        "License": {
+            "productId": {
+                "required": "Ürün zorunludur"
+            },
+            "piece": {
+                "required": "Adet zorunludur",
+                "minLength": "1 ve 2000 arasında olmalıdır",
+                "maxLength": "1 ve 2000 arasında olmalıdır"
+            },
+            "partnerAcronisId": {
+                "required": "Partner zorunludur"
+            },
+            "customerAcronisId": {
+                "required": "Müşteri zorunludur"
+            },
+            "key": {
+                "required": "Lisans anahtarı zorunludur",
+                "regex": "Geçerli bir lisans anahtarı olmalıdır"
             }
         },
         "Course": {
