@@ -605,7 +605,8 @@
             "pw_pack_adv_management": "Gelişmiş Yönetim",
             "pw_pack_adv_security": "Gelişmiş Güvenlik",
             "pw_pack_adv_dlp": "Gelişmiş Veri Kaybı Önleme",
-            "pw_pack_adv_backup_m365_seats": "Gelişmiş yedekleme için Microsoft 365 bilgisayar lisansları"
+            "pw_pack_adv_backup_m365_seats": "Gelişmiş yedekleme için Microsoft 365 bilgisayar lisansları",
+            "pw_pack_adv_security_m365_seats": "Gelişmiş güvenlik için Microsoft 365 bilgisayar lisansları"
         },
         "search": "Ara",
         "columns": "Sütunlar",

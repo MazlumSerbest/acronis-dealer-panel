@@ -605,7 +605,8 @@
             "pw_pack_adv_management": "Advanced Management",
             "pw_pack_adv_security": "Advanced Security",
             "pw_pack_adv_dlp": "Advanced Data Loss Prevention",
-            "pw_pack_adv_backup_m365_seats": "Microsoft 365 Seats for Advanced Backup"
+            "pw_pack_adv_backup_m365_seats": "Microsoft 365 Seats for Advanced Backup",
+            "pw_pack_adv_security_m365_seats": "Microsoft 365 Seats for Advanced Security"
         },
         "search": "Search",
         "columns": "Columns",
