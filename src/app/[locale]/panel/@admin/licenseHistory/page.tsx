@@ -83,7 +83,7 @@ export default function LicenseHistoryPage() {
         },
         {
             accessorKey: "createdAt",
-            header: t("createdAt"),
+            header: t("actionDate"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
                 const data: string = row.getValue("createdAt");
@@ -120,7 +120,7 @@ export default function LicenseHistoryPage() {
         <DataTable
             zebra
             columns={columns}
-            data={data}
+            data={data || []}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
             defaultPageSize={50}
