@@ -139,6 +139,16 @@ export const partnerPaths: Path[] = [
             />
         ),
     },
+    {
+        path: "/panel/licenseHistory",
+        key: "licenseHistory",
+        icon: (
+            <LuHistory
+                className="size-6 group-hover:text-blue-400"
+                aria-label="License History Page"
+            />
+        ),
+    },
     // {
     //     path: "/panel/alerts",
     //     key: "alerts",
