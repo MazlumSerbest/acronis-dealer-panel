@@ -23,7 +23,6 @@ model User {
   acronisTenantId  String?
   language         String?   @default("tr")
   deleted          Boolean   @default(false)
-  // licensed         Boolean   @default(false)
   partnerAcronisId String?
   accounts         Account[]
   sessions         Session[]
@@ -67,82 +66,77 @@ model VerificationToken {
 }
 
 model Partner {
-  id              String    @id @default(cuid())
-  acronisId       String    @unique
-  createdBy       String
-  createdAt       DateTime  @default(now())
-  updatedBy       String?
-  updatedAt       DateTime  @updatedAt
-  active          Boolean   @default(true)
-  applicationId   String?   @unique
-  billingDate     DateTime?
-  parentAcronisId String?
-  name            String?
-  licensed        Boolean   @default(true)
-
+  id                     String           @id @default(cuid())
+  acronisId              String           @unique
+  createdBy              String
+  createdAt              DateTime         @default(now())
+  updatedBy              String?
+  updatedAt              DateTime         @updatedAt
+  active                 Boolean          @default(true)
+  applicationId          String?          @unique
+  billingDate            DateTime?
+  parentAcronisId        String?
+  name                   String?
+  licensed               Boolean          @default(true)
   customers              Customer[]
   licenses               License[]
+  licenseHistory         LicenseHistory[]
+  assignedLicenseHistory LicenseHistory[] @relation("assignHistory")
   application            Application?     @relation(fields: [applicationId], references: [id])
   parent                 Partner?         @relation("parent", fields: [parentAcronisId], references: [acronisId])
   children               Partner[]        @relation("parent")
   users                  User[]
-  licenseHistory         LicenseHistory[]
-  assignedLicenseHistory LicenseHistory[] @relation("assignHistory")
 }
 
 model Customer {
-  id               String    @id @default(cuid())
-  acronisId        String?   @unique
+  id               String           @id @default(cuid())
+  acronisId        String?          @unique
   billingDate      DateTime?
   createdBy        String
-  createdAt        DateTime  @default(now())
+  createdAt        DateTime         @default(now())
   updatedBy        String?
-  updatedAt        DateTime  @updatedAt
-  active           Boolean   @default(true)
+  updatedAt        DateTime         @updatedAt
+  active           Boolean          @default(true)
   name             String?
   partnerAcronisId String
-
-  partner        Partner          @relation(fields: [partnerAcronisId], references: [acronisId])
-  licenses       License[]
-  licenseHistory LicenseHistory[]
+  partner          Partner          @relation(fields: [partnerAcronisId], references: [acronisId])
+  licenses         License[]
+  licenseHistory   LicenseHistory[]
 }
 
 model License {
-  id                String    @id @default(cuid())
-  key               String    @unique
+  id                String           @id @default(cuid())
+  key               String           @unique
   activatedAt       DateTime?
   createdBy         String
-  createdAt         DateTime  @default(now())
+  createdAt         DateTime         @default(now())
   updatedBy         String?
-  updatedAt         DateTime  @updatedAt
-  serialNo          String    @unique
+  updatedAt         DateTime         @updatedAt
+  serialNo          String           @unique
   productId         String
   expiresAt         DateTime?
   assignedAt        DateTime?
   customerAcronisId String?
   partnerAcronisId  String?
-
-  customer Customer?        @relation(fields: [customerAcronisId], references: [acronisId])
-  partner  Partner?         @relation(fields: [partnerAcronisId], references: [acronisId])
-  product  Product          @relation(fields: [productId], references: [id])
-  history  LicenseHistory[]
+  customer          Customer?        @relation(fields: [customerAcronisId], references: [acronisId])
+  partner           Partner?         @relation(fields: [partnerAcronisId], references: [acronisId])
+  product           Product          @relation(fields: [productId], references: [id])
+  history           LicenseHistory[]
 }
 
 model LicenseHistory {
-  id                       String  @id @default(cuid())
+  id                       String    @id @default(cuid())
   licenseId                String
-  previousPartnerAcronisId String?
   partnerAcronisId         String
+  previousPartnerAcronisId String?
   customerAcronisId        String?
   action                   String
-
-  createdAt DateTime @default(now())
-  createdBy String
-
-  license         License   @relation(fields: [licenseId], references: [id], onDelete: Cascade)
-  previousPartner Partner?  @relation("assignHistory", fields: [previousPartnerAcronisId], references: [acronisId])
-  partner         Partner   @relation(fields: [partnerAcronisId], references: [acronisId])
-  customer        Customer? @relation(fields: [customerAcronisId], references: [acronisId])
+  createdAt                DateTime  @default(now())
+  createdBy                String
+  customer                 Customer? @relation(fields: [customerAcronisId], references: [acronisId])
+  license                  License   @relation(fields: [licenseId], references: [id], onDelete: Cascade)
+  partner                  Partner   @relation(fields: [partnerAcronisId], references: [acronisId])
+  previousPartner          Partner?  @relation("assignHistory", fields: [previousPartnerAcronisId], references: [acronisId])
 }
 
 model Product {
@@ -234,16 +228,17 @@ model Lesson {
 
 /// Views
 view v_ActiveLicenses {
-  id                String    @id
-  expiresAt         DateTime?
-  activatedAt       DateTime?
-  code              String?
-  model             String?
-  quota             Int?
-  unit              String?
-  bytes             BigInt?
-  partnerAcronisId  String?
-  customerAcronisId String?
+  id                     String    @id
+  expiresAt              DateTime?
+  activatedAt            DateTime?
+  code                   String?
+  model                  String?
+  quota                  Int?
+  unit                   String?
+  bytes                  BigInt?
+  partnerAcronisId       String?
+  partnerParentAcronisId String?
+  customerAcronisId      String?
 }
 
 view v_License {
@@ -267,4 +262,32 @@ view v_License {
   createdBy              String?
   updatedAt              DateTime?
   updatedBy              String?
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_LicensedCustomers {
+  acronisId String?
+  name      String?
+  code      String?
+  model     String?
+  quota     Int?
+  unit      String?
+  bytes     BigInt?
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_LicenseHistory {
+  id                       String    @id
+  action                   String?
+  createdAt                DateTime?
+  createdBy                String?
+  licenseSerialNo          String?
+  productName              String?
+  previousPartner          String?
+  previousPartnerAcronisId String?
+  partner                  String?
+  partnerAcronisId         String?
+  customer                 String?
 }

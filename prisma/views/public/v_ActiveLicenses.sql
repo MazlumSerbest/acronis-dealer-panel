@@ -8,6 +8,7 @@ SELECT
   pro.unit,
   pro.bytes,
   par."acronisId" AS "partnerAcronisId",
+  par."parentAcronisId" AS "partnerParentAcronisId",
   cus."acronisId" AS "customerAcronisId"
 FROM
   (
@@ -16,9 +17,9 @@ FROM
         "License" l
         LEFT JOIN "Product" pro ON ((pro.id = l."productId"))
       )
-      LEFT JOIN "Partner" par ON ((par.id = l."partnerAcronisId"))
+      LEFT JOIN "Partner" par ON ((par."acronisId" = l."partnerAcronisId"))
     )
-    LEFT JOIN "Customer" cus ON ((cus.id = l."customerAcronisId"))
+    LEFT JOIN "Customer" cus ON ((cus."acronisId" = l."customerAcronisId"))
   )
 WHERE
   (
