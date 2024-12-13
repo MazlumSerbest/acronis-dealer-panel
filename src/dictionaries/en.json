@@ -6,6 +6,7 @@
             "tenants": "Tenants",
             "customers": "Customers",
             "licenses": "Licenses",
+            "licenseHistory": "License History",
             "products": "Products",
             "alerts": "Alerts",
             "management": "Management",
@@ -273,7 +274,13 @@
         "customerCount": "Customer Count",
         "subPartnerCount": "Sub Partner Count",
         "licenseKey": "License Key",
-        "moreThanOneLicenseError": "Can't assign multiple licenses to a customer at once."
+        "moreThanOneLicenseError": "Can't assign multiple licenses to a customer at once.",
+        "firstAssignment": "First Assignment",
+        "assignment": "Assignment",
+        "activation": "Activation",
+        "productName": "Product Name",
+        "previousPartner": "Previous Partner",
+        "actionDate": "Action Date"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -625,6 +632,7 @@
         "selectDate": "Pick a date",
         "clear": "Clear",
         "actions": "Actions",
+        "action": "Action",
         "toggleColumns": "Toggle Columns",
         "clearFilters": "Clear Filters",
         "history": "History",

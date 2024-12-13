@@ -6,6 +6,7 @@
             "tenants": "Kiracılar",
             "customers": "Müşteriler",
             "licenses": "Lisanslar",
+            "licenseHistory": "Lisans Geçmişi",
             "products": "Ürünler",
             "alerts": "Uyarılar",
             "management": "Yönetim",
@@ -36,6 +37,7 @@
         "role": "Rol",
         "kind": "Tip",
         "actions": "İşlemler",
+        "action": "İşlem",
         "edit": "Düzenle",
         "new": "Yeni",
         "add": "Ekle",
@@ -273,7 +275,13 @@
         "customerCount": "Müşteri Sayısı",
         "subPartnerCount": "Alt Partner Sayısı",
         "licenseKey": "Lisans Anahtarı",
-        "moreThanOneLicenseError": "Müşteriye aynı anda birden fazla lisans atanamaz!"
+        "moreThanOneLicenseError": "Müşteriye aynı anda birden fazla lisans atanamaz!",
+        "firstAssignment": "İlk Atama",
+        "assignment": "Atama",
+        "activation": "Aktivasyon",
+        "productName": "Ürün Adı",
+        "previousPartner": "Önceki Partner",
+        "actionDate": "İşlem Tarihi"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
