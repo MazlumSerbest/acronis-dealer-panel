@@ -29,7 +29,7 @@ export function generateShortId() {
         return chars[Math.floor(Math.random() * chars.length)];
     };
 
-    const timestamp = Date.now().toString(36).slice(0, 7); // Zaman damgasını 36 tabanında al (daha kısa olur)
+    const timestamp = Date.now().toString(36); // Zaman damgasını 36 tabanında al (daha kısa olur)
     const randomBlock = Array.from({ length: 5 }, getRandomChar).join(""); // 6 rastgele karakter
     const counter = (Math.floor(Math.random() * 1000)).toString().padStart(3, "0"); // 3 haneli rastgele sayaç
 

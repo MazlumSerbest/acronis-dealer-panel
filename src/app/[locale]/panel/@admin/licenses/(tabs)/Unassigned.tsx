@@ -56,9 +56,11 @@ const licenseFormSchema = z.object({
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
 
 const assignFormSchema = z.object({
-    partnerAcronisId: z.string({
-        required_error: "License.partnerAcronisId.required",
-    }).uuid(),
+    partnerAcronisId: z
+        .string({
+            required_error: "License.partnerAcronisId.required",
+        })
+        .uuid(),
 });
 
 type AssignFormValues = z.infer<typeof assignFormSchema>;
@@ -110,37 +112,44 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
 
-                    // CSV Export
-                    const headers = "product,serialNo,key,expiresAt";
-                    const rows = res.data.map((obj: any) => {
-                        return [
-                            products?.find((p) => p.id === obj.productId)?.name,
-                            obj.serialNo,
-                            obj.key,
-                            DateFormat(obj.expiresAt),
-                        ].join(",");
-                    });
-                    const csvContent = [headers, ...rows].join("\n");
+                    // ZPL Export
+                    const labels = res.data.map((obj: any) => {
+                        return `^XA
+^CF0,20
+^FO30,20^FD${products?.find((p) => p.id === obj.productId)?.name}^FS
+^FO320,20^FDExp: ${DateFormat(obj.expiresAt).replaceAll(".", "/")}^FS
+^BY2,2,40
+^FO30,45^BC^FD${obj.serialNo}^FS
+^XZ
 
-                    const blob = new Blob([csvContent], {
-                        type: "text/csv;charset=utf-8;",
+^XA
+^CF0,15
+^FO165,10^FDS/N: ${obj.serialNo}^FS
+^BY2,2,40
+^FO50,28^BC,60^FD${obj.key}^FS
+^XZ`;
+                    });
+                    const zplContent = labels.join("\n\n");
+
+                    const blob = new Blob([zplContent], {
+                        type: "text/zpl;charset=utf-8;",
                     });
 
-                    const csvLink = document.createElement("a");
+                    const zplLink = document.createElement("a");
                     const url = URL.createObjectURL(blob);
-                    csvLink.setAttribute("href", url);
-                    csvLink.setAttribute(
+                    zplLink.setAttribute("href", url);
+                    zplLink.setAttribute(
                         "download",
                         `${
                             products?.find((p) => p.id === values.productId)
                                 ?.name
-                        } List - ${DateTimeFormat(
+                        } Labels - ${DateTimeFormat(
                             new Date().toISOString(),
-                        )}.csv`,
+                        )}.zpl`,
                     );
-                    document.body.appendChild(csvLink);
-                    csvLink.click();
-                    document.body.removeChild(csvLink);
+                    document.body.appendChild(zplLink);
+                    zplLink.click();
+                    document.body.removeChild(zplLink);
 
                     setOpen(false);
                     form.reset();
