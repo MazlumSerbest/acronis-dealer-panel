@@ -601,6 +601,8 @@
             "pg_pack_adv_management": "Advanced Management",
             "pg_pack_adv_security": "Advanced Security",
             "pg_pack_adv_email_security": "Advanced Email Security",
+            "pg_pack_adv_dlp": "Advanced Data Loss Prevention",
+            "pg_pack_adv_security_m365_seats": "Microsoft 365 Seats for Advanced Security",
             "pw_base_workstations": "Workstations",
             "pw_base_secondary_workstations": "Workstations (included features)",
             "pw_base_servers": "Servers",

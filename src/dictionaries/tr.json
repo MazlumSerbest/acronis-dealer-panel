@@ -602,6 +602,8 @@
             "pg_pack_adv_management": "Gelişmiş Yönetim",
             "pg_pack_adv_security": "Gelişmiş Güvenlik",
             "pg_pack_adv_email_security": "Gelişmiş E-posta Güvenliği",
+            "pg_pack_adv_dlp": "Gelişmiş Veri Kaybı Önleme",
+            "pg_pack_adv_security_m365_seats": "Gelişmiş güvenlik için Microsoft 365 bilgisayar lisansları",
             "pw_base_workstations": "İş İstasyonları",
             "pw_base_secondary_workstations": "İş İstasyonları (dahil özellikler)",
             "pw_base_servers": "Sunucular",
