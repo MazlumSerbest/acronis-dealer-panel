@@ -280,7 +280,14 @@
         "activation": "Activation",
         "productName": "Product Name",
         "previousPartner": "Previous Partner",
-        "actionDate": "Action Date"
+        "actionDate": "Action Date",
+        "security": "Security",
+        "warningMessage": "These setting are only for information purposes and only can be changed at Acronis Cyber Protect Cloud.",
+        "securitySubtitle": "Security settings from Acronis Cyber Protect Cloud",
+        "pricing": "Pricing",
+        "pricingSubtitle": "Pricing settings from Acronis Cyber Protect Cloud",
+        "branding": "Branding",
+        "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -680,14 +687,7 @@
     "Settings": {
         "title": "Settings",
         "general": "General",
-        "locations": "Locations",
-        "security": "Security",
-        "warningMessage": "These setting are only for information purposes and only can be changed at Acronis Cyber Protect Cloud.",
-        "securitySubtitle": "Security settings from Acronis Cyber Protect Cloud",
-        "pricing": "Pricing",
-        "pricingSubtitle": "Pricing settings from Acronis Cyber Protect Cloud",
-        "branding": "Branding",
-        "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud"
+        "locations": "Locations"
     },
     "Messages": {
         "authorizationNeeded": "Authorization Needed.",

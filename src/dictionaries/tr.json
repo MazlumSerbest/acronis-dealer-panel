@@ -281,7 +281,14 @@
         "activation": "Aktivasyon",
         "productName": "Ürün Adı",
         "previousPartner": "Önceki Partner",
-        "actionDate": "İşlem Tarihi"
+        "actionDate": "İşlem Tarihi",
+        "security": "Güvenlik",
+        "warningMessage": "Bu ayarlar sadece bilgilendirme amaçlıdır ve yalnızca Acronis Cyber Protect Cloud üzerinden değiştirilebilir.",
+        "securitySubtitle": "Acronis Cyber Protect Cloud güvenlik ayarları",
+        "pricing": "Fiyatlandırma",
+        "pricingSubtitle": "Acronis Cyber Protect Cloud fiyatlandırma ayarları",
+        "branding": "Markalama",
+        "brandingSubtitle": "Acronis Cyber Protect Cloud markalama ayarları"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -680,14 +687,7 @@
     "Settings": {
         "title": "Ayarlar",
         "general": "Genel",
-        "locations": "Konumlar",
-        "security": "Güvenlik",
-        "warningMessage": "Bu ayarlar sadece bilgilendirme amaçlıdır ve yalnızca Acronis Cyber Protect Cloud üzerinden değiştirilebilir.",
-        "securitySubtitle": "Acronis Cyber Protect Cloud güvenlik ayarları",
-        "pricing": "Fiyatlandırma",
-        "pricingSubtitle": "Acronis Cyber Protect Cloud fiyatlandırma ayarları",
-        "branding": "Markalama",
-        "brandingSubtitle": "Acronis Cyber Protect Cloud markalama ayarları"
+        "locations": "Konumlar"
     },
     "Messages": {
         "authorizationNeeded": "Yetkilendirme Gerekli.",
