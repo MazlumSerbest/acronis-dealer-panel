@@ -18,7 +18,6 @@ import { LuFolderLock, LuCoins, LuTag } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 export default function GeneralTab() {
-    const ts = useTranslations("Settings");
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
@@ -45,15 +44,16 @@ export default function GeneralTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
+            
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuFolderLock className="size-8 text-green-500/60" />
                     <div>
                         <CardTitle className="font-medium text-xl">
-                            {ts("security")}
+                            {t("security")}
                         </CardTitle>
                         <CardDescription>
-                            {ts("securitySubtitle")}
+                            {t("securitySubtitle")}
                         </CardDescription>
                     </div>
                 </CardHeader>
@@ -84,10 +84,10 @@ export default function GeneralTab() {
                     <LuCoins className="size-8 text-yellow-500/60" />
                     <div>
                         <CardTitle className="font-medium text-xl">
-                            {ts("pricing")}
+                            {t("pricing")}
                         </CardTitle>
                         <CardDescription>
-                            {ts("pricingSubtitle")}
+                            {t("pricingSubtitle")}
                         </CardDescription>
                     </div>
                 </CardHeader>
@@ -112,10 +112,10 @@ export default function GeneralTab() {
                     <LuTag className="size-8 text-blue-400/60" />
                     <div>
                         <CardTitle className="font-medium text-xl">
-                            {ts("branding")}
+                            {t("branding")}
                         </CardTitle>
                         <CardDescription>
-                            {ts("brandingSubtitle")}
+                            {t("brandingSubtitle")}
                         </CardDescription>
                     </div>
                 </CardHeader>

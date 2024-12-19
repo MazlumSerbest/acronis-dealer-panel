@@ -6,7 +6,7 @@ import useUserStore from "@/store/user";
 import AcronisWarning from "@/components/AcronisWarning";
 
 export default function ProfileTab() {
-    const t = useTranslations("Management");
+    const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
     //#region Fetch Data
@@ -34,6 +34,7 @@ export default function ProfileTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
+            
             <Card className="w-full">
                 <CardHeader>
                     <CardTitle className="font-medium text-xl">

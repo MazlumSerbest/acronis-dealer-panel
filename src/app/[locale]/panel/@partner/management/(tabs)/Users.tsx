@@ -46,6 +46,7 @@ export default function UsersTab() {
             accessorKey: "enabled",
             header: t("enabled"),
             enableGlobalFilter: false,
+            enableHiding: false,
             cell: ({ row }) => {
                 const data: boolean = row.getValue("enabled");
 

@@ -47,6 +47,7 @@ export default function LocationsTab() {
             accessorKey: "platform_owned",
             header: t("platformOwned"),
             enableGlobalFilter: false,
+            enableHiding: false,
             cell: ({ row }) => {
                 const data: boolean = row.getValue("platform_owned");
 
