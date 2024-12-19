@@ -88,7 +88,6 @@ export const adminPaths: Path[] = [
     {
         path: "/panel/users",
         key: "users",
-        roles: ["admin"],
         icon: (
             <LuUser2
                 className="size-6 group-hover:text-blue-400"
@@ -159,6 +158,16 @@ export const partnerPaths: Path[] = [
     //         />
     //     ),
     // },
+    {
+        path: "/panel/users",
+        key: "users",
+        icon: (
+            <LuUser2
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Users Page"
+            />
+        ),
+    },
     {
         path: "/panel/management",
         key: "management",

@@ -474,6 +474,7 @@ export default function UsersPage() {
                 data={data}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
+                defaultPageSize={30}
                 facetedFilters={[
                     {
                         column: "role",
