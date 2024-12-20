@@ -49,6 +49,7 @@ interface DataTableProps<TData, TValue> {
     basic?: boolean;
     zebra?: boolean;
     isLoading?: boolean;
+    defaultSearch?: string;
     defaultPageIndex?: number;
     defaultPageSize?: 10 | 20 | 30 | 40 | 50;
     defaultSort?: string;
@@ -78,6 +79,7 @@ export function DataTable<TData, TValue>({
     basic = false,
     zebra = false,
     isLoading = false,
+    defaultSearch = "",
     defaultPageIndex = 0,
     defaultPageSize = 20,
     defaultSort = "",
@@ -97,7 +99,7 @@ export function DataTable<TData, TValue>({
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(visibleColumns);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [globalFilter, setGlobalFilter] = useState("");
+    const [globalFilter, setGlobalFilter] = useState(defaultSearch ?? "");
     const [sorting, setSorting] = useState<SortingState>([
         { id: defaultSort, desc: defaultSortDirection === "desc" },
     ]);
@@ -143,58 +145,64 @@ export function DataTable<TData, TValue>({
     return (
         <div className="space-y-4">
             {/* Toolbar */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 items-center justify-between gap-2">
-                <div className="flex flex-1 items-center space-x-2">
-                    <Input
-                        placeholder={tc("searchPlaceholder")}
-                        value={globalFilter ?? ""}
-                        onChange={(e) => setGlobalFilter(e.target.value)}
-                        onKeyDown={(e) => {
-                            if (
-                                e.key === "Enter" &&
-                                onSearchEnter &&
-                                selectable
-                            ) {
-                                onSearchEnter(
-                                    table,
-                                    globalFilter,
-                                    setGlobalFilter,
-                                );
-                            }
-                        }}
-                        className="max-w-sm min-w-max"
-                    />
-
-                    {facetedFilters?.map(
-                        (filter) =>
-                            table.getColumn(filter.column) && (
-                                <DataTableFacetedFilter
-                                    key={filter.column}
-                                    column={table.getColumn(filter.column)}
-                                    title={filter.title}
-                                    options={filter.options}
-                                />
-                            ),
-                    )}
-
-                    {isFiltered && (
-                        <Button
-                            variant="ghost"
-                            onClick={() => {
-                                table.resetGlobalFilter();
-                                table.resetColumnFilters();
+            <div className="flex md:items-center justify-between gap-2">
+                <div className="flex flex-1 items-center gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <Input
+                            className="w-full"
+                            placeholder={tc("searchPlaceholder")}
+                            value={globalFilter ?? ""}
+                            onChange={(e) => setGlobalFilter(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (
+                                    e.key === "Enter" &&
+                                    onSearchEnter &&
+                                    selectable
+                                ) {
+                                    onSearchEnter(
+                                        table,
+                                        globalFilter,
+                                        setGlobalFilter,
+                                    );
+                                }
                             }}
-                            className="flex gap-2 h-8 px-2 lg:px-3"
-                        >
-                            <span className="sr-only lg:not-sr-only">
-                                {tc("clear")}
-                            </span>
-                            <Cross2Icon className="size-4" />
-                        </Button>
-                    )}
+                        />
+
+                        <div className="flex gap-2 items-center">
+                            {facetedFilters?.map(
+                                (filter) =>
+                                    table.getColumn(filter.column) && (
+                                        <DataTableFacetedFilter
+                                            key={filter.column}
+                                            column={table.getColumn(
+                                                filter.column,
+                                            )}
+                                            title={filter.title}
+                                            options={filter.options}
+                                        />
+                                    ),
+                            )}
+
+                            {isFiltered && (
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => {
+                                        table.resetGlobalFilter();
+                                        table.resetColumnFilters();
+                                    }}
+                                    className="flex gap-2 h-8 px-2 lg:px-3"
+                                >
+                                    <span className="sr-only lg:not-sr-only">
+                                        {tc("clear")}
+                                    </span>
+                                    <Cross2Icon className="size-4" />
+                                </Button>
+                            )}
+                        </div>
+                    </div>
                 </div>
 
-                <div className="flex flex-row gap-2 justify-end">
+                <div className="flex flex-row gap-2 justify-end h-full">
                     {actions && (
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
