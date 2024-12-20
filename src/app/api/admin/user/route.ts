@@ -17,43 +17,7 @@ export const GET = auth(async (req: any) => {
                 ok: false,
             });
 
-        const data = await prisma.user.findMany({
-            select: {
-                id: true,
-                active: true,
-                name: true,
-                email: true,
-                emailVerified: true,
-                role: true,
-                partnerAcronisId: true,
-                acronisTenantId: true,
-                createdBy: true,
-                createdAt: true,
-                updatedBy: true,
-                updatedAt: true,
-                partner: {
-                    select: {
-                        acronisId: true,
-                        name: true,
-                        licensed: true,
-                        application: {
-                            select: {
-                                name: true,
-                                email: true,
-                            },
-                        },
-                    },
-                },
-                sessions: {
-                    take: 1,
-                    select: {
-                        createdAt: true,
-                    },
-                    orderBy: {
-                        createdAt: "desc",
-                    },
-                },
-            },
+        const data = await prisma.v_User.findMany({
             orderBy: {
                 createdAt: "asc",
             },
