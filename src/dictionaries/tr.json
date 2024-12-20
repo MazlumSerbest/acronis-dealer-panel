@@ -288,7 +288,10 @@
         "pricing": "Fiyatlandırma",
         "pricingSubtitle": "Acronis Cyber Protect Cloud fiyatlandırma ayarları",
         "branding": "Markalama",
-        "brandingSubtitle": "Acronis Cyber Protect Cloud markalama ayarları"
+        "brandingSubtitle": "Acronis Cyber Protect Cloud markalama ayarları",
+        "users": "Kullanıcılar",
+        "partnerAcronisId": "Partner Acronis ID",
+        "verified": "Doğrulandı"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

@@ -287,7 +287,10 @@
         "pricing": "Pricing",
         "pricingSubtitle": "Pricing settings from Acronis Cyber Protect Cloud",
         "branding": "Branding",
-        "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud"
+        "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud",
+        "users": "Users",
+        "partnerAcronisId": "Partner Acronis ID",
+        "verified": "Verified"
     },
     "SignIn": {
         "signIn": "Sign In",
