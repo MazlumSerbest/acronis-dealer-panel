@@ -50,6 +50,9 @@ export function generateCuid() {
 }
 
 export function formatBytes(a: any, b = 2) {
+    // if (a === null) return "Unlimited";
+    // if (a === undefined) return "Unlimited";
+    // if (a === 0) return "0 Bytes";
     if (!+a) return "0 Bytes";
     const c = 0 > b ? 0 : b,
         d = Math.floor(Math.log(a) / Math.log(1024));

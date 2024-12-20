@@ -291,3 +291,23 @@ view v_LicenseHistory {
   partnerAcronisId         String?
   customer                 String?
 }
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_User {
+  id               String    @id
+  name             String?
+  email            String?
+  emailVerified    Boolean?
+  role             String?
+  active           Boolean?
+  language         String?
+  deleted          Boolean?
+  acronisTenantId  String?
+  partnerAcronisId String?
+  createdAt        DateTime?
+  createdBy        String?
+  updatedAt        DateTime?
+  updatedBy        String?
+  partnerName      String?
+  lastLogin        DateTime?
+}
