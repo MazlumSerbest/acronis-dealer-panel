@@ -63,6 +63,7 @@ import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
 import useUserStore from "@/store/user";
+import { useSearchParams } from "next/navigation";
 
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -70,11 +71,13 @@ const userFormSchema = z.object({
     role: z.enum(["admin", "partner"], {
         required_error: "User.role.required",
     }),
-    name: z.string({
-        required_error: "User.name.required",
-    }).min(3, {
-        message: "User.name.minLength",
-    }),
+    name: z
+        .string({
+            required_error: "User.name.required",
+        })
+        .min(3, {
+            message: "User.name.minLength",
+        }),
     email: z
         .string({
             required_error: "User.email.required",
@@ -91,6 +94,8 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 export default function UsersPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.User");
+    const searchParams = useSearchParams();
+    const search = searchParams.get("search");
     const { user: currentUser } = useUserStore();
     const { toast } = useToast();
 
@@ -173,7 +178,7 @@ export default function UsersPage() {
 
     //#region Table
     const visibleColumns = {
-        acronisTenantId: false,
+        partnerAcronisId: false,
         createdAt: false,
         createdBy: false,
         updatedAt: false,
@@ -203,7 +208,6 @@ export default function UsersPage() {
 
                 return data || "-";
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "email",
@@ -240,33 +244,50 @@ export default function UsersPage() {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
-            accessorKey: "partner",
-            header: t("partnerName"),
+            accessorKey: "partnerAcronisId",
+            header: t("partnerAcronisId"),
+            enableHiding: false,
             cell: ({ row }) => {
-                const data: Partner = row.getValue("partner");
+                const data: string = row.getValue("partnerAcronisId");
 
-                return data?.name || "-";
-            },
-            filterFn: (rows: any, id, value) => {
-                return rows?.filter((row: any) => {
-                    const partner = row.getValue("name");
-
-                    return partner.name
-                        .toLowerCase()
-                        .includes(value.toLowerCase());
-                });
+                return data || "-";
             },
         },
         {
-            accessorKey: "sessions",
-            header: t("lastLogin"),
-            enableGlobalFilter: false,
+            accessorKey: "partnerName",
+            header: t("partnerName"),
+            enableGlobalFilter: true,
             cell: ({ row }) => {
-                const data: any[] = row.getValue("sessions");
+                const data: string = row.getValue("partnerName");
 
-                return data?.length > 0
-                    ? DateTimeFormat(data[0].createdAt)
-                    : "-";
+                return data || "-";
+            },
+        },
+        {
+            accessorKey: "lastLogin",
+            header: t("lastLogin"),
+            enableHiding: false,
+            enableGlobalFilter: false,
+            // header: ({ column }) => (
+            //     <div className="flex flex-row items-center">
+            //         {t("lastLogin")}
+            //         <Button
+            //             variant="ghost"
+            //             className="p-1"
+            //             onClick={() => 
+            //                 column.toggleSorting(
+            //                     column.getIsSorted() === "asc",
+            //                 );
+            //             }
+            //         >
+            //             <LuChevronsUpDown className="size-4" />
+            //         </Button>
+            //     </div>
+            // ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("lastLogin");
+
+                return DateTimeFormat(data);
             },
         },
         {
@@ -274,11 +295,11 @@ export default function UsersPage() {
             header: t("emailVerified"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: string = row.getValue("emailVerified");
+                const data: boolean = row.getValue("emailVerified");
 
-                const emailVerified: boolean = data?.length > 0;
-                return <BoolChip size="size-4" value={emailVerified} />;
+                return <BoolChip size="size-4" value={data} />;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "active",
@@ -471,10 +492,11 @@ export default function UsersPage() {
             <DataTable
                 zebra
                 columns={columns}
-                data={data}
+                data={data || []}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
                 defaultPageSize={30}
+                defaultSearch={search || ""}
                 facetedFilters={[
                     {
                         column: "role",
@@ -482,6 +504,14 @@ export default function UsersPage() {
                         options: [
                             { value: "admin", label: t("admin") },
                             { value: "partner", label: t("partner") },
+                        ],
+                    },
+                    {
+                        column: "emailVerified",
+                        title: t("verified"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
                         ],
                     },
                     {

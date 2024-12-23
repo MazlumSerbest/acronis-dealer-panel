@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
@@ -302,6 +302,15 @@ export default function PartnersPage() {
                                 }}
                             >
                                 {t("edit")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    router.push(
+                                        `/panel/users?search=${data.acronisId}`,
+                                    );
+                                }}
+                            >
+                                {t("users")}
                             </DropdownMenuItem>
                             {/* <DropdownMenuItem>{t("delete")}</DropdownMenuItem> */}
                         </DropdownMenuContent>

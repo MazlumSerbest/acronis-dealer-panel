@@ -99,7 +99,7 @@ export function DataTable<TData, TValue>({
     const [columnVisibility, setColumnVisibility] =
         useState<VisibilityState>(visibleColumns);
     // const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-    const [globalFilter, setGlobalFilter] = useState(defaultSearch ?? "");
+    const [globalFilter, setGlobalFilter] = useState(defaultSearch || "");
     const [sorting, setSorting] = useState<SortingState>([
         { id: defaultSort, desc: defaultSortDirection === "desc" },
     ]);
@@ -112,7 +112,6 @@ export function DataTable<TData, TValue>({
             columnVisibility,
             rowSelection,
             globalFilter,
-
             // columnFilters,
         },
         initialState: {
@@ -156,8 +155,8 @@ export function DataTable<TData, TValue>({
                             onKeyDown={(e) => {
                                 if (
                                     e.key === "Enter" &&
-                                    onSearchEnter &&
-                                    selectable
+                                    selectable &&
+                                    onSearchEnter
                                 ) {
                                     onSearchEnter(
                                         table,
