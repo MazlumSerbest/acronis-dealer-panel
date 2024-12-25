@@ -291,7 +291,8 @@
         "brandingSubtitle": "Acronis Cyber Protect Cloud markalama ayarları",
         "users": "Kullanıcılar",
         "partnerAcronisId": "Partner Acronis ID",
-        "verified": "Doğrulandı"
+        "verified": "Doğrulandı",
+        "goToTenant": "Kiracıya Git"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

@@ -290,7 +290,8 @@
         "brandingSubtitle": "Branding settings from Acronis Cyber Protect Cloud",
         "users": "Users",
         "partnerAcronisId": "Partner Acronis ID",
-        "verified": "Verified"
+        "verified": "Verified",
+        "goToTenant": "Go to Tenant"
     },
     "SignIn": {
         "signIn": "Sign In",
