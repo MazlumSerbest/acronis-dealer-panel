@@ -17,7 +17,7 @@ export default function UsersPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading } = useSWR(`/api/user?${currentUser?.partnerAcronisId}`, null, {
+    const { data, error, isLoading } = useSWR(`/api/user?partnerAcronisId=${currentUser?.partnerAcronisId}`, null, {
         revalidateOnFocus: false,
     });
 

@@ -38,6 +38,7 @@ type Partner = Entity & {
     users?: User[];
     customers?: Customer[];
     licenses?: License[];
+    _count?: any;
 };
 
 type Customer = Entity & {

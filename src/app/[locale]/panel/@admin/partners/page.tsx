@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { z } from "zod";
@@ -37,12 +37,11 @@ import {
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
+import PageHeader from "@/components/PageHeader";
 
 import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
-import useUserStore from "@/store/user";
 import { DateTimeFormat } from "@/utils/date";
 import { Switch } from "@/components/ui/switch";
-import { sub } from "date-fns";
 
 const partnerFormSchema = z.object({
     acronisId: z.string().uuid().optional(),
@@ -297,12 +296,24 @@ export default function PartnersPage() {
                             )}
                             <DropdownMenuItem
                                 onClick={() => {
-                                    setOpen(true);
-                                    form.reset(data);
+                                    router.push(
+                                        `/panel/tenants/${data.acronisId}`,
+                                    );
                                 }}
                             >
-                                {t("edit")}
+                                {t("goToTenant")}
                             </DropdownMenuItem>
+                            {data._count.customers > 0 && (
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        router.push(
+                                            `/panel/tenants/${data.acronisId}?tab=clients`,
+                                        );
+                                    }}
+                                >
+                                    {t("customers")}
+                                </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem
                                 onClick={() => {
                                     router.push(
@@ -311,6 +322,14 @@ export default function PartnersPage() {
                                 }}
                             >
                                 {t("users")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={() => {
+                                    setOpen(true);
+                                    form.reset(data);
+                                }}
+                            >
+                                {t("edit")}
                             </DropdownMenuItem>
                             {/* <DropdownMenuItem>{t("delete")}</DropdownMenuItem> */}
                         </DropdownMenuContent>
@@ -335,31 +354,36 @@ export default function PartnersPage() {
         );
     return (
         <>
-            <DataTable
-                zebra
-                columns={columns}
-                data={partners}
-                visibleColumns={visibleColumns}
-                isLoading={isLoading}
-                facetedFilters={[
-                    {
-                        column: "licensed",
-                        title: t("licensed"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                    {
-                        column: "active",
-                        title: t("active"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                ]}
-            />
+            <div className="flex flex-col gap-4">
+                <PageHeader title={t("partners")} />
+                
+                <DataTable
+                    zebra
+                    columns={columns}
+                    data={partners}
+                    visibleColumns={visibleColumns}
+                    isLoading={isLoading}
+                    defaultPageSize={30}
+                    facetedFilters={[
+                        {
+                            column: "licensed",
+                            title: t("licensed"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
+                            ],
+                        },
+                        {
+                            column: "active",
+                            title: t("active"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
+                            ],
+                        },
+                    ]}
+                />
+            </div>
 
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent>

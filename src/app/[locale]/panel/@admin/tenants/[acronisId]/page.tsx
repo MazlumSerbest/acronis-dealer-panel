@@ -139,6 +139,7 @@ export default function TenantDetail({
                     </Button>
                 </div>
             </div>
+            
             <div className="w-full">
                 <Tabs
                     defaultValue="general"
