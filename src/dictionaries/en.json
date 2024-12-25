@@ -291,7 +291,8 @@
         "users": "Users",
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Verified",
-        "goToTenant": "Go to Tenant"
+        "goToTenant": "Go to Tenant",
+        "partners": "Partners"
     },
     "SignIn": {
         "signIn": "Sign In",

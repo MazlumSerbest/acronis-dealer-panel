@@ -292,7 +292,8 @@
         "users": "Kullanıcılar",
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Doğrulandı",
-        "goToTenant": "Kiracıya Git"
+        "goToTenant": "Kiracıya Git",
+        "partners": "Partnerler"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

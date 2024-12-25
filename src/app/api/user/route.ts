@@ -17,11 +17,11 @@ export const GET = auth(async (req: any) => {
                 ok: false,
             });
 
-        const parentAcronisId = req.nextUrl.searchParams.get("parentAcronisId");
+        const partnerAcronisId = req.nextUrl.searchParams.get("partnerAcronisId");
 
         const data = await prisma.user.findMany({
             where: {
-                partnerAcronisId: parentAcronisId,
+                partnerAcronisId: partnerAcronisId,
             },
             select: {
                 id: true,

@@ -63,7 +63,7 @@ import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
 import useUserStore from "@/store/user";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -94,6 +94,7 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 export default function UsersPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.User");
+    const router = useRouter();
     const searchParams = useSearchParams();
     const search = searchParams.get("search");
     const { user: currentUser } = useUserStore();
@@ -274,7 +275,7 @@ export default function UsersPage() {
             //         <Button
             //             variant="ghost"
             //             className="p-1"
-            //             onClick={() => 
+            //             onClick={() =>
             //                 column.toggleSorting(
             //                     column.getIsSorted() === "asc",
             //                 );
@@ -379,6 +380,18 @@ export default function UsersPage() {
                             <DropdownMenuLabel>
                                 {t("actions")}
                             </DropdownMenuLabel>
+                            {data.partnerAcronisId && (
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        router.push(
+                                            `/panel/tenants/${data.partnerAcronisId}`,
+                                        );
+                                    }}
+                                >
+                                    {t("goToTenant")}
+                                </DropdownMenuItem>
+                            )}
+
                             <DropdownMenuItem
                                 onClick={() => {
                                     setIsNew(false);
