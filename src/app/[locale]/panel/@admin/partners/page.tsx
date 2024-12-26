@@ -269,15 +269,6 @@ export default function PartnersPage() {
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
-                            {/* <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                            >
-                                <span className="sr-only">
-                                    {t("toggleMenu")}
-                                </span>
-                            </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -294,6 +285,7 @@ export default function PartnersPage() {
                                     {t("goToApplication")}
                                 </DropdownMenuItem>
                             )}
+
                             <DropdownMenuItem
                                 onClick={() => {
                                     router.push(
@@ -303,6 +295,7 @@ export default function PartnersPage() {
                             >
                                 {t("goToTenant")}
                             </DropdownMenuItem>
+
                             {data._count.customers > 0 && (
                                 <DropdownMenuItem
                                     onClick={() => {
@@ -314,6 +307,7 @@ export default function PartnersPage() {
                                     {t("customers")}
                                 </DropdownMenuItem>
                             )}
+
                             <DropdownMenuItem
                                 onClick={() => {
                                     router.push(
@@ -323,6 +317,7 @@ export default function PartnersPage() {
                             >
                                 {t("users")}
                             </DropdownMenuItem>
+
                             <DropdownMenuItem
                                 onClick={() => {
                                     setOpen(true);
@@ -356,7 +351,7 @@ export default function PartnersPage() {
         <>
             <div className="flex flex-col gap-4">
                 <PageHeader title={t("partners")} />
-                
+
                 <DataTable
                     zebra
                     columns={columns}

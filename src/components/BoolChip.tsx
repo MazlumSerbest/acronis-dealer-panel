@@ -5,6 +5,7 @@ interface Props {
     value: boolean;
     showText?: boolean;
     size?: string;
+    className?: string;
     // size?: "sm" | "md" | "lg" | undefined;
     // variant?:
     //     | "dot"
@@ -17,9 +18,9 @@ interface Props {
     //     | undefined;
 }
 
-export default function BoolChip({ value, showText, size = "size-5" }: Props) {
+export default function BoolChip({ value, showText, size = "size-5", className }: Props) {
     return (
-        <div className="w-full">
+        <div className={className}>
             <div
                 className={cn(
                     "flex items-center",

@@ -31,8 +31,8 @@ export const PUT = auth(async (req: any) => {
             const keyCheck = await prisma.license.findFirst({
                 where: {
                     id: values.ids[0],
-                }
-            })
+                },
+            });
 
             if (keyCheck?.key != values.key)
                 return NextResponse.json({
@@ -64,8 +64,10 @@ export const PUT = auth(async (req: any) => {
             data: values.ids.map((id: string) => ({
                 licenseId: id,
                 previousPartnerAcronisId: kind === "customer" ? null : from,
-                partnerAcronisId: kind === "customer" ? from : values.partnerAcronisId,
-                customerAcronisId: kind === "customer" ? values.customerAcronisId : null,
+                partnerAcronisId:
+                    kind === "customer" ? from : values.partnerAcronisId,
+                customerAcronisId:
+                    kind === "customer" ? values.customerAcronisId : null,
                 action: kind === "customer" ? "activation" : "assignment",
                 createdBy: req.auth.user.email,
                 createdAt: new Date().toISOString(),
@@ -74,13 +76,19 @@ export const PUT = auth(async (req: any) => {
 
         if (updatedLicenses && updatedLicenses.count > 0) {
             return NextResponse.json({
-                message: "Lisans(lar) başarıyla atandı!",
+                message:
+                    kind === "customer"
+                        ? "Lisans aktive edildi!"
+                        : "Lisans(lar) başarıyla atandı!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Lisans(lar) atanamadı!",
+                message:
+                    kind === "customer"
+                        ? "Lisans aktive edilemedi!"
+                        : "Lisans(lar) atanamadı!",
                 status: 400,
                 ok: false,
             });

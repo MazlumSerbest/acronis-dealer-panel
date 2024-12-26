@@ -544,7 +544,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                     />
 
-                    {currentUser?.licensed && (
+                    {currentUser?.licensed && tenant.kind == "partner" && (
                         <SmallCard
                             title={t("totalLicense")}
                             icon={
