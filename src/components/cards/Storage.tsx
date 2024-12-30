@@ -26,9 +26,17 @@ type Props = {
     quota: {
         value: number;
     };
+    action?: React.ReactNode;
 };
 
-export default function StorageCard({ title, description, model, usage, quota }: Props) {
+export default function StorageCard({
+    title,
+    description,
+    model,
+    usage,
+    quota,
+    action,
+}: Props) {
     const withoutQuota = quota?.value === null;
     const available = quota?.value > usage ? quota?.value - usage : 0;
     const total = withoutQuota ? usage : usage + available;
@@ -39,9 +47,7 @@ export default function StorageCard({ title, description, model, usage, quota }:
     const chartConfig = {
         usage: {
             label: "Usage",
-            color: withoutQuota
-                ? chartColors.blue
-                : chartColors.red,
+            color: withoutQuota ? chartColors.blue : chartColors.red,
         },
         available: {
             label: "Available",
@@ -54,6 +60,7 @@ export default function StorageCard({ title, description, model, usage, quota }:
             <CardHeader className="items-center pb-0">
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{model}</CardDescription>
+                {action}
             </CardHeader>
             <CardContent className="flex flex-1 items-center pb-0">
                 <ChartContainer
@@ -139,7 +146,9 @@ export default function StorageCard({ title, description, model, usage, quota }:
                                                 >
                                                     {quota?.value !== null
                                                         ? "Quota: " +
-                                                          formatBytes(quota?.value)
+                                                          formatBytes(
+                                                              quota?.value,
+                                                          )
                                                         : formatBytes(
                                                               total,
                                                           ).split(" ")[1]}
@@ -168,11 +177,7 @@ export default function StorageCard({ title, description, model, usage, quota }:
                 </ChartContainer>
             </CardContent>
             {description && (
-                <CardFooter className="flex-col gap-2 text-sm -mt-20">
-                    {/* <div className="flex items-center gap-2 font-medium leading-none">
-                        Trending up by 5.2% this month
-                        <TrendingUp className="h-4 w-4" />
-                    </div> */}
+                <CardFooter className="flex flex-col text-sm -mt-20">
                     <div className="leading-none text-muted-foreground">
                         {description}
                     </div>
