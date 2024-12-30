@@ -17,8 +17,10 @@ import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
 import { formatBytes } from "@/utils/functions";
 import { chartColors } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type Props = {
+    className?: string;
     title: string;
     description?: string;
     model: string;
@@ -30,6 +32,7 @@ type Props = {
 };
 
 export default function StorageCard({
+    className,
     title,
     description,
     model,
@@ -56,7 +59,7 @@ export default function StorageCard({
     } satisfies ChartConfig;
 
     return (
-        <Card className="flex flex-col max-h-min">
+        <Card className={cn("flex flex-col max-h-min", className)}>
             <CardHeader className="items-center pb-0">
                 <CardTitle>{title}</CardTitle>
                 <CardDescription>{model}</CardDescription>
@@ -177,8 +180,8 @@ export default function StorageCard({
                 </ChartContainer>
             </CardContent>
             {description && (
-                <CardFooter className="flex flex-col text-sm -mt-20">
-                    <div className="leading-none text-muted-foreground">
+                <CardFooter className="flex flex-col text-xs -mt-24">
+                    <div className="leading-none text-muted-foreground ">
                         {description}
                     </div>
                 </CardFooter>
