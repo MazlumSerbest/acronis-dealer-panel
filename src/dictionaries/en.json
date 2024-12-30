@@ -37,6 +37,7 @@
         "role": "Role",
         "kind": "Kind",
         "actions": "Actions",
+        "action": "Action",    
         "edit": "Edit",
         "new": "New",
         "add": "Add",
@@ -292,7 +293,8 @@
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Verified",
         "goToTenant": "Go to Tenant",
-        "partners": "Partners"
+        "partners": "Partners",
+        "quotaEdit": "Quota Edit"
     },
     "SignIn": {
         "signIn": "Sign In",

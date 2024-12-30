@@ -3,7 +3,6 @@ import prisma from "@/utils/db";
 import getToken from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
-import { set } from "date-fns";
 
 export const GET = auth(async (req: any, { params }) => {
     try {

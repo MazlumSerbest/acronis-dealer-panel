@@ -293,7 +293,8 @@
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Doğrulandı",
         "goToTenant": "Kiracıya Git",
-        "partners": "Partnerler"
+        "partners": "Partnerler",
+        "quotaEdit": "Kotayı Düzenle"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
