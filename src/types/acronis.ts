@@ -76,7 +76,7 @@ type TenantUsage = {
     measurement_unit: "quantity" | "bytes";
     infra_id: string;
     offering_item?: {
-        status: number;
+        status: boolean;
         quota?: {
             value: number;
             overage: number;
@@ -84,6 +84,16 @@ type TenantUsage = {
         };
     };
 };
+
+type OfferingItem = AcronisEntity & {
+    name?: string;
+    status?: boolean;
+    quota?: {
+        value: number;
+        overage: number;
+        version: number;
+    };
+}
 
 // V1
 type Alert = {

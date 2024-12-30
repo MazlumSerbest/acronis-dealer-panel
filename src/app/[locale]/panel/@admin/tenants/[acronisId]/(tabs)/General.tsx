@@ -37,6 +37,20 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from "@/components/ui/popover";
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
@@ -45,13 +59,14 @@ import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
 
-import { calculateRemainingDays } from "@/utils/functions";
+import { calculateRemainingDays, parseBytes } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import useUserStore from "@/store/user";
 import {
     LuAlertTriangle,
     LuArrowUpRight,
     LuCopy,
+    LuGauge,
     LuInfo,
     LuLoader2,
     LuPencil,
@@ -101,7 +116,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     const { user: currentUser } = useUserStore();
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
+    const [openQuotaDialog, setOpenQuotaDialog] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [submittingQuota, setSubmittingQuota] = useState(false);
     const [edit, setEdit] = useState(false);
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
     const [licensed, setLicensed] = useState<boolean>(true);
@@ -851,6 +868,129 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         u.usage_name == "storage" &&
                                         u.edition == "pck_per_workload",
                                 )?.offering_item.quota
+                            }
+                            action={
+                                <Popover open={openQuotaDialog} onOpenChange={setOpenQuotaDialog}>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            size="sm"
+                                            className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                        >
+                                            {t("quotaEdit")}
+                                            <LuGauge className="size-4" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <form
+                                            action={async (formData) => {
+                                                setSubmittingQuota(true);
+                                                const quota =
+                                                    formData.get("quota");
+                                                const unit =
+                                                    formData.get("unit");
+
+                                                const bytes = parseBytes(
+                                                    Number(quota),
+                                                    unit as string,
+                                                );
+
+                                                await fetch(
+                                                    `/api/acronis/tenants/offeringItems/${tenant.id}`,
+                                                    {
+                                                        method: "PUT",
+                                                        body: JSON.stringify({
+                                                            name: "pw_base_storage",
+                                                            edition:
+                                                                "pck_per_workload",
+                                                            bytes: bytes,
+                                                        }),
+                                                    },
+                                                )
+                                                    .then((res) => res.json())
+                                                    .then((res) => {
+                                                        if (res.ok) {
+                                                            toast({
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                            usagesMutate();
+                                                        } else {
+                                                            toast({
+                                                                variant:
+                                                                    "destructive",
+                                                                title: t(
+                                                                    "errorTitle",
+                                                                ),
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                        }
+                                                    })
+                                                    .finally(() => {
+                                                        setSubmittingQuota(
+                                                            false,
+                                                        );
+                                                        setOpenQuotaDialog(false);
+                                                    });
+                                            }}
+                                        >
+                                            <div className="grid gap-2">
+                                                <div className="grid grid-cols-3 items-center gap-4">
+                                                    <Label htmlFor="quota">
+                                                        {t("quota")}
+                                                    </Label>
+                                                    <Input
+                                                        required
+                                                        name="quota"
+                                                        type="number"
+                                                        className="col-span-2 h-8"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-3 items-center gap-4">
+                                                    <Label htmlFor="unit">
+                                                        {t("unit")}
+                                                    </Label>
+                                                    <Select
+                                                        required
+                                                        name="unit"
+                                                        defaultValue="GB"
+                                                    >
+                                                        <SelectTrigger className="col-span-2 h-8">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                {/* <SelectLabel>
+                                                                    Units
+                                                                </SelectLabel> */}
+                                                                <SelectItem value="MB">
+                                                                    MB
+                                                                </SelectItem>
+                                                                <SelectItem value="GB">
+                                                                    GB
+                                                                </SelectItem>
+                                                                <SelectItem value="TB">
+                                                                    TB
+                                                                </SelectItem>
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                <Button
+                                                    disabled={submittingQuota}
+                                                    type="submit"
+                                                    size="sm"
+                                                    className="w-full bg-green-600 hover:bg-green-600/90"
+                                                >
+                                                    {t("save")}
+                                                    {submittingQuota && (
+                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    )}
+                                                </Button>
+                                            </div>
+                                        </form>
+                                    </PopoverContent>
+                                </Popover>
                             }
                         />
                     )}

@@ -61,6 +61,15 @@ export function formatBytes(a: any, b = 2) {
     }`;
 }
 
+export function parseBytes(value: number, unit: string): number {
+    const units = ["MB", "GB", "TB"];
+    const unitIndex = units.indexOf(unit);
+    if (unitIndex === -1) {
+        throw new Error("Geçersiz birim! Desteklenen birimler: MB, GB, TB.");
+    }
+    return value * Math.pow(1024, unitIndex + 2); // +2 çünkü MB = 1024^1, GB = 1024^2, TB = 1024^3
+}
+
 export function calculateDaysUntilAnniversary(date: string) {
     const today = new Date();
     const currentYear = today.getFullYear();
