@@ -339,47 +339,22 @@ export default function CustomersPage() {
             accessorKey: "usages",
             enableHiding: false,
             enableGlobalFilter: false,
-            header: () =>
-                currentUser?.licensed ? (
-                    <div className="flex flex-row justify-center">
-                        {t("usages")}
-                    </div>
-                ) : (
-                    <div className="flex flex-col gap-2 py-3">
-                        <span className="mx-auto">{t("totalUsages")}</span>
+            header: () => (
+                <div className="flex flex-col gap-2 py-3">
+                    <span className="mx-auto">{t("totalUsages")}</span>
 
-                        <div className="grid grid-cols-2 justify-items-center">
-                            <p className="flex flex-row gap-2">
-                                {t("perWorkload")}
-                            </p>
-                            <p className="flex flex-row gap-2">{t("perGB")}</p>
-                        </div>
+                    <div className="grid grid-cols-2 justify-items-center">
+                        <p className="flex flex-row gap-2">
+                            {t("perWorkload")}
+                        </p>
+                        <p className="flex flex-row gap-2">{t("perGB")}</p>
                     </div>
-                ),
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: any = row.getValue("usages");
 
-                return currentUser?.licensed ? (
-                    <div className="flex flex-row justify-center gap-4">
-                        <span
-                            className={cn(
-                                data?.perGB?.quota &&
-                                    data?.perGB?.value > data?.perGB?.quota
-                                    ? "text-destructive"
-                                    : "",
-                            )}
-                        >
-                            {data?.perGB?.value
-                                ? formatBytes(data?.perGB?.value)
-                                : "-"}
-                        </span>
-                        <span className="text-muted-foreground">
-                            {data?.perGB?.quota
-                                ? ` / ${formatBytes(data?.perGB?.quota)}`
-                                : ""}
-                        </span>
-                    </div>
-                ) : (
+                return (
                     <div className="grid grid-cols-2 justify-items-center">
                         <p className="grid grid-cols-2 justify-items-center gap-2">
                             <span

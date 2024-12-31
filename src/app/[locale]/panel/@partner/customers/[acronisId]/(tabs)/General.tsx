@@ -68,6 +68,8 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+
     const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
     const [completedLicenseCount, setCompletedLicenseCount] =
@@ -112,6 +114,23 @@ export default function GeneralTab({ t, tenant }: Props) {
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
+            );
+
+            const workload = data?.usages?.items?.find(
+                (u: TenantUsage) =>
+                    u.usage_name == "storage" &&
+                    u.edition == "pck_per_workload",
+            );
+            const gigabyte = data?.usages?.items?.find(
+                (u: TenantUsage) =>
+                    u.usage_name == "storage" &&
+                    u.edition == "pck_per_gigabyte",
+            );
+            setSelectedModel(
+                (!workload?.value || !workload?.overage) &&
+                    (gigabyte?.value || gigabyte?.overage)
+                    ? "perGB"
+                    : "perWorkload",
             );
 
             if (currentUser?.licensed && tenant.kind === "partner") {
@@ -498,36 +517,30 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Skeleton>
             ) : (
                 <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-start">
-                    {!currentUser?.licensed && (
-                        <StorageCard
-                            title={t("storageCardTitle")}
-                            description={t("storageCardDescriptionPW")}
-                            model={t("perWorkload")}
-                            usage={
-                                usages?.usages?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                )?.value
-                            }
-                            quota={
-                                usages?.usages?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                )?.offering_item.quota
-                            }
-                        />
-                    )}
+                    <StorageCard
+                        title={t("storageCardTitle")}
+                        description={t("storageCardDescriptionPW")}
+                        model={t("perWorkload")}
+                        usage={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_workload",
+                            )?.value
+                        }
+                        quota={
+                            usages?.usages?.items?.find(
+                                (u: TenantUsage) =>
+                                    u.usage_name == "storage" &&
+                                    u.edition == "pck_per_workload",
+                            )?.offering_item.quota
+                        }
+                    />
 
                     <StorageCard
                         title={t("storageCardTitle")}
-                        description={
-                            !currentUser?.licensed
-                                ? t("storageCardDescriptionGB")
-                                : t("storageCardDescription")
-                        }
-                        model={!currentUser?.licensed ? t("perGB") : t("total")}
+                        description={t("storageCardDescriptionGB")}
+                        model={t("perGB")}
                         usage={
                             usages?.usages?.items?.find(
                                 (u: TenantUsage) =>
@@ -544,7 +557,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         }
                     />
 
-                    {currentUser?.licensed && tenant.kind == "partner" && (
+                    {/* {currentUser?.licensed && tenant.kind == "partner" && (
                         <SmallCard
                             title={t("totalLicense")}
                             icon={
@@ -555,7 +568,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 "totalSmallCardDescription",
                             )} (${t("active")} ${t("and")} ${t("passive")})`}
                         />
-                    )}
+                    )} */}
                 </div>
             )}
 
@@ -639,123 +652,94 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <h2 className="font-medium text-xl">{t("usages")}</h2>
             </div>
 
-            {!currentUser?.licensed ? (
-                <Tabs defaultValue="perWorkload" className="col-span-full">
-                    <TabsList>
-                        <TabsTrigger value={"perWorkload"}>
-                            {t("perWorkload")}
-                        </TabsTrigger>
-                        <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
-                    </TabsList>
-                    {!usages ? (
-                        <div className="col-span-3 mt-2">
-                            <Skeleton>
-                                <DefaultSkeleton />
-                            </Skeleton>
-                        </div>
-                    ) : (
-                        <>
-                            <TabsContent value={"perWorkload"}>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
-                                    {usagesPerWorkload?.length ? (
-                                        usagesPerWorkload
-                                            ?.sort((a, b) =>
-                                                a.usage_name < b.usage_name
-                                                    ? 1
-                                                    : b.usage_name <
-                                                      a.usage_name
-                                                    ? -1
-                                                    : 0,
-                                            )
-                                            .map((u: TenantUsage, index) => (
-                                                <UsageCard
-                                                    key={index}
-                                                    title={u.name}
-                                                    description={u.usage_name}
-                                                    unit={u.measurement_unit}
-                                                    value={u.value}
-                                                    quota={
-                                                        u.offering_item
-                                                            ?.quota as any
-                                                    }
-                                                />
-                                            ))
-                                    ) : (
-                                        <>
-                                            <div className="flex items-center justify-center col-span-full">
-                                                <p>{t("noUsageData")}</p>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </TabsContent>
-                            <TabsContent value={"perGB"}>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
-                                    {usagesPerGB?.length ? (
-                                        usagesPerGB
-                                            ?.sort((a, b) =>
-                                                a.usage_name < b.usage_name
-                                                    ? 1
-                                                    : b.usage_name <
-                                                      a.usage_name
-                                                    ? -1
-                                                    : 0,
-                                            )
-                                            .map((u: TenantUsage, index) => (
-                                                <UsageCard
-                                                    key={index}
-                                                    title={u.name}
-                                                    description={u.usage_name}
-                                                    unit={u.measurement_unit}
-                                                    value={u.value}
-                                                    quota={
-                                                        u.offering_item
-                                                            ?.quota as any
-                                                    }
-                                                />
-                                            ))
-                                    ) : (
-                                        <>
-                                            <div className="flex items-center justify-center col-span-full">
-                                                <p>{t("noUsageData")}</p>
-                                            </div>
-                                        </>
-                                    )}
-                                </div>
-                            </TabsContent>
-                        </>
-                    )}
-                </Tabs>
-            ) : (
-                <div className="col-span-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-2 min-h-24">
-                    {usagesPerGB?.length ? (
-                        usagesPerGB
-                            ?.sort((a, b) =>
-                                a.usage_name < b.usage_name
-                                    ? 1
-                                    : b.usage_name < a.usage_name
-                                    ? -1
-                                    : 0,
-                            )
-                            .map((u: TenantUsage, index) => (
-                                <UsageCard
-                                    key={index}
-                                    title={u.name}
-                                    description={u.usage_name}
-                                    unit={u.measurement_unit}
-                                    value={u.value}
-                                    quota={u.offering_item?.quota as any}
-                                />
-                            ))
-                    ) : (
-                        <>
-                            <div className="flex items-center justify-center col-span-full">
-                                <p>{t("noUsageData")}</p>
+            <Tabs
+                value={selectedModel}
+                onValueChange={setSelectedModel}
+                className="col-span-full"
+            >
+                <TabsList>
+                    <TabsTrigger value={"perWorkload"}>
+                        {t("perWorkload")}
+                    </TabsTrigger>
+                    <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
+                </TabsList>
+                {!usages ? (
+                    <div className="col-span-3 mt-2">
+                        <Skeleton>
+                            <DefaultSkeleton />
+                        </Skeleton>
+                    </div>
+                ) : (
+                    <>
+                        <TabsContent value={"perWorkload"}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                                {usagesPerWorkload?.length ? (
+                                    usagesPerWorkload
+                                        ?.sort((a, b) =>
+                                            a.usage_name < b.usage_name
+                                                ? 1
+                                                : b.usage_name < a.usage_name
+                                                ? -1
+                                                : 0,
+                                        )
+                                        .map((u: TenantUsage, index) => (
+                                            <UsageCard
+                                                key={index}
+                                                title={u.name}
+                                                description={u.usage_name}
+                                                unit={u.measurement_unit}
+                                                value={u.value}
+                                                quota={
+                                                    u.offering_item
+                                                        ?.quota as any
+                                                }
+                                            />
+                                        ))
+                                ) : (
+                                    <>
+                                        <div className="flex items-center justify-center col-span-full">
+                                            <p>{t("noUsageData")}</p>
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                        </>
-                    )}
-                </div>
-            )}
+                        </TabsContent>
+                        <TabsContent value={"perGB"}>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                                {usagesPerGB?.length ? (
+                                    usagesPerGB
+                                        ?.sort((a, b) =>
+                                            a.usage_name < b.usage_name
+                                                ? 1
+                                                : b.usage_name < a.usage_name
+                                                ? -1
+                                                : 0,
+                                        )
+                                        .map((u: TenantUsage, index) => (
+                                            <UsageCard
+                                                key={index}
+                                                title={u.name}
+                                                description={u.usage_name}
+                                                unit={u.measurement_unit}
+                                                value={u.value}
+                                                quota={
+                                                    u.offering_item
+                                                        ?.quota as any
+                                                }
+                                            />
+                                        ))
+                                ) : (
+                                    <>
+                                        <div className="flex items-center justify-center col-span-full">
+                                            <p>{t("noUsageData")}</p>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        </TabsContent>
+                    </>
+                )}
+            </Tabs>
         </div>
     );
 }
