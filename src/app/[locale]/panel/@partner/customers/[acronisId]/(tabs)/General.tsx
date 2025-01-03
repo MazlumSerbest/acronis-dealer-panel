@@ -42,7 +42,6 @@ import {
     LuSigma,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { set } from "date-fns";
 
 type Props = {
     t: Function;
@@ -127,8 +126,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                     u.edition == "pck_per_gigabyte",
             );
             setSelectedModel(
-                (!workload?.value || !workload?.overage) &&
-                    (gigabyte?.value || gigabyte?.overage)
+                !workload?.value &&
+                    !workload?.offering_item?.quota?.value &&
+                    (gigabyte?.value || gigabyte?.offering_item?.quota?.value)
                     ? "perGB"
                     : "perWorkload",
             );

@@ -126,6 +126,8 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
 
+    const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+
     const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
     const [completedLicenseCount, setCompletedLicenseCount] =
@@ -170,6 +172,24 @@ export default function GeneralTab({ t, tenant }: Props) {
                         u.usage_name != "storage" &&
                         u.usage_name != "storage_total",
                 ),
+            );
+
+            const workload = data?.usages?.items?.find(
+                (u: TenantUsage) =>
+                    u.usage_name == "storage" &&
+                    u.edition == "pck_per_workload",
+            );
+            const gigabyte = data?.usages?.items?.find(
+                (u: TenantUsage) =>
+                    u.usage_name == "storage" &&
+                    u.edition == "pck_per_gigabyte",
+            );
+            setSelectedModel(
+                !workload?.value &&
+                    !workload?.offering_item?.quota?.value &&
+                    (gigabyte?.value || gigabyte?.offering_item?.quota?.value)
+                    ? "perGB"
+                    : "perWorkload",
             );
 
             if (panelTenant?.licensed && tenant.kind === "partner") {
@@ -1099,7 +1119,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <h2 className="font-medium text-xl">{t("usages")}</h2>
             </div>
 
-            <Tabs className="col-span-full">
+            <Tabs
+                value={selectedModel}
+                onValueChange={setSelectedModel}
+                className="col-span-full"
+            >
                 <TabsList>
                     <TabsTrigger value={"perWorkload"}>
                         {t("perWorkload")}
