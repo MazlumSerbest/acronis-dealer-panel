@@ -20,7 +20,6 @@ export default function SignIn({
 }) {
     const search = new URLSearchParams(searchParams);
     const { data: session } = useSession();
-    if (session) return redirect("/panel");
 
     const router = useRouter();
     const pathName = usePathname();
@@ -52,6 +51,7 @@ export default function SignIn({
         });
     }
 
+    if (session) return redirect("/panel");
     return (
         <>
             <div className="relative container flex flex-col h-dvh pt-12 sm:pt-20 px-2 sm:px-0">
