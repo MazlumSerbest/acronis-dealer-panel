@@ -75,7 +75,7 @@ const productFormSchema = z.object({
         .min(3, "Product.code.minLength"),
     model: z.enum(["perGB", "perWorkload"]),
     quota: z.coerce.number().optional(),
-    unit: z.enum(["MB", "GB", "TB", "piece"]).optional().nullable(),
+    unit: z.enum(["GB", "TB", "piece"]).optional().nullable(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -437,7 +437,6 @@ export default function ProductsPage() {
                         column: "unit",
                         title: t("unit"),
                         options: [
-                            { value: "MB", label: t("MB") },
                             { value: "GB", label: t("GB") },
                             { value: "TB", label: t("TB") },
                             { value: "piece", label: t("piece") },

@@ -76,7 +76,7 @@ type Product = Entity & {
     name: string;
     model: "perGB" | "perWorkload";
     quota?: number;
-    unit?: "MB" | "GB" | "TB" | "piece";
+    unit?: "GB" | "TB" | "piece";
     bytes?: bigint;
     edition?: "standart" | "advanced"
 };
