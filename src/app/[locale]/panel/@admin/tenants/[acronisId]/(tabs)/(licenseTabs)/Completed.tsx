@@ -84,8 +84,9 @@ export default function CompletedTab({ tenant }: Props) {
                 const data: number = row.getValue("productQuota");
                 const unit: string = row.original.productUnit;
 
-                return `${data} ${unit || ""}` || "-";
+                return `${data} ${unit === "GB" ? unit : ""}`;
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "assignedAt",
@@ -229,6 +230,7 @@ export default function CompletedTab({ tenant }: Props) {
                     column: "productQuota",
                     title: t("quota"),
                     options: [
+                        { value: 1, label: "1" },
                         { value: 25, label: "25GB" },
                         { value: 50, label: "50GB" },
                         { value: 100, label: "100GB" },
