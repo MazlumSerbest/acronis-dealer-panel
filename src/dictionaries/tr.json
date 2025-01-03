@@ -314,7 +314,8 @@
             "MissingCSRF": "CSRF jetonu eksik veya geçersiz.",
             "Configuration": "Sunucu yapılandırmasında bir sorun var. Lütfen yönetici ile iletişime geçin.",
             "AccessDenied": "Bu sayfaya erişim izniniz yok. Lütfen yönetici ile iletişime geçin.",
-            "Verification": "Jetonun süresi dolmuş veya daha önce kullanılmış. Lütfen yeni bir tane talep edin."
+            "Verification": "Jetonun süresi dolmuş veya daha önce kullanılmış. Lütfen yeni bir tane talep edin.",
+            "turnstile": "Captcha çözülmedi!"
         }
     },
     "Application": {

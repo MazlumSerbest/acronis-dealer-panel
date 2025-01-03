@@ -1,6 +1,7 @@
 "use client";
 import { SWRConfig } from "swr";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { SessionProvider } from "next-auth/react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
     return (
@@ -16,7 +17,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
                     },
                 }}
             >
-                <TooltipProvider>{children}</TooltipProvider>
+                <SessionProvider refetchOnWindowFocus>
+                    <TooltipProvider>{children}</TooltipProvider>
+                </SessionProvider>
             </SWRConfig>
         </>
     );

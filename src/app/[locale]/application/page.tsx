@@ -135,7 +135,7 @@ export default function Application() {
     });
 
     function onSubmit(values: ApplicationFormValues) {
-        if(submitting) return;
+        if (submitting) return;
         setSubmitting(true);
 
         const formData = new FormData();
@@ -897,6 +897,7 @@ export default function Application() {
                                 <div className="grid gap-2">
                                     <Turnstile
                                         siteKey="0x4AAAAAAAfReA6N46PHA4HD"
+                                        // siteKey="1x00000000000000000000AA"
                                         className={cn(
                                             form.formState.errors.turnstile
                                                 ? "ring-destructive ring-2"
