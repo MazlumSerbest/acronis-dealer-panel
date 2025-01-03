@@ -82,6 +82,7 @@ export default function LicenseHistoryPage() {
 
                 return t(data) || "-";
             },
+            filterFn: (row, id, value) => value == row.getValue(id),
         },
         {
             accessorKey: "createdAt",

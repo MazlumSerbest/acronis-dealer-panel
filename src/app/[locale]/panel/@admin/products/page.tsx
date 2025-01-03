@@ -629,9 +629,9 @@ export default function ProductsPage() {
                                             <SelectContent>
                                                 {/* <SelectItem>
                                                 </SelectItem> */}
-                                                <SelectItem value="MB">
+                                                {/* <SelectItem value="MB">
                                                     {t("MB")}
-                                                </SelectItem>
+                                                </SelectItem> */}
                                                 <SelectItem value="GB">
                                                     {t("GB")}
                                                 </SelectItem>
