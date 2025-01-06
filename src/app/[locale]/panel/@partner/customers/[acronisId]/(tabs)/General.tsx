@@ -260,8 +260,8 @@ export default function GeneralTab({ t, tenant }: Props) {
         <div className="container grid grid-cols-3 gap-4">
             {usages?.usages?.items?.some(
                 (u: TenantUsage) =>
+                    u.offering_item?.quota &&
                     u.offering_item?.quota?.value !== null &&
-                    u.offering_item?.quota?.value !== undefined &&
                     u.value > u.offering_item.quota.value,
             ) && (
                 <Alert className="col-span-3" variant="destructive">

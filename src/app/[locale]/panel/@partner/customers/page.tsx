@@ -341,7 +341,9 @@ export default function CustomersPage() {
             enableGlobalFilter: false,
             header: () => (
                 <div className="flex flex-col gap-2 py-3">
-                    <span className="mx-auto">{t("totalUsages")}</span>
+                    <span className="mx-auto">{`${t("totalUsages")} / ${t(
+                        "quota",
+                    )}`}</span>
 
                     <div className="grid grid-cols-2 justify-items-center">
                         <p className="flex flex-row gap-2">

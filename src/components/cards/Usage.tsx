@@ -40,11 +40,13 @@ export default function UsageCard({
 }: Props) {
     const t = useTranslations("Components.Usage");
 
-    const formatedValue = unit == "bytes" ? formatBytes(value) : value;
-    const formatedQuota =
+    const formattedValue = unit == "bytes" ? formatBytes(value) : value;
+    const formattedQuota =
         unit == "bytes" ? formatBytes(quota?.value) : quota?.value;
-    const quotaExceeded = quota?.value && quota?.value && value > quota?.value;
-    const quotaAlmostExceeded = quota?.value && value > quota?.value * 0.8;
+    const quotaExceeded =
+        quota && quota?.value !== null && value > quota?.value;
+    const quotaAlmostExceeded =
+        quota && quota?.value !== null && value > quota?.value * 0.8;
 
     return (
         <Card
@@ -104,8 +106,7 @@ export default function UsageCard({
                                 "size-5",
                             )}
                         />
-                    ) : 
-                    description?.includes("mailbox") ? (
+                    ) : description?.includes("mailbox") ? (
                         <LuInbox
                             className={cn(
                                 quotaExceeded
@@ -116,8 +117,7 @@ export default function UsageCard({
                                 "size-5",
                             )}
                         />
-                    ) :
-                    (
+                    ) : (
                         <LuDatabaseBackup
                             className={cn(
                                 quotaExceeded
@@ -142,9 +142,11 @@ export default function UsageCard({
                         "text-2xl font-bold",
                     )}
                 >
-                    {formatedValue}
+                    {formattedValue}
                     <span className="text-base text-muted-foreground ml-2">
-                        {quota?.value ? `/ ${formatedQuota}` : ""}
+                        {quota && quota?.value !== null
+                            ? `/ ${formattedQuota}`
+                            : ""}
                     </span>
                 </div>
                 <p className="text-xs text-muted-foreground">{description}</p>

@@ -37,7 +37,7 @@
         "role": "Role",
         "kind": "Kind",
         "actions": "Actions",
-        "action": "Action",    
+        "action": "Action",
         "edit": "Edit",
         "new": "New",
         "add": "Add",
@@ -592,6 +592,9 @@
             "october": "October",
             "november": "November",
             "december": "December"
+        },
+        "Storage": {
+            "quotaExceeded": "Quota Exceeded!"
         },
         "Usage": {
             "workstation_storage": "Workstation Storage",

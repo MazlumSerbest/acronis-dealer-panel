@@ -18,6 +18,7 @@ import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 import { formatBytes } from "@/utils/functions";
 import { chartColors } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 
 type Props = {
     className?: string;
@@ -40,12 +41,15 @@ export default function StorageCard({
     quota,
     action,
 }: Props) {
+    const t = useTranslations("Components.Storage");
     const withoutQuota = !quota || quota?.value === null;
     const available = quota?.value > usage ? quota?.value - usage : 0;
     const total = withoutQuota ? usage : usage + available;
     const chartData = [
         { usage: usage, available: withoutQuota ? null : available },
     ];
+    const quotaExceeded =
+        quota && quota?.value !== null && usage > quota?.value;
 
     const chartConfig = {
         usage: {
@@ -59,10 +63,26 @@ export default function StorageCard({
     } satisfies ChartConfig;
 
     return (
-        <Card className={cn("flex flex-col max-h-min", className)}>
+        <Card
+            className={cn(
+                "flex flex-col max-h-min",
+                quotaExceeded ? "border-destructive" : "",
+                className,
+            )}
+        >
             <CardHeader className="items-center pb-0">
-                <CardTitle>{title}</CardTitle>
+                <CardTitle
+                    className={cn(quotaExceeded ? "text-destructive" : "")}
+                >
+                    {title}
+                </CardTitle>
                 <CardDescription>{model}</CardDescription>
+                {quotaExceeded && (
+                    <CardDescription className="leading-none text-destructive font-bold">
+                        {t("quotaExceeded")}
+                    </CardDescription>
+                )}
+
                 {action}
             </CardHeader>
             <CardContent className="flex flex-1 items-center pb-0">
@@ -136,7 +156,8 @@ export default function StorageCard({
                                                     y={(viewBox.cy || 0) - 16}
                                                     className="fill-foreground text-2xl font-bold"
                                                 >
-                                                    {quota && quota?.value !== null
+                                                    {quota &&
+                                                    quota?.value !== null
                                                         ? formatBytes(usage)
                                                         : formatBytes(
                                                               total,
@@ -147,7 +168,8 @@ export default function StorageCard({
                                                     y={(viewBox.cy || 0) + 4}
                                                     className="fill-muted-foreground"
                                                 >
-                                                    {quota && quota?.value !== null
+                                                    {quota &&
+                                                    quota?.value !== null
                                                         ? "Quota: " +
                                                           formatBytes(
                                                               quota?.value,

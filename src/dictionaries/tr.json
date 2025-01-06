@@ -238,7 +238,7 @@
         "storageCardDescriptionGB": "Gigabayt başına toplam depolama kullanımı",
         "storageCardDescription": "Toplam depolama kullanımını gösterir",
         "limitExceeded": "Limit Aşıldı",
-        "limitExceededDescription": "Bu müşterilerden bazılarının kullanımı kota limitini aşıyor.",
+        "limitExceededDescription": "Bu müşterilerinin bazı kullanımları kota limitini aşıyor.",
         "tenantInformation": "Kiracı Bilgileri",
         "customerInformation": "Müşteri Bilgileri",
         "acronisCloudPlatformEditDescription": "Bazı bilgiler yalnızca Acronis Cyber Protect Cloud'dan değiştirilebilir.",
@@ -592,6 +592,9 @@
             "october": "Ekim",
             "november": "Kasım",
             "december": "Aralık"
+        },
+        "Storage": {
+            "quotaExceeded": "Kota Aşımı!"
         },
         "Usage": {
             "workstation_storage": "Çalışma İstasyonu Depolama",
