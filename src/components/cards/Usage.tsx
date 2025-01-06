@@ -46,7 +46,7 @@ export default function UsageCard({
     const quotaExceeded =
         quota && quota?.value !== null && value > quota?.value;
     const quotaAlmostExceeded =
-        quota && quota?.value !== null && value > quota?.value * 0.8;
+        quota && quota?.value !== null && value > quota?.value * 0.9;
 
     return (
         <Card

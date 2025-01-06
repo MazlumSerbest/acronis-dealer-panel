@@ -255,12 +255,15 @@ export default function TenantsPage() {
                         <p className="grid grid-cols-2 justify-items-center gap-2">
                             <span
                                 className={cn(
-                                    data?.perWorkload?.quota &&
-                                        data?.perWorkload?.quota?.value !==
-                                            null &&
-                                        data?.perWorkload?.value >
-                                            data?.perWorkload?.quota?.value
+                                    !data?.perWorkload?.quota ||
+                                        data?.perWorkload?.quota?.value === null
+                                        ? "" 
+                                        : data?.perWorkload?.value >
+                                          data?.perWorkload?.quota?.value
                                         ? "text-destructive"
+                                        : data?.perWorkload?.value >
+                                          data?.perWorkload?.quota?.value * 0.9
+                                        ? "text-yellow-500"
                                         : "",
                                 )}
                             >
@@ -280,11 +283,15 @@ export default function TenantsPage() {
                         <p className="grid grid-cols-2 justify-items-center gap-2">
                             <span
                                 className={cn(
-                                    data?.perGB?.quota &&
-                                        data?.perGB?.quota?.value !== null &&
-                                        data?.perGB?.value >
-                                            data?.perGB?.quota?.value
+                                    !data?.perGB?.quota ||
+                                        data?.perGB?.quota?.value === null
+                                        ? "" 
+                                        : data?.perGB?.value >
+                                          data?.perGB?.quota?.value
                                         ? "text-destructive"
+                                        : data?.perGB?.value >
+                                          data?.perGB?.quota?.value * 0.9
+                                        ? "text-yellow-500"
                                         : "",
                                 )}
                             >
