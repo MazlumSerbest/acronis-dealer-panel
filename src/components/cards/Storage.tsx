@@ -40,7 +40,7 @@ export default function StorageCard({
     quota,
     action,
 }: Props) {
-    const withoutQuota = quota?.value === null;
+    const withoutQuota = !quota || quota?.value === null;
     const available = quota?.value > usage ? quota?.value - usage : 0;
     const total = withoutQuota ? usage : usage + available;
     const chartData = [
@@ -136,7 +136,7 @@ export default function StorageCard({
                                                     y={(viewBox.cy || 0) - 16}
                                                     className="fill-foreground text-2xl font-bold"
                                                 >
-                                                    {quota?.value !== null
+                                                    {quota && quota?.value !== null
                                                         ? formatBytes(usage)
                                                         : formatBytes(
                                                               total,
@@ -147,7 +147,7 @@ export default function StorageCard({
                                                     y={(viewBox.cy || 0) + 4}
                                                     className="fill-muted-foreground"
                                                 >
-                                                    {quota?.value !== null
+                                                    {quota && quota?.value !== null
                                                         ? "Quota: " +
                                                           formatBytes(
                                                               quota?.value,

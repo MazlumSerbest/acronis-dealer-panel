@@ -6,7 +6,7 @@ import { getTranslations } from "next-intl/server";
 export const GET = auth(async (req: any, { params }) => {
     try {
         const tm = await getTranslations({
-            locale: "en", 
+            locale: "en",
             namespace: "Messages",
         });
 
@@ -23,7 +23,7 @@ export const GET = auth(async (req: any, { params }) => {
         if (!token) {
             return NextResponse.json({
                 message: "Authentication failed!",
-                status: 401, 
+                status: 401,
                 ok: false,
             });
         }
@@ -51,8 +51,10 @@ export const GET = auth(async (req: any, { params }) => {
 
         const children = (await res.json()) || [];
 
-        const tenantIds = children?.items?.map((item: any) => item.id).join(",");
-        
+        const tenantIds = children?.items
+            ?.map((item: any) => item.id)
+            .join(",");
+
         if (!tenantIds) {
             return NextResponse.json([]);
         }
@@ -77,7 +79,7 @@ export const GET = auth(async (req: any, { params }) => {
 
         const newData = children?.items?.map((c: any) => {
             const itemUsage = usages?.items?.find(
-                (u: any) => u.tenant === c.id
+                (u: any) => u.tenant === c.id,
             )?.usages;
 
             const findUsage = (edition: string, name: string) => {
@@ -85,11 +87,14 @@ export const GET = auth(async (req: any, { params }) => {
                     (u: any) =>
                         u.edition === edition &&
                         u.name === name &&
-                        u.infra_id === infraId
+                        u.infra_id === infraId,
                 );
             };
 
-            const perWorkloadUsage = findUsage("pck_per_workload", "pw_base_storage");
+            const perWorkloadUsage = findUsage(
+                "pck_per_workload",
+                "pw_base_storage",
+            );
             const perGBUsage = findUsage("pck_per_gigabyte", "pg_base_storage");
 
             return {
@@ -97,11 +102,15 @@ export const GET = auth(async (req: any, { params }) => {
                 usages: {
                     perWorkload: {
                         value: perWorkloadUsage?.value,
-                        quota: perWorkloadUsage?.offering_item ? perWorkloadUsage.offering_item.quota?.value : undefined,
+                        quota: perWorkloadUsage?.offering_item
+                            ? perWorkloadUsage.offering_item.quota
+                            : undefined,
                     },
                     perGB: {
                         value: perGBUsage?.value,
-                        quota: perGBUsage?.offering_item ? perGBUsage.offering_item.quota?.value : undefined,
+                        quota: perGBUsage?.offering_item
+                            ? perGBUsage.offering_item.quota
+                            : undefined,
                     },
                 },
             };
@@ -112,7 +121,6 @@ export const GET = auth(async (req: any, { params }) => {
         }
 
         return NextResponse.json(newData);
-
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

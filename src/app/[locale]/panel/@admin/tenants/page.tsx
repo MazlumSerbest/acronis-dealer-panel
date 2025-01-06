@@ -254,8 +254,10 @@ export default function TenantsPage() {
                             <span
                                 className={cn(
                                     data?.perWorkload?.quota &&
+                                        data?.perWorkload?.quota?.value !==
+                                            null &&
                                         data?.perWorkload?.value >
-                                            data?.perWorkload?.quota
+                                            data?.perWorkload?.quota?.value
                                         ? "text-destructive"
                                         : "",
                                 )}
@@ -265,9 +267,10 @@ export default function TenantsPage() {
                                     : "-"}
                             </span>
                             <span className="text-muted-foreground">
-                                {data?.perWorkload?.quota
+                                {data?.perWorkload?.quota &&
+                                data?.perWorkload?.quota?.value !== null
                                     ? ` / ${formatBytes(
-                                          data?.perWorkload?.quota,
+                                          data?.perWorkload?.quota?.value,
                                       )}`
                                     : ""}
                             </span>
@@ -276,7 +279,9 @@ export default function TenantsPage() {
                             <span
                                 className={cn(
                                     data?.perGB?.quota &&
-                                        data?.perGB?.value > data?.perGB?.quota
+                                        data?.perGB?.quota?.value !== null &&
+                                        data?.perGB?.value >
+                                            data?.perGB?.quota?.value
                                         ? "text-destructive"
                                         : "",
                                 )}
@@ -286,8 +291,11 @@ export default function TenantsPage() {
                                     : "-"}
                             </span>
                             <span className="text-muted-foreground">
-                                {data?.perGB?.quota
-                                    ? ` / ${formatBytes(data?.perGB?.quota)}`
+                                {data?.perGB?.quota &&
+                                data?.perGB?.quota?.value !== null
+                                    ? ` / ${formatBytes(
+                                          data?.perGB?.quota?.value,
+                                      )}`
                                     : ""}
                             </span>
                         </p>

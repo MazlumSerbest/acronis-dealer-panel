@@ -886,7 +886,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_workload",
-                            )?.offering_item.quota
+                            )?.offering_item?.quota
                         }
                         action={
                             <Popover
@@ -1028,7 +1028,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_gigabyte",
-                            )?.offering_item.quota
+                            )?.offering_item?.quota
                         }
                     />
 
