@@ -234,9 +234,9 @@
         "welcomeToAdmin": "Yönetici Paneline Hoş Geldiniz",
         "welcomeToPartner": "Partner Paneline Hoş Geldiniz",
         "storageCardTitle": "Yedek Depolama Alanı",
-        "storageCardDescriptionPW": "İş yükü başına toplam depolama kullanımı",
-        "storageCardDescriptionGB": "Gigabayt başına toplam depolama kullanımı",
-        "storageCardDescription": "Toplam depolama kullanımını gösterir",
+        "storageCardDescriptionPW": "İş yükü başına toplam yedek depolama kullanımı",
+        "storageCardDescriptionGB": "Gigabayt başına toplam yedek depolama kullanımı",
+        "storageCardDescription": "Toplam yedek depolama kullanımını gösterir",
         "limitExceeded": "Limit Aşıldı",
         "limitExceededDescription": "Bu müşterilerinin bazı kullanımları kota limitini aşıyor.",
         "tenantInformation": "Kiracı Bilgileri",
@@ -294,7 +294,9 @@
         "verified": "Doğrulandı",
         "goToTenant": "Kiracıya Git",
         "partners": "Partnerler",
-        "quotaEdit": "Kotayı Düzenle"
+        "quotaEdit": "Kotayı Düzenle",
+        "deleteSelected": "Seçilenleri Sil",
+        "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

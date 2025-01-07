@@ -19,6 +19,17 @@ import {
     DialogTitle,
 } from "@/components/ui/dialog";
 import {
+    AlertDialog,
+    AlertDialogContent,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+    AlertDialogDescription,
+    AlertDialogCancel,
+    AlertDialogAction,
+} from "@/components/ui/alert-dialog";
+import {
     Form,
     FormControl,
     FormField,
@@ -72,6 +83,7 @@ export default function UnassignedTab() {
 
     const [open, setOpen] = useState(false);
     const [assignOpen, setAssignOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [products, setProducts] = useState<ListBoxItem[] | null>(null);
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
     const [submitting, setSubmitting] = useState(false);
@@ -423,6 +435,14 @@ export default function UnassignedTab() {
                         >
                             {t("assignToPartner")}
                         </DropdownMenuItem>,
+                        <DropdownMenuItem
+                            key="delete"
+                            onClick={() => {
+                                setDeleteOpen(true);
+                            }}
+                        >
+                            {t("deleteSelected")}
+                        </DropdownMenuItem>,
                     ]
                 }
                 selectOnClick={async (table, row) => {
@@ -625,6 +645,62 @@ export default function UnassignedTab() {
                     </Form>
                 </DialogContent>
             </Dialog>
+
+            <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {t("deleteSelected")}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            {t("deleteLicenseDescription", {
+                                length: selectedIds.length,
+                            })}
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel asChild>
+                            <Button variant="outline">{t("close")}</Button>
+                        </AlertDialogCancel>
+                        <AlertDialogAction
+                            disabled={submitting}
+                            className="bg-destructive hover:bg-destructive/90"
+                            onClick={() => {
+                                setSubmitting(true);
+
+                                fetch("/api/admin/license", {
+                                    method: "DELETE",
+                                    body: JSON.stringify(selectedIds),
+                                })
+                                    .then((res) => res.json())
+                                    .then((res) => {
+                                        if (res.ok) {
+                                            toast({
+                                                description: res.message,
+                                            });
+                                            setSelectedIds([]);
+                                            setDeleteOpen(false);
+                                            mutate();
+                                        } else {
+                                            toast({
+                                                variant: "destructive",
+                                                title: t("errorTitle"),
+                                                description: res.message,
+                                            });
+                                        }
+
+                                        setSubmitting(false);
+                                    });
+                            }}
+                        >
+                            {t("delete")}
+                            {submitting && (
+                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                            )}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </>
     );
 }

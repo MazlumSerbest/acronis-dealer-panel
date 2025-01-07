@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
-import { generateCuid, generateLicenseKey, generateShortId } from "@/utils/functions";
+import {
+    generateCuid,
+    generateLicenseKey,
+    generateShortId,
+} from "@/utils/functions";
 import { getTranslations } from "next-intl/server";
 
 export const GET = auth(async (req: any) => {
@@ -182,6 +186,52 @@ export const POST = auth(async (req: any) => {
         } else {
             return NextResponse.json({
                 message: "Lisanslar kaydedilemedi!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
+
+export const DELETE = auth(async (req: any) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (req.auth.user.role !== "admin")
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+
+        const licenseIds = await req.json();
+
+        const deleted = await prisma.license.deleteMany({
+            where: {
+                id: {
+                    in: licenseIds,
+                },
+            },
+        });
+
+        if (deleted.count === licenseIds.length) {
+            return NextResponse.json({
+                message: "Lisanslar başarıyla silindi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Lisanslar silinirken hata oluştu!",
                 status: 400,
                 ok: false,
             });

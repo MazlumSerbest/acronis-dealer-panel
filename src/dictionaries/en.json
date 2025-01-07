@@ -294,7 +294,9 @@
         "verified": "Verified",
         "goToTenant": "Go to Tenant",
         "partners": "Partners",
-        "quotaEdit": "Quota Edit"
+        "quotaEdit": "Quota Edit",
+        "deleteSelected": "Delete Selected",
+        "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?"
     },
     "SignIn": {
         "signIn": "Sign In",
