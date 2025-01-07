@@ -47,36 +47,36 @@ export default function ProfileTab() {
                     <div>
                         <dt className="font-medium">{t("legalCompanyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.name || "-"}
+                            {data?.name || "-"}
                         </dd>
                     </div>
                     <div>
                         <dt className="font-medium">{t("taxId")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.contact?.title || "-"}
+                            {data?.contact?.title || "-"}
                         </dd>
                     </div>
                     <div>
                         <dt className="font-medium">{t("companyEmail")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.contact?.email || "-"}
+                            {data?.contact?.email || "-"}
                         </dd>
                     </div>
                     <div>
                         <dt className="font-medium">{t("companyPhone")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.contact?.phone || "-"}
+                            {data?.contact?.phone || "-"}
                         </dd>
                     </div>
                     <div>
                         <dt className="font-medium">{t("companyLegalAddress")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {!data.tenant?.contact?.address1 &&
-                            !data.tenant?.contact?.address2
+                            {!data?.contact?.address1 &&
+                            !data?.contact?.address2
                                 ? "-"
-                                : (data.tenant?.contact?.address1 || "") +
+                                : (data?.contact?.address1 || "") +
                                   ", " +
-                                  (data.tenant?.contact?.address2 || "")}
+                                  (data?.contact?.address2 || "")}
                         </dd>
                     </div>
                     <div>
@@ -84,13 +84,13 @@ export default function ProfileTab() {
                             {t("totalNumberOfEmployees")}
                         </dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.contact?.organization_size || "-"}
+                            {data?.contact?.organization_size || "-"}
                         </dd>
                     </div>
                     <div>
                         <dt className="font-medium">{t("companyWebsite")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenant?.contact?.website || "-"}
+                            {data?.contact?.website || "-"}
                         </dd>
                     </div>
                 </CardContent>

@@ -44,7 +44,7 @@ export default function PanelPage() {
 
     const { data, error } = useSWR(
         currentUser?.acronisTenantId &&
-            `/api/acronis/usages/${currentUser?.acronisTenantId}`,
+            `/api/acronis/tenants/${currentUser?.acronisTenantId}/usages`,
         null,
         {
             revalidateOnFocus: false,

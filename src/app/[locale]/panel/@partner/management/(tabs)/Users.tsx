@@ -15,7 +15,6 @@ import { LuChevronsUpDown } from "react-icons/lu";
 export default function UsersTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
-    const [users, setUsers] = useState<TenantUser[]>([]);
 
     //#region Table
     const columns: ColumnDef<TenantUser, any>[] = [
@@ -57,13 +56,10 @@ export default function UsersTab() {
     //#endregion
 
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenants/users/${currentUser?.acronisTenantId}`,
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/users`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
-                setUsers(data.users?.items);
-            },
         },
     );
 
@@ -82,7 +78,7 @@ export default function UsersTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
-            <DataTable columns={columns} data={users} isLoading={isLoading} />
+            <DataTable columns={columns} data={data} isLoading={isLoading} />
         </div>
     );
 }

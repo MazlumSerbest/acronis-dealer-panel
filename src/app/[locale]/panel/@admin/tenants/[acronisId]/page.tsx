@@ -35,7 +35,7 @@ export default function TenantDetail({
         {
             revalidateOnFocus: false,
             onSuccess: (data) => {
-                if (data.tenant.kind === "partner") trigger();
+                if (data.kind === "partner") trigger();
             },
         },
     );
@@ -116,7 +116,7 @@ export default function TenantDetail({
         <div className="flex flex-col gap-2">
             <div className="container relative flex w-full items-center gap-2">
                 <h1 className="flex-1 font-semibold text-2xl text-blue-400 text-center mt-4 md:mt-2 truncate">
-                    {data?.tenant?.name || ""}
+                    {data?.name || ""}
                 </h1>
                 <div className="hidden sm:flex sm:absolute right-0 gap-2">
                     <Button
@@ -153,7 +153,7 @@ export default function TenantDetail({
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
-                        {data?.tenant?.kind == "partner" && (
+                        {data?.kind == "partner" && (
                             <TabsTrigger value="clients">
                                 {t("clients")}
                             </TabsTrigger>
@@ -163,7 +163,7 @@ export default function TenantDetail({
                         </TabsTrigger>
                     </TabsList>
                     <TabsContent value="general">
-                        <GeneralTab t={t} tenant={data?.tenant} />
+                        <GeneralTab t={t} tenant={data} />
                     </TabsContent>
                     <TabsContent value="clients">
                         {!isMutating && children ? (
@@ -175,7 +175,7 @@ export default function TenantDetail({
                         )}
                     </TabsContent>
                     <TabsContent value="licenses">
-                        <LicensesTab t={t} tenant={data?.tenant} />
+                        <LicensesTab t={t} tenant={data} />
                     </TabsContent>
                 </Tabs>
             </div>

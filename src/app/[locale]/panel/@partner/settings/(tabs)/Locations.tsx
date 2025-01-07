@@ -16,7 +16,6 @@ import { LuChevronsUpDown } from "react-icons/lu";
 export default function LocationsTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
-    const [locations, setLocations] = useState([]);
 
     //#region Table
     const columns: ColumnDef<TenantLocation>[] = [
@@ -58,13 +57,10 @@ export default function LocationsTab() {
     //#endregion
 
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/locations/tenant/${currentUser?.acronisTenantId}`,
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/locations`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
-                setLocations(data.locations?.items);
-            },
         },
     );
 
@@ -74,7 +70,7 @@ export default function LocationsTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!locations)
+    if (!data)
         return (
             <Skeleton>
                 <TableSkeleton />
@@ -83,11 +79,7 @@ export default function LocationsTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
-            <DataTable
-                columns={columns}
-                data={locations || []}
-                isLoading={isLoading}
-            />
+            <DataTable columns={columns} data={data} isLoading={isLoading} />
         </div>
     );
 }

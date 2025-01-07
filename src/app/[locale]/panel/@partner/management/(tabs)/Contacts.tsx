@@ -83,13 +83,13 @@ export default function ContactsTab() {
     //#endregion
 
     const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenants/contacts/${currentUser?.acronisTenantId}`,
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/contacts`,
         null,
         {
             revalidateOnFocus: false,
             onSuccess: (data) => {
                 setContacts(
-                    data.contacts.items.filter(
+                    data.items.filter(
                         (c: TenantContact) => !c.types?.includes("legal"),
                     ),
                 );
@@ -103,7 +103,7 @@ export default function ContactsTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (!contacts)
         return (
             <Skeleton>
                 <TableSkeleton />

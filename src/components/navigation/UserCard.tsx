@@ -90,11 +90,11 @@ export default function UserCard() {
                     `/api/acronis/tenants/15229d4a-ff0f-498b-849d-a4f71bdc81a4`,
                 )
                     .then((res) => res.json())
-                    .then((data) => updateMainTenant(data?.tenant));
+                    .then((data) => updateMainTenant(data));
             else if (user?.partnerAcronisId)
                 fetch(`/api/acronis/tenants/${user?.partnerAcronisId}`)
                     .then((res) => res.json())
-                    .then((data) => updateMainTenant(data?.tenant));
+                    .then((data) => updateMainTenant(data));
         }
     }, [session, updateMainTenant, updateUser, user?.partnerAcronisId]);
 

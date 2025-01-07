@@ -152,7 +152,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         data: usages,
         error: usagesError,
         mutate: usagesMutate,
-    } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
+    } = useSWR(`/api/acronis/tenants/${tenant?.id}/usages`, null, {
         revalidateOnFocus: false,
         onSuccess: async (data) => {
             setUsagesPerWorkload(
@@ -915,7 +915,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             );
 
                                             await fetch(
-                                                `/api/acronis/tenants/offeringItems/${tenant.id}`,
+                                                `/api/acronis/tenants/${tenant.id}/offeringItems`,
                                                 {
                                                     method: "PUT",
                                                     body: JSON.stringify({

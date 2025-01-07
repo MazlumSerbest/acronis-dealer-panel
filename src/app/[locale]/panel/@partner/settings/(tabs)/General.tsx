@@ -22,7 +22,7 @@ export default function GeneralTab() {
     const { user: currentUser } = useUserStore();
 
     const { data, error } = useSWR(
-        `/api/acronis/tenants/info/${currentUser?.acronisTenantId}`,
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/info`,
         null,
         {
             revalidateOnFocus: false,
@@ -44,7 +44,7 @@ export default function GeneralTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
-            
+
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuFolderLock className="size-8 text-green-500/60" />
@@ -63,17 +63,14 @@ export default function GeneralTab() {
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
                                 showText
-                                value={
-                                    data.tenantInfo?.mfa?.mfa_status ==
-                                    "enabled"
-                                }
+                                value={data.mfa?.mfa_status == "enabled"}
                             />
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("usersCount")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.mfa?.users_count}
+                            {data.mfa?.users_count}
                         </dd>
                     </div>
                 </CardContent>
@@ -95,13 +92,13 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {t(data.tenantInfo?.pricing.mode || "")}
+                            {t(data.pricing?.mode || "")}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("currency")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.pricing?.currency || "-"}
+                            {data.pricing?.currency || "-"}
                         </dd>
                     </div>
                 </CardContent>
@@ -123,29 +120,26 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("companyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.branding?.company_name || "-"}
+                            {data.branding?.company_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("serviceName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.branding?.service_name || "-"}
+                            {data.branding?.service_name || "-"}
                         </dd>
                     </div>
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("platformTermsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0 truncate">
-                            {data.tenantInfo?.branding?.platform_terms_url ? (
+                            {data.branding?.platform_terms_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"
                                     target="_blank"
-                                    href={
-                                        data.tenantInfo?.branding
-                                            ?.platform_terms_url
-                                    }
+                                    href={data.branding?.platform_terms_url}
                                 >
                                     {
-                                        data.tenantInfo?.branding?.platform_terms_url?.split(
+                                        data.branding?.platform_terms_url?.split(
                                             "?",
                                         )[0]
                                     }
@@ -158,17 +152,13 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("termsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.branding?.terms_url ? (
+                            {data.branding?.terms_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"
                                     target="_blank"
-                                    href={data.tenantInfo?.branding?.terms_url}
+                                    href={data.branding?.terms_url}
                                 >
-                                    {
-                                        data.tenantInfo?.branding?.terms_url?.split(
-                                            "?",
-                                        )[0]
-                                    }
+                                    {data.branding?.terms_url?.split("?")[0]}
                                 </Link>
                             ) : (
                                 "-"
@@ -178,19 +168,13 @@ export default function GeneralTab() {
                     <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
                         <dt className="font-medium">{t("privacyPolicyUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.tenantInfo?.branding?.privacy_policy_url ? (
+                            {data.branding?.privacy_policy_url ? (
                                 <Link
                                     className="text-sm hover:underline truncate"
                                     target="_blank"
-                                    href={
-                                        data.tenantInfo?.branding
-                                            ?.privacy_policy_url
-                                    }
+                                    href={data.branding?.privacy_policy_url}
                                 >
-                                    {
-                                        data.tenantInfo?.branding
-                                            ?.privacy_policy_url
-                                    }
+                                    {data.branding?.privacy_policy_url}
                                 </Link>
                             ) : (
                                 "-"

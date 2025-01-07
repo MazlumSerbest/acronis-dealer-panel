@@ -93,7 +93,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         data: usages,
         error,
         mutate,
-    } = useSWR(`/api/acronis/usages/${tenant?.id}`, null, {
+    } = useSWR(`/api/acronis/tenants/${tenant?.id}/usages`, null, {
         revalidateOnFocus: false,
         onSuccess: async (data) => {
             setUsagesPerWorkload(
