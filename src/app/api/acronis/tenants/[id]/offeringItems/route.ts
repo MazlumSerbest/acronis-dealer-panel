@@ -31,7 +31,7 @@ export const PUT = auth(async (req: any, { params }) => {
         const { name, edition, bytes } = body;
 
         const offeringItemsRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.tenantId}/offering_items?edition=${edition}`,
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/offering_items?edition=${edition}`,
             {
                 method: "GET",
                 headers: headers,
@@ -70,7 +70,7 @@ export const PUT = auth(async (req: any, { params }) => {
         };
 
         const updateOfferingItemsRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.tenantId}/offering_items`,
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/offering_items`,
             {
                 method: "PUT",
                 headers: headers,

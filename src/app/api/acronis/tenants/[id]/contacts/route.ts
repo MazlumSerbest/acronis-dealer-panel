@@ -29,36 +29,46 @@ export const GET = auth(async (req: any, { params }) => {
         const headers = {
             Authorization: `Bearer ${token}`,
         };
-        const locationRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/locations`,
+        const contactIdsRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/contacts`,
             {
                 method: "GET",
                 headers: headers,
             },
         );
 
-        if (locationRes.ok) {
-            const locationIds = await locationRes.json();
-            if (!locationIds.locations.length)
-                return await NextResponse.json({ locations: { items: [] } });
-
-            const params = new URLSearchParams({
-                uuids: locationIds.locations.join(),
-                // lod: "basic",
+        if (!contactIdsRes.ok)
+            NextResponse.json({
+                message: "Contact Ids not found!",
+                status: 404,
+                ok: false,
             });
-            const res = await fetch(
-                `${process.env.ACRONIS_API_V2_URL}/locations?${params}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                },
-            );
 
-            const locations = await res.json();
+        const contactIds = await contactIdsRes.json();
+        if (!contactIds.items.length)
+            return await NextResponse.json({ contacts: { items: [] } });
 
-            if (res.ok) return NextResponse.json({ locations });
-            else return NextResponse.json({ message: "Failed!" });
-        } else return NextResponse.json({ message: "Failed" });
+        const searchParams = new URLSearchParams({
+            uuids: contactIds.items.join(),
+            // lod: "basic",
+        });
+        const contactsRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/contacts?${searchParams}`,
+            {
+                method: "GET",
+                headers: headers,
+            },
+        );
+
+        const contacts = await contactsRes.json();
+
+        if (contactsRes.ok) return NextResponse.json(contacts);
+        else
+            return NextResponse.json({
+                message: "Contacts not found!",
+                status: 404,
+                ok: false,
+            });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

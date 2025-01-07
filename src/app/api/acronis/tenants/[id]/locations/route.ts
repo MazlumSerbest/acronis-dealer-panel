@@ -29,36 +29,46 @@ export const GET = auth(async (req: any, { params }) => {
         const headers = {
             Authorization: `Bearer ${token}`,
         };
-        const userRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.tenantId}/users`,
+        const locationIdsRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/locations`,
             {
                 method: "GET",
                 headers: headers,
             },
         );
 
-        if (userRes.ok) {
-            const userIds = await userRes.json();
-            if (!userIds.items.length)
-                return await NextResponse.json({ users: { items: [] } });
-
-            const params = new URLSearchParams({
-                uuids: userIds.items.join(),
-                // lod: "basic",
+        if (!locationIdsRes.ok)
+            return NextResponse.json({
+                message: "Location Ids not found!",
+                status: 404,
+                ok: false,
             });
-            const res = await fetch(
-                `${process.env.ACRONIS_API_V2_URL}/users?${params}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                },
-            );
 
-            const users = await res.json();
+        const locationIds = await locationIdsRes.json();
+        if (!locationIds.locations.length)
+            return await NextResponse.json({ locations: { items: [] } });
 
-            if (res.ok) return NextResponse.json({ users });
-            else return NextResponse.json({ message: "Failed!" });
-        } else return NextResponse.json({ message: "Failed" });
+        const searchParams = new URLSearchParams({
+            uuids: locationIds.locations.join(),
+            // lod: "basic",
+        });
+        const res = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/locations?${searchParams}`,
+            {
+                method: "GET",
+                headers: headers,
+            },
+        );
+
+        const locations = await res.json();
+
+        if (res.ok) return NextResponse.json(locations.items);
+        else
+            return NextResponse.json({
+                message: "Locations not found!",
+                status: 404,
+                ok: false,
+            });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

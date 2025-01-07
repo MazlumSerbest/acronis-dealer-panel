@@ -29,36 +29,46 @@ export const GET = auth(async (req: any, { params }) => {
         const headers = {
             Authorization: `Bearer ${token}`,
         };
-        const contactRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.tenantId}/contacts`,
+        const userIdsRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/users`,
             {
                 method: "GET",
                 headers: headers,
             },
         );
 
-        if (contactRes.ok) {
-            const contactIds = await contactRes.json();
-            if (!contactIds.items.length)
-                return await NextResponse.json({ contacts: { items: [] } });
-
-            const params = new URLSearchParams({
-                uuids: contactIds.items.join(),
-                // lod: "basic",
+        if (!userIdsRes.ok)
+            return NextResponse.json({
+                message: "User Ids not found!",
+                status: 404,
+                ok: false,
             });
-            const res = await fetch(
-                `${process.env.ACRONIS_API_V2_URL}/contacts?${params}`,
-                {
-                    method: "GET",
-                    headers: headers,
-                },
-            );
 
-            const contacts = await res.json();
+        const userIds = await userIdsRes.json();
+        if (!userIds.items.length)
+            return await NextResponse.json({ users: { items: [] } });
 
-            if (res.ok) return NextResponse.json({ contacts });
-            else return NextResponse.json({ message: "Failed!" });
-        } else return NextResponse.json({ message: "Failed" });
+        const searchParams = new URLSearchParams({
+            uuids: userIds.items.join(),
+            // lod: "basic",
+        });
+        const userRes = await fetch(
+            `${process.env.ACRONIS_API_V2_URL}/users?${searchParams}`,
+            {
+                method: "GET",
+                headers: headers,
+            },
+        );
+
+        const users = await userRes.json();
+
+        if (userRes.ok) return NextResponse.json(users.items);
+        else
+            return NextResponse.json({
+                message: "Users not found!",
+                status: 404,
+                ok: false,
+            });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,
