@@ -39,8 +39,13 @@ export const GET = auth(async (req: any, { params }) => {
 
         const tenant = (await res.json()) || [];
 
-        if (res.ok) return NextResponse.json({ tenant });
-        else return NextResponse.json({ message: "Failed!" });
+        if (res.ok) return NextResponse.json(tenant);
+        else
+            return NextResponse.json({
+                message: "Tenant not found!",
+                status: 404,
+                ok: false,
+            });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

@@ -28,16 +28,19 @@ export const GET = auth(async (req: any, { params }) => {
             });
         }
 
-        if (params?.parentAcronisId === "undefined") {
-            return;
-        }
+        if (params?.parentId === "undefined")
+            return NextResponse.json({
+                message: "There is no Parent Id!",
+                status: 404,
+                ok: false,
+            });
 
         const headers = {
             Authorization: `Bearer ${token}`,
         };
 
         const searchParams = new URLSearchParams({
-            parent_id: params?.parentAcronisId as string,
+            parent_id: params?.parentId as string,
         });
 
         const res = await fetch(

@@ -40,7 +40,7 @@ export const GET = auth(async (req: any, { params }) => {
 
         if (res.ok) {
             const alert = await res.json();
-            return await NextResponse.json({ alert });
+            return await NextResponse.json(alert);
         } else return await NextResponse.json({ message: "Failed!" });
     } catch (error: any) {
         return NextResponse.json({
