@@ -296,7 +296,8 @@
         "partners": "Partnerler",
         "quotaEdit": "Kotayı Düzenle",
         "deleteSelected": "Seçilenleri Sil",
-        "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?"
+        "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
+        "createCustomer": "Müşteri Oluştur"
     },
     "SignIn": {
         "signIn": "Giriş Yap",

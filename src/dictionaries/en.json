@@ -296,7 +296,8 @@
         "partners": "Partners",
         "quotaEdit": "Quota Edit",
         "deleteSelected": "Delete Selected",
-        "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?"
+        "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?",
+        "createCustomer": "Create Customer"
     },
     "SignIn": {
         "signIn": "Sign In",

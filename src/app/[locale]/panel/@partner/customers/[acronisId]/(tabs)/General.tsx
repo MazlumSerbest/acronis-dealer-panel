@@ -184,6 +184,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     async function onSubmit(values: CustomerFormValues) {
         if (submitting) return;
         setSubmitting(true);
+        console.log(customer?.parent?.licensed);
 
         let newCustomer;
         if (tenant.kind == "customer") {
@@ -199,6 +200,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 name: tenant?.name,
                 acronisId: tenant?.id,
                 parentAcronisId: tenant?.parent_id,
+                licensed: currentUser?.licensed,
                 billingDate: values.billingDate?.toISOString(),
             };
         }
@@ -484,6 +486,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </dd>
                                 </div>
                             </CardContent>
+
                             {edit && (
                                 <CardFooter className="flex flex-row gap-2 justify-end">
                                     <Button
@@ -500,6 +503,23 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         className="bg-green-600 hover:bg-green-600/90"
                                     >
                                         {t("save")}
+                                        {submitting && (
+                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        )}
+                                    </Button>
+                                </CardFooter>
+                            )}
+
+                            {!edit && !customer && (
+                                <CardFooter className="flex flex-row gap-2 justify-end">
+                                    <Button
+                                        disabled={submitting}
+                                        type="submit"
+                                        className=" bg-blue-400 hover:bg-blue-400/90"
+                                    >
+                                        {tenant.kind == "customer"
+                                            ? t("createCustomer")
+                                            : t("createPartner")}
                                         {submitting && (
                                             <LuLoader2 className="size-4 animate-spin ml-2" />
                                         )}

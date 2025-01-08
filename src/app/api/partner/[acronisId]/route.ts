@@ -25,6 +25,7 @@ export const GET = auth(async (req: any, { params }) => {
                 parent: {
                     select: {
                         name: true,
+                        licensed: true,
                     },
                 }
             },
