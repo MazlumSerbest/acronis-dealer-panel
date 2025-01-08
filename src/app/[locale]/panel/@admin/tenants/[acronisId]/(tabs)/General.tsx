@@ -156,7 +156,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         revalidateOnFocus: false,
         onSuccess: async (data) => {
             setUsagesPerWorkload(
-                data?.usages?.items?.filter(
+                data?.items?.filter(
                     (u: TenantUsage) =>
                         u.value > 0 &&
                         u.edition === "pck_per_workload" &&
@@ -165,7 +165,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ),
             );
             setUsagesPerGB(
-                data?.usages?.items?.filter(
+                data?.items?.filter(
                     (u: TenantUsage) =>
                         u.value > 0 &&
                         u.edition === "pck_per_gigabyte" &&
@@ -174,12 +174,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ),
             );
 
-            const workload = data?.usages?.items?.find(
+            const workload = data?.items?.find(
                 (u: TenantUsage) =>
                     u.usage_name == "storage" &&
                     u.edition == "pck_per_workload",
             );
-            const gigabyte = data?.usages?.items?.find(
+            const gigabyte = data?.items?.find(
                 (u: TenantUsage) =>
                     u.usage_name == "storage" &&
                     u.edition == "pck_per_gigabyte",
@@ -233,6 +233,18 @@ export default function GeneralTab({ t, tenant }: Props) {
             }
         },
     });
+
+    useSWR(
+        `/api/acronis/tenants/${tenant?.id}/usages?usage_names=local_storage,storage`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: async (data) => {
+                console.log(data);
+                usagesMutate();
+            },
+        },
+    );
     // #endregion
 
     //#region Form
@@ -323,7 +335,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         );
     return (
         <div className="container grid grid-cols-3 gap-4">
-            {usages?.usages?.items?.some(
+            {usages?.items?.some(
                 (u: TenantUsage) =>
                     u.offering_item?.quota &&
                     u.offering_item?.quota?.value !== null &&
@@ -875,14 +887,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                         description={t("storageCardDescriptionPW")}
                         model={t("perWorkload")}
                         usage={
-                            usages?.usages?.items?.find(
+                            usages?.items?.find(
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_workload",
                             )?.value
                         }
                         quota={
-                            usages?.usages?.items?.find(
+                            usages?.items?.find(
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_workload",
@@ -1017,14 +1029,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                         description={t("storageCardDescriptionGB")}
                         model={t("perGB")}
                         usage={
-                            usages?.usages?.items?.find(
+                            usages?.items?.find(
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_gigabyte",
                             )?.value
                         }
                         quota={
-                            usages?.usages?.items?.find(
+                            usages?.items?.find(
                                 (u: TenantUsage) =>
                                     u.usage_name == "storage" &&
                                     u.edition == "pck_per_gigabyte",

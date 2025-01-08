@@ -29,8 +29,17 @@ export const GET = auth(async (req: any, { params }) => {
         const headers = {
             Authorization: `Bearer ${token}`,
         };
+
+        const usageNames = req.nextUrl.searchParams.get("usage_names");
+        let searchParams: URLSearchParams | undefined = undefined;
+
+        if (usageNames)
+            searchParams = new URLSearchParams({
+                usage_names: usageNames,
+            });
+
         const res = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/usages`,
+            `${process.env.ACRONIS_API_V2_URL}/tenants/${params?.id}/usages?${searchParams}`,
             {
                 method: "GET",
                 headers: headers,
@@ -39,12 +48,13 @@ export const GET = auth(async (req: any, { params }) => {
 
         const usages = await res.json();
 
-        if (res.ok) return NextResponse.json({ usages });
-        else return NextResponse.json({
-            message: "Usages not found!",
-            status: 404,
-            ok: false,
-        });
+        if (res.ok) return NextResponse.json(usages);
+        else
+            return NextResponse.json({
+                message: "Usages not found!",
+                status: 404,
+                ok: false,
+            });
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

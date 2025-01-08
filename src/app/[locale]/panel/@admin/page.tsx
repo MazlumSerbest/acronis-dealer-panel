@@ -50,7 +50,7 @@ export default function PanelPage() {
             revalidateOnFocus: false,
             onSuccess: async (data) => {
                 setUsagesPerWorkload(
-                    data?.usages?.items?.filter(
+                    data?.items?.filter(
                         (u: TenantUsage) =>
                             u.edition == "pck_per_workload" &&
                             u.value > 0 &&
@@ -59,7 +59,7 @@ export default function PanelPage() {
                     ),
                 );
                 setUsagesPerGB(
-                    data?.usages?.items?.filter(
+                    data?.items?.filter(
                         (u: TenantUsage) =>
                             u.edition == "pck_per_gigabyte" &&
                             u.value > 0 &&
@@ -212,14 +212,14 @@ export default function PanelPage() {
                             description={t("storageCardDescriptionPW")}
                             model={t("perWorkload")}
                             usage={
-                                data?.usages?.items?.find(
+                                data?.items?.find(
                                     (u: TenantUsage) =>
                                         u.usage_name == "storage" &&
                                         u.edition == "pck_per_workload",
                                 )?.value
                             }
                             quota={
-                                data?.usages?.items?.find(
+                                data?.items?.find(
                                     (u: TenantUsage) =>
                                         u.usage_name == "storage" &&
                                         u.edition == "pck_per_workload",
@@ -231,14 +231,14 @@ export default function PanelPage() {
                             description={t("storageCardDescriptionGB")}
                             model={t("perGB")}
                             usage={
-                                data?.usages?.items?.find(
+                                data?.items?.find(
                                     (u: TenantUsage) =>
                                         u.usage_name == "storage" &&
                                         u.edition == "pck_per_gigabyte",
                                 )?.value
                             }
                             quota={
-                                data?.usages?.items?.find(
+                                data?.items?.find(
                                     (u: TenantUsage) =>
                                         u.usage_name == "storage" &&
                                         u.edition == "pck_per_gigabyte",
