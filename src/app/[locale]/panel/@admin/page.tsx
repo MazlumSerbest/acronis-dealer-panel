@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 import { useTranslations } from "next-intl";
 
 import {
@@ -33,21 +34,28 @@ export default function PanelPage() {
     const router = useRouter();
     const { user: currentUser } = useUserStore();
 
+    const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
+    const [storagePerWorkload, setStoragePerWorkload] = useState<TenantUsage>();
+    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
+    const [storagePerGB, setStoragePerGB] = useState<TenantUsage>();
+    const [localStorage, setLocalStorage] = useState<TenantUsage>();
+
+    const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
     const [unassignedLicenseCount, setUnassignedLicenseCount] =
         useState<number>(0);
     const [assignedLicenseCount, setAssignedLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
 
-    const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
-    const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
-
-    const { data, error } = useSWR(
-        currentUser?.acronisTenantId &&
-            `/api/acronis/tenants/${currentUser?.acronisTenantId}/usages`,
-        null,
+    const { error, trigger } = useSWRMutation(
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/usages`,
+        async (url) => {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch usages");
+            return response.json();
+        },
         {
-            revalidateOnFocus: false,
             onSuccess: async (data) => {
                 setUsagesPerWorkload(
                     data?.items?.filter(
@@ -83,7 +91,7 @@ export default function PanelPage() {
                 const active = await fetch(
                     `/api/admin/license/count?status=active`,
                 );
-                
+
                 const activeCount = await active.json();
                 setActiveLicenseCount(activeCount.count);
 
@@ -92,6 +100,61 @@ export default function PanelPage() {
                         assignedCount.count +
                         unassignedCount.count,
                 );
+            },
+        },
+    );
+
+    useSWR(
+        currentUser?.acronisTenantId &&
+            `/api/acronis/tenants/${currentUser?.acronisTenantId}/usages?usage_names=local_storage,storage`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: async (data) => {
+                setStoragePerWorkload(
+                    data?.items?.find(
+                        (u: TenantUsage) =>
+                            u.usage_name === "storage" &&
+                            u.edition === "pck_per_workload" &&
+                            u.infra_id ===
+                                "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                    ),
+                );
+                setStoragePerGB(
+                    data?.items?.find(
+                        (u: TenantUsage) =>
+                            u.usage_name === "storage" &&
+                            u.edition === "pck_per_gigabyte" &&
+                            u.infra_id ===
+                                "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                    ),
+                );
+                setLocalStorage(
+                    data?.items?.find(
+                        (u: TenantUsage) => u.usage_name === "local_storage",
+                    ),
+                );
+
+                const workload = data?.items?.find(
+                    (u: TenantUsage) =>
+                        u.usage_name == "storage" &&
+                        u.edition == "pck_per_workload",
+                );
+                const gigabyte = data?.items?.find(
+                    (u: TenantUsage) =>
+                        u.usage_name == "storage" &&
+                        u.edition == "pck_per_gigabyte",
+                );
+                setSelectedModel(
+                    !workload?.value &&
+                        !workload?.offering_item?.quota?.value &&
+                        (gigabyte?.value ||
+                            gigabyte?.offering_item?.quota?.value)
+                        ? "perGB"
+                        : "perWorkload",
+                );
+
+                trigger();
             },
         },
     );
@@ -152,10 +215,10 @@ export default function PanelPage() {
                     {t("failedToLoad")}
                 </div>
             ) : (
-                <div className="container m-auto flex flex-col gap-4">
+                <div className="container m-auto flex flex-col gap-3">
                     <h1 className="text-xl font-semibold">{t("licenses")}</h1>
 
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3">
                         <SmallCard
                             title={t("total")}
                             value={totalLicenseCount}
@@ -206,44 +269,33 @@ export default function PanelPage() {
                         {t("totalUsages")}
                     </h1>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
                         <StorageCard
                             title={t("storageCardTitle")}
                             description={t("storageCardDescriptionPW")}
                             model={t("perWorkload")}
-                            usage={
-                                data?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                )?.value
-                            }
+                            usage={storagePerWorkload?.value as number}
                             quota={
-                                data?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_workload",
-                                )?.offering_item.quota
+                                storagePerWorkload?.offering_item?.quota as any
                             }
                         />
+
+                        <div className="flex flex-col gap-3">
+                            <UsageCard
+                                title="local_storage"
+                                description={t("localStorageDescription")}
+                                unit="bytes"
+                                value={localStorage?.value as number}
+                                quota={null as any}
+                            />
+                        </div>
+
                         <StorageCard
                             title={t("storageCardTitle")}
                             description={t("storageCardDescriptionGB")}
                             model={t("perGB")}
-                            usage={
-                                data?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_gigabyte",
-                                )?.value
-                            }
-                            quota={
-                                data?.items?.find(
-                                    (u: TenantUsage) =>
-                                        u.usage_name == "storage" &&
-                                        u.edition == "pck_per_gigabyte",
-                                )?.offering_item.quota
-                            }
+                            usage={storagePerGB?.value as number}
+                            quota={storagePerGB?.offering_item?.quota as any}
                         />
                     </div>
 
@@ -260,7 +312,7 @@ export default function PanelPage() {
                             </TabsTrigger>
                         </TabsList>
                         <TabsContent value="perWorkload">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
                                         ?.sort((a, b) =>
@@ -293,7 +345,7 @@ export default function PanelPage() {
                             </div>
                         </TabsContent>
                         <TabsContent value="perGB">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB
                                         ?.sort((a, b) =>
