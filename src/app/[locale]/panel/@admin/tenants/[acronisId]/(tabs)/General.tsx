@@ -377,7 +377,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             </div>
         );
     return (
-        <div className="container grid grid-cols-3 gap-4">
+        <div className="container grid grid-cols-3 gap-3">
             {usages?.items?.some(
                 (u: TenantUsage) =>
                     u.offering_item?.quota &&
@@ -686,6 +686,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             )}
                         </form>
                     </Form>
+
                     {!edit &&
                         tenant.parent_id == currentUser?.acronisTenantId &&
                         (!panelTenant || panelTenant?.users?.length == 0) && (
@@ -924,7 +925,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
             ) : (
-                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-4 justify-start ">
+                <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-3 justify-start">
                     <StorageCard
                         title={t("storageCardTitle")}
                         description={t("storageCardDescriptionPW")}
@@ -1090,7 +1091,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <h2 className="font-medium text-xl">{t("licenses")}</h2>
             </div>
 
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 col-span-full">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 col-span-full gap-3">
                 {tenant.kind == "partner" && (
                     <SmallCard
                         title={t("passive")}
@@ -1178,7 +1179,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 ) : (
                     <>
                         <TabsContent value={"perWorkload"}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
                                         ?.sort((a, b) =>
@@ -1212,7 +1213,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         </TabsContent>
 
                         <TabsContent value={"perGB"}>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 min-h-24">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB
                                         ?.sort((a, b) =>
