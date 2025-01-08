@@ -297,7 +297,9 @@
         "quotaEdit": "Quota Edit",
         "deleteSelected": "Delete Selected",
         "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?",
-        "createCustomer": "Create Customer"
+        "createCustomer": "Create Customer",
+        "localStorage": "Local Storage",
+        "localStorageDescription": "Local storage usage"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -600,6 +602,7 @@
             "quotaExceeded": "Quota Exceeded!"
         },
         "Usage": {
+            "local_storage": "Local Storage",
             "workstation_storage": "Workstation Storage",
             "server_storage": "Server Storage",
             "vm_storage": "VM Storage",

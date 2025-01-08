@@ -2,6 +2,7 @@ import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import useSWR from "swr";
+import useSWRMutation from "swr/mutation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -65,7 +66,10 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [submitting, setSubmitting] = useState(false);
 
     const [usagesPerWorkload, setUsagesPerWorkload] = useState<TenantUsage[]>();
+    const [storagePerWorkload, setStoragePerWorkload] = useState<TenantUsage>();
     const [usagesPerGB, setUsagesPerGB] = useState<TenantUsage[]>();
+    const [storagePerGB, setStoragePerGB] = useState<TenantUsage>();
+    const [localStorage, setLocalStorage] = useState<TenantUsage>();
 
     const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
 
@@ -77,103 +81,97 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
 
     // #region Fetch Data
-    const {
-        data: customer,
-        error: customerError,
-        mutate: customerMutate,
-    } = useSWR(`/api/${tenant?.kind}/${tenant?.id}`, null, {
-        revalidateOnFocus: false,
-        onSuccess: (data) => {
-            const daysDiff = calculateRemainingDays(data.billingDate);
-            seDaysUntilNextBillingDate(daysDiff);
+    const { data: customer, mutate: customerMutate } = useSWR(
+        `/api/${tenant?.kind}/${tenant?.id}`,
+        null,
+        {
+            revalidateOnFocus: false,
+            onSuccess: (data) => {
+                const daysDiff = calculateRemainingDays(data.billingDate);
+                seDaysUntilNextBillingDate(daysDiff);
+            },
         },
-    });
+    );
 
     const {
         data: usages,
-        error,
-        mutate,
-    } = useSWR(`/api/acronis/tenants/${tenant?.id}/usages`, null, {
-        revalidateOnFocus: false,
-        onSuccess: async (data) => {
-            setUsagesPerWorkload(
-                data?.items?.filter(
-                    (u: TenantUsage) =>
-                        u.edition == "pck_per_workload" &&
-                        u.value > 0 &&
-                        u.usage_name != "storage" &&
-                        u.usage_name != "storage_total",
-                ),
-            );
-            setUsagesPerGB(
-                data?.items?.filter(
-                    (u: TenantUsage) =>
-                        u.edition == "pck_per_gigabyte" &&
-                        u.value > 0 &&
-                        u.usage_name != "storage" &&
-                        u.usage_name != "storage_total",
-                ),
-            );
-            
-            const workload = data?.items?.find(
-                (u: TenantUsage) =>
-                    u.usage_name == "storage" &&
-                    u.edition == "pck_per_workload",
-            );
-            const gigabyte = data?.items?.find(
-                (u: TenantUsage) =>
-                    u.usage_name == "storage" &&
-                    u.edition == "pck_per_gigabyte",
-            );
-            setSelectedModel(
-                !workload?.value &&
-                    !workload?.offering_item?.quota?.value &&
-                    (gigabyte?.value || gigabyte?.offering_item?.quota?.value)
-                    ? "perGB"
-                    : "perWorkload",
-            );
-
-            if (currentUser?.licensed && tenant.kind === "partner") {
-                const inactive = await fetch(
-                    `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
-                );
-                const inactiveCount = await inactive.json();
-                setInactiveLicenseCount(inactiveCount.count);
-
-                const active = await fetch(
-                    `/api/license/count?status=active&partnerAcronisId=${tenant.id}`,
-                );
-                const activeCount = await active.json();
-                setActiveLicenseCount(activeCount.count);
-
-                const completed = await fetch(
-                    `/api/license/count?status=completed&partnerAcronisId=${tenant.id}`,
-                );
-                const completedCount = await completed.json();
-                setCompletedLicenseCount(completedCount.count);
-
-                const expired = await fetch(
-                    `/api/license/count?status=expired&partnerAcronisId=${tenant.id}`,
-                );
-                const expiredCount = await expired.json();
-                setExpiredLicenseCount(expiredCount.count);
-
-                setTotalLicenseCount(inactiveCount.count + activeCount.count);
-            } else if (currentUser?.licensed && tenant.kind === "customer") {
-                const active = await fetch(
-                    `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
-                );
-                const activeCount = await active.json();
-                setActiveLicenseCount(activeCount.count);
-
-                const completed = await fetch(
-                    `/api/license/count?status=completed&customerAcronisId=${tenant.id}`,
-                );
-                const completedCount = await completed.json();
-                setCompletedLicenseCount(completedCount.count);
-            }
+        error: usagesError,
+        trigger: usagesTrigger,
+    } = useSWRMutation(
+        `/api/acronis/tenants/${tenant?.id}/usages`,
+        async (url) => {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch usages");
+            return response.json();
         },
-    });
+        {
+            onSuccess: async (data) => {
+                setUsagesPerWorkload(
+                    data?.items?.filter(
+                        (u: TenantUsage) =>
+                            u.edition == "pck_per_workload" &&
+                            u.value > 0 &&
+                            u.usage_name != "storage" &&
+                            u.usage_name != "storage_total",
+                    ),
+                );
+                setUsagesPerGB(
+                    data?.items?.filter(
+                        (u: TenantUsage) =>
+                            u.edition == "pck_per_gigabyte" &&
+                            u.value > 0 &&
+                            u.usage_name != "storage" &&
+                            u.usage_name != "storage_total",
+                    ),
+                );
+
+                if (currentUser?.licensed && tenant.kind === "partner") {
+                    const inactive = await fetch(
+                        `/api/license/count?status=inactive&partnerAcronisId=${tenant.id}`,
+                    );
+                    const inactiveCount = await inactive.json();
+                    setInactiveLicenseCount(inactiveCount.count);
+
+                    const active = await fetch(
+                        `/api/license/count?status=active&partnerAcronisId=${tenant.id}`,
+                    );
+                    const activeCount = await active.json();
+                    setActiveLicenseCount(activeCount.count);
+
+                    const completed = await fetch(
+                        `/api/license/count?status=completed&partnerAcronisId=${tenant.id}`,
+                    );
+                    const completedCount = await completed.json();
+                    setCompletedLicenseCount(completedCount.count);
+
+                    const expired = await fetch(
+                        `/api/license/count?status=expired&partnerAcronisId=${tenant.id}`,
+                    );
+                    const expiredCount = await expired.json();
+                    setExpiredLicenseCount(expiredCount.count);
+
+                    setTotalLicenseCount(
+                        inactiveCount.count + activeCount.count,
+                    );
+                } else if (
+                    currentUser?.licensed &&
+                    tenant.kind === "customer"
+                ) {
+                    const active = await fetch(
+                        `/api/license/count?status=active&customerAcronisId=${tenant.id}`,
+                    );
+                    const activeCount = await active.json();
+                    setActiveLicenseCount(activeCount.count);
+
+                    const completed = await fetch(
+                        `/api/license/count?status=completed&customerAcronisId=${tenant.id}`,
+                    );
+                    const completedCount = await completed.json();
+                    setCompletedLicenseCount(completedCount.count);
+                }
+            },
+        },
+    );
 
     useSWR(
         `/api/acronis/tenants/${tenant?.id}/usages?usage_names=local_storage,storage`,
@@ -181,6 +179,50 @@ export default function GeneralTab({ t, tenant }: Props) {
         {
             revalidateOnFocus: false,
             onSuccess: async (data) => {
+                setStoragePerWorkload(
+                    data?.items?.find(
+                        (u: TenantUsage) =>
+                            u.usage_name === "storage" &&
+                            u.edition === "pck_per_workload" &&
+                            u.infra_id ===
+                                "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                    ),
+                );
+                setStoragePerGB(
+                    data?.items?.find(
+                        (u: TenantUsage) =>
+                            u.usage_name === "storage" &&
+                            u.edition === "pck_per_gigabyte" &&
+                            u.infra_id ===
+                                "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                    ),
+                );
+                setLocalStorage(
+                    data?.items?.find(
+                        (u: TenantUsage) => u.usage_name === "local_storage",
+                    ),
+                );
+
+                const workload = data?.items?.find(
+                    (u: TenantUsage) =>
+                        u.usage_name == "storage" &&
+                        u.edition == "pck_per_workload",
+                );
+                const gigabyte = data?.items?.find(
+                    (u: TenantUsage) =>
+                        u.usage_name == "storage" &&
+                        u.edition == "pck_per_gigabyte",
+                );
+                setSelectedModel(
+                    !workload?.value &&
+                        !workload?.offering_item?.quota?.value &&
+                        (gigabyte?.value ||
+                            gigabyte?.offering_item?.quota?.value)
+                        ? "perGB"
+                        : "perWorkload",
+                );
+
+                usagesTrigger();
             },
         },
     );
@@ -267,6 +309,12 @@ export default function GeneralTab({ t, tenant }: Props) {
     }
     //#endregion
 
+    if (usagesError)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     return (
         <div className="container grid grid-cols-3 gap-4">
             {usages?.items?.some(
@@ -550,40 +598,24 @@ export default function GeneralTab({ t, tenant }: Props) {
                         title={t("storageCardTitle")}
                         description={t("storageCardDescriptionPW")}
                         model={t("perWorkload")}
-                        usage={
-                            usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_workload",
-                            )?.value
-                        }
-                        quota={
-                            usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_workload",
-                            )?.offering_item?.quota
-                        }
+                        usage={storagePerWorkload?.value as number}
+                        quota={storagePerWorkload?.offering_item?.quota as any}
+                    />
+
+                    <UsageCard
+                        title="local_storage"
+                        description={t("localStorageDescription")}
+                        unit="bytes"
+                        value={localStorage?.value as number}
+                        quota={null as any}
                     />
 
                     <StorageCard
                         title={t("storageCardTitle")}
                         description={t("storageCardDescriptionGB")}
                         model={t("perGB")}
-                        usage={
-                            usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_gigabyte",
-                            )?.value
-                        }
-                        quota={
-                            usages?.items?.find(
-                                (u: TenantUsage) =>
-                                    u.usage_name == "storage" &&
-                                    u.edition == "pck_per_gigabyte",
-                            )?.offering_item?.quota
-                        }
+                        usage={storagePerGB?.value as number}
+                        quota={storagePerGB?.offering_item?.quota as any}
                     />
 
                     {/* {currentUser?.licensed && tenant.kind == "partner" && (

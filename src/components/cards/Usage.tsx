@@ -13,6 +13,7 @@ import {
     LuComputer,
     LuDatabase,
     LuDatabaseBackup,
+    LuHardDrive,
     LuInbox,
     LuMailbox,
     LuMonitor,
@@ -27,7 +28,6 @@ type Props = {
     quota: {
         value: number | null;
     };
-    icon?: React.ReactNode;
 };
 
 export default function UsageCard({
@@ -36,7 +36,6 @@ export default function UsageCard({
     unit,
     value,
     quota,
-    icon,
 }: Props) {
     const t = useTranslations("Components.Usage");
 
@@ -117,7 +116,18 @@ export default function UsageCard({
                                 "size-5",
                             )}
                         />
-                    ) : (
+                    ) : title?.includes("local_storage") ? (
+                        <LuHardDrive
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ): (
                         <LuDatabaseBackup
                             className={cn(
                                 quotaExceeded
