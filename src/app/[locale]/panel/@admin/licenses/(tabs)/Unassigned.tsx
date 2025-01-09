@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -50,6 +49,8 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
+import  createZPL from "@/utils/createZPL";
+import printZPL from "@/utils/printZPL";
 
 const licenseFormSchema = z.object({
     productId: z.string({
@@ -123,49 +124,48 @@ export default function UnassignedTab() {
                     toast({
                         description: res.message,
                     });
-
-                    // ZPL Export
-                    const labels = res.data.map((obj: any) => {
-                        return `^XA
-^CF0,20
-^FO30,20^FD${products?.find((p) => p.id === obj.productId)?.name}^FS
-^FO320,20^FDExp: ${DateFormat(obj.expiresAt).replaceAll(".", "/")}^FS
-^BY2,2,40
-^FO30,45^BC^FD${obj.serialNo}^FS
-^XZ
-
-^XA
-^CF0,15
-^FO165,10^FDS/N: ${obj.serialNo}^FS
-^BY2,2,40
-^FO50,28^BC,60^FD${obj.key}^FS
-^XZ`;
-                    });
-                    const zplContent = labels.join("\n\n");
-
-                    const blob = new Blob([zplContent], {
-                        type: "text/zpl;charset=utf-8;",
-                    });
-
-                    const zplLink = document.createElement("a");
-                    const url = URL.createObjectURL(blob);
-                    zplLink.setAttribute("href", url);
-                    zplLink.setAttribute(
-                        "download",
-                        `${
-                            products?.find((p) => p.id === values.productId)
-                                ?.name
-                        } Labels - ${DateTimeFormat(
-                            new Date().toISOString(),
-                        )}.zpl`,
-                    );
-                    document.body.appendChild(zplLink);
-                    zplLink.click();
-                    document.body.removeChild(zplLink);
-
                     setOpen(false);
                     form.reset();
                     mutate();
+
+                    // ZPL Export
+//                     const labels = res.data.map((obj: any) => {
+//                         return `^XA
+// ^CF0,20
+// ^FO30,20^FD${products?.find((p) => p.id === obj.productId)?.name}^FS
+// ^FO320,20^FDExp: ${DateFormat(obj.expiresAt).replaceAll(".", "/")}^FS
+// ^BY2,2,40
+// ^FO30,45^BC^FD${obj.serialNo}^FS
+// ^XZ
+
+// ^XA
+// ^CF0,15
+// ^FO165,10^FDS/N: ${obj.serialNo}^FS
+// ^BY2,2,40
+// ^FO50,28^BC,60^FD${obj.key}^FS
+// ^XZ`;
+//                     });
+//                     const zplContent = labels.join("\n\n");
+
+//                     const blob = new Blob([zplContent], {
+//                         type: "text/zpl;charset=utf-8;",
+//                     });
+
+//                     const zplLink = document.createElement("a");
+//                     const url = URL.createObjectURL(blob);
+//                     zplLink.setAttribute("href", url);
+//                     zplLink.setAttribute(
+//                         "download",
+//                         `${
+//                             products?.find((p) => p.id === values.productId)
+//                                 ?.name
+//                         } Labels - ${DateTimeFormat(
+//                             new Date().toISOString(),
+//                         )}.zpl`,
+//                     );
+//                     document.body.appendChild(zplLink);
+//                     zplLink.click();
+//                     document.body.removeChild(zplLink);
                 } else {
                     toast({
                         variant: "destructive",
@@ -434,6 +434,30 @@ export default function UnassignedTab() {
                             }}
                         >
                             {t("assignToPartner")}
+                        </DropdownMenuItem>,
+                        <DropdownMenuItem
+                            key="print"
+                            onClick={async () => {
+                                const zpl: string = await createZPL(selectedIds);
+                                console.log(zpl);
+                                await printZPL(zpl).then((res: any) => {
+                                    if (res.ok) {
+                                        toast({
+                                            description:
+                                                "Sended to printed successfully!",
+                                        });
+                                        mutate();
+                                    } else {
+                                        toast({
+                                            variant: "destructive",
+                                            title: t("errorTitle"),
+                                            description: res?.message?.message,
+                                        });
+                                    }
+                                });
+                            }}
+                        >
+                            {t("printSelected")}
                         </DropdownMenuItem>,
                         <DropdownMenuItem
                             key="delete"

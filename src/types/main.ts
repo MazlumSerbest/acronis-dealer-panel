@@ -57,6 +57,7 @@ type License = Entity & {
     serialNo: string;
     expiresAt?: string;
     activatedAt?: string;
+    product?: Product;
 };
 
 type LicenseHistory = {

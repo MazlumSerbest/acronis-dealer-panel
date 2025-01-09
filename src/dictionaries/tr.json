@@ -296,6 +296,7 @@
         "partners": "Partnerler",
         "quotaEdit": "Kotayı Düzenle",
         "deleteSelected": "Seçilenleri Sil",
+        "printSelected": "Seçilenleri Yazdır",
         "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
         "createCustomer": "Müşteri Oluştur",
         "localStorage": "Yerel Depolama",
