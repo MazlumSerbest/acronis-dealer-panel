@@ -298,7 +298,7 @@
         "deleteSelected": "Seçilenleri Sil",
         "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
         "createCustomer": "Müşteri Oluştur",
-        "localStorage": "Yerel Yedek Depolama",
+        "localStorage": "Yerel Depolama",
         "localStorageDescription": "Yerel yedek depolama alanı kullanımı"
     },
     "SignIn": {
@@ -602,7 +602,7 @@
             "quotaExceeded": "Kota Aşımı!"
         },
         "Usage": {
-            "local_storage": "Yerel Yedek Depolama",
+            "local_storage": "Yerel Depolama",
             "workstation_storage": "Çalışma İstasyonu Depolama",
             "server_storage": "Sunucu Depolama",
             "vm_storage": "Sanal Makine Depolama",

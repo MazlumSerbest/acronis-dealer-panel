@@ -173,7 +173,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         },
     );
 
-    useSWR(
+    const { isLoading: storageIsLoading } = useSWR(
         `/api/acronis/tenants/${tenant?.id}/usages?usage_names=local_storage,storage`,
         null,
         {
@@ -588,7 +588,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Card>
             </div>
 
-            {!usages ? (
+            {storageIsLoading ? (
                 <Skeleton>
                     <div className="h-full w-full rounded-xl bg-slate-200"></div>
                 </Skeleton>
@@ -609,23 +609,21 @@ export default function GeneralTab({ t, tenant }: Props) {
                         usage={storagePerGB?.value as number}
                         quota={storagePerGB?.offering_item?.quota as any}
                     />
-
-                    {/* {currentUser?.licensed && tenant.kind == "partner" && (
-                        <SmallCard
-                            title={t("totalLicense")}
-                            icon={
-                                <LuSigma className="size-5 text-muted-foreground" />
-                            }
-                            value={totalLicenseCount}
-                            description={`${t(
-                                "totalSmallCardDescription",
-                            )} (${t("active")} ${t("and")} ${t("passive")})`}
-                        />
-                    )} */}
                 </div>
             )}
 
-            <div className="col-span-full md:col-span-1"> 
+            <div className="col-span-full md:col-span-1">
+                <SmallCard
+                    title={t("totalLicense")}
+                    icon={<LuSigma className="size-5 text-muted-foreground" />}
+                    value={totalLicenseCount}
+                    description={`${t("totalSmallCardDescription")} (${t(
+                        "active",
+                    )} ${t("and")} ${t("passive")})`}
+                />
+            </div>
+
+            <div className="col-span-full md:col-span-1">
                 <UsageCard
                     title="local_storage"
                     description={t("localStorageDescription")}
