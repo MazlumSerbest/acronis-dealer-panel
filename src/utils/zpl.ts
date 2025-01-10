@@ -27,7 +27,7 @@ export async function printZPL(zpl: string) {
 }
 
 export async function createPDF(zpl: string) {
-    await fetch("http://api.labelary.com/v1/printers/8dpmm/labels/2.36x0.59", {
+    await fetch(`${window.location.protocol}//api.labelary.com/v1/printers/8dpmm/labels/2.36x0.59`, {
         method: "POST",
         headers: {
             Accept: "application/pdf",
