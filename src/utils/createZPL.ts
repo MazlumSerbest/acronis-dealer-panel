@@ -2,7 +2,7 @@
 import prisma from "./db";
 import { DateFormat } from "./date";
 
-export default async function createZPLFromIds(ids: string[]) {
+export async function createZPLFromIds(ids: string[]) {
     const licenses: any = await prisma.license.findMany({
         where: {
             id: { in: ids },

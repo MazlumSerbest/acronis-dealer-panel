@@ -50,8 +50,8 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
-import createZPLFromIds, { createZPLFromObjects } from "@/utils/createZPL";
-import printZPL from "@/utils/printZPL";
+import { createZPLFromIds, createZPLFromObjects } from "@/utils/createZPL";
+import { createPDF, printZPL } from "@/utils/zpl";
 import { Switch } from "@/components/ui/switch";
 
 const licenseFormSchema = z.object({
@@ -82,7 +82,7 @@ type AssignFormValues = z.infer<typeof assignFormSchema>;
 
 export default function UnassignedTab() {
     const t = useTranslations("General");
-    const tf = useTranslations("FormMessages.License")
+    const tf = useTranslations("FormMessages.License");
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
 
@@ -137,21 +137,23 @@ export default function UnassignedTab() {
                             res.data,
                         );
 
-                        await printZPL(zpl).then((printRes: any) => {
-                            if (printRes.ok) {
-                                toast({
-                                    description:
-                                        "Sended to printed successfully!",
-                                });
-                                mutate();
-                            } else {
-                                toast({
-                                    variant: "destructive",
-                                    title: t("errorTitle"),
-                                    description: printRes?.message?.message,
-                                });
-                            }
-                        });
+                        createPDF(zpl);
+
+                        // await printZPL(zpl).then((printRes: any) => {
+                        //     if (printRes.ok) {
+                        //         toast({
+                        //             description:
+                        //                 "Sended to printed successfully!",
+                        //         });
+                        //         mutate();
+                        //     } else {
+                        //         toast({
+                        //             variant: "destructive",
+                        //             title: t("errorTitle"),
+                        //             description: printRes?.message?.message,
+                        //         });
+                        //     }
+                        // });
                     }
                 } else {
                     toast({
@@ -425,25 +427,36 @@ export default function UnassignedTab() {
                         <DropdownMenuItem
                             key="print"
                             onClick={async () => {
-                                const zpl: string = await createZPLFromIds(
+                                if (selectedIds.length > 25) {
+                                    toast({
+                                        variant: "destructive",
+                                        title: t("errorTitle"),
+                                        description: t("printLimit"),
+                                    });
+                                    return;
+                                }
+
+                                const zpl: any = await createZPLFromIds(
                                     selectedIds,
                                 );
 
-                                await printZPL(zpl).then((res: any) => {
-                                    if (res.ok) {
-                                        toast({
-                                            description:
-                                                "Sended to printed successfully!",
-                                        });
-                                        mutate();
-                                    } else {
-                                        toast({
-                                            variant: "destructive",
-                                            title: t("errorTitle"),
-                                            description: res?.message?.message,
-                                        });
-                                    }
-                                });
+                                createPDF(zpl);
+
+                                // await printZPL(zpl).then((res: any) => {
+                                //     if (res.ok) {
+                                //         toast({
+                                //             description:
+                                //                 "Sended to printed successfully!",
+                                //         });
+                                //         mutate();
+                                //     } else {
+                                //         toast({
+                                //             variant: "destructive",
+                                //             title: t("errorTitle"),
+                                //             description: res?.message?.message,
+                                //         });
+                                //     }
+                                // });
                             }}
                         >
                             {t("printSelected")}
@@ -573,7 +586,9 @@ export default function UnassignedTab() {
                                 render={({ field }) => (
                                     <FormItem className="flex flex-row items-center justify-between">
                                         <div className="space-y-0.5">
-                                            <FormLabel>{t("sendToPrint")}</FormLabel>
+                                            <FormLabel>
+                                                {t("sendToPrint")}
+                                            </FormLabel>
                                             <FormDescription>
                                                 {tf("print.description")}
                                             </FormDescription>

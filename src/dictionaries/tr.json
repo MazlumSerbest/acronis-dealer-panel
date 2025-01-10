@@ -301,7 +301,8 @@
         "createCustomer": "Müşteri Oluştur",
         "localStorage": "Yerel Depolama",
         "localStorageDescription": "Yerel yedek depolama alanı kullanımı",
-        "sendToPrint": "Yazdırmaya Gönder"
+        "sendToPrint": "Yazdırmaya Gönder",
+        "printLimit": "Maksimum 25 lisans yazdırabilirsiniz."
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -456,7 +457,7 @@
                 "regex": "Geçerli bir lisans anahtarı olmalıdır"
             },
             "print": {
-                "description": "Lisansları direkt olarak yazdırmak için bu değeri işaretleyin. Eğer işaretlediyseniz yazıcı ve Browser Print programının açık olduğundan emin olun."
+                "description": "Lisansları oluşturulduktan sonra direkt olarak yazdırmak için bu değeri işaretleyin. Eğer işaretlediyseniz yazıcı ve Browser Print programının açık olduğundan emin olun."
             }
         },
         "Course": {

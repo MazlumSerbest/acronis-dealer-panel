@@ -301,7 +301,8 @@
         "createCustomer": "Create Customer",
         "localStorage": "Local Storage",
         "localStorageDescription": "Local storage usage",
-        "sendToPrint": "Send to Print"
+        "sendToPrint": "Send to Print",
+        "printLimit": "You can print a maximum of 25 licenses."
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -456,7 +457,7 @@
                 "regex": "Must be a valid key"
             },
             "print": {
-                "description": "Check this value to print licenses directly. If checked, make sure the printer and Browser Print program are open."
+                "description": "Check this value to print created licenses directly. If checked, make sure the printer and Browser Print program are open."
             }
         },
         "Course": {
