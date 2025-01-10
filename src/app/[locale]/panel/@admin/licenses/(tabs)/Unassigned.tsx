@@ -31,6 +31,7 @@ import {
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -49,8 +50,9 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
-import  createZPL from "@/utils/createZPL";
+import createZPLFromIds, { createZPLFromObjects } from "@/utils/createZPL";
 import printZPL from "@/utils/printZPL";
+import { Switch } from "@/components/ui/switch";
 
 const licenseFormSchema = z.object({
     productId: z.string({
@@ -63,6 +65,7 @@ const licenseFormSchema = z.object({
         .min(1, "License.piece.minLength")
         .max(2000, "License.piece.maxLength"),
     expiresAt: z.date().optional(),
+    print: z.boolean().optional(),
 });
 
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
@@ -79,6 +82,7 @@ type AssignFormValues = z.infer<typeof assignFormSchema>;
 
 export default function UnassignedTab() {
     const t = useTranslations("General");
+    const tf = useTranslations("FormMessages.License")
     const { toast } = useToast();
     const { user: currentUser } = useUserStore();
 
@@ -119,7 +123,7 @@ export default function UnassignedTab() {
             body: JSON.stringify(values),
         })
             .then((res) => res.json())
-            .then((res) => {
+            .then(async (res) => {
                 if (res.ok) {
                     toast({
                         description: res.message,
@@ -128,44 +132,27 @@ export default function UnassignedTab() {
                     form.reset();
                     mutate();
 
-                    // ZPL Export
-//                     const labels = res.data.map((obj: any) => {
-//                         return `^XA
-// ^CF0,20
-// ^FO30,20^FD${products?.find((p) => p.id === obj.productId)?.name}^FS
-// ^FO320,20^FDExp: ${DateFormat(obj.expiresAt).replaceAll(".", "/")}^FS
-// ^BY2,2,40
-// ^FO30,45^BC^FD${obj.serialNo}^FS
-// ^XZ
+                    if (values.print) {
+                        const zpl: string = await createZPLFromObjects(
+                            res.data,
+                        );
 
-// ^XA
-// ^CF0,15
-// ^FO165,10^FDS/N: ${obj.serialNo}^FS
-// ^BY2,2,40
-// ^FO50,28^BC,60^FD${obj.key}^FS
-// ^XZ`;
-//                     });
-//                     const zplContent = labels.join("\n\n");
-
-//                     const blob = new Blob([zplContent], {
-//                         type: "text/zpl;charset=utf-8;",
-//                     });
-
-//                     const zplLink = document.createElement("a");
-//                     const url = URL.createObjectURL(blob);
-//                     zplLink.setAttribute("href", url);
-//                     zplLink.setAttribute(
-//                         "download",
-//                         `${
-//                             products?.find((p) => p.id === values.productId)
-//                                 ?.name
-//                         } Labels - ${DateTimeFormat(
-//                             new Date().toISOString(),
-//                         )}.zpl`,
-//                     );
-//                     document.body.appendChild(zplLink);
-//                     zplLink.click();
-//                     document.body.removeChild(zplLink);
+                        await printZPL(zpl).then((printRes: any) => {
+                            if (printRes.ok) {
+                                toast({
+                                    description:
+                                        "Sended to printed successfully!",
+                                });
+                                mutate();
+                            } else {
+                                toast({
+                                    variant: "destructive",
+                                    title: t("errorTitle"),
+                                    description: printRes?.message?.message,
+                                });
+                            }
+                        });
+                    }
                 } else {
                     toast({
                         variant: "destructive",
@@ -438,8 +425,10 @@ export default function UnassignedTab() {
                         <DropdownMenuItem
                             key="print"
                             onClick={async () => {
-                                const zpl: string = await createZPL(selectedIds);
-                                console.log(zpl);
+                                const zpl: string = await createZPLFromIds(
+                                    selectedIds,
+                                );
+
                                 await printZPL(zpl).then((res: any) => {
                                     if (res.ok) {
                                         toast({
@@ -574,6 +563,27 @@ export default function UnassignedTab() {
                                                     ?.expiresAt
                                             }
                                         />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="print"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>{t("sendToPrint")}</FormLabel>
+                                            <FormDescription>
+                                                {tf("print.description")}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
                                     </FormItem>
                                 )}
                             />

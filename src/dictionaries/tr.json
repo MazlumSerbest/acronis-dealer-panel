@@ -300,7 +300,8 @@
         "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
         "createCustomer": "Müşteri Oluştur",
         "localStorage": "Yerel Depolama",
-        "localStorageDescription": "Yerel yedek depolama alanı kullanımı"
+        "localStorageDescription": "Yerel yedek depolama alanı kullanımı",
+        "sendToPrint": "Yazdırmaya Gönder"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -453,6 +454,9 @@
             "key": {
                 "required": "Lisans anahtarı zorunludur",
                 "regex": "Geçerli bir lisans anahtarı olmalıdır"
+            },
+            "print": {
+                "description": "Lisansları direkt olarak yazdırmak için bu değeri işaretleyin. Eğer işaretlediyseniz yazıcı ve Browser Print programının açık olduğundan emin olun."
             }
         },
         "Course": {

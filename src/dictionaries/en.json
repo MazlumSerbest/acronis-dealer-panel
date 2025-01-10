@@ -300,7 +300,8 @@
         "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?",
         "createCustomer": "Create Customer",
         "localStorage": "Local Storage",
-        "localStorageDescription": "Local storage usage"
+        "localStorageDescription": "Local storage usage",
+        "sendToPrint": "Send to Print"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -453,6 +454,9 @@
             "key": {
                 "required": "License key is required",
                 "regex": "Must be a valid key"
+            },
+            "print": {
+                "description": "Check this value to print licenses directly. If checked, make sure the printer and Browser Print program are open."
             }
         },
         "Course": {
