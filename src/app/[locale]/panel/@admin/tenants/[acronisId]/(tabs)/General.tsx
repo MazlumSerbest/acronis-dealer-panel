@@ -132,6 +132,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [localStorage, setLocalStorage] = useState<TenantUsage>();
 
     const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+    const [perWorkloadEnabled, setPerWorkloadEnabled] =
+        useState<boolean>(false);
+    const [perGBEnabled, setPerGBEnabled] = useState<boolean>(false);
 
     const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
@@ -282,6 +285,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                             gigabyte?.offering_item?.quota?.value)
                         ? "perGB"
                         : "perWorkload",
+                );
+                setPerWorkloadEnabled(
+                    workload?.value || workload?.offering_item?.quota?.value,
+                );
+                setPerGBEnabled(
+                    gigabyte?.value || gigabyte?.offering_item?.quota?.value,
                 );
 
                 usagesTrigger();
@@ -926,166 +935,209 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Skeleton>
             ) : (
                 <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-3 justify-start">
-                    <StorageCard
-                        title={t("storageCardTitle")}
-                        description={t("storageCardDescriptionPW")}
-                        model={t("perWorkload")}
-                        usage={storagePerWorkload?.value as number}
-                        quota={storagePerWorkload?.offering_item?.quota as any}
-                        action={
-                            <Popover
-                                open={openQuotaDialog}
-                                onOpenChange={setOpenQuotaDialog}
-                            >
-                                <PopoverTrigger asChild>
-                                    <Button
-                                        size="sm"
-                                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                    >
-                                        {t("quotaEdit")}
-                                        <LuGauge className="size-4" />
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent>
-                                    <form
-                                        action={async (formData) => {
-                                            setSubmittingQuota(true);
-                                            const quota = formData.get("quota");
-                                            const unit = formData.get("unit");
+                    {perWorkloadEnabled && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionPW")}
+                            model={t("perWorkload")}
+                            usage={storagePerWorkload?.value as number}
+                            quota={
+                                storagePerWorkload?.offering_item?.quota as any
+                            }
+                            action={
+                                <Popover
+                                    open={openQuotaDialog}
+                                    onOpenChange={setOpenQuotaDialog}
+                                >
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            size="sm"
+                                            className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                        >
+                                            {t("quotaEdit")}
+                                            <LuGauge className="size-4" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent>
+                                        <form
+                                            action={async (formData) => {
+                                                setSubmittingQuota(true);
+                                                const quota =
+                                                    formData.get("quota");
+                                                const unit =
+                                                    formData.get("unit");
 
-                                            const bytes = parseBytes(
-                                                Number(quota),
-                                                unit as string,
-                                            );
+                                                const bytes = parseBytes(
+                                                    Number(quota),
+                                                    unit as string,
+                                                );
 
-                                            await fetch(
-                                                `/api/acronis/tenants/${tenant.id}/offeringItems`,
-                                                {
-                                                    method: "PUT",
-                                                    body: JSON.stringify({
-                                                        name: "pw_base_storage",
-                                                        edition:
-                                                            "pck_per_workload",
-                                                        bytes: bytes,
-                                                    }),
-                                                },
-                                            )
-                                                .then((res) => res.json())
-                                                .then((res) => {
-                                                    if (res.ok) {
-                                                        toast({
-                                                            description:
-                                                                res.message,
-                                                        });
-                                                        storageMutate();
-                                                    } else {
-                                                        toast({
-                                                            variant:
-                                                                "destructive",
-                                                            title: t(
-                                                                "errorTitle",
-                                                            ),
-                                                            description:
-                                                                res.message,
-                                                        });
-                                                    }
-                                                })
-                                                .finally(() => {
-                                                    setSubmittingQuota(false);
-                                                    setOpenQuotaDialog(false);
-                                                });
-                                        }}
-                                    >
-                                        <div className="grid gap-2">
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="quota">
-                                                    {t("quota")}
-                                                </Label>
-                                                <Input
-                                                    required
-                                                    name="quota"
-                                                    type="number"
-                                                    className="col-span-2 h-8"
-                                                />
-                                            </div>
-                                            <div className="grid grid-cols-3 items-center gap-4">
-                                                <Label htmlFor="unit">
-                                                    {t("unit")}
-                                                </Label>
-                                                <Select
-                                                    required
-                                                    name="unit"
-                                                    defaultValue="GB"
-                                                >
-                                                    <SelectTrigger className="col-span-2 h-8">
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectGroup>
-                                                            {/* <SelectLabel>
+                                                await fetch(
+                                                    `/api/acronis/tenants/${tenant.id}/offeringItems`,
+                                                    {
+                                                        method: "PUT",
+                                                        body: JSON.stringify({
+                                                            name: "pw_base_storage",
+                                                            edition:
+                                                                "pck_per_workload",
+                                                            bytes: bytes,
+                                                        }),
+                                                    },
+                                                )
+                                                    .then((res) => res.json())
+                                                    .then((res) => {
+                                                        if (res.ok) {
+                                                            toast({
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                            storageMutate();
+                                                        } else {
+                                                            toast({
+                                                                variant:
+                                                                    "destructive",
+                                                                title: t(
+                                                                    "errorTitle",
+                                                                ),
+                                                                description:
+                                                                    res.message,
+                                                            });
+                                                        }
+                                                    })
+                                                    .finally(() => {
+                                                        setSubmittingQuota(
+                                                            false,
+                                                        );
+                                                        setOpenQuotaDialog(
+                                                            false,
+                                                        );
+                                                    });
+                                            }}
+                                        >
+                                            <div className="grid gap-2">
+                                                <div className="grid grid-cols-3 items-center gap-4">
+                                                    <Label htmlFor="quota">
+                                                        {t("quota")}
+                                                    </Label>
+                                                    <Input
+                                                        required
+                                                        name="quota"
+                                                        type="number"
+                                                        className="col-span-2 h-8"
+                                                    />
+                                                </div>
+                                                <div className="grid grid-cols-3 items-center gap-4">
+                                                    <Label htmlFor="unit">
+                                                        {t("unit")}
+                                                    </Label>
+                                                    <Select
+                                                        required
+                                                        name="unit"
+                                                        defaultValue="GB"
+                                                    >
+                                                        <SelectTrigger className="col-span-2 h-8">
+                                                            <SelectValue />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectGroup>
+                                                                {/* <SelectLabel>
                                                                     Units
                                                                 </SelectLabel> */}
-                                                            <SelectItem value="MB">
-                                                                MB
-                                                            </SelectItem>
-                                                            <SelectItem value="GB">
-                                                                GB
-                                                            </SelectItem>
-                                                            <SelectItem value="TB">
-                                                                TB
-                                                            </SelectItem>
-                                                        </SelectGroup>
-                                                    </SelectContent>
-                                                </Select>
+                                                                <SelectItem value="MB">
+                                                                    MB
+                                                                </SelectItem>
+                                                                <SelectItem value="GB">
+                                                                    GB
+                                                                </SelectItem>
+                                                                <SelectItem value="TB">
+                                                                    TB
+                                                                </SelectItem>
+                                                            </SelectGroup>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </div>
+                                                <Button
+                                                    disabled={submittingQuota}
+                                                    type="submit"
+                                                    size="sm"
+                                                    className="w-full bg-green-600 hover:bg-green-600/90"
+                                                >
+                                                    {t("save")}
+                                                    {submittingQuota && (
+                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    )}
+                                                </Button>
                                             </div>
-                                            <Button
-                                                disabled={submittingQuota}
-                                                type="submit"
-                                                size="sm"
-                                                className="w-full bg-green-600 hover:bg-green-600/90"
-                                            >
-                                                {t("save")}
-                                                {submittingQuota && (
-                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
-                                                )}
-                                            </Button>
-                                        </div>
-                                    </form>
-                                </PopoverContent>
-                            </Popover>
-                        }
-                    />
+                                        </form>
+                                    </PopoverContent>
+                                </Popover>
+                            }
+                        />
+                    )}
 
-                    <StorageCard
-                        title={t("storageCardTitle")}
-                        description={t("storageCardDescriptionGB")}
-                        model={t("perGB")}
-                        usage={storagePerGB?.value as number}
-                        quota={storagePerGB?.offering_item?.quota as any}
-                    />
+                    {perGBEnabled && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionGB")}
+                            model={t("perGB")}
+                            usage={storagePerGB?.value as number}
+                            quota={storagePerGB?.offering_item?.quota as any}
+                        />
+                    )}
+
+                    {tenant.kind === "customer" && (
+                        <>
+                            <UsageCard
+                                title="local_storage"
+                                description={t("localStorageDescription")}
+                                unit="bytes"
+                                value={localStorage?.value as number}
+                                quota={null as any}
+                            />
+                            
+                            <SmallCard
+                                title={t("totalLicense")}
+                                icon={
+                                    <LuSigma className="size-5 text-muted-foreground" />
+                                }
+                                value={totalLicenseCount}
+                                description={`${t(
+                                    "totalSmallCardDescription",
+                                )} (${t("active")} ${t("and")} ${t(
+                                    "passive",
+                                )})`}
+                            />
+                        </>
+                    )}
                 </div>
             )}
 
-            <div className="col-span-full md:col-span-1">
-                <SmallCard
-                    title={t("totalLicense")}
-                    icon={<LuSigma className="size-5 text-muted-foreground" />}
-                    value={totalLicenseCount}
-                    description={`${t("totalSmallCardDescription")} (${t(
-                        "active",
-                    )} ${t("and")} ${t("passive")})`}
-                />
-            </div>
+            {tenant.kind === "partner" && (
+                <>
+                    <div className="col-span-full md:col-span-1">
+                        <SmallCard
+                            title={t("totalLicense")}
+                            icon={
+                                <LuSigma className="size-5 text-muted-foreground" />
+                            }
+                            value={totalLicenseCount}
+                            description={`${t(
+                                "totalSmallCardDescription",
+                            )} (${t("active")} ${t("and")} ${t("passive")})`}
+                        />
+                    </div>
 
-            <div className="col-span-full md:col-span-1">
-                <UsageCard
-                    title="local_storage"
-                    description={t("localStorageDescription")}
-                    unit="bytes"
-                    value={localStorage?.value as number}
-                    quota={null as any}
-                />
-            </div>
+                    <div className="col-span-full md:col-span-1">
+                        <UsageCard
+                            title="local_storage"
+                            description={t("localStorageDescription")}
+                            unit="bytes"
+                            value={localStorage?.value as number}
+                            quota={null as any}
+                        />
+                    </div>
+                </>
+            )}
 
             <div className="col-span-full">
                 <h2 className="font-medium text-xl">{t("licenses")}</h2>
@@ -1158,18 +1210,21 @@ export default function GeneralTab({ t, tenant }: Props) {
             <div className="col-span-full">
                 <h2 className="font-medium text-xl">{t("usages")}</h2>
             </div>
-            
+
             <Tabs
                 value={selectedModel}
                 onValueChange={setSelectedModel}
                 className="col-span-full"
             >
-                <TabsList>
-                    <TabsTrigger value={"perWorkload"}>
-                        {t("perWorkload")}
-                    </TabsTrigger>
-                    <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
-                </TabsList>
+                {tenant.kind === "partner" && (
+                    <TabsList>
+                        <TabsTrigger value={"perWorkload"}>
+                            {t("perWorkload")}
+                        </TabsTrigger>
+                        <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
+                    </TabsList>
+                )}
+
                 {!usages ? (
                     <div className="col-span-3 mt-2">
                         <Skeleton>
@@ -1178,7 +1233,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                     </div>
                 ) : (
                     <>
-                        <TabsContent value={"perWorkload"}>
+                        <TabsContent
+                            value={"perWorkload"}
+                            className={
+                                tenant.kind === "customer" ? "-mt-1" : ""
+                            }
+                        >
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
@@ -1212,7 +1272,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                             </div>
                         </TabsContent>
 
-                        <TabsContent value={"perGB"}>
+                        <TabsContent
+                            value={"perGB"}
+                            className={
+                                tenant.kind === "customer" ? "-mt-1" : ""
+                            }
+                        >
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB

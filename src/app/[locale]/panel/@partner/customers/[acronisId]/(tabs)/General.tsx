@@ -72,6 +72,9 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [localStorage, setLocalStorage] = useState<TenantUsage>();
 
     const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+    const [perWorkloadEnabled, setPerWorkloadEnabled] =
+        useState<boolean>(false);
+    const [perGBEnabled, setPerGBEnabled] = useState<boolean>(false);
 
     const [inactiveLicenseCount, setInactiveLicenseCount] = useState<number>(0);
     const [activeLicenseCount, setActiveLicenseCount] = useState<number>(0);
@@ -220,6 +223,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                             gigabyte?.offering_item?.quota?.value)
                         ? "perGB"
                         : "perWorkload",
+                );
+                setPerWorkloadEnabled(
+                    workload?.value || workload?.offering_item?.quota?.value,
+                );
+                setPerGBEnabled(
+                    gigabyte?.value || gigabyte?.offering_item?.quota?.value,
                 );
 
                 usagesTrigger();
@@ -594,44 +603,91 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Skeleton>
             ) : (
                 <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-3 justify-start">
-                    <StorageCard
-                        title={t("storageCardTitle")}
-                        description={t("storageCardDescriptionPW")}
-                        model={t("perWorkload")}
-                        usage={storagePerWorkload?.value as number}
-                        quota={storagePerWorkload?.offering_item?.quota as any}
-                    />
+                    {perWorkloadEnabled && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionPW")}
+                            model={t("perWorkload")}
+                            usage={storagePerWorkload?.value as number}
+                            quota={
+                                storagePerWorkload?.offering_item?.quota as any
+                            }
+                        />
+                    )}
 
-                    <StorageCard
-                        title={t("storageCardTitle")}
-                        description={t("storageCardDescriptionGB")}
-                        model={t("perGB")}
-                        usage={storagePerGB?.value as number}
-                        quota={storagePerGB?.offering_item?.quota as any}
-                    />
+                    {perGBEnabled && (
+                        <StorageCard
+                            title={t("storageCardTitle")}
+                            description={t("storageCardDescriptionGB")}
+                            model={t("perGB")}
+                            usage={storagePerGB?.value as number}
+                            quota={storagePerGB?.offering_item?.quota as any}
+                        />
+                    )}
+
+                    {tenant.kind === "customer" && (
+                        <>
+                            {(perWorkloadEnabled || !currentUser?.licensed) && (
+                                <UsageCard
+                                    title="local_storage"
+                                    description={t("localStorageDescription")}
+                                    unit="bytes"
+                                    value={localStorage?.value as number}
+                                    quota={null as any}
+                                />
+                            )}
+
+                            {currentUser?.licensed && (
+                                <SmallCard
+                                    title={t("totalLicense")}
+                                    icon={
+                                        <LuSigma className="size-5 text-muted-foreground" />
+                                    }
+                                    value={totalLicenseCount}
+                                    description={`${t(
+                                        "totalSmallCardDescription",
+                                    )} (${t("active")} ${t("and")} ${t(
+                                        "passive",
+                                    )})`}
+                                />
+                            )}
+                        </>
+                    )}
                 </div>
             )}
 
-            <div className="col-span-full md:col-span-1">
-                <SmallCard
-                    title={t("totalLicense")}
-                    icon={<LuSigma className="size-5 text-muted-foreground" />}
-                    value={totalLicenseCount}
-                    description={`${t("totalSmallCardDescription")} (${t(
-                        "active",
-                    )} ${t("and")} ${t("passive")})`}
-                />
-            </div>
+            {tenant.kind === "partner" && (
+                <>
+                    {currentUser?.licensed && (
+                        <div className="col-span-full md:col-span-1">
+                            <SmallCard
+                                title={t("totalLicense")}
+                                icon={
+                                    <LuSigma className="size-5 text-muted-foreground" />
+                                }
+                                value={totalLicenseCount}
+                                description={`${t(
+                                    "totalSmallCardDescription",
+                                )} (${t("active")} ${t("and")} ${t(
+                                    "passive",
+                                )})`}
+                            />
+                        </div>
+                    )}
 
-            <div className="col-span-full md:col-span-1">
-                <UsageCard
-                    title="local_storage"
-                    description={t("localStorageDescription")}
-                    unit="bytes"
-                    value={localStorage?.value as number}
-                    quota={null as any}
-                />
-            </div>
+                    {(perWorkloadEnabled || !currentUser?.licensed) && (
+                        <div className="col-span-full md:col-span-1">
+                            <UsageCard
+                                title="local_storage"
+                                description={t("localStorageDescription")}
+                                unit="bytes"
+                                value={localStorage?.value as number}
+                                quota={null as any}
+                            />
+                        </div>
+                    )}
+                </>
+            )}
 
             {currentUser?.licensed && (
                 <>
@@ -718,12 +774,15 @@ export default function GeneralTab({ t, tenant }: Props) {
                 onValueChange={setSelectedModel}
                 className="col-span-full"
             >
-                <TabsList>
-                    <TabsTrigger value={"perWorkload"}>
-                        {t("perWorkload")}
-                    </TabsTrigger>
-                    <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
-                </TabsList>
+                {tenant.kind === "partner" && (
+                    <TabsList>
+                        <TabsTrigger value={"perWorkload"}>
+                            {t("perWorkload")}
+                        </TabsTrigger>
+                        <TabsTrigger value={"perGB"}>{t("perGB")}</TabsTrigger>
+                    </TabsList>
+                )}
+
                 {!usages ? (
                     <div className="col-span-3 mt-2">
                         <Skeleton>
@@ -732,7 +791,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                     </div>
                 ) : (
                     <>
-                        <TabsContent value={"perWorkload"}>
+                        <TabsContent
+                            value={"perWorkload"}
+                            className={
+                                tenant.kind === "customer" ? "-mt-2" : ""
+                            }
+                        >
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerWorkload?.length ? (
                                     usagesPerWorkload
@@ -765,7 +829,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 )}
                             </div>
                         </TabsContent>
-                        <TabsContent value={"perGB"}>
+                        <TabsContent
+                            value={"perGB"}
+                            className={
+                                tenant.kind === "customer" ? "-mt-1" : ""
+                            }
+                        >
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-24">
                                 {usagesPerGB?.length ? (
                                     usagesPerGB

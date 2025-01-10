@@ -14,17 +14,19 @@ import Loader from "@/components/loaders/Loader";
 import CustomersTab from "./(tabs)/Customers";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
+import useUserStore from "@/store/user";
 
 export default function CustomerDetail({
     params,
 }: {
     params: { acronisId: string };
 }) {
+    const t = useTranslations("General");
     const router = useRouter();
     const searchParams = useSearchParams();
-    const tab = searchParams.get("tab") || "general";
     const pathname = usePathname();
-    const t = useTranslations("General");
+    const { user: currentUser } = useUserStore();
+    const tab = searchParams.get("tab") || "general";
 
     const [children, setChildren] = useState(undefined);
 
@@ -143,19 +145,26 @@ export default function CustomerDetail({
                     }
                     className="flex flex-col w-full"
                 >
-                    <TabsList className="mx-auto  *:md:w-[200px] *:w-full mb-2">
-                        <TabsTrigger value="general">
-                            {t("general")}
-                        </TabsTrigger>
-                        {data?.kind == "partner" && (
-                            <TabsTrigger value="customers">
-                                {t("customers")}
+                    {data?.kind === "customer" && !currentUser?.licensed ? (
+                        <></>
+                    ) : (
+                        <TabsList className="mx-auto  *:md:w-[200px] *:w-full mb-2">
+                            <TabsTrigger value="general">
+                                {t("general")}
                             </TabsTrigger>
-                        )}
-                        <TabsTrigger value="licenses">
-                            {t("licenses")}
-                        </TabsTrigger>
-                    </TabsList>
+                            {data?.kind == "partner" && (
+                                <TabsTrigger value="customers">
+                                    {t("customers")}
+                                </TabsTrigger>
+                            )}
+                            {currentUser?.licensed && (
+                                <TabsTrigger value="licenses">
+                                    {t("licenses")}
+                                </TabsTrigger>
+                            )}
+                        </TabsList>
+                    )}
+
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>

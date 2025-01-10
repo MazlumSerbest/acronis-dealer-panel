@@ -440,6 +440,8 @@ export default function UnassignedTab() {
                                     selectedIds,
                                 );
 
+                                console.log(zpl);
+
                                 createPDF(zpl);
 
                                 // await printZPL(zpl).then((res: any) => {
