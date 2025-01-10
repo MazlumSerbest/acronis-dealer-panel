@@ -23,19 +23,19 @@ export async function createZPLFromIds(ids: string[]) {
     licenses.forEach((l: License) => {
         zpl += "^XA";
         zpl += "^CF0,20";
-        zpl += `^FO30,20^FD${l?.product?.name}^FS`;
-        zpl += `^FO320,20^FDExp: ${DateFormat(l.expiresAt).replaceAll(
+        zpl += `^FO30,25^FD${l?.product?.name}^FS`;
+        zpl += `^FO320,25^FDExp: ${DateFormat(l.expiresAt).replaceAll(
             ".",
             "/",
         )}^FS`;
         zpl += "^BY2,2,40";
-        zpl += `^FO30,45^BC^FD${l.serialNo}^FS`;
+        zpl += `^FO30,50^BC^FD${l.serialNo}^FS`;
         zpl += "^XZ";
         zpl += "^XA";
         zpl += "^CF0,15";
-        zpl += `^FO165,10^FDS/N: ${l.serialNo}^FS`;
+        zpl += `^FO165,15^FDS/N: ${l.serialNo}^FS`;
         zpl += "^BY2,2,40";
-        zpl += `^FO50,28^BC,60^FD${l.key}^FS`;
+        zpl += `^FO50,33^BC,60^FD${l.key}^FS`;
         zpl += "^XZ";
     });
 
@@ -48,19 +48,19 @@ export async function createZPLFromObjects(licenses: License[]) {
     licenses.forEach((l: License) => {
         zpl += "^XA";
         zpl += "^CF0,20";
-        zpl += `^FO30,20^FD${l?.product?.name}^FS`;
-        zpl += `^FO320,20^FDExp: ${DateFormat(l.expiresAt).replaceAll(
+        zpl += `^FO30,25^FD${l?.product?.name}^FS`;
+        zpl += `^FO320,25^FDExp: ${DateFormat(l.expiresAt).replaceAll(
             ".",
             "/",
         )}^FS`;
         zpl += "^BY2,2,40";
-        zpl += `^FO30,45^BC^FD${l.serialNo}^FS`;
+        zpl += `^FO30,50^BC^FD${l.serialNo}^FS`;
         zpl += "^XZ";
         zpl += "^XA";
         zpl += "^CF0,15";
-        zpl += `^FO165,10^FDS/N: ${l.serialNo}^FS`;
+        zpl += `^FO165,15^FDS/N: ${l.serialNo}^FS`;
         zpl += "^BY2,2,40";
-        zpl += `^FO50,28^BC,60^FD${l.key}^FS`;
+        zpl += `^FO50,33^BC,60^FD${l.key}^FS`;
         zpl += "^XZ";
     });
     
