@@ -24,16 +24,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         updateAge: 60,
     },
     providers: [
-        Sendgrid({
-            from: process.env.EMAIL_FROM,
-            apiKey: process.env.AUTH_SENDGRID_KEY,
-            maxAge: 5 * 60, // 5 minutes
-        }),
-        // Nodemailer({
-        //     server: process.env.EMAIL_SERVER,
-        //     from: process.env.EMAIL_FROM,
-        // }),
         ForwardEmail({
+            server: process.env.EMAIL_SERVER,
             from: process.env.EMAIL_FROM,
             apiKey: process.env.AUTH_FORWARDEMAIL_KEY,
             maxAge: 5 * 60, // 5 minutes

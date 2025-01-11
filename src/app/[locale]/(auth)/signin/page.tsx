@@ -43,9 +43,7 @@ export default function SignIn({
             return router.push("/signin?error=emailRequired");
         }
 
-        // await signIn("forwardemail", formData);
-        // await signIn("nodemailer", formData);
-        await signIn("sendgrid", {
+        await signIn("forwardemail", {
             redirectTo: "/",
             email: email,
         });
