@@ -225,10 +225,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                         : "perWorkload",
                 );
                 setPerWorkloadEnabled(
-                    workload?.value || workload?.offering_item?.quota?.value,
+                    workload?.value ||
+                        workload?.offering_item?.quota?.value === 0 ||
+                        workload?.offering_item?.quota?.value > 0,
                 );
                 setPerGBEnabled(
-                    gigabyte?.value || gigabyte?.offering_item?.quota?.value,
+                    gigabyte?.value ||
+                        gigabyte?.offering_item?.quota?.value === 0 ||
+                        gigabyte?.offering_item?.quota?.value > 0,
                 );
 
                 usagesTrigger();
@@ -625,68 +629,16 @@ export default function GeneralTab({ t, tenant }: Props) {
                         />
                     )}
 
-                    {tenant.kind === "customer" && (
-                        <>
-                            {(perWorkloadEnabled || !currentUser?.licensed) && (
-                                <UsageCard
-                                    title="local_storage"
-                                    description={t("localStorageDescription")}
-                                    unit="bytes"
-                                    value={localStorage?.value as number}
-                                    quota={null as any}
-                                />
-                            )}
-
-                            {currentUser?.licensed && (
-                                <SmallCard
-                                    title={t("totalLicense")}
-                                    icon={
-                                        <LuSigma className="size-5 text-muted-foreground" />
-                                    }
-                                    value={totalLicenseCount}
-                                    description={`${t(
-                                        "totalSmallCardDescription",
-                                    )} (${t("active")} ${t("and")} ${t(
-                                        "passive",
-                                    )})`}
-                                />
-                            )}
-                        </>
+                    {(perWorkloadEnabled || !currentUser?.licensed) && (
+                        <UsageCard
+                            title="local_storage"
+                            description={t("localStorageDescription")}
+                            unit="bytes"
+                            value={localStorage?.value as number}
+                            quota={null as any}
+                        />
                     )}
                 </div>
-            )}
-
-            {tenant.kind === "partner" && (
-                <>
-                    {currentUser?.licensed && (
-                        <div className="col-span-full md:col-span-1">
-                            <SmallCard
-                                title={t("totalLicense")}
-                                icon={
-                                    <LuSigma className="size-5 text-muted-foreground" />
-                                }
-                                value={totalLicenseCount}
-                                description={`${t(
-                                    "totalSmallCardDescription",
-                                )} (${t("active")} ${t("and")} ${t(
-                                    "passive",
-                                )})`}
-                            />
-                        </div>
-                    )}
-
-                    {(perWorkloadEnabled || !currentUser?.licensed) && (
-                        <div className="col-span-full md:col-span-1">
-                            <UsageCard
-                                title="local_storage"
-                                description={t("localStorageDescription")}
-                                unit="bytes"
-                                value={localStorage?.value as number}
-                                quota={null as any}
-                            />
-                        </div>
-                    )}
-                </>
             )}
 
             {currentUser?.licensed && (
