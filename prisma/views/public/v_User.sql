@@ -10,13 +10,13 @@ SELECT
   u.active,
   u.language,
   u.deleted,
-  u."acronisTenantId",
-  u."partnerAcronisId",
+  COALESCE(u."acronisTenantId", '' :: text) AS "acronisTenantId",
+  COALESCE(u."partnerAcronisId", '' :: text) AS "partnerAcronisId",
   u."createdAt",
   u."createdBy",
   u."updatedAt",
   u."updatedBy",
-  p.name AS "partnerName",
+  COALESCE(p.name, '' :: text) AS "partnerName",
   s."createdAt" AS "lastLogin"
 FROM
   (

@@ -7,6 +7,7 @@ SELECT
   pro.quota,
   pro.unit,
   pro.bytes,
+  pro."usageNames",
   par."acronisId" AS "partnerAcronisId",
   par."parentAcronisId" AS "partnerParentAcronisId",
   cus."acronisId" AS "customerAcronisId"

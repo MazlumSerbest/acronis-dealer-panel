@@ -140,21 +140,22 @@ model LicenseHistory {
 }
 
 model Product {
-  id        String    @id @default(cuid())
-  code      String    @unique
-  name      String
-  model     String
-  active    Boolean   @default(true)
-  createdBy String
-  createdAt DateTime  @default(now())
-  updatedBy String?
-  updatedAt DateTime  @updatedAt
-  quota     Int?
-  unit      String?
-  bytes     BigInt?
-  edition   String?
+  id         String    @id @default(cuid())
+  code       String    @unique
+  name       String
+  model      String
+  active     Boolean   @default(true)
+  createdBy  String
+  createdAt  DateTime  @default(now())
+  updatedBy  String?
+  updatedAt  DateTime  @updatedAt
+  quota      Int?
+  unit       String?
+  bytes      BigInt?
+  edition    String?
+  usageName String?
   usageNames String?
-  licenses  License[]
+  licenses   License[]
 }
 
 model Application {
@@ -237,6 +238,7 @@ view v_ActiveLicenses {
   quota                  Int?
   unit                   String?
   bytes                  BigInt?
+  usageName             String?
   partnerAcronisId       String?
   partnerParentAcronisId String?
   customerAcronisId      String?
