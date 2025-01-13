@@ -1,11 +1,33 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+    DialogDescription,
+    DialogFooter,
+    DialogClose,
+} from "@/components/ui/dialog";
+import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
 import {
     Tooltip,
     TooltipTrigger,
@@ -15,22 +37,68 @@ import {
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
+import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
 
 import { DateFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuInfo, LuAlertTriangle } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuLoader2,
+    LuAlertCircle,
+    LuCheck,
+    LuInfo,
+    LuAlertTriangle,
+} from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
+const customerFormSchema = z.object({
+    kind: z.enum(["partner"]),
+    name: z
+        .string({
+            required_error: "Customer.name.required",
+        })
+        .min(6, {
+            message: "Customer.name.minLength",
+        }),
+    login: z
+        .string({
+            required_error: "Customer.login.required",
+        })
+        .regex(/^[a-zA-Z0-9@!#$%^&*()+=\-[\]\\';,/{}|":<>?~`\s]+$/, {
+            message: "Customer.login.invalidType",
+        })
+        .min(4, {
+            message: "Customer.login.minLength",
+        }),
+    email: z
+        .string({
+            required_error: "Customer.email.required",
+        })
+        .email({
+            message: "Customer.email.invalidType",
+        }),
+});
+
+type CustomerFormValues = z.infer<typeof customerFormSchema>;
+
 export default function TenantsPage() {
     const t = useTranslations("General");
+    const tf = useTranslations("FormMessages.Customer");
     const router = useRouter();
+    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
     const [updatedData, setUpdatedData] = useState(undefined);
 
+    const [open, setOpen] = useState(false);
+    const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
+    const [loginCheckLoading, setLoginCheckLoading] = useState(false);
+    const [loginValid, setLoginValid] = useState(false);
+
     // #region Fetch Data
-    const { data, error, isLoading } = useSWR(
+    const { data, error, isLoading, mutate } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
             : null,
@@ -91,6 +159,54 @@ export default function TenantsPage() {
         },
     );
     // #endregion
+
+    //#region Form
+    const form = useForm<CustomerFormValues>({
+        resolver: zodResolver(customerFormSchema),
+        mode: "onChange",
+    });
+
+    function onSubmit(values: CustomerFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
+        const customer = {
+            name: values.name,
+            login: values.login,
+            parentAcronisId: currentUser?.acronisTenantId,
+            partnerAcronisId: currentUser?.partnerAcronisId,
+            kind: "partner",
+            licensed: currentUser?.licensed,
+            contact: {
+                email: values.email,
+            },
+        };
+
+        fetch("/api/acronis/tenants", {
+            method: "POST",
+            body: JSON.stringify(customer),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpen(false);
+                    mutate();
+                    form.reset();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+
+                setSubmitting(false);
+            });
+    }
+    //#endregion
 
     //#region Table
     const visibleColumns = {};
@@ -257,7 +373,7 @@ export default function TenantsPage() {
                                 className={cn(
                                     !data?.perWorkload?.quota ||
                                         data?.perWorkload?.quota?.value === null
-                                        ? "" 
+                                        ? ""
                                         : data?.perWorkload?.value >
                                           data?.perWorkload?.quota?.value
                                         ? "text-destructive"
@@ -285,7 +401,7 @@ export default function TenantsPage() {
                                 className={cn(
                                     !data?.perGB?.quota ||
                                         data?.perGB?.quota?.value === null
-                                        ? "" 
+                                        ? ""
                                         : data?.perGB?.value >
                                           data?.perGB?.quota?.value
                                         ? "text-destructive"
@@ -315,6 +431,73 @@ export default function TenantsPage() {
     ];
     //#endregion
 
+    //#region Check Login Debounce
+    const debounce = (fn: Function, delay: number) => {
+        let timeoutId: NodeJS.Timeout;
+        return (...args: any[]) => {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => fn(...args), delay);
+        };
+    };
+
+    const checkLoginAvailability = useCallback(
+        async (username: string) => {
+            if (username.length < 4) return;
+
+            const loginRegex =
+                /^[a-zA-Z0-9@!#$%^&*()+=\-[\]\\';,/{}|":<>?~`\s]+$/;
+            if (!loginRegex.test(username)) {
+                setLoginValid(false);
+                setLoginAlreadyTaken(false);
+                form.setError("login", {
+                    type: "manual",
+                    message: "Customer.login.invalidType",
+                });
+                return;
+            }
+
+            setLoginValid(false);
+            setLoginAlreadyTaken(false);
+            setLoginCheckLoading(true);
+
+            try {
+                const res = await fetch(
+                    `/api/acronis/users/checkLogin?username=${username}`,
+                );
+                const data = await res.json();
+
+                if (data.ok) {
+                    setLoginAlreadyTaken(false);
+                    setLoginValid(true);
+                    form.clearErrors("login");
+                } else {
+                    setLoginAlreadyTaken(true);
+                    setLoginValid(false);
+                    form.setError("login", {
+                        type: "manual",
+                        message: "Customer.login.alreadyTaken",
+                    });
+                }
+            } catch (error) {
+                setLoginAlreadyTaken(true);
+                setLoginValid(false);
+                form.setError("login", {
+                    type: "manual",
+                    message: "Customer.login.checkFailed",
+                });
+            } finally {
+                setLoginCheckLoading(false);
+            }
+        },
+        [form],
+    );
+
+    const debouncedCheckLogin = useMemo(
+        () => debounce(checkLoginAvailability, 500),
+        [checkLoginAvailability],
+    );
+    //#endregion
+
     if (error)
         return (
             <div className="flex min-h-24 justify-center items-center">
@@ -324,6 +507,7 @@ export default function TenantsPage() {
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("tenants")} />
+
             {!data ? (
                 <Skeleton>
                     <TableSkeleton />
@@ -372,11 +556,151 @@ export default function TenantsPage() {
                             ],
                         },
                     ]}
+                    onAddNew={() => {
+                        setOpen(true);
+                    }}
                     onClick={(item) => {
                         router.push("tenants/" + item?.original?.id);
                     }}
                 />
             )}
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("newPartner")}</DialogTitle>
+                        <DialogDescription></DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("name")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.name
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="login"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("username")}
+                                        </FormLabel>
+                                        <FormDescription>
+                                            {tf("login.description")}
+                                        </FormDescription>
+                                        <FormControl>
+                                            <div className="relative flex items-center">
+                                                <Input
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value =
+                                                            e.target.value;
+                                                        field.onChange(value);
+
+                                                        // Reset states if input is too short
+                                                        if (value.length < 4) {
+                                                            setLoginValid(
+                                                                false,
+                                                            );
+                                                            setLoginAlreadyTaken(
+                                                                false,
+                                                            );
+                                                            setLoginCheckLoading(
+                                                                false,
+                                                            );
+                                                            return;
+                                                        }
+
+                                                        debouncedCheckLogin(
+                                                            value,
+                                                        );
+                                                    }}
+                                                />
+                                                {loginCheckLoading && (
+                                                    <LuLoader2 className="size-4 animate-spin absolute right-2" />
+                                                )}
+                                                {loginAlreadyTaken && (
+                                                    <LuAlertCircle className="size-4 text-destructive absolute right-2" />
+                                                )}
+                                                {loginValid && (
+                                                    <LuCheck className="size-4 text-green-600 absolute right-2" />
+                                                )}
+                                            </div>
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.login
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("email")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.email
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    disabled={
+                                        loginCheckLoading ||
+                                        loginAlreadyTaken ||
+                                        submitting
+                                    }
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }
