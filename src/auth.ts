@@ -1,5 +1,4 @@
 import NextAuth, { DefaultSession } from "next-auth";
-import Sendgrid from "next-auth/providers/sendgrid";
 import ForwardEmail from "next-auth/providers/forwardemail";
 // import Nodemailer from "next-auth/providers/nodemailer";
 import { PrismaAdapter } from "@auth/prisma-adapter";

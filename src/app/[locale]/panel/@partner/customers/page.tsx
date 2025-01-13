@@ -10,6 +10,8 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
     Dialog,
     DialogContent,
@@ -27,21 +29,19 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
-import { DataTable } from "@/components/table/DataTable";
-import BoolChip from "@/components/BoolChip";
-import FormError from "@/components/FormError";
-import PageHeader from "@/components/PageHeader";
 import {
     Tooltip,
     TooltipTrigger,
     TooltipContent,
 } from "@/components/ui/tooltip";
 
-import { DateFormat, DateTimeFormat } from "@/utils/date";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import { DataTable } from "@/components/table/DataTable";
+import BoolChip from "@/components/BoolChip";
+import FormError from "@/components/FormError";
+import PageHeader from "@/components/PageHeader";
+
+import { DateFormat } from "@/utils/date";
 import {
     LuChevronsUpDown,
     LuLoader2,
@@ -497,6 +497,7 @@ export default function CustomersPage() {
     return (
         <div className="flex flex-col gap-4">
             <PageHeader title={t("customers")} />
+
             {!data ? (
                 <Skeleton>
                     <TableSkeleton />
