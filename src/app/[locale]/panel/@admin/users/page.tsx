@@ -266,30 +266,34 @@ export default function UsersPage() {
         },
         {
             accessorKey: "lastLogin",
-            header: t("lastLogin"),
+            // header: t("lastLogin"),
             enableHiding: false,
             enableGlobalFilter: false,
-            // header: ({ column }) => (
-            //     <div className="flex flex-row items-center">
-            //         {t("lastLogin")}
-            //         <Button
-            //             variant="ghost"
-            //             className="p-1"
-            //             onClick={() =>
-            //                 column.toggleSorting(
-            //                     column.getIsSorted() === "asc",
-            //                 );
-            //             }
-            //         >
-            //             <LuChevronsUpDown className="size-4" />
-            //         </Button>
-            //     </div>
-            // ),
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("lastLogin")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             cell: ({ row }) => {
                 const data: string = row.getValue("lastLogin");
 
                 return DateTimeFormat(data);
             },
+            sortingFn: (rowA, rowB, id) => {
+                const a = new Date(rowA.original[id]);
+                const b = new Date(rowB.original[id]);
+                
+                return a.getTime() - b.getTime();
+            }
         },
         {
             accessorKey: "emailVerified",
