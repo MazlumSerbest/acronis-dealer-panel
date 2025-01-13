@@ -222,67 +222,9 @@ export const POST = auth(async (req: any, { params }) => {
             },
         );
 
-        const offeringItems = {
-            offering_items: [
-                {
-                    name: "pg_base_storage",
-                    application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
-                    edition: "pck_per_gigabyte",
-                    usage_name: "storage",
-                    status: 1,
-                    locked: false,
-                    type: "infra",
-                    infra_id: "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
-                    measurement_unit: "bytes",
-                },
-                {
-                    name: "pg_base_workstations",
-                    application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
-                    edition: "pck_per_gigabyte",
-                    usage_name: "workstations",
-                    status: 1,
-                    locked: false,
-                    type: "count",
-                    infra_id: null,
-                    measurement_unit: "quantity",
-                },
-                {
-                    name: "pg_base_servers",
-                    application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
-                    edition: "pck_per_gigabyte",
-                    usage_name: "servers",
-                    status: 1,
-                    locked: false,
-                    type: "count",
-                    infra_id: null,
-                    measurement_unit: "quantity",
-                },
-                {
-                    name: "pg_base_vms",
-                    application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
-                    edition: "pck_per_gigabyte",
-                    usage_name: "vms",
-                    status: 1,
-                    locked: false,
-                    type: "count",
-                    infra_id: null,
-                    measurement_unit: "quantity",
-                },
-            ],
-        };
-
-        const enableOfferingItemsRes = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants/${createdTenant.id}/offering_items`,
-            {
-                method: "PUT",
-                headers: headers,
-                body: JSON.stringify(offeringItems),
-            },
-        );
-
-        let setQuotaRes;
-        if (tenant.kind == "customer") {
-            const usages = {
+        let enableOfferingItemsRes;
+        if (tenant.kind === "partner") {
+            const offeringItems = {
                 offering_items: [
                     {
                         name: "pg_base_storage",
@@ -294,21 +236,147 @@ export const POST = auth(async (req: any, { params }) => {
                         type: "infra",
                         infra_id: "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                         measurement_unit: "bytes",
-                        quota: {
-                            version: 0,
-                            overage: 0,
-                            value: 0,
-                        },
+                    },
+                    {
+                        name: "pw_base_storage",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "storage",
+                        status: 1,
+                        locked: false,
+                        type: "infra",
+                        infra_id: "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                        measurement_unit: "bytes",
+                    },
+                    {
+                        name: "local_storage",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: null,
+                        usage_name: "local_storage",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "bytes",
+                    },
+                    {
+                        name: "pg_base_workstations",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_gigabyte",
+                        usage_name: "workstations",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pg_base_servers",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_gigabyte",
+                        usage_name: "servers",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pg_base_vms",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_gigabyte",
+                        usage_name: "vms",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_workstations",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "workstations",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_servers",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "servers",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_vms",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "vms",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_m365_seats",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "mailboxes",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_m365_mailboxes",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "o365_mailboxes",
+                        status: 1,
+                        locked: false,
+                        type: "feature",
+                        infra_id: null,
+                    },
+                    {
+                        name: "pw_base_web_hosting_servers",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "web_hosting_servers",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
+                    },
+                    {
+                        name: "pw_base_nas",
+                        application_id: "6e6d758d-8e74-3ae3-ac84-50eb0dff12eb",
+                        edition: "pck_per_workload",
+                        usage_name: "nas",
+                        status: 1,
+                        locked: false,
+                        type: "count",
+                        infra_id: null,
+                        measurement_unit: "quantity",
                     },
                 ],
             };
 
-            setQuotaRes = await fetch(
+            enableOfferingItemsRes = await fetch(
                 `${process.env.ACRONIS_API_V2_URL}/tenants/${createdTenant.id}/offering_items`,
                 {
                     method: "PUT",
                     headers: headers,
-                    body: JSON.stringify(usages),
+                    body: JSON.stringify(offeringItems),
                 },
             );
         }
@@ -370,7 +438,7 @@ export const POST = auth(async (req: any, { params }) => {
                 status: 200,
                 ok: false,
             });
-        if (!enableOfferingItemsRes.ok)
+        if (tenant.kind === "partner" && !enableOfferingItemsRes?.ok)
             return NextResponse.json({
                 message: "Failed to enable offering items!",
                 status: 200,
@@ -382,7 +450,6 @@ export const POST = auth(async (req: any, { params }) => {
                 status: 200,
                 ok: false,
             });
-
         if (tenant.kind === "partner") {
             return NextResponse.json({
                 message: "Partner başarıyla kaydedildi!",
@@ -390,14 +457,6 @@ export const POST = auth(async (req: any, { params }) => {
                 ok: true,
             });
         } else {
-            if (!setQuotaRes?.ok) {
-                return NextResponse.json({
-                    message: "Failed to set quota!",
-                    status: 200,
-                    ok: false,
-                });
-            }
-
             return NextResponse.json({
                 message: "Müşteri başarıyla kaydedildi!",
                 status: 200,

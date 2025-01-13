@@ -153,6 +153,7 @@ model Product {
   unit      String?
   bytes     BigInt?
   edition   String?
+  usageNames String?
   licenses  License[]
 }
 
