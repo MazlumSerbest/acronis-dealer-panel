@@ -26,7 +26,7 @@ export default function TenantDetail({
     const pathname = usePathname();
     const t = useTranslations("General");
 
-    const [children, setChildren] = useState(undefined);
+    const [updatedChildren, setUpdatedChildren] = useState(undefined);
 
     //#region Fetch Data
     const { data, error } = useSWR(
@@ -40,7 +40,11 @@ export default function TenantDetail({
         },
     );
 
-    const { trigger, isMutating } = useSWRMutation(
+    const {
+        data: children,
+        trigger,
+        isMutating,
+    } = useSWRMutation(
         `/api/acronis/tenants/children/${params.acronisId}`,
         async (url) => {
             const response = await fetch(url);
@@ -91,7 +95,7 @@ export default function TenantDetail({
                         usages: item.usages,
                     }));
 
-                    setChildren(newData);
+                    setUpdatedChildren(newData);
                 } catch (error) {
                     console.error("Error fetching data:", error);
                 }
@@ -139,7 +143,7 @@ export default function TenantDetail({
                     </Button>
                 </div>
             </div>
-            
+
             <div className="w-full">
                 <Tabs
                     defaultValue="general"
@@ -167,7 +171,11 @@ export default function TenantDetail({
                     </TabsContent>
                     <TabsContent value="clients">
                         {!isMutating && children ? (
-                            <ClientsTab t={t} clients={children} />
+                            <ClientsTab
+                                t={t}
+                                clients={children}
+                                updatedClients={updatedChildren}
+                            />
                         ) : (
                             <Skeleton>
                                 <TableSkeleton />

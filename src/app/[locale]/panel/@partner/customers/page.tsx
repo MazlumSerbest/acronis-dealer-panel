@@ -294,7 +294,11 @@ export default function CustomersPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return (
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : (
                     <div className="flex flex-row gap-2">
                         {DateFormat(data)}
                         {data &&
@@ -332,7 +336,19 @@ export default function CustomersPage() {
                 const data: string = row.getValue("billingDate");
                 const remainingDays = calculateRemainingDays(data);
 
-                return data ? (remainingDays > 0 ? remainingDays : "0") : "-";
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : data ? (
+                    remainingDays > 0 ? (
+                        remainingDays
+                    ) : (
+                        "0"
+                    )
+                ) : (
+                    "-"
+                );
             },
         },
         {
@@ -503,255 +519,240 @@ export default function CustomersPage() {
                     <TableSkeleton />
                 </Skeleton>
             ) : (
-                <>
-                    <DataTable
-                        zebra
-                        data={updatedData || data}
-                        columns={columns}
-                        visibleColumns={visibleColumns}
-                        defaultPageSize={50}
-                        defaultSort="name"
-                        defaultSortDirection="asc"
-                        isLoading={isLoading}
-                        facetedFilters={[
-                            {
-                                column: "kind",
-                                title: t("kind"),
-                                options: [
-                                    {
-                                        value: "customer",
-                                        label: t("customer"),
-                                    },
-                                    {
-                                        value: "partner",
-                                        label: t("partner"),
-                                    },
-                                ],
-                            },
-                            {
-                                column: "mfa_status",
-                                title: t("mfaStatus"),
-                                options: [
-                                    {
-                                        value: "enabled",
-                                        label: t("enabled"),
-                                    },
-                                    {
-                                        value: "disabled",
-                                        label: t("disabled"),
-                                    },
-                                ],
-                            },
-                            {
-                                column: "enabled",
-                                title: t("enabled"),
-                                options: [
-                                    {
-                                        value: true,
-                                        label: t("true"),
-                                    },
-                                    {
-                                        value: false,
-                                        label: t("false"),
-                                    },
-                                ],
-                            },
-                        ]}
-                        onAddNew={() => {
-                            setOpen(true);
-                        }}
-                        onClick={(item) => {
-                            router.push("customers/" + item?.original?.id);
-                        }}
-                    />
-
-                    <Dialog open={open} onOpenChange={setOpen}>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>{t("newCustomer")}</DialogTitle>
-                                <DialogDescription></DialogDescription>
-                            </DialogHeader>
-                            <Form {...form}>
-                                <form
-                                    onSubmit={form.handleSubmit(onSubmit)}
-                                    autoComplete="off"
-                                    className="space-y-4"
-                                >
-                                    <FormField
-                                        control={form.control}
-                                        name="kind"
-                                        render={({ field }) => (
-                                            <FormItem className="space-y-3">
-                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                    {t("kind")}
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <RadioGroup
-                                                        onValueChange={
-                                                            field.onChange
-                                                        }
-                                                        defaultValue={
-                                                            field.value
-                                                        }
-                                                        className="flex flex-col space-y-1"
-                                                    >
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="customer" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                {t("customer")}
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                        <FormItem className="flex items-center space-x-3 space-y-0">
-                                                            <FormControl>
-                                                                <RadioGroupItem value="partner" />
-                                                            </FormControl>
-                                                            <FormLabel className="font-normal">
-                                                                {t("partner")}
-                                                            </FormLabel>
-                                                        </FormItem>
-                                                    </RadioGroup>
-                                                </FormControl>
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="name"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                    {t("name")}
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormError
-                                                    error={
-                                                        form?.formState?.errors
-                                                            ?.name
-                                                    }
-                                                />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="login"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                    {t("username")}
-                                                </FormLabel>
-                                                <FormDescription>
-                                                    {tf("login.description")}
-                                                </FormDescription>
-                                                <FormControl>
-                                                    <div className="relative flex items-center">
-                                                        <Input
-                                                            {...field}
-                                                            onChange={(e) => {
-                                                                const value =
-                                                                    e.target
-                                                                        .value;
-                                                                field.onChange(
-                                                                    value,
-                                                                );
-
-                                                                // Reset states if input is too short
-                                                                if (
-                                                                    value.length <
-                                                                    4
-                                                                ) {
-                                                                    setLoginValid(
-                                                                        false,
-                                                                    );
-                                                                    setLoginAlreadyTaken(
-                                                                        false,
-                                                                    );
-                                                                    setLoginCheckLoading(
-                                                                        false,
-                                                                    );
-                                                                    return;
-                                                                }
-
-                                                                debouncedCheckLogin(
-                                                                    value,
-                                                                );
-                                                            }}
-                                                        />
-                                                        {loginCheckLoading && (
-                                                            <LuLoader2 className="size-4 animate-spin absolute right-2" />
-                                                        )}
-                                                        {loginAlreadyTaken && (
-                                                            <LuAlertCircle className="size-4 text-destructive absolute right-2" />
-                                                        )}
-                                                        {loginValid && (
-                                                            <LuCheck className="size-4 text-green-600 absolute right-2" />
-                                                        )}
-                                                    </div>
-                                                </FormControl>
-                                                <FormError
-                                                    error={
-                                                        form?.formState?.errors
-                                                            ?.login
-                                                    }
-                                                />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <FormField
-                                        control={form.control}
-                                        name="email"
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                                    {t("email")}
-                                                </FormLabel>
-                                                <FormControl>
-                                                    <Input {...field} />
-                                                </FormControl>
-                                                <FormError
-                                                    error={
-                                                        form?.formState?.errors
-                                                            ?.email
-                                                    }
-                                                />
-                                            </FormItem>
-                                        )}
-                                    />
-
-                                    <DialogFooter>
-                                        <DialogClose asChild>
-                                            <Button variant="outline">
-                                                {t("close")}
-                                            </Button>
-                                        </DialogClose>
-                                        <Button
-                                            disabled={
-                                                loginCheckLoading ||
-                                                loginAlreadyTaken ||
-                                                submitting
-                                            }
-                                            type="submit"
-                                            className="bg-green-600 hover:bg-green-600/90"
-                                        >
-                                            {t("save")}
-                                            {submitting && (
-                                                <LuLoader2 className="size-4 animate-spin ml-2" />
-                                            )}
-                                        </Button>
-                                    </DialogFooter>
-                                </form>
-                            </Form>
-                        </DialogContent>
-                    </Dialog>
-                </>
+                <DataTable
+                    zebra
+                    data={updatedData || data}
+                    columns={columns}
+                    visibleColumns={visibleColumns}
+                    defaultPageSize={50}
+                    defaultSort="name"
+                    defaultSortDirection="asc"
+                    isLoading={isLoading}
+                    facetedFilters={[
+                        {
+                            column: "kind",
+                            title: t("kind"),
+                            options: [
+                                {
+                                    value: "customer",
+                                    label: t("customer"),
+                                },
+                                {
+                                    value: "partner",
+                                    label: t("partner"),
+                                },
+                            ],
+                        },
+                        {
+                            column: "mfa_status",
+                            title: t("mfaStatus"),
+                            options: [
+                                {
+                                    value: "enabled",
+                                    label: t("enabled"),
+                                },
+                                {
+                                    value: "disabled",
+                                    label: t("disabled"),
+                                },
+                            ],
+                        },
+                        {
+                            column: "enabled",
+                            title: t("enabled"),
+                            options: [
+                                {
+                                    value: true,
+                                    label: t("true"),
+                                },
+                                {
+                                    value: false,
+                                    label: t("false"),
+                                },
+                            ],
+                        },
+                    ]}
+                    onAddNew={() => {
+                        setOpen(true);
+                    }}
+                    onClick={(item) => {
+                        router.push("customers/" + item?.original?.id);
+                    }}
+                />
             )}
+
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("newCustomer")}</DialogTitle>
+                        <DialogDescription></DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="kind"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-3">
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("kind")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="flex flex-col space-y-1"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="customer" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t("customer")}
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="partner" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t("partner")}
+                                                    </FormLabel>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("name")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.name
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="login"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("username")}
+                                        </FormLabel>
+                                        <FormDescription>
+                                            {tf("login.description")}
+                                        </FormDescription>
+                                        <FormControl>
+                                            <div className="relative flex items-center">
+                                                <Input
+                                                    {...field}
+                                                    onChange={(e) => {
+                                                        const value =
+                                                            e.target.value;
+                                                        field.onChange(value);
+
+                                                        // Reset states if input is too short
+                                                        if (value.length < 4) {
+                                                            setLoginValid(
+                                                                false,
+                                                            );
+                                                            setLoginAlreadyTaken(
+                                                                false,
+                                                            );
+                                                            setLoginCheckLoading(
+                                                                false,
+                                                            );
+                                                            return;
+                                                        }
+
+                                                        debouncedCheckLogin(
+                                                            value,
+                                                        );
+                                                    }}
+                                                />
+                                                {loginCheckLoading && (
+                                                    <LuLoader2 className="size-4 animate-spin absolute right-2" />
+                                                )}
+                                                {loginAlreadyTaken && (
+                                                    <LuAlertCircle className="size-4 text-destructive absolute right-2" />
+                                                )}
+                                                {loginValid && (
+                                                    <LuCheck className="size-4 text-green-600 absolute right-2" />
+                                                )}
+                                            </div>
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.login
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("email")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.email
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    disabled={
+                                        loginCheckLoading ||
+                                        loginAlreadyTaken ||
+                                        submitting
+                                    }
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

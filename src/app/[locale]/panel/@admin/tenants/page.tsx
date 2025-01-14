@@ -304,7 +304,11 @@ export default function TenantsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return (
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : (
                     <div className="flex flex-row gap-2">
                         {DateFormat(data)}
                         {data &&
@@ -342,7 +346,19 @@ export default function TenantsPage() {
                 const data: string = row.getValue("billingDate");
                 const remainingDays = calculateRemainingDays(data);
 
-                return data ? (remainingDays > 0 ? remainingDays : "0") : "-";
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : data ? (
+                    remainingDays > 0 ? (
+                        remainingDays
+                    ) : (
+                        "0"
+                    )
+                ) : (
+                    "-"
+                );
             },
         },
         {

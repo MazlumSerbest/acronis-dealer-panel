@@ -15,13 +15,15 @@ import { DateFormat } from "@/utils/date";
 import { LuAlertTriangle, LuChevronsUpDown, LuInfo } from "react-icons/lu";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
+import Skeleton from "@/components/loaders/Skeleton";
 
 type Props = {
     t: Function;
     clients: Tenant[];
+    updatedClients: Tenant[] | undefined;
 };
 
-export default function ClientsTab({ t, clients }: Props) {
+export default function ClientsTab({ t, clients, updatedClients }: Props) {
     const router = useRouter();
 
     //#region Table
@@ -129,7 +131,11 @@ export default function ClientsTab({ t, clients }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return (
+                return !updatedClients ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : (
                     <div className="flex flex-row gap-2">
                         {DateFormat(data)}
                         {data &&
@@ -167,7 +173,19 @@ export default function ClientsTab({ t, clients }: Props) {
                 const data: string = row.getValue("billingDate");
                 const remainingDays = calculateRemainingDays(data);
 
-                return data ? (remainingDays > 0 ? remainingDays : "0") : "-";
+                return !updatedClients ? (
+                    <Skeleton>
+                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : data ? (
+                    remainingDays > 0 ? (
+                        remainingDays
+                    ) : (
+                        "0"
+                    )
+                ) : (
+                    "-"
+                );
             },
         },
         {
@@ -259,7 +277,7 @@ export default function ClientsTab({ t, clients }: Props) {
     return (
         <DataTable
             zebra
-            data={clients || []}
+            data={updatedClients || clients}
             columns={columns}
             visibleColumns={visibleColumns}
             defaultPageSize={50}
