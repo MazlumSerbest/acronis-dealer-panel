@@ -30,7 +30,8 @@ export const GET = auth(async (req: any) => {
                 updatedAt: true,
                 quota: true,
                 unit: true,
-                edition: true
+                edition: true,
+                usageName: true,
             },
             orderBy: {
                 createdAt: "asc",

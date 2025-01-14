@@ -239,6 +239,16 @@ export default function ProductsPage() {
             },
         },
         {
+            accessorKey: "usageName",
+            header: t("usageName"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("usageName");
+
+                return data || "-";
+            },
+        },
+        {
             accessorKey: "model",
             header: t("model"),
             enableGlobalFilter: false,

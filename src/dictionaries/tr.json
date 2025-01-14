@@ -303,7 +303,8 @@
         "localStorage": "Yerel Depolama",
         "localStorageDescription": "Yerel yedek depolama alanı kullanımı",
         "sendToPrint": "Yazdırmaya Gönder",
-        "printLimit": "Maksimum 25 lisans yazdırabilirsiniz."
+        "printLimit": "Maksimum 25 lisans yazdırabilirsiniz.",
+        "usageName": "Kullanım Adı"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -387,7 +388,7 @@
                 "alreadyTaken": "Bu kullanıcı adı zaten alınmış",
                 "checkFailed": "Kullanıcı adı kontrolü başarısız",
                 "minLength": "En az 6 karakter uzunluğunda olmalıdır",
-                "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
+                "description": "Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
                 "invalidType": "Geçerli bir kullanıcı adı olmalıdır"
             },
             "email": {

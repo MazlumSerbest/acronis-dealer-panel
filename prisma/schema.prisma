@@ -154,7 +154,6 @@ model Product {
   bytes      BigInt?
   edition    String?
   usageName String?
-  usageNames String?
   licenses   License[]
 }
 

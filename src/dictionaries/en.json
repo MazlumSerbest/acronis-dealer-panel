@@ -303,7 +303,8 @@
         "localStorage": "Local Storage",
         "localStorageDescription": "Local storage usage",
         "sendToPrint": "Send to Print",
-        "printLimit": "You can print a maximum of 25 licenses."
+        "printLimit": "You can print a maximum of 25 licenses.",
+        "usageName": "Usage Name"
     },
     "SignIn": {
         "signIn": "Sign In",
