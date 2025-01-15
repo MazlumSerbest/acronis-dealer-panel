@@ -28,11 +28,42 @@ export const PUT = auth(async (req: any) => {
                 activatedAt: new Date().toISOString(),
             };
 
+            const modelCheck = await prisma.license.findFirst({
+                where: {
+                    customerAcronisId: values.customerAcronisId,
+                },
+                include: {
+                    product: {
+                        select: {
+                            model: true,
+                        },
+                    },
+                },
+            });
+
             const keyCheck = await prisma.license.findFirst({
                 where: {
                     id: values.ids[0],
                 },
+                include: {
+                    product: {
+                        select: {
+                            model: true,
+                        },
+                    },
+                },
             });
+
+            if (
+                modelCheck?.id &&
+                keyCheck?.product.model !== modelCheck?.product.model
+            ) {
+                return NextResponse.json({
+                    message: `Bu müşterinin ${modelCheck?.product.model} modelinde lisansı bulunduğundan, ${keyCheck?.product.model} modelinde lisans atayamazsınız!`,
+                    status: 400,
+                    ok: false,
+                });
+            }
 
             if (keyCheck?.key != values.key)
                 return NextResponse.json({
