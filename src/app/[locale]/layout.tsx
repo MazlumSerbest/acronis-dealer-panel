@@ -29,8 +29,8 @@ export default async function LocaleLayout({
     if (!isValidLocale) notFound();
 
     return (
-        <html lang={locale} className="light">
-            <body className={inter.className}>
+        <html lang={locale} suppressHydrationWarning>
+            <body className={`antialiased ${inter.className}`}>
                 <NextTopLoader
                     color={chartColors.blue}
                     showSpinner={false}
