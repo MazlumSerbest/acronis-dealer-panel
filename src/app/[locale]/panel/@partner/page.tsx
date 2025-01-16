@@ -138,23 +138,20 @@ export default function PanelPage() {
                     ),
                 );
 
-                const workload = data?.items?.find(
-                    (u: TenantUsage) =>
-                        u.usage_name == "storage" &&
-                        u.edition == "pck_per_workload",
-                );
+                // const workload = data?.items?.find(
+                //     (u: TenantUsage) =>
+                //         u.usage_name == "storage" &&
+                //         u.edition == "pck_per_workload" &&
+                //         u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                // );
                 const gigabyte = data?.items?.find(
                     (u: TenantUsage) =>
                         u.usage_name == "storage" &&
-                        u.edition == "pck_per_gigabyte",
+                        u.edition == "pck_per_gigabyte" &&
+                        u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
                 setSelectedModel(
-                    !workload?.value &&
-                        !workload?.offering_item?.quota?.value &&
-                        (gigabyte?.value ||
-                            gigabyte?.offering_item?.quota?.value)
-                        ? "perGB"
-                        : "perWorkload",
+                    gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
                 );
 
                 trigger();

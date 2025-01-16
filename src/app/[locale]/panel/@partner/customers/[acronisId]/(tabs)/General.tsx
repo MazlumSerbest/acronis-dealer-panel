@@ -209,31 +209,20 @@ export default function GeneralTab({ t, tenant }: Props) {
                 const workload = data?.items?.find(
                     (u: TenantUsage) =>
                         u.usage_name == "storage" &&
-                        u.edition == "pck_per_workload",
+                        u.edition == "pck_per_workload" &&
+                        u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
                 const gigabyte = data?.items?.find(
                     (u: TenantUsage) =>
                         u.usage_name == "storage" &&
-                        u.edition == "pck_per_gigabyte",
+                        u.edition == "pck_per_gigabyte" &&
+                        u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
                 setSelectedModel(
-                    !workload?.value &&
-                        !workload?.offering_item?.quota?.value &&
-                        (gigabyte?.value ||
-                            gigabyte?.offering_item?.quota?.value)
-                        ? "perGB"
-                        : "perWorkload",
+                    gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
                 );
-                setPerWorkloadEnabled(
-                    workload?.value ||
-                        workload?.offering_item?.quota?.value === 0 ||
-                        workload?.offering_item?.quota?.value > 0,
-                );
-                setPerGBEnabled(
-                    gigabyte?.value ||
-                        gigabyte?.offering_item?.quota?.value === 0 ||
-                        gigabyte?.offering_item?.quota?.value > 0,
-                );
+                setPerWorkloadEnabled(workload?.offering_item?.status);
+                setPerGBEnabled(gigabyte?.offering_item?.status);
 
                 usagesTrigger();
             },
@@ -607,36 +596,55 @@ export default function GeneralTab({ t, tenant }: Props) {
                 </Skeleton>
             ) : (
                 <div className="flex flex-col grid-cols-1 w-full col-span-full md:col-span-1 gap-3 justify-start">
-                    {perWorkloadEnabled && (
-                        <StorageCard
-                            title={t("storageCardTitle")}
-                            description={t("storageCardDescriptionPW")}
-                            model={t("perWorkload")}
-                            usage={storagePerWorkload?.value as number}
-                            quota={
-                                storagePerWorkload?.offering_item?.quota as any
-                            }
-                        />
-                    )}
+                    {perWorkloadEnabled ||
+                    perGBEnabled ||
+                    localStorage?.offering_item?.status ? (
+                        <>
+                            {perWorkloadEnabled ? (
+                                <StorageCard
+                                    title={t("storageCardTitle")}
+                                    description={t("storageCardDescriptionPW")}
+                                    model={t("perWorkload")}
+                                    usage={storagePerWorkload?.value as number}
+                                    quota={
+                                        storagePerWorkload?.offering_item
+                                            ?.quota as any
+                                    }
+                                />
+                            ) : null}
 
-                    {perGBEnabled && (
-                        <StorageCard
-                            title={t("storageCardTitle")}
-                            description={t("storageCardDescriptionGB")}
-                            model={t("perGB")}
-                            usage={storagePerGB?.value as number}
-                            quota={storagePerGB?.offering_item?.quota as any}
-                        />
-                    )}
+                            {perGBEnabled ? (
+                                <StorageCard
+                                    title={t("storageCardTitle")}
+                                    description={t("storageCardDescriptionGB")}
+                                    model={t("perGB")}
+                                    usage={storagePerGB?.value as number}
+                                    quota={
+                                        storagePerGB?.offering_item
+                                            ?.quota as any
+                                    }
+                                />
+                            ) : null}
 
-                    {(perWorkloadEnabled || !currentUser?.licensed) && (
-                        <UsageCard
-                            title="local_storage"
-                            description={t("localStorageDescription")}
-                            unit="bytes"
-                            value={localStorage?.value as number}
-                            quota={null as any}
-                        />
+                            {localStorage?.offering_item?.status ? (
+                                <UsageCard
+                                    title="local_storage"
+                                    description={t("localStorageDescription")}
+                                    unit="bytes"
+                                    value={localStorage?.value as number}
+                                    quota={null as any}
+                                />
+                            ) : null}
+                        </>
+                    ) : (
+                        <Card className="text-sm">
+                            <CardHeader className="flex flex-row justify-between space-y-0 gap-1">
+                                <CardTitle className="leading-normal">
+                                    {t("noActiveProduct")}
+                                </CardTitle>
+                                <LuInfo className="text-muted-foreground size-5" />
+                            </CardHeader>
+                        </Card>
                     )}
                 </div>
             )}
