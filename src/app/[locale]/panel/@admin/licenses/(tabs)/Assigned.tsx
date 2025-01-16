@@ -80,6 +80,16 @@ export default function AssignedTab() {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "productModel",
+            header: t("model"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("productModel");
+
+                return t(data) || "-";
+            },
+        },
+        {
             accessorKey: "assignedAt",
             enableGlobalFilter: false,
             enableHiding: false,
@@ -215,6 +225,14 @@ export default function AssignedTab() {
                         { value: 25, label: "25GB" },
                         { value: 50, label: "50GB" },
                         { value: 100, label: "100GB" },
+                    ],
+                },
+                {
+                    column: "productModel",
+                    title: t("model"),
+                    options: [
+                        { value: "perWorkload", label: t("perWorkload") },
+                        { value: "perGB", label: t("perGB") },
                     ],
                 },
             ]}

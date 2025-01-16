@@ -38,25 +38,7 @@ import Combobox from "@/components/Combobox";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2, LuMinus } from "react-icons/lu";
 import useUserStore from "@/store/user";
-import { cn } from "@/lib/utils";
 import { getCustomers, getPartners } from "@/lib/data";
-
-// const addFormSchema = z.object({
-//     partnerAcronisId: z.string().uuid().optional(),
-//     serials: z.array(
-//         z.object({
-//             value: z.string().length(10, {
-//                 message: "",
-//             }),
-//         }),
-//     ),
-// });
-
-// type AddFormValues = z.infer<typeof addFormSchema>;
-
-// const defaultValues: Partial<AddFormValues> = {
-//     serials: [{ value: "" }],
-// };
 
 const assignToCustomerFormSchema = z.object({
     customerAcronisId: z
@@ -92,7 +74,6 @@ export default function PassiveTab() {
     const [partners, setPartners] = useState<ListBoxItem[] | null>(null);
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
-    // const [openAdd, setOpenAdd] = useState(false);
     const [openAssignToCustomer, setOpenAssignToCustomer] = useState(false);
     const [openAssignToPartner, setOpenAssignToPartner] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -106,45 +87,6 @@ export default function PassiveTab() {
     );
 
     // #region Form
-
-    // const addForm = useForm<AddFormValues>({
-    //     resolver: zodResolver(addFormSchema),
-    //     defaultValues,
-    // });
-
-    // const { fields, append, remove } = useFieldArray({
-    //     name: "serials",
-    //     control: addForm.control,
-    // });
-
-    // function onSubmitAdd(values: AddFormValues) {
-    //     values.partnerAcronisId = currentUser?.partnerAcronisId;
-    //     if (!values.partnerAcronisId) return;
-    //     if (submitting) return;
-    //     setSubmitting(true);
-
-    //     fetch("/api/license", {
-    //         method: "PUT",
-    //         body: JSON.stringify(values),
-    //     })
-    //         .then((res) => res.json())
-    //         .then((res) => {
-    //             if (res.ok) {
-    //                 toast({
-    //                     description: res.message,
-    //                 });
-    //                 setOpenAdd(false);
-    //                 mutate();
-    //             } else {
-    //                 toast({
-    //                     variant: "destructive",
-    //                     title: t("errorTitle"),
-    //                     description: res.message,
-    //                 });
-    //             }
-    //             setSubmitting(false);
-    //         });
-    // }
 
     const assignToCustomerForm = useForm<AssignToCustomerFormValues>({
         resolver: zodResolver(assignToCustomerFormSchema),
@@ -319,6 +261,16 @@ export default function PassiveTab() {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "productModel",
+            header: t("model"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("productModel");
+
+                return t(data) || "-";
+            },
+        },
+        {
             accessorKey: "assignedAt",
             header: t("assignedAt"),
             enableGlobalFilter: false,
@@ -449,6 +401,14 @@ export default function PassiveTab() {
                             { value: 100, label: "100GB" },
                         ],
                     },
+                    {
+                        column: "productModel",
+                        title: t("model"),
+                        options: [
+                            { value: "perWorkload", label: t("perWorkload") },
+                            { value: "perGB", label: t("perGB") },
+                        ],
+                    },
                 ]}
                 actions={
                     selectedIds.length > 0 && [
@@ -509,114 +469,6 @@ export default function PassiveTab() {
                     }
                 }}
             />
-
-            {/* <Dialog open={openAdd} onOpenChange={setOpenAdd}>
-                <DialogContent className="max-h-[90vh] overflow-y-auto">
-                    <DialogHeader>
-                        <DialogTitle>{t("addLicense")}</DialogTitle>
-                    </DialogHeader>
-
-                    <Form {...addForm}>
-                        <form
-                            onSubmit={addForm.handleSubmit(onSubmitAdd)}
-                            autoComplete="off"
-                            className="space-y-4"
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter") {
-                                    e.preventDefault();
-                                    append({ value: "" });
-                                    // Focus the newly added input after a short delay to allow render
-                                    setTimeout(() => {
-                                        const inputs =
-                                            document.querySelectorAll(
-                                                'input[name^="serials"]',
-                                            );
-                                        const lastInput = inputs[
-                                            inputs.length - 1
-                                        ] as HTMLInputElement;
-                                        lastInput?.focus();
-                                    }, 0);
-                                }
-                            }}
-                        >
-                            <div>
-                                {fields.map((field, index) => (
-                                    <FormField
-                                        control={addForm.control}
-                                        key={field.id}
-                                        name={`serials.${index}.value`}
-                                        render={({ field }) => (
-                                            <FormItem>
-                                                <FormLabel
-                                                    className={cn(
-                                                        index !== 0 &&
-                                                            "sr-only",
-                                                    )}
-                                                >
-                                                    {t("licenseSerialNo")}
-                                                </FormLabel>
-                                                <FormDescription
-                                                    className={cn(
-                                                        index !== 0 &&
-                                                            "sr-only",
-                                                    )}
-                                                >
-                                                    {t("addLicenseDescription")}
-                                                </FormDescription>
-                                                <FormControl>
-                                                    <div className="flex flex-row gap-2">
-                                                        <Input {...field} />
-                                                        {index !== 0 && (
-                                                            <Button
-                                                                size="icon"
-                                                                variant="outline"
-                                                                onClick={() =>
-                                                                    remove(
-                                                                        index,
-                                                                    )
-                                                                }
-                                                            >
-                                                                <LuMinus className="size-4" />
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                </FormControl>
-                                                <FormMessage />
-                                            </FormItem>
-                                        )}
-                                    />
-                                ))}
-                                <Button
-                                    type="button"
-                                    variant="outline"
-                                    size="sm"
-                                    className="mt-2"
-                                    onClick={() => append({ value: "" })}
-                                >
-                                    {t("addSerialNo")}
-                                </Button>
-                            </div>
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">
-                                        {t("close")}
-                                    </Button>
-                                </DialogClose>
-                                <Button
-                                    disabled={submitting}
-                                    type="submit"
-                                    className="bg-green-600 hover:bg-green-600/90"
-                                >
-                                    {t("add")}
-                                    {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
-                                    )}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog> */}
 
             <Dialog
                 open={openAssignToCustomer}

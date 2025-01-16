@@ -5,6 +5,7 @@ SELECT
   pro.code AS "productCode",
   pro.quota AS "productQuota",
   pro.unit AS "productUnit",
+  pro.model AS "productModel",
   l."partnerAcronisId",
   par.name AS "partnerName",
   par."parentAcronisId" AS "partnerParentAcronisId",
