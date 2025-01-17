@@ -1,6 +1,9 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname, redirect } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import {
@@ -24,6 +27,14 @@ import {
     SheetTrigger,
 } from "../ui/sheet";
 import {
+    Form,
+    FormControl,
+    FormDescription,
+    FormField,
+    FormItem,
+    FormLabel,
+} from "@/components/ui/form";
+import {
     Select,
     SelectContent,
     SelectItem,
@@ -32,12 +43,27 @@ import {
 } from "../ui/select";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import { toast } from "../ui/use-toast";
+
+import FormError from "@/components/FormError";
 
 import { useLocale, useTranslations } from "next-intl";
-import { LuLogOut } from "react-icons/lu";
+import { LuLoader2, LuLogOut } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import useAcronisStore from "@/store/acronis";
 import { getFullNameInitials } from "@/lib/utils";
+
+const userFormSchema = z.object({
+    name: z
+        .string({
+            required_error: "User.name.required",
+        })
+        .min(3, {
+            message: "User.name.minLength",
+        }),
+});
+
+type UserFormValues = z.infer<typeof userFormSchema>;
 
 export default function UserCard() {
     const t = useTranslations("General");
@@ -47,6 +73,41 @@ export default function UserCard() {
     const session = useSession();
     const { user, updateUser } = useUserStore();
     const { updateMainTenant } = useAcronisStore();
+    const [submitting, setSubmitting] = useState(false);
+
+    //#region Form
+    const form = useForm<UserFormValues>({
+        resolver: zodResolver(userFormSchema),
+    });
+
+    function onSubmit(values: UserFormValues) {
+        if (submitting || !user) return;
+        setSubmitting(true);
+
+        fetch(`/api/user/${user.id}`, {
+            method: "PUT",
+            body: JSON.stringify(values),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    user.name = values.name;
+                    updateUser(user);
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+
+                setSubmitting(false);
+            });
+    }
+    //#endregion
 
     useEffect(() => {
         if (!session) return redirect("/api/auth/signin");
@@ -95,10 +156,18 @@ export default function UserCard() {
                 fetch(`/api/acronis/tenants/${user?.partnerAcronisId}`)
                     .then((res) => res.json())
                     .then((data) => updateMainTenant(data));
-        }
-    }, [session, updateMainTenant, updateUser, user?.partnerAcronisId]);
 
-    // if (error) return <div>failed to load</div>;
+            form.setValue("name", user?.name || "");
+        }
+    }, [
+        form,
+        session,
+        updateMainTenant,
+        updateUser,
+        user?.name,
+        user?.partnerAcronisId,
+    ]);
+
     if (!user)
         return (
             <div className="animate-pulse flex gap-2 items-center">
@@ -137,34 +206,65 @@ export default function UserCard() {
                             {t("editProfile")}
                         </SheetTitle>
                     </SheetHeader>
-                    <div className="flex flex-col gap-4 my-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="name">{t("name")}</Label>
-                            <Input
-                                readOnly
-                                id="name"
-                                value={user.name}
-                                className="col-span-3"
+                    <Form {...form}>
+                        <form
+                            onSubmit={form.handleSubmit(onSubmit)}
+                            autoComplete="off"
+                            className="space-y-4 py-4"
+                        >
+                            <FormField
+                                control={form.control}
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("name")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.name
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
                             />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="username" className="">
-                                {t("email")}
-                            </Label>
-                            <Input
-                                readOnly
-                                id="username"
-                                value={user.email}
-                                className="col-span-3"
-                            />
-                        </div>
-                    </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="username">{t("email")}</Label>
+                                <Input
+                                    readOnly
+                                    disabled
+                                    id="username"
+                                    value={user.email}
+                                    className="col-span-3"
+                                />
+                            </div>
+
+                            <div>
+                                <Button
+                                    disabled={submitting}
+                                    type="submit"
+                                    variant="default"
+                                    className="w-full bg-blue-400 hover:bg-blue-400/90"
+                                >
+                                    {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
+                                </Button>
+                            </div>
+                        </form>
+                    </Form>
+
                     <SheetHeader>
                         <SheetTitle className="text-blue-400">
                             {t("otherSettings")}
                         </SheetTitle>
                     </SheetHeader>
-                    <div className="flex flex-col mt-4">
+                    <div className="flex flex-col py-4">
                         <div className="grid grid-cols-2 items-center gap-4">
                             <Label>{t("language")}</Label>
                             <Select
@@ -193,6 +293,7 @@ export default function UserCard() {
                     </div>
                 </SheetContent>
             </Sheet>
+
             <AlertDialog>
                 <AlertDialogTrigger asChild>
                     <Button variant="ghost" size="icon">
