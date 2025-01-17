@@ -12,6 +12,7 @@ import {
     LuPackage,
     LuGraduationCap,
     LuHistory,
+    LuNewspaper,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -92,6 +93,16 @@ export const adminPaths: Path[] = [
             <LuUser2
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Users Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/news",
+        key: "news",
+        icon: (
+            <LuNewspaper
+                className="size-6 group-hover:text-blue-400"
+                aria-label="News Page"
             />
         ),
     },
