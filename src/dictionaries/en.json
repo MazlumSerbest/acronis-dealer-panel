@@ -306,7 +306,14 @@
         "sendToPrint": "Send to Print",
         "printLimit": "You can print a maximum of 25 licenses.",
         "usageName": "Usage Name",
-        "noActiveProduct": "Can't find any active product!"
+        "noActiveProduct": "Can't find any active product!",
+        "news": "News",
+        "newNews": "New News",
+        "editNews": "Edit News",
+        "image": "Image",
+        "content": "Content",
+        "contentEditorPlaceholder": "Write your content here...",
+        "draft": "Draft"
     },
     "SignIn": {
         "signIn": "Sign In",
@@ -521,6 +528,20 @@
             },
             "description": {
                 "required": "Description is required"
+            }
+        },
+        "News": {
+            "title": {
+                "required": "Title is required",
+                "minLength": "Must be at least 3 characters long"
+            },
+            "order": {
+                "required": "Order is required",
+                "invalidType": "Must be a valid number"
+            },
+            "image": {
+                "required": "Image is required",
+                "description": "The image must be in png or jpg format and must be no larger than 2MB"
             }
         },
         "Application": {

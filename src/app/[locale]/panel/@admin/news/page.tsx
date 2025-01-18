@@ -1,5 +1,6 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -34,14 +35,6 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
-import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -55,15 +48,13 @@ import {
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
-import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
 
 import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
-import useUserStore from "@/store/user";
-import { useRouter, useSearchParams } from "next/navigation";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 
 const newsFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -75,8 +66,11 @@ const newsFormSchema = z.object({
         .min(3, {
             message: "News.title.minLength",
         }),
-    order: z.number(),
-    image: z.string(),
+    order: z.coerce.number({
+        required_error: "News.order.required",
+        invalid_type_error: "News.order.invalidType",
+    }),
+    // image: z.string().optional(),
     content: z.string().optional(),
 });
 
@@ -107,11 +101,12 @@ export default function NewsPage() {
     function onSubmit(values: NewsFormValues) {
         if (submitting) return;
         setSubmitting(true);
+        const newValues = { ...values, image: "test" };
 
         if (isNew) {
             fetch("/api/admin/news", {
                 method: "POST",
-                body: JSON.stringify(values),
+                body: JSON.stringify(newValues),
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -428,7 +423,7 @@ export default function NewsPage() {
             />
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className=" md:w-[780px] max-w-[780px]">
+                <DialogContent className=" md:w-[780px] max-w-[780px] max-h-screen overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {isNew ? t("newNews") : t("editNews")}
@@ -446,7 +441,7 @@ export default function NewsPage() {
                                 name="status"
                                 render={({ field }) => (
                                     <FormItem className="space-y-3">
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <FormLabel>
                                             {t("status")}
                                         </FormLabel>
                                         <FormControl>
@@ -527,7 +522,7 @@ export default function NewsPage() {
                                 )}
                             />
 
-                            <FormField
+                            {/* <FormField
                                 control={form.control}
                                 name="image"
                                 render={({ field }) => (
@@ -535,16 +530,48 @@ export default function NewsPage() {
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("image")}
                                         </FormLabel>
+                                        <FormDescription>
+                                            {tf("image.description")}
+                                        </FormDescription>
                                         <FormControl>
                                             <Input
                                                 type="file"
-                                                accept="image/png, image/jpeg"
+                                                accept="image/png, image/jpeg, image/jpg"
                                                 {...field}
                                             />
                                         </FormControl>
                                         <FormError
                                             error={
                                                 form?.formState?.errors?.image
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            /> */}
+
+                            <FormField
+                                control={form.control}
+                                name="content"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>{t("content")}</FormLabel>
+                                        <FormControl>
+                                            <MinimalTiptapEditor
+                                                value={field.value}
+                                                onChange={field.onChange}
+                                                className="w-full"
+                                                editorContentClassName="p-5"
+                                                output="html"
+                                                placeholder={t(
+                                                    "contentEditorPlaceholder",
+                                                )}
+                                                editable={true}
+                                                editorClassName="focus:outline-none"
+                                            />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.content
                                             }
                                         />
                                     </FormItem>

@@ -306,7 +306,14 @@
         "sendToPrint": "Yazdırmaya Gönder",
         "printLimit": "Maksimum 25 lisans yazdırabilirsiniz.",
         "usageName": "Kullanım Adı",
-        "noActiveProduct": "Herhangi bir aktif ürün bulunamadı!"
+        "noActiveProduct": "Herhangi bir aktif ürün bulunamadı!",
+        "news": "Haberler",
+        "newNews": "Yeni Haber",
+        "editNews": "Haberi Düzenle",
+        "image": "Resim",
+        "content": "İçerik",
+        "contentEditorPlaceholder": "İçeriği buraya yazın...",
+        "draft": "Taslak"
     },
     "SignIn": {
         "signIn": "Giriş Yap",
@@ -521,6 +528,20 @@
             },
             "description": {
                 "required": "Açıklama zorunludur"
+            }
+        },
+        "News": {
+            "title": {
+                "required": "Başlık zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır"
+            },
+            "order": {
+                "required": "Sıra zorunludur",
+                "invalidType": "Geçerli bir sayı olmalıdır"
+            },
+            "image": {
+                "required": "Resim zorunludur",
+                "description": "Resim png veya jpg formatında olmalıdır ve en fazla 2MB boyutunda olmalıdır"
             }
         },
         "Application": {
