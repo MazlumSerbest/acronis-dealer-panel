@@ -189,13 +189,26 @@ export default function NewsPage() {
             },
         },
         {
-            accessorKey: "role",
-            header: t("role"),
+            accessorKey: "order",
+            header: ({ column }) => (
+                <div className="flex flex-row items-center">
+                    {t("order")}
+                    <Button
+                        variant="ghost"
+                        className="p-1"
+                        onClick={() =>
+                            column.toggleSorting(column.getIsSorted() === "asc")
+                        }
+                    >
+                        <LuChevronsUpDown className="size-4" />
+                    </Button>
+                </div>
+            ),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: string = row.getValue("role");
+                const data: number = row.getValue("order");
 
-                return t(data) || "-";
+                return data;
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -206,7 +219,7 @@ export default function NewsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("status");
 
-                return data || "-";
+                return t(data);
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -256,39 +269,17 @@ export default function NewsPage() {
             enableGlobalFilter: false,
             enableHiding: false,
             cell: ({ row }) => {
-                const data: User = row.original;
+                const data: News = row.original;
 
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
                             <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
-                            {/* <Button
-                                aria-haspopup="true"
-                                size="icon"
-                                variant="ghost"
-                            >
-                                <LuMoreHorizontal className="size-4" />
-                                <span className="sr-only">
-                                    {t("toggleMenu")}
-                                </span>
-                            </Button> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
                                 {t("actions")}
                             </DropdownMenuLabel>
-                            {data.partnerAcronisId && (
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        router.push(
-                                            `/panel/tenants/${data.partnerAcronisId}`,
-                                        );
-                                    }}
-                                >
-                                    {t("goToTenant")}
-                                </DropdownMenuItem>
-                            )}
-
                             <DropdownMenuItem
                                 onClick={() => {
                                     setIsNew(false);
@@ -318,7 +309,9 @@ export default function NewsPage() {
                                     </AlertDialogHeader>
 
                                     <div className="text-sm text-muted-foreground">
-                                        {t("selectedItem", { name: data.name })}
+                                        {t("selectedItem", {
+                                            name: data.title,
+                                        })}
                                     </div>
 
                                     <AlertDialogFooter>
@@ -396,29 +389,23 @@ export default function NewsPage() {
                 isLoading={isLoading}
                 defaultPageSize={30}
                 defaultSort="order"
-                defaultSortDirection="desc"
+                defaultSortDirection="asc"
                 facetedFilters={[
                     {
-                        column: "active",
-                        title: t("active"),
+                        column: "status",
+                        title: t("status"),
                         options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                    {
-                        column: "adminOnly",
-                        title: t("adminOnly"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
+                            { value: "passive", label: t("passive") },
+                            { value: "draft", label: t("draft") },
+                            { value: "active", label: t("active") },
                         ],
                     },
                 ]}
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset();
+                    form.reset({});
+                    form.reset({});
                 }}
             />
 
@@ -441,9 +428,7 @@ export default function NewsPage() {
                                 name="status"
                                 render={({ field }) => (
                                     <FormItem className="space-y-3">
-                                        <FormLabel>
-                                            {t("status")}
-                                        </FormLabel>
+                                        <FormLabel>{t("status")}</FormLabel>
                                         <FormControl>
                                             <RadioGroup
                                                 onValueChange={field.onChange}
