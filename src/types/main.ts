@@ -79,7 +79,7 @@ type Product = Entity & {
     quota?: number;
     unit?: "GB" | "TB" | "piece";
     bytes?: bigint;
-    edition?: "standart" | "advanced"
+    edition?: "standart" | "advanced";
 };
 
 type Application = Entity & {
@@ -124,4 +124,12 @@ type Lesson = Entity & {
     description: string;
     order: number;
     link: string;
+};
+
+type News = Entity & {
+    status: "passive" | "draft" | "active";
+    order: number;
+    title: string;
+    image: string;
+    content?: string;
 };
