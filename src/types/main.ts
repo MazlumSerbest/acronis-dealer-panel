@@ -130,6 +130,6 @@ type News = Entity & {
     status: "passive" | "draft" | "active";
     order: number;
     title: string;
-    image: string;
+    image: File | string;
     content?: string;
 };

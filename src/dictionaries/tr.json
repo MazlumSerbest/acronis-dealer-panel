@@ -541,7 +541,9 @@
             },
             "image": {
                 "required": "Resim zorunludur",
-                "description": "Resim png veya jpg formatında olmalıdır ve en fazla 2MB boyutunda olmalıdır"
+                "invalidType": "Geçerli bir resim tipi olmalıdır",
+                "maxSize": "Resim en fazla 2MB boyutunda olmalıdır",
+                "description": "Resim png veya jpg formatında olmalıdır ve en fazla 2MB boyutunda olmalıdır."
             }
         },
         "Application": {

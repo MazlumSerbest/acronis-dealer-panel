@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -55,6 +56,7 @@ import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 const newsFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -70,7 +72,20 @@ const newsFormSchema = z.object({
         required_error: "News.order.required",
         invalid_type_error: "News.order.invalidType",
     }),
-    // image: z.string().optional(),
+    image: z
+        .any()
+        .refine((files) => files?.[0], "News.image.required")
+        .refine(
+            (files) => files?.[0]?.size <= 2 * 1024 * 1024,
+            "News.image.maxSize",
+        )
+        .refine(
+            (files) =>
+                ["image/png", "image/jpeg", "image/jpg"].includes(
+                    files?.[0]?.type,
+                ),
+            "News.image.invalidType",
+        ),
     content: z.string().optional(),
 });
 
@@ -86,8 +101,20 @@ export default function NewsPage() {
     const [isNew, setIsNew] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
+    const [images, setImages] = useState<{ src: string; id: string }[]>([]);
+
     const { data, error, isLoading, mutate } = useSWR(`/api/admin/news`, null, {
         revalidateOnFocus: false,
+        onSuccess: (data) => {
+            const imageObjects = data.map((item: any) => {
+                return {
+                    src: item.image,
+                    id: item.id,
+                };
+            });
+
+            setImages(imageObjects);
+        },
     });
 
     //#region Form
@@ -98,15 +125,23 @@ export default function NewsPage() {
         },
     });
 
+    const imageRef = form.register("image");
+
     function onSubmit(values: NewsFormValues) {
         if (submitting) return;
         setSubmitting(true);
-        const newValues = { ...values, image: "test" };
+
+        const formData = new FormData();
+        formData.append("title", values.title);
+        formData.append("order", values.order.toString());
+        formData.append("status", values.status);
+        formData.append("image", values.image[0]);
+        formData.append("content", values.content || "");
 
         if (isNew) {
             fetch("/api/admin/news", {
                 method: "POST",
-                body: JSON.stringify(newValues),
+                body: formData,
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -190,6 +225,7 @@ export default function NewsPage() {
         },
         {
             accessorKey: "order",
+            enableHiding: false,
             header: ({ column }) => (
                 <div className="flex flex-row items-center">
                     {t("order")}
@@ -216,6 +252,7 @@ export default function NewsPage() {
             accessorKey: "status",
             header: t("status"),
             enableGlobalFilter: false,
+            enableHiding: false,
             cell: ({ row }) => {
                 const data: string = row.getValue("status");
 
@@ -404,13 +441,13 @@ export default function NewsPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({});
-                    form.reset({});
+                    form.reset({ status: "draft" });
+                    form.reset({ status: "draft" });
                 }}
             />
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className=" md:w-[780px] max-w-[780px] max-h-screen overflow-auto">
+                <DialogContent className="md:w-[780px] max-w-[780px] max-h-screen overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {isNew ? t("newNews") : t("editNews")}
@@ -507,7 +544,7 @@ export default function NewsPage() {
                                 )}
                             />
 
-                            {/* <FormField
+                            <FormField
                                 control={form.control}
                                 name="image"
                                 render={({ field }) => (
@@ -518,11 +555,34 @@ export default function NewsPage() {
                                         <FormDescription>
                                             {tf("image.description")}
                                         </FormDescription>
+
+                                        {!isNew && (
+                                            <div className="w-full flex justify-center">
+                                                <div className="w-96">
+                                                    <AspectRatio ratio={16 / 9}>
+                                                        <Image
+                                                            src={
+                                                                images.find(
+                                                                    (i) =>
+                                                                        i.id ===
+                                                                        form.getValues(
+                                                                            "id",
+                                                                        ),
+                                                                )?.src || ""
+                                                            }
+                                                            alt=""
+                                                            className="rounded-xl object-cover"
+                                                            fill
+                                                        />
+                                                    </AspectRatio>
+                                                </div>
+                                            </div>
+                                        )}
                                         <FormControl>
                                             <Input
                                                 type="file"
                                                 accept="image/png, image/jpeg, image/jpg"
-                                                {...field}
+                                                {...imageRef}
                                             />
                                         </FormControl>
                                         <FormError
@@ -532,7 +592,7 @@ export default function NewsPage() {
                                         />
                                     </FormItem>
                                 )}
-                            /> */}
+                            />
 
                             <FormField
                                 control={form.control}
