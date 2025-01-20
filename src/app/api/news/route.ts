@@ -25,17 +25,18 @@ export const GET = auth(async (req: any) => {
         const data = await prisma.news.findMany({
             select: {
                 id: true,
+                order: true,
+                status: true,
                 title: true,
                 image: true,
-                status: true,
-                order: true,
+                content: true,
             },
             orderBy: {
                 order: "asc",
             },
             where: {
                 status: {
-                    in: status ? status.split(",") : ["active", "draft"],
+                    in: status ? status.split(",") : ["active"],
                 },
             },
         });

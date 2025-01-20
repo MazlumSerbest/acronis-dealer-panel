@@ -63,7 +63,6 @@ export const POST = auth(async (req: any) => {
         const fileType = imageFile.type.split("/")[1];
         const title = formData.get("title");
 
-        // upload image
         await fs.mkdir(uploadDir, { recursive: true }); // Klasör yoksa oluştur
 
         const fileName = `${Date.now()}-${title}`;
