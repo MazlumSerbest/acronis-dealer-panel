@@ -2,38 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
+import fs from "fs/promises";
+import path from "path";
 
-export const GET = auth(async (req: any, { params }) => {
-    try {
-        const tm = await getTranslations({
-            locale: "en",
-            namespace: "Messages",
-        });
-
-        if (!req.auth)
-            return NextResponse.json({
-                message: tm("authorizationNeeded"),
-                status: 401,
-                ok: false,
-            });
-
-        const data = await prisma.news.findUnique({
-            where: {
-                id: params?.id as string,
-            },
-        });
-
-        // get file
-
-        return NextResponse.json(data);
-    } catch (error: any) {
-        return NextResponse.json({
-            message: error?.message,
-            status: 500,
-            ok: false,
-        });
-    }
-});
+const uploadDir = path.join(process.env.UPLOAD_DIR || "", "news");
 
 export const PUT = auth(async (req: any, { params }) => {
     try {
@@ -49,11 +21,50 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const news: any = await req.json();
-        news.updatedAt = new Date().toISOString();
-        news.updatedBy = req.auth.user.email;
-        
-        // file update
+        const formData = await req.formData();
+        const title = formData.get("title");
+        const imageFile = formData.get("image") as File;
+
+        const news: any = {
+            title: title,
+            status: formData.get("status"),
+            order: parseInt(formData.get("order")),
+            content: formData.get("content"),
+            updatedAt: new Date().toISOString(),
+            updatedBy: req.auth.user.email,
+        };
+
+        if (imageFile?.name) {
+            const fileType = imageFile.type.split("/")[1];
+
+            await fs.mkdir(uploadDir, { recursive: true }); // Klasör yoksa oluştur
+
+            const fileName = `${Date.now()}-${title}`;
+            const filePath = path.join(uploadDir, fileName + "." + fileType);
+            const imageBuffer = Buffer.from(await imageFile.arrayBuffer());
+
+            await fs.writeFile(filePath, imageBuffer); // Dosyayı yaz
+
+            const imageUrl = `/uploads/news/${fileName}.${fileType}`;
+
+            news.image = imageUrl;
+
+            // delete old file
+            const oldNews = await prisma.news.findUnique({
+                where: {
+                    id: params?.id as string,
+                },
+            });
+
+            if (oldNews?.image) {
+                const oldFilePath = path.join(
+                    process.cwd(),
+                    "public",
+                    oldNews.image
+                );
+                await fs.unlink(oldFilePath);
+            }
+        }
 
         const updatedNews = await prisma.news.update({
             data: news,
@@ -103,6 +114,16 @@ export const DELETE = auth(async (req: any, { params }) => {
                 id: params?.id as string,
             },
         });
+
+        // delete old file
+        if (deletedNews.image) {
+            const oldFilePath = path.join(
+                process.cwd(),
+                "public",
+                deletedNews.image
+            );
+            await fs.unlink(oldFilePath);
+        }
 
         if (deletedNews.id) {
             return NextResponse.json({
