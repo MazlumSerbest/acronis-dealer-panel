@@ -23,12 +23,19 @@ export const GET = auth(async (req: any) => {
         const status = req.nextUrl.searchParams.get("status");
 
         const data = await prisma.news.findMany({
+            select: {
+                id: true,
+                title: true,
+                image: true,
+                status: true,
+                order: true,
+            },
             orderBy: {
                 order: "asc",
             },
             where: {
                 status: {
-                    in: status ? status.split(",") : ["active", "draft", "passive"],
+                    in: status ? status.split(",") : ["active", "draft"],
                 },
             },
         });

@@ -21,16 +21,9 @@ export const GET = auth(async (req: any) => {
                 ok: false,
             });
 
-        const status = req.nextUrl.searchParams.get("status");
-
         const data = await prisma.news.findMany({
             orderBy: {
                 order: "asc",
-            },
-            where: {
-                status: {
-                    in: status ? status.split(",") : ["active", "draft", "passive"],
-                },
             },
         });
 
@@ -83,9 +76,10 @@ export const POST = auth(async (req: any) => {
 
         const news = {
             title: title,
-            content: formData.get("content"),
+            status: formData.get("status"),
             order: parseInt(formData.get("order")),
             image: imageUrl,
+            content: formData.get("content"),
             createdBy: req.auth.user.email,
         };
 
