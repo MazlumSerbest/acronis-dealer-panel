@@ -24,19 +24,19 @@ export default function BoolChip({ value, showText, size = "size-5", className }
             <div
                 className={cn(
                     "flex items-center",
-                    value ? "bg-green-100" : "bg-red-100",
+                    value ? "bg-green-100" : "bg-destructive/10",
                     "p-1 rounded-full w-min",
                 )}
             >
                 {value ? (
                     <LuCheckCircle2 className={cn(size, "text-green-600")} />
                 ) : (
-                    <LuXCircle className={cn(size, "text-red-500")} />
+                    <LuXCircle className={cn(size, "text-destructive")} />
                 )}
                 {showText && (
                     <p
                         className={cn(
-                            value ? "text-green-600" : "text-red-500",
+                            value ? "text-green-600" : "text-destructive",
                             "mx-1",
                         )}
                     >
