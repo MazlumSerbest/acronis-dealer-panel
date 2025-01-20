@@ -541,9 +541,9 @@
             },
             "image": {
                 "required": "Image is required",
-                "invalidType": "Must be a valid image format",
-                "maxSize": "Must be smaller than 2MB",
-                "description": "The image must be in png or jpg format and must be smaller than 2MB."
+                "invalidType": "Image must be in valid format",
+                "maxSize": "Must be smaller than 3MB",
+                "description": "The image must be in png or jpg format and must be smaller than 3MB."
             }
         },
         "Application": {
