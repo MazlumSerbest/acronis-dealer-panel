@@ -57,6 +57,8 @@ import { DateTimeFormat } from "@/utils/date";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 const newsFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -256,9 +258,32 @@ export default function NewsPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("status");
 
-                return t(data);
+                return (
+                    <Badge
+                        variant={
+                            data === "active"
+                                ? "default"
+                                : data === "draft"
+                                ? "secondary"
+                                : "destructive"
+                        }
+                        className={cn(data === "active" && "bg-green-600 hover:bg-green-600/90")}
+                    >
+                        {t(data)}
+                    </Badge>
+                );
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "content",
+            header: t("content"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("content") ? true : false;
+
+                return <BoolChip value={data} />;
+            },
         },
         {
             accessorKey: "createdAt",

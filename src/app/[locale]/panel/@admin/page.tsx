@@ -13,6 +13,14 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import Autoplay from "embla-carousel-autoplay";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
@@ -20,7 +28,6 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
-import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 
 import useUserStore from "@/store/user";
 import {
@@ -30,14 +37,6 @@ import {
     LuSigma,
 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
-import {
-    Dialog,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -250,16 +249,13 @@ export default function PanelPage() {
                                             >
                                                 {item.status === "draft" ? (
                                                     <Badge
-                                                        variant="destructive"
+                                                        variant="secondary"
                                                         className="absolute top-2 right-2 z-50"
                                                     >
                                                         {t("draft")}
                                                     </Badge>
                                                 ) : (
-                                                    <Badge
-                                                        variant="destructive"
-                                                        className="absolute top-2 right-2 z-50 bg-green-600 hover:bg-green-600/90"
-                                                    >
+                                                    <Badge className="absolute top-2 right-2 z-50 bg-green-600 hover:bg-green-600/90">
                                                         {t("active")}
                                                     </Badge>
                                                 )}
