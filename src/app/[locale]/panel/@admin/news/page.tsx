@@ -74,21 +74,21 @@ const newsFormSchema = z.object({
         required_error: "News.order.required",
         invalid_type_error: "News.order.invalidType",
     }),
-    image: z
-        .any()
-        .refine((files) => files?.[0], "News.image.required")
-        .refine(
-            (files) => files?.[0]?.size <= 2 * 1024 * 1024,
-            "News.image.maxSize",
-        )
-        .refine(
-            (files) =>
-                ["image/png", "image/jpeg", "image/jpg"].includes(
-                    files?.[0]?.type,
-                ),
-            "News.image.invalidType",
-        ),
-    content: z.string().optional(),
+    image: z.any(),
+    // .refine((files) => !files || files?.[0], "News.image.required")
+    // .refine(
+    //     (files) => !files || files?.[0]?.size <= 3 * 1024 * 1024,
+    //     "News.image.maxSize",
+    // )
+    // .refine(
+    //     (files) =>
+    //         !files ||
+    //         ["image/png", "image/jpeg", "image/jpg"].includes(
+    //             files?.[0]?.type,
+    //         ),
+    //     "News.image.invalidType",
+    // ),
+    content: z.string().optional().nullable(),
 });
 
 type NewsFormValues = z.infer<typeof newsFormSchema>;
@@ -96,7 +96,6 @@ type NewsFormValues = z.infer<typeof newsFormSchema>;
 export default function NewsPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.News");
-    const router = useRouter();
     const { toast } = useToast();
 
     const [open, setOpen] = useState(false);
@@ -137,10 +136,36 @@ export default function NewsPage() {
         formData.append("title", values.title);
         formData.append("order", values.order.toString());
         formData.append("status", values.status);
-        formData.append("image", values.image[0]);
         formData.append("content", values.content || "");
 
         if (isNew) {
+            const image = values.image?.[0];
+            if (!image) {
+                form.setError("image", {
+                    type: "manual",
+                    message: "News.image.required",
+                });
+                setSubmitting(false);
+                return;
+            }
+            if (image.size > 3 * 1024 * 1024) {
+                form.setError("image", {
+                    type: "manual",
+                    message: "News.image.maxSize",
+                });
+                setSubmitting(false);
+                return;
+            }
+            if (!["image/png", "image/jpeg", "image/jpg"].includes(image.type)) {
+                form.setError("image", {
+                    type: "manual",
+                    message: "News.image.invalidType",
+                });
+                setSubmitting(false);
+                return;
+            }
+            formData.append("image", image);
+
             fetch("/api/admin/news", {
                 method: "POST",
                 body: formData,
@@ -165,9 +190,31 @@ export default function NewsPage() {
                     setSubmitting(false);
                 });
         } else {
+            if (values.image?.[0]?.name) {
+                const image = values.image[0];
+                if (image.size > 3 * 1024 * 1024) {
+                    form.setError("image", {
+                        type: "manual",
+                        message: "News.image.maxSize",
+                    });
+                    setSubmitting(false);
+                    return;
+                }
+                if (!["image/png", "image/jpeg", "image/jpg"].includes(image.type)) {
+                    form.setError("image", {
+                        type: "manual",
+                        message: "News.image.invalidType",
+                    });
+                    setSubmitting(false);
+                    return;
+                }
+
+                formData.append("image", image);
+            }
+
             fetch(`/api/admin/news/${values.id}`, {
                 method: "PUT",
-                body: JSON.stringify(values),
+                body: formData,
             })
                 .then((res) => res.json())
                 .then((res) => {
@@ -267,7 +314,10 @@ export default function NewsPage() {
                                 ? "secondary"
                                 : "destructive"
                         }
-                        className={cn(data === "active" && "bg-green-600 hover:bg-green-600/90")}
+                        className={cn(
+                            data === "active" &&
+                                "bg-green-600 hover:bg-green-600/90",
+                        )}
                     >
                         {t(data)}
                     </Badge>
@@ -466,8 +516,8 @@ export default function NewsPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({ status: "draft" });
-                    form.reset({ status: "draft" });
+                    form.reset({ status: "draft", image: null });
+                    form.reset({ status: "draft", image: null });
                 }}
             />
 
@@ -603,6 +653,7 @@ export default function NewsPage() {
                                                 </div>
                                             </div>
                                         )}
+
                                         <FormControl>
                                             <Input
                                                 type="file"
