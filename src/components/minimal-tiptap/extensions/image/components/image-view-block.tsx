@@ -216,7 +216,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
                 </div>
               )}
 
-              <ControlledZoom
+              {/* <ControlledZoom
                 isZoomed={imageState.isZoomed}
                 onZoomChange={() => setImageState(prev => ({ ...prev, isZoomed: false }))}
               >
@@ -238,7 +238,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({ editor, node, selected
                   title={node.attrs.title || ''}
                   id={node.attrs.id}
                 />
-              </ControlledZoom>
+              </ControlledZoom> */}
             </div>
 
             {imageState.isServerUploading && <ImageOverlay />}
