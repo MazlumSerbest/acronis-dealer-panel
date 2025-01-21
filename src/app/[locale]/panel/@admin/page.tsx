@@ -458,7 +458,7 @@ export default function PanelPage() {
             </div>
 
             <Dialog open={openNews} onOpenChange={setOpenNews}>
-                <DialogContent className="md:w-[780px] max-w-[780px] max-h-screen overflow-auto [&>button]:hidden">
+                <DialogContent className="md:w-[780px] max-w-[780px] max-h-screen overflow-auto [&>button]:hidden justify-center">
                     <DialogHeader>
                         <AspectRatio ratio={16 / 9}>
                             <Image
@@ -474,7 +474,7 @@ export default function PanelPage() {
                         {currentNews?.title}
                     </h1>
 
-                    <div
+                    <div className="prose *:w-full"
                         dangerouslySetInnerHTML={{
                             __html: currentNews?.content,
                         }}

@@ -75,19 +75,6 @@ const newsFormSchema = z.object({
         invalid_type_error: "News.order.invalidType",
     }),
     image: z.any(),
-    // .refine((files) => !files || files?.[0], "News.image.required")
-    // .refine(
-    //     (files) => !files || files?.[0]?.size <= 3 * 1024 * 1024,
-    //     "News.image.maxSize",
-    // )
-    // .refine(
-    //     (files) =>
-    //         !files ||
-    //         ["image/png", "image/jpeg", "image/jpg"].includes(
-    //             files?.[0]?.type,
-    //         ),
-    //     "News.image.invalidType",
-    // ),
     content: z.string().optional().nullable(),
 });
 
@@ -681,13 +668,13 @@ export default function NewsPage() {
                                                 value={field.value}
                                                 onChange={field.onChange}
                                                 className="w-full"
-                                                editorContentClassName="p-5"
+                                                editorContentClassName="prose p-5"
                                                 output="html"
                                                 placeholder={t(
                                                     "contentEditorPlaceholder",
                                                 )}
-                                                editable={true}
-                                                editorClassName="focus:outline-none"
+                                                editorClassName="prose focus:outline-none"
+                                                editable
                                             />
                                         </FormControl>
                                         <FormError
