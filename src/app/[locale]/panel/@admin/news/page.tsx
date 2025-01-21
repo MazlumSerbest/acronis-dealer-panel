@@ -509,7 +509,7 @@ export default function NewsPage() {
             />
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="md:max-w-fit max-h-screen overflow-auto">
+                <DialogContent className="md:w-8/12 lg:w-6/12 max-w-none max-h-screen overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {isNew ? t("newNews") : t("editNews")}
