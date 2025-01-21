@@ -458,7 +458,7 @@ export default function PanelPage() {
             </div>
 
             <Dialog open={openNews} onOpenChange={setOpenNews}>
-                <DialogContent className="md:w-[780px] max-w-[780px] max-h-screen overflow-auto [&>button]:hidden justify-center">
+                <DialogContent className="md:max-w-fit max-h-screen overflow-auto [&>button]:hidden">
                     <DialogHeader>
                         <AspectRatio ratio={16 / 9}>
                             <Image
