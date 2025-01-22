@@ -114,7 +114,7 @@ export default function UserCard() {
         const sessionUser = session?.data?.user;
 
         if (sessionUser) {
-            fetch(`/api/admin/user/${sessionUser.email ?? ""}`)
+            fetch(`/api/user/${sessionUser.email ?? ""}`)
                 .then((res) => res.json())
                 .then((data) => {
                     if (data?.role === "admin")
