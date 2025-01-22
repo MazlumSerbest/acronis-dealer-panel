@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -88,8 +88,8 @@ export default function CustomersPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Customer");
     const router = useRouter();
-    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
+
     const [updatedData, setUpdatedData] = useState<any[]>([]);
 
     const [open, setOpen] = useState(false);

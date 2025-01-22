@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -23,11 +23,9 @@ import {
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
-    FormMessage,
 } from "@/components/ui/form";
 
 import { DataTable } from "@/components/table/DataTable";
@@ -67,7 +65,6 @@ type AssignToPartnerFormValues = z.infer<typeof assignToPartnerFormSchema>;
 
 export default function PassiveTab() {
     const t = useTranslations("General");
-    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
 
     const [customers, setCustomers] = useState<ListBoxItem[] | null>(null);

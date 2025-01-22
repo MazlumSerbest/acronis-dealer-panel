@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import useSWR from "swr";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -124,7 +124,6 @@ export default function ApplicationDetail({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Partner");
-    const { toast } = useToast();
 
     const [openApprove, setOpenApprove] = useState(false);
     const [openCreatePartner, setOpenCreatePartner] = useState(false);

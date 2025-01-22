@@ -1,11 +1,9 @@
 import { useState } from "react";
-import useSWR from "swr";
-import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -15,8 +13,6 @@ import { Switch } from "@/components/ui/switch";
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -106,7 +102,6 @@ export default function Lessons({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Lesson");
-    const { toast } = useToast();
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(false);
 

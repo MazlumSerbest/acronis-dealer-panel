@@ -6,7 +6,7 @@ import useSWRMutation from "swr/mutation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -58,7 +58,6 @@ type CustomerFormValues = z.infer<typeof customerFormSchema>;
 export default function GeneralTab({ t, tenant }: Props) {
     const router = useRouter();
     const pathname = usePathname();
-    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
     const [daysUntilNextBillingDate, seDaysUntilNextBillingDate] = useState(0);
 

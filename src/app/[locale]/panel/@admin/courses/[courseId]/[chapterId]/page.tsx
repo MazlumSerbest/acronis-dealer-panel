@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,7 +66,6 @@ export default function ChapterDetail({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Chapter");
-    const { toast } = useToast();
 
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);

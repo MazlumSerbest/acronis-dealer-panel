@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,6 @@ export default function PartnersPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Partner");
     const router = useRouter();
-    const { toast } = useToast();
     const [partners, setPartners] = useState<Partner[]>([]);
 
     const [open, setOpen] = useState(false);

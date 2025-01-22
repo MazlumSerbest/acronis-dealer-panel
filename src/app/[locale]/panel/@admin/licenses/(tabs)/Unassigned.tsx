@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,6 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
     AlertDialogDescription,
     AlertDialogCancel,
     AlertDialogAction,
@@ -51,7 +50,7 @@ import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
 import { createZPLFromIds, createZPLFromObjects } from "@/utils/createZPL";
-import { createPDF, printZPL } from "@/utils/zpl";
+import { createPDF } from "@/utils/zpl";
 import { Switch } from "@/components/ui/switch";
 
 const licenseFormSchema = z.object({
@@ -83,7 +82,6 @@ type AssignFormValues = z.infer<typeof assignFormSchema>;
 export default function UnassignedTab() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.License");
-    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
 
     const [open, setOpen] = useState(false);

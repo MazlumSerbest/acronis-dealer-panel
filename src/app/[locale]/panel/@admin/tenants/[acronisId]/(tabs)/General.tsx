@@ -6,7 +6,7 @@ import useSWRMutation from "swr/mutation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -48,7 +48,6 @@ import {
     SelectContent,
     SelectGroup,
     SelectItem,
-    SelectLabel,
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
@@ -60,7 +59,11 @@ import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
 
-import { calculateRemainingDays, parseBytes } from "@/utils/functions";
+import {
+    calculateRemainingDays,
+    CopyToClipboard,
+    parseBytes,
+} from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import useUserStore from "@/store/user";
 import {
@@ -68,7 +71,6 @@ import {
     LuArrowUpRight,
     LuCopy,
     LuGauge,
-    LuHardDrive,
     LuInfo,
     LuLoader2,
     LuPencil,
@@ -76,7 +78,6 @@ import {
     LuShieldAlert,
     LuShieldCheck,
     LuShieldOff,
-    LuSigma,
 } from "react-icons/lu";
 import { Input } from "@/components/ui/input";
 import FormError from "@/components/FormError";
@@ -114,8 +115,8 @@ type UserFormValues = z.infer<typeof userFormSchema>;
 export default function GeneralTab({ t, tenant }: Props) {
     const router = useRouter();
     const pathname = usePathname();
-    const { toast } = useToast();
     const { user: currentUser } = useUserStore();
+
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
     const [openQuotaDialog, setOpenQuotaDialog] = useState(false);
@@ -480,14 +481,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         <LuCopy
                                             className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60"
                                             onClick={() => {
-                                                navigator.clipboard.writeText(
+                                                CopyToClipboard(
                                                     tenant?.id || "",
+                                                    t("copiedToClipboard"),
                                                 );
-                                                toast({
-                                                    title: t(
-                                                        "copiedToClipboard",
-                                                    ),
-                                                });
                                             }}
                                         />
                                     </dd>

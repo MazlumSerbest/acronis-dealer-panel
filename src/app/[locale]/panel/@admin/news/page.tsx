@@ -1,13 +1,12 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import {
     Dialog,
@@ -83,7 +82,6 @@ type NewsFormValues = z.infer<typeof newsFormSchema>;
 export default function NewsPage() {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.News");
-    const { toast } = useToast();
 
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);

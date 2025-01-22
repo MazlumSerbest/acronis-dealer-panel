@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "@/components/ui/use-toast";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -80,7 +80,6 @@ export default function Chapters({
 }) {
     const t = useTranslations("General");
     const router = useRouter();
-    const { toast } = useToast();
     const [open, setOpen] = useState(false);
 
     //#region Form
