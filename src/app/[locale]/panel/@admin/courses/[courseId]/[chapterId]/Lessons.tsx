@@ -10,12 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -525,6 +520,16 @@ export default function Lessons({
                                     </FormItem>
                                 )}
                             />
+
+                            {form.getValues("link") && (
+                                <iframe
+                                    className="max-w-96 min-h-[100px] rounded-xl mx-auto"
+                                    src={form.getValues("link")}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerPolicy="strict-origin-when-cross-origin"
+                                    allowFullScreen
+                                ></iframe>
+                            )}
 
                             <FormField
                                 control={form.control}
