@@ -47,7 +47,7 @@ export default function CourseLayout({
         data: course,
         error,
         isLoading,
-    } = useSWR(`/api/admin/course/${courseId}`, null, {
+    } = useSWR(`/api/course/${courseId}`, null, {
         revalidateOnFocus: false,
     });
 

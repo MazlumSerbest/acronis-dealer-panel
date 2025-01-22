@@ -10,16 +10,25 @@ export const GET = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const data = await prisma.lesson.findUnique({
+        const data = await prisma.chapter.findUnique({
             where: {
                 id: params?.id as string,
+            },
+            include: {
+                lessons: true,
+                course: {
+                    select: {
+                        id: true,
+                        name: true,
+                    },
+                },
             },
         });
 
@@ -47,26 +56,26 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const lesson: any = await req.json();
-        lesson.updatedAt = new Date().toISOString();
-        lesson.updatedBy = req.auth.user.email;
+        const chapter: any = await req.json();
+        chapter.updatedAt = new Date().toISOString();
+        chapter.updatedBy = req.auth.user.email;
 
-        const updatedLesson = await prisma.lesson.update({
-            data: lesson,
+        const updatedChapter = await prisma.chapter.update({
+            data: chapter,
             where: {
                 id: params?.id as string,
             },
         });
 
-        if (updatedLesson.id) {
+        if (updatedChapter.id) {
             return NextResponse.json({
-                message: "Ders başarıyla güncellendi!",
+                message: "Bölüm başarıyla güncellendi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Ders güncellenemedi!",
+                message: "Bölüm güncellenemedi!",
                 status: 400,
                 ok: false,
             });
@@ -93,22 +102,22 @@ export const DELETE = auth(async (req: any, { params }) => {
                 status: 401,
                 ok: false,
             });
-        
-        const deletedLesson = await prisma.lesson.delete({
+
+        const deletedChapter = await prisma.chapter.delete({
             where: {
                 id: params?.id as string,
             },
         });
 
-        if (deletedLesson.id) {
+        if (deletedChapter.id) {
             return NextResponse.json({
-                message: "Ders başarıyla silindi!",
+                message: "Bölüm başarıyla silindi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Ders silinirken hata oluştu!",
+                message: "Bölüm silinirken hata oluştu!",
                 status: 400,
                 ok: false,
             });

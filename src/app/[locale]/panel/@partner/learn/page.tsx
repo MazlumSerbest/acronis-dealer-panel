@@ -13,7 +13,7 @@ export default function LearnPage() {
     const [courses, setCourses] = useState<Course[]>([]);
 
     //#region Fetch Data
-    const { data, error, isLoading } = useSWR(`/api/admin/course`, null, {
+    const { data, error, isLoading } = useSWR(`/api/course`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
             setCourses(data.filter((c: Course) => c.active));

@@ -3,45 +3,6 @@ import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
 
-export const GET = auth(async (req: any, { params }) => {
-    try {
-        const tm = await getTranslations({
-            locale: "en",
-            namespace: "Messages",
-        });
-
-        if (!req.auth)
-            return NextResponse.json({
-                message: tm("authorizationNeeded"),
-                status: 401,
-                ok: false,
-            });
-
-        const data = await prisma.chapter.findUnique({
-            where: {
-                id: params?.id as string,
-            },
-            include: {
-                lessons: true,
-                course: {
-                    select: {
-                        id: true,
-                        name: true,
-                    },
-                },
-            },
-        });
-
-        return NextResponse.json(data);
-    } catch (error: any) {
-        return NextResponse.json({
-            message: error?.message,
-            status: 500,
-            ok: false,
-        });
-    }
-});
-
 export const PUT = auth(async (req: any, { params }) => {
     try {
         const tm = await getTranslations({
@@ -56,26 +17,26 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const chapter: any = await req.json();
-        chapter.updatedAt = new Date().toISOString();
-        chapter.updatedBy = req.auth.user.email;
+        const lesson: any = await req.json();
+        lesson.updatedAt = new Date().toISOString();
+        lesson.updatedBy = req.auth.user.email;
 
-        const updatedChapter = await prisma.chapter.update({
-            data: chapter,
+        const updatedLesson = await prisma.lesson.update({
+            data: lesson,
             where: {
                 id: params?.id as string,
             },
         });
 
-        if (updatedChapter.id) {
+        if (updatedLesson.id) {
             return NextResponse.json({
-                message: "Bölüm başarıyla güncellendi!",
+                message: "Ders başarıyla güncellendi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Bölüm güncellenemedi!",
+                message: "Ders güncellenemedi!",
                 status: 400,
                 ok: false,
             });
@@ -102,22 +63,22 @@ export const DELETE = auth(async (req: any, { params }) => {
                 status: 401,
                 ok: false,
             });
-        
-        const deletedChapter = await prisma.chapter.delete({
+
+        const deletedLesson = await prisma.lesson.delete({
             where: {
                 id: params?.id as string,
             },
         });
 
-        if (deletedChapter.id) {
+        if (deletedLesson.id) {
             return NextResponse.json({
-                message: "Bölüm başarıyla silindi!",
+                message: "Ders başarıyla silindi!",
                 status: 200,
                 ok: true,
             });
         } else {
             return NextResponse.json({
-                message: "Bölüm silinirken hata oluştu!",
+                message: "Ders silinirken hata oluştu!",
                 status: 400,
                 ok: false,
             });

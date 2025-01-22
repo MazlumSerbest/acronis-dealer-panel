@@ -21,7 +21,7 @@ export default function LessonPage({
 
     //#region Fetch Data
     const { data: lesson, error } = useSWR(
-        `/api/admin/lesson/${params.lessonId}`,
+        `/api/lesson/${params.lessonId}`,
         null,
         {
             revalidateOnFocus: false,

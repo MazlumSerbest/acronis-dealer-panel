@@ -34,7 +34,7 @@ export default function CourseDetail({
 
     //#region Fetch Data
     const { data: course, error } = useSWR(
-        `/api/admin/course/${params.courseId}`,
+        `/api/course/${params.courseId}`,
         null,
         {
             revalidateOnFocus: false,

@@ -61,7 +61,6 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-
 export const PUT = auth(async (req: any, { params }) => {
     try {
         const tm = await getTranslations({
