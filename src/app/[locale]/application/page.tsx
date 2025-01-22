@@ -151,7 +151,7 @@ export default function Application() {
         formData.append("postalCode", values.postalCode);
         // Files
 
-        fetch("/api/admin/application", {
+        fetch("/api/application", {
             method: "POST",
             body: formData,
         })
