@@ -1,6 +1,4 @@
 import { useTranslations } from "next-intl";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { LuAlertTriangle } from "react-icons/lu";
 
 type Props = {
     error: any;

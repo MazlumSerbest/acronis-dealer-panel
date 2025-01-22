@@ -3,19 +3,15 @@ import { formatBytes } from "@/utils/functions";
 import {
     Card,
     CardContent,
-    CardDescription,
     CardHeader,
     CardTitle,
 } from "../ui/card";
 import { cn } from "@/lib/utils";
 import {
     LuBox,
-    LuComputer,
-    LuDatabase,
     LuDatabaseBackup,
     LuHardDrive,
     LuInbox,
-    LuMailbox,
     LuMonitor,
     LuServer,
 } from "react-icons/lu";
