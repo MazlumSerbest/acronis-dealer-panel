@@ -18,6 +18,7 @@ import {
     DialogContent,
     DialogFooter,
     DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import Autoplay from "embla-carousel-autoplay";
@@ -26,9 +27,10 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
+import SmallCard from "@/components/cards/SmallCard";
+import Editor from "@/components/editor/editor";
 
 import useUserStore from "@/store/user";
-import SmallCard from "@/components/cards/SmallCard";
 import {
     LuShield,
     LuShieldAlert,
@@ -248,7 +250,7 @@ export default function PanelPage() {
                                             <AspectRatio ratio={16 / 9}>
                                                 <Image
                                                     src={item.image}
-                                                    className="rounded-xl object-cover"
+                                                    className="rounded-xl border shadow-sm object-cover bg-blue-50"
                                                     fill
                                                     alt={item.title}
                                                 />
@@ -478,26 +480,28 @@ export default function PanelPage() {
             <Dialog open={openNews} onOpenChange={setOpenNews}>
                 <DialogContent className="flex flex-col md:w-8/12 lg:w-6/12 max-w-none max-h-screen overflow-auto [&>button]:hidden">
                     <DialogHeader>
-                        <AspectRatio ratio={16 / 9}>
-                            <Image
-                                src={currentNews?.image}
-                                alt={currentNews?.title}
-                                fill
-                                className="rounded-xl object-cover"
-                            />
-                        </AspectRatio>
+                        <DialogTitle className="text-2xl font-bold mt-4 text-center text-blue-400">
+                            {currentNews?.title}
+                        </DialogTitle>
                     </DialogHeader>
 
-                    <h1 className="text-2xl font-bold mt-4 text-center text-blue-400">
-                        {currentNews?.title}
-                    </h1>
+                    <AspectRatio ratio={16 / 9}>
+                        <Image
+                            src={currentNews?.image}
+                            alt={currentNews?.title}
+                            fill
+                            className="rounded-xl shadow-sm object-cover bg-blue-50"
+                        />
+                    </AspectRatio>
 
-                    <div
-                        className="prose *:w-full min-w-full"
-                        dangerouslySetInnerHTML={{
-                            __html: currentNews?.content,
-                        }}
-                    ></div>
+                    <div className="min-w-full">
+                        <Editor
+                            editable={false}
+                            initialContent={JSON.parse(
+                                currentNews?.content || "[]",
+                            )}
+                        />
+                    </div>
 
                     <DialogFooter>
                         <Button

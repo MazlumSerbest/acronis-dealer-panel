@@ -18,6 +18,7 @@ import {
     DialogContent,
     DialogFooter,
     DialogHeader,
+    DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +29,7 @@ import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
+import Editor from "@/components/editor/editor";
 
 import useUserStore from "@/store/user";
 import {
@@ -37,7 +39,6 @@ import {
     LuSigma,
 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
-import Editor from "@/components/editor/editor";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -53,7 +54,7 @@ export default function PanelPage() {
     const [storagePerGB, setStoragePerGB] = useState<TenantUsage>();
     const [localStorage, setLocalStorage] = useState<TenantUsage>();
 
-    const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
+    // const [selectedModel, setSelectedModel] = useState<string>("perWorkload");
 
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
     const [unassignedLicenseCount, setUnassignedLicenseCount] =
@@ -175,9 +176,9 @@ export default function PanelPage() {
                         u.edition == "pck_per_gigabyte" &&
                         u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
-                setSelectedModel(
-                    gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
-                );
+                // setSelectedModel(
+                //     gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
+                // );
 
                 triggerNews();
                 triggerUsages();
@@ -262,7 +263,7 @@ export default function PanelPage() {
                                                 )}
                                                 <Image
                                                     src={item.image}
-                                                    className="rounded-xl object-cover"
+                                                    className="rounded-xl border shadow-sm object-cover bg-blue-50"
                                                     fill
                                                     alt={item.title}
                                                 />
@@ -461,24 +462,26 @@ export default function PanelPage() {
             <Dialog open={openNews} onOpenChange={setOpenNews}>
                 <DialogContent className="flex flex-col md:w-8/12 lg:w-6/12 max-w-none max-h-screen overflow-auto [&>button]:hidden">
                     <DialogHeader>
-                        <AspectRatio ratio={16 / 9}>
-                            <Image
-                                src={currentNews?.image}
-                                alt={currentNews?.title}
-                                fill
-                                className="rounded-xl object-cover"
-                            />
-                        </AspectRatio>
+                        <DialogTitle className="text-2xl font-bold mt-4 text-center text-blue-400">
+                            {currentNews?.title}
+                        </DialogTitle>
                     </DialogHeader>
 
-                    <h1 className="text-2xl font-bold mt-4 text-center text-blue-400">
-                        {currentNews?.title}
-                    </h1>
+                    <AspectRatio ratio={16 / 9}>
+                        <Image
+                            src={currentNews?.image}
+                            alt={currentNews?.title}
+                            fill
+                            className="rounded-xl shadow-sm object-cover bg-blue-50"
+                        />
+                    </AspectRatio>
 
                     <div className="min-w-full">
                         <Editor
                             editable={false}
-                            initialContent={JSON.parse(currentNews?.content || "[]")}
+                            initialContent={JSON.parse(
+                                currentNews?.content || "[]",
+                            )}
                         />
                     </div>
 
