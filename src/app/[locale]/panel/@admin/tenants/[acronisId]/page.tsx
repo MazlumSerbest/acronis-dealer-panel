@@ -153,7 +153,7 @@ export default function TenantDetail({
                     }
                     className="flex flex-col w-full"
                 >
-                    <TabsList className="mx-auto *:md:w-[200px] *:w-full mb-2">
+                    <TabsList className="mx-auto md:*:w-[200px] *:w-full mb-2">
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>

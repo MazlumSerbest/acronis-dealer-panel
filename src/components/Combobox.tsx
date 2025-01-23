@@ -71,7 +71,7 @@ export default function Combobox({
                                 <CommandItem
                                     key={i.id}
                                     value={i.name}
-                                    className="!opacity-80"
+                                    className="opacity-80!"
                                     onSelect={() => {
                                         form.setValue(name, i.id);
                                         setOpen(false);

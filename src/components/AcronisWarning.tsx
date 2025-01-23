@@ -7,7 +7,7 @@ export default function AcronisWarning() {
 
     return (
         <Alert className="border-yellow-400 text-yellow-500">
-            <LuAlertTriangle className="size-4 !text-yellow-500" />
+            <LuAlertTriangle className="size-4 text-yellow-500!" />
             <AlertTitle className="capitalize">{t("warning")}</AlertTitle>
             <AlertDescription>{t("warningMessage")}</AlertDescription>
         </Alert>

@@ -148,7 +148,7 @@ export default function CustomerDetail({
                     {data?.kind === "customer" && !currentUser?.licensed ? (
                         <></>
                     ) : (
-                        <TabsList className="mx-auto  *:md:w-[200px] *:w-full mb-2">
+                        <TabsList className="mx-auto  md:*:w-[200px] *:w-full mb-2">
                             <TabsTrigger value="general">
                                 {t("general")}
                             </TabsTrigger>

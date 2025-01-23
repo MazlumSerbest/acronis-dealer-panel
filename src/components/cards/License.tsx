@@ -79,7 +79,7 @@ export default function LicenseCard({
                         endAngle={(360 / total) * value}
                         innerRadius={80}
                         outerRadius={140}
-                        className={cn(onClick && "*:hover:cursor-pointer")}
+                        className={cn(onClick && "hover:*:cursor-pointer")}
                     >
                         <PolarGrid
                             gridType="circle"

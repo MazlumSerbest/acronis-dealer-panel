@@ -671,7 +671,7 @@ export default function NewsPage() {
                                                 placeholder={t(
                                                     "contentEditorPlaceholder",
                                                 )}
-                                                editorClassName="prose focus:outline-none"
+                                                editorClassName="prose focus:outline-hidden"
                                                 editable
                                             />
                                         </FormControl>

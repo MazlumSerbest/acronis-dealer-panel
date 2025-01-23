@@ -410,7 +410,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         className="col-span-3 text-yellow-500 border-yellow-500"
                         variant="default"
                     >
-                        <LuInfo className="size-4 !text-yellow-500" />
+                        <LuInfo className="size-4 text-yellow-500!" />
                         <AlertTitle>
                             {t("lessThanTwoWeeksUntilBilling")}
                         </AlertTitle>
@@ -464,7 +464,7 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
-                            <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:items-center *:px-4 *:py-2">
+                            <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:px-4 *:py-2">
                                 <div>
                                     <dt className="font-medium">{t("name")}</dt>
                                     <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">

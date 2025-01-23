@@ -68,7 +68,7 @@ export const MinimalTiptapEditor = React.forwardRef<HTMLDivElement, MinimalTipta
         name="editor"
         ref={ref}
         className={cn(
-          'flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-sm focus-within:outline-none focus-within:ring-2 !ring-blue-500/80 focus-within:ring-ring',
+          'flex h-auto min-h-72 w-full flex-col rounded-md border border-input shadow-xs focus-within:outline-hidden focus-within:ring-2 ring-blue-500/80! focus-within:ring-ring',
           className
         )}
       >

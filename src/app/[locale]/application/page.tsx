@@ -265,7 +265,7 @@ export default function Application() {
                                                 className="grid grid-cols-1 md:grid-cols-2 gap-2"
                                             >
                                                 <FormItem>
-                                                    <FormLabel className="[&:has([data-state=checked])>div]:ring-2 !ring-blue-500 ring-offset-2 [&:has([data-state=checked])>div]:text-blue-500 cursor-pointer">
+                                                    <FormLabel className="[&:has([data-state=checked])>div]:ring-2 ring-blue-500! ring-offset-2 [&:has([data-state=checked])>div]:text-blue-500 cursor-pointer">
                                                         <FormControl>
                                                             <RadioGroupItem
                                                                 value="business"
@@ -315,7 +315,7 @@ export default function Application() {
                                                     </FormLabel>
                                                 </FormItem>
                                                 <FormItem>
-                                                    <FormLabel className="[&:has([data-state=checked])>div]:ring-2 !ring-blue-500 ring-offset-2 [&:has([data-state=checked])>div]:text-blue-500 cursor-pointer">
+                                                    <FormLabel className="[&:has([data-state=checked])>div]:ring-2 ring-blue-500! ring-offset-2 [&:has([data-state=checked])>div]:text-blue-500 cursor-pointer">
                                                         <FormControl>
                                                             <RadioGroupItem
                                                                 value="person"

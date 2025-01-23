@@ -118,7 +118,7 @@ export default function CourseDetail({
                                         value={chapter.id || ""}
                                         className="px-2"
                                     >
-                                        <AccordionTrigger className="font-semibold !no-underline px-4">
+                                        <AccordionTrigger className="font-semibold no-underline! px-4">
                                             {chapter.name}
                                         </AccordionTrigger>
                                         <AccordionContent className="space-y divide-y gap-2 p-0">

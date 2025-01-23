@@ -33,7 +33,7 @@ export default function NavLayout() {
     return (
         <>
             {/* Navbar */}
-            <nav className="flex lg:hidden bg-white shadow z-[47] items-center fixed top-0 w-screen h-min py-2 px-4 gap-2">
+            <nav className="flex lg:hidden bg-white shadow-sm z-47 items-center fixed top-0 w-screen h-min py-2 px-4 gap-2">
                 <Button
                     variant="ghost"
                     size="icon"
@@ -57,7 +57,7 @@ export default function NavLayout() {
             <div
                 ref={ref}
                 className={
-                    "fixed lg:sticky flex flex-col z-[48] shrink-0 bg-white shadow-lg lg:w-64 h-screen t-0 p-3 py-5 gap-3 border-r border-slate-200 transition-transform .3s ease-in-out lg:translate-x-0" +
+                    "fixed lg:sticky flex flex-col z-48 shrink-0 bg-white shadow-lg lg:w-64 h-screen t-0 p-3 py-5 gap-3 border-r border-slate-200 transition-transform .3s ease-in-out lg:translate-x-0" +
                     (!showSidebar ? " -translate-x-full" : "")
                 }
             >
@@ -105,7 +105,7 @@ export default function NavLayout() {
                         <div className="w-full h-6 bg-slate-200 rounded"></div>
                     </div>
                 )} */}
-                <div className="flex flex-col flex-grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
+                <div className="flex flex-col grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
                     {currentUser?.role == "admin" ? (
                         <>
                             {adminPaths.map((p, index) => {

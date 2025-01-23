@@ -14,7 +14,7 @@ interface Props {
     //     | "bordered"
     //     | "light"
     //     | "faded"
-    //     | "shadow"
+    //     | "shadow-sm"
     //     | undefined;
 }
 

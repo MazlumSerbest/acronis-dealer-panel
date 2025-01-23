@@ -43,7 +43,7 @@ export default function ProfileTab() {
                     {/* <CardDescription>Card Description</CardDescription> */}
                 </CardHeader>
 
-                <CardContent className="flex flex-col divide-y text-sm leading-6 *:sm:grid *:sm:grid-cols-2 *:md:grid-cols-3 *:px-4 *:py-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:px-4 *:py-2">
                     <div>
                         <dt className="font-medium">{t("legalCompanyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">

@@ -92,7 +92,7 @@ export default function CourseLayout({
                             {t("currentLesson")}
                         </CardDescription>
                         <CardTitle className="text-sm">{currentLesson?.name}</CardTitle>
-                        <div className="flex flex-row justify-between !mt-4">
+                        <div className="flex flex-row justify-between mt-4!">
                             <Button
                                 size="sm"
                                 variant="outline"
@@ -151,7 +151,7 @@ export default function CourseLayout({
                                     value={chapter.id || ""}
                                     className="px-2"
                                 >
-                                    <AccordionTrigger className="font-semibold !no-underline px-4">
+                                    <AccordionTrigger className="font-semibold no-underline! px-4">
                                         {chapter.name}
                                     </AccordionTrigger>
                                     <AccordionContent className="space-y divide-y gap-2 p-0">

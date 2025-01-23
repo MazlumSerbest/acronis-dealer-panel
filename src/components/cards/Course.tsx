@@ -12,7 +12,7 @@ type Props = {
 
 export default function CourseCard({ id, name, description, duration, level }: Props) {
     return (
-        <div className="flex flex-col p-4 w-72 min-h-52 gap-4 border shadow hover:shadow-md rounded-lg ">
+        <div className="flex flex-col p-4 w-72 min-h-52 gap-4 border shadow-sm hover:shadow-md rounded-lg ">
             <div className="flex-1 flex flex-col gap-2">
                 <h4 className="text-lg font-semibold">{name}</h4>
                 <p className="flex-1 text-sm text-muted-foreground mb-2">
