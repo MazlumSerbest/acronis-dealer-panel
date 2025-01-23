@@ -54,10 +54,10 @@ import FormError from "@/components/FormError";
 import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { MinimalTiptapEditor } from "@/components/minimal-tiptap";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import Editor from "@/components/editor/editor";
 
 const newsFormSchema = z.object({
     id: z.string().cuid().optional(),
@@ -74,7 +74,7 @@ const newsFormSchema = z.object({
         invalid_type_error: "News.order.invalidType",
     }),
     image: z.any(),
-    content: z.string().optional().nullable(),
+    content: z.any(),
 });
 
 type NewsFormValues = z.infer<typeof newsFormSchema>;
@@ -117,11 +117,13 @@ export default function NewsPage() {
         if (submitting) return;
         setSubmitting(true);
 
+        console.log(values.content);
+
         const formData = new FormData();
         formData.append("title", values.title);
         formData.append("order", values.order.toString());
         formData.append("status", values.status);
-        formData.append("content", values.content || "");
+        formData.append("content", JSON.stringify(values.content) || "");
 
         if (isNew) {
             const image = values.image?.[0];
@@ -141,7 +143,9 @@ export default function NewsPage() {
                 setSubmitting(false);
                 return;
             }
-            if (!["image/png", "image/jpeg", "image/jpg"].includes(image.type)) {
+            if (
+                !["image/png", "image/jpeg", "image/jpg"].includes(image.type)
+            ) {
                 form.setError("image", {
                     type: "manual",
                     message: "News.image.invalidType",
@@ -185,7 +189,11 @@ export default function NewsPage() {
                     setSubmitting(false);
                     return;
                 }
-                if (!["image/png", "image/jpeg", "image/jpg"].includes(image.type)) {
+                if (
+                    !["image/png", "image/jpeg", "image/jpg"].includes(
+                        image.type,
+                    )
+                ) {
                     form.setError("image", {
                         type: "manual",
                         message: "News.image.invalidType",
@@ -381,7 +389,15 @@ export default function NewsPage() {
                                 onClick={() => {
                                     setIsNew(false);
                                     setOpen(true);
-                                    form.reset(data);
+                                    const newData = {
+                                        ...data,
+                                        content: data.content
+                                            ? JSON.parse(data.content)
+                                            : undefined,
+                                    };
+
+                                    form.reset(newData);
+                                    form.reset(newData);
                                 }}
                             >
                                 {t("edit")}
@@ -501,8 +517,14 @@ export default function NewsPage() {
                 onAddNew={() => {
                     setIsNew(true);
                     setOpen(true);
-                    form.reset({ status: "draft", image: null });
-                    form.reset({ status: "draft", image: null });
+                    form.reset({
+                        status: "draft",
+                        image: null,
+                    });
+                    form.reset({
+                        status: "draft",
+                        image: null,
+                    });
                 }}
             />
 
@@ -662,17 +684,9 @@ export default function NewsPage() {
                                     <FormItem>
                                         <FormLabel>{t("content")}</FormLabel>
                                         <FormControl>
-                                            <MinimalTiptapEditor
-                                                value={field.value}
+                                            <Editor
+                                                initialContent={field.value}
                                                 onChange={field.onChange}
-                                                className="w-full"
-                                                editorContentClassName="prose p-5"
-                                                output="html"
-                                                placeholder={t(
-                                                    "contentEditorPlaceholder",
-                                                )}
-                                                editorClassName="prose focus:outline-hidden"
-                                                editable
                                             />
                                         </FormControl>
                                         <FormError

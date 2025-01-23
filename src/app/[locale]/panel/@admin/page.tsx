@@ -37,6 +37,7 @@ import {
     LuSigma,
 } from "react-icons/lu";
 import { cn } from "@/lib/utils";
+import Editor from "@/components/editor/editor";
 
 export default function PanelPage() {
     const t = useTranslations("General");
@@ -474,11 +475,12 @@ export default function PanelPage() {
                         {currentNews?.title}
                     </h1>
 
-                    <div className="prose *:w-full min-w-full"
-                        dangerouslySetInnerHTML={{
-                            __html: currentNews?.content,
-                        }}
-                    ></div>
+                    <div className="min-w-full">
+                        <Editor
+                            editable={false}
+                            initialContent={JSON.parse(currentNews?.content || "[]")}
+                        />
+                    </div>
 
                     <DialogFooter>
                         <Button
