@@ -153,7 +153,7 @@ export default function SignIn({
                                 <Button
                                     disabled={submitting}
                                     type="submit"
-                                    className="bg-blue-500 hover:bg-blue-500/80"
+                                    className="bg-blue-400 hover:bg-blue-400/90"
                                 >
                                     {ts("signInWithEmail")}
                                     {submitting && (
