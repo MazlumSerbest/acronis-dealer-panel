@@ -305,7 +305,7 @@ export default function TenantsPage() {
 
                 return !updatedData ? (
                     <Skeleton>
-                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                        <div className="rounded-sm bg-slate-200 w-full h-5"></div>
                     </Skeleton>
                 ) : (
                     <div className="flex flex-row gap-2">
@@ -347,7 +347,7 @@ export default function TenantsPage() {
 
                 return !updatedData ? (
                     <Skeleton>
-                        <div className="rounded bg-slate-200 w-full h-5"></div>
+                        <div className="rounded-sm bg-slate-200 w-full h-5"></div>
                     </Skeleton>
                 ) : data ? (
                     remainingDays > 0 ? (

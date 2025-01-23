@@ -173,10 +173,10 @@ export default function UserCard() {
             <div className="animate-pulse flex gap-2 items-center">
                 <div className="rounded-full bg-slate-200 h-10 w-10"></div>
                 <div className="flex-1 flex flex-col min-w-0 gap-1">
-                    <div className="h-4 bg-slate-200 rounded"></div>
-                    <div className="h-3 bg-slate-200 rounded"></div>
+                    <div className="h-4 bg-slate-200 rounded-sm"></div>
+                    <div className="h-3 bg-slate-200 rounded-sm"></div>
                 </div>
-                <div className="rounded bg-slate-200 h-8 w-8"></div>
+                <div className="rounded-sm bg-slate-200 h-8 w-8"></div>
             </div>
         );
     return (

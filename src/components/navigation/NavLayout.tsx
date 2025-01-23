@@ -80,7 +80,7 @@ export default function NavLayout() {
                         </div>
                     ) : (
                         <div className="animate-pulse flex items-center">
-                            <div className="w-full h-6 bg-slate-200 rounded"></div>
+                            <div className="w-full h-6 bg-slate-200 rounded-sm"></div>
                         </div>
                     )}
                 </div>
@@ -102,7 +102,7 @@ export default function NavLayout() {
                     </div>
                 ) : (
                     <div className="animate-pulse flex items-center">
-                        <div className="w-full h-6 bg-slate-200 rounded"></div>
+                        <div className="w-full h-6 bg-slate-200 rounded-sm"></div>
                     </div>
                 )} */}
                 <div className="flex flex-col grow overflow-x-hidden overflow-y-auto min-h-0 gap-1">
