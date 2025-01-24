@@ -511,7 +511,7 @@ export default function UsersPage() {
                 data={data || []}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
-                defaultPageSize={30}
+                defaultPageSize={50}
                 defaultSearch={search || ""}
                 facetedFilters={[
                     {

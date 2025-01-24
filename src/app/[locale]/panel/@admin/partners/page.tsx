@@ -357,7 +357,7 @@ export default function PartnersPage() {
                     data={partners}
                     visibleColumns={visibleColumns}
                     isLoading={isLoading}
-                    defaultPageSize={30}
+                    defaultPageSize={50}
                     facetedFilters={[
                         {
                             column: "licensed",

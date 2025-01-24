@@ -480,7 +480,7 @@ export default function PanelPage() {
             <Dialog open={openNews} onOpenChange={setOpenNews}>
                 <DialogContent className="flex flex-col md:w-8/12 lg:w-6/12 max-w-none max-h-screen overflow-auto [&>button]:hidden">
                     <DialogHeader>
-                        <DialogTitle className="text-2xl font-bold mt-4 text-center text-blue-400">
+                        <DialogTitle className="text-2xl font-bold text-center text-blue-400">
                             {currentNews?.title}
                         </DialogTitle>
                     </DialogHeader>
@@ -490,7 +490,7 @@ export default function PanelPage() {
                             src={currentNews?.image}
                             alt={currentNews?.title}
                             fill
-                            className="rounded-xl shadow-sm object-cover bg-blue-50"
+                            className="rounded-xl border shadow-sm object-cover bg-blue-50"
                         />
                     </AspectRatio>
 

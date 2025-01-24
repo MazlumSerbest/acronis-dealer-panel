@@ -500,7 +500,6 @@ export default function NewsPage() {
                 data={data || []}
                 visibleColumns={visibleColumns}
                 isLoading={isLoading}
-                defaultPageSize={30}
                 defaultSort="order"
                 defaultSortDirection="asc"
                 facetedFilters={[
@@ -653,7 +652,7 @@ export default function NewsPage() {
                                                                 )?.src || ""
                                                             }
                                                             alt=""
-                                                            className="rounded-xl object-cover"
+                                                            className="rounded-xl border shadow-sm object-cover bg-blue-50/50"
                                                             fill
                                                         />
                                                     </AspectRatio>
