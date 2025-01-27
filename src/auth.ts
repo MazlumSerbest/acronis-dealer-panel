@@ -50,12 +50,26 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
                 where: {
                     email: user.email || "",
                 },
+                select: {
+                    active: true,
+                    role: true,
+                    partner: {
+                        select: {
+                            active: true,
+                        },
+                    },
+                },
             });
 
             if (!userExists) {
                 return "/signin?error=emailNotFound";
             } else if (userExists?.active === false) {
                 return "/signin?error=accountNotActive";
+            } else if (
+                userExists.role !== "admin" &&
+                userExists?.partner?.active === false
+            ) {
+                return "/signin?error=partnerNotActive";
             } else {
                 return true; //if the email exists in the User collection, email them a magic login link
             }

@@ -513,6 +513,8 @@ export default function UsersPage() {
                 isLoading={isLoading}
                 defaultPageSize={50}
                 defaultSearch={search || ""}
+                defaultSort="createdAt"
+                defaultSortDirection="desc"
                 facetedFilters={[
                     {
                         column: "role",
