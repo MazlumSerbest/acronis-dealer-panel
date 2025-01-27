@@ -66,7 +66,7 @@ export function LicenseHistorySheet({ licenseId, trigger }: Props) {
                                     {index !== data.length - 1 && (
                                         <LuArrowDownCircle
                                             strokeWidth={1}
-                                            className="size-10 text-blue-500/50"
+                                            className="size-10 text-blue-400/90"
                                         />
                                     )}
                                 </div>

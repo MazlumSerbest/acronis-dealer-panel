@@ -106,7 +106,7 @@ export default function GeneralTab() {
 
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
-                    <LuTag className="size-8 text-blue-400/60" />
+                    <LuTag className="size-8 text-blue-400/90" />
                     <div>
                         <CardTitle className="font-medium text-xl">
                             {t("branding")}
