@@ -316,11 +316,12 @@
         "draft": "Taslak"
     },
     "SignIn": {
-        "signIn": "Giriş Yap",
+        "signIn": "Hoşgeldiniz",
         "signInDescription": "Giriş yapmak için aşağıya e-posta adresinizi girin",
         "emailPlaceholder": "ornek@gmail.com",
         "signInWithEmail": "E-posta ile Giriş Yap",
         "makeApplication": "Bayilik Başvurusu Yap",
+        "allRightsReserved": "Tüm hakları saklıdır.",
         "termsOfService": "Hizmet Şartları",
         "privacyPolicy": "Gizlilik Politikası",
         "checkYourEmail": "E-postanızı Kontrol Edin",

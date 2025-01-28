@@ -20,7 +20,7 @@ export default async function Error({
 
     return (
         <div className="container flex flex-col items-center justify-center h-screen gap-10">
-            <Card className="max-w-[660px]">
+            <Card className="max-w-[680px]">
                 <CardHeader>
                     <CardTitle className="text-3xl text-destructive">
                         {t("errorTitle")}
@@ -34,7 +34,7 @@ export default async function Error({
                     </p>
                     {error != "Configuration" && (
                         <div className="flex justify-center">
-                            <Button variant="outline" size="lg" asChild>
+                            <Button variant="destructive" size="lg" asChild>
                                 <Link href="/signin">{t("backToSignIn")}</Link>
                             </Button>
                         </div>

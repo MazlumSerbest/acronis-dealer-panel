@@ -316,11 +316,12 @@
         "draft": "Draft"
     },
     "SignIn": {
-        "signIn": "Sign In",
+        "signIn": "Welcome",
         "signInDescription": "Enter your email below to sign in",
         "emailPlaceholder": "name@gmail.com",
         "signInWithEmail": "Sign In with Email",
         "makeApplication": "Make a Dealer Application",
+        "allRightsReserved": "All rights reserved.",
         "termsOfService": "Terms of Service",
         "privacyPolicy": "Privacy Policy",
         "checkYourEmail": "Check Your Email",
