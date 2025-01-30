@@ -19,6 +19,8 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import Image from "next/image";
 
 export default function SignIn({
     searchParams,
@@ -194,6 +196,19 @@ export default function SignIn({
                     By clicking continue, you are going to redirected to
                     application page.
                 </p> */}
+
+                <div className="flex flex-row w-full justify-center items-center -mb-6">
+                    {/* <p className="text-balance text-center text-xs text-muted-foreground">
+                        Powered by
+                    </p> */}
+                    <Image
+                        src="/images/acronis-platinum-provider.png"
+                        alt="Acronis Gold Service Provider"
+                        height={40}
+                        width={220}
+                    />
+                </div>
+
                 <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
                     © {new Date().getFullYear()} DCube Bilişim Teknolojileri.
                     <br />
