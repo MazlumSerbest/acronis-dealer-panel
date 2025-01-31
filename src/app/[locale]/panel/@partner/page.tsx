@@ -166,12 +166,12 @@ export default function PanelPage() {
                     ),
                 );
 
-                // const workload = data?.items?.find(
-                //     (u: TenantUsage) =>
-                //         u.usage_name == "storage" &&
-                //         u.edition == "pck_per_workload" &&
-                //         u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
-                // );
+                const workload = data?.items?.find(
+                    (u: TenantUsage) =>
+                        u.usage_name == "storage" &&
+                        u.edition == "pck_per_workload" &&
+                        u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
+                );
                 const gigabyte = data?.items?.find(
                     (u: TenantUsage) =>
                         u.usage_name == "storage" &&
@@ -179,7 +179,11 @@ export default function PanelPage() {
                         u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
                 setSelectedModel(
-                    gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
+                    workload?.offering_item.status
+                        ? "perWorkload"
+                        : gigabyte?.offering_item?.status
+                        ? "perGB"
+                        : "perWorkload",
                 );
 
                 triggerNews();

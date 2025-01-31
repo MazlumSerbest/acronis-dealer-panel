@@ -218,7 +218,11 @@ export default function GeneralTab({ t, tenant }: Props) {
                         u.infra_id === "d46a4b2a-2631-4f76-84cd-07ce3aed3dde",
                 );
                 setSelectedModel(
-                    gigabyte?.offering_item?.status ? "perGB" : "perWorkload",
+                    workload?.offering_item.status
+                        ? "perWorkload"
+                        : gigabyte?.offering_item?.status
+                        ? "perGB"
+                        : "perWorkload",
                 );
                 setPerWorkloadEnabled(workload?.offering_item?.status);
                 setPerGBEnabled(gigabyte?.offering_item?.status);
