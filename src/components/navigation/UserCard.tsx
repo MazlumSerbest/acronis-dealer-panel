@@ -110,7 +110,7 @@ export default function UserCard() {
     //#endregion
 
     useEffect(() => {
-        if (!session) return redirect("/api/auth/signin");
+        if (!session) return redirect(`/${locale}/signin`);
         const sessionUser = session?.data?.user;
 
         if (sessionUser) {
@@ -166,6 +166,7 @@ export default function UserCard() {
         updateUser,
         user?.name,
         user?.partnerAcronisId,
+        locale,
     ]);
 
     if (!user)

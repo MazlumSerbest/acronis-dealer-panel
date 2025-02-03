@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { getLocale } from "next-intl/server";
 import NavLayout from "@/components/navigation/NavLayout";
 
 export default async function PanelLayout({
@@ -10,8 +11,9 @@ export default async function PanelLayout({
     partner: React.ReactNode;
 }) {
     const session = await auth();
+    const locale = await getLocale();
 
-    if (!session) return redirect("/api/auth/signin");
+    if (!session) return redirect(`/${locale}/signin`);
     return (
         <main className="flex">
             <NavLayout />
