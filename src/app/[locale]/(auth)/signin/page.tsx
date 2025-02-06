@@ -139,6 +139,7 @@ export default function SignIn({
                                     options={{
                                         size: "flexible" as any,
                                         language: locale,
+                                        theme: "light",
                                     }}
                                     className={cn(
                                         "*:-mb-[6px]",
