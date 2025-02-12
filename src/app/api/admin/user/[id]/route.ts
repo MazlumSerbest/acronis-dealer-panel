@@ -80,12 +80,7 @@ export const DELETE = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const deletedUser = await prisma.user.update({
-            data: {
-                deleted: true,
-                updatedAt: new Date().toISOString(),
-                updatedBy: req.auth.user.email,
-            },
+        const deletedUser = await prisma.user.delete({
             where: {
                 id: params?.id as string,
             },
