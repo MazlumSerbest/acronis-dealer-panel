@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useRouter, usePathname, redirect } from "next/navigation";
+import {
+    useRouter,
+    usePathname,
+    useSearchParams,
+    redirect,
+} from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -70,6 +75,7 @@ export default function UserCard() {
     const locale = useLocale();
     const router = useRouter();
     const pathName = usePathname();
+    const searchParams = useSearchParams();
     const session = useSession();
     const { user, updateUser } = useUserStore();
     const { updateMainTenant } = useAcronisStore();
@@ -275,7 +281,9 @@ export default function UserCard() {
                                         `/${locale}/`,
                                         `/${v}/`,
                                     );
-                                    router.replace(newPath);
+                                    router.replace(
+                                        newPath + "?" + searchParams,
+                                    );
                                     router.refresh();
                                 }}
                             >
