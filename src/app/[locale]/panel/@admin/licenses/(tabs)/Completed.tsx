@@ -13,7 +13,7 @@ import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
 export default function CompletedTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/admin/license?status=completed`,
         null,
         {
@@ -223,7 +223,7 @@ export default function CompletedTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

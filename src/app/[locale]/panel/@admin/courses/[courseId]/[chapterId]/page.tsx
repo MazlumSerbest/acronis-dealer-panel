@@ -119,7 +119,7 @@ export default function ChapterDetail({
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />

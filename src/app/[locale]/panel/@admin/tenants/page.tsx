@@ -523,7 +523,7 @@ export default function TenantsPage() {
         <div className="flex flex-col gap-4">
             <PageHeader title={t("tenants")} />
 
-            {!data ? (
+            {isLoading ? (
                 <Skeleton>
                     <TableSkeleton />
                 </Skeleton>

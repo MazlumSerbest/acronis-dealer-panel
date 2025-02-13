@@ -111,7 +111,7 @@ export default function LicenseHistoryPage() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

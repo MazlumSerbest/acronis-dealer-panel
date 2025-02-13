@@ -18,7 +18,7 @@ type Props = {
 export default function ActiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/license?status=active&${tenant.kind}AcronisId=${tenant.id}`,
         null,
         {
@@ -220,7 +220,7 @@ export default function ActiveTab({ tenant }: Props) {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

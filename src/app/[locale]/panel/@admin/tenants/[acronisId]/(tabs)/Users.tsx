@@ -35,10 +35,10 @@ export default function UsersTab({ t, tenant }: Props) {
                 <TabsTrigger value="partner">{tu("partner")}</TabsTrigger>
                 <TabsTrigger value="acronis">{tu("acronis")}</TabsTrigger>
             </TabsList>
+
             <TabsContent value="partner">
                 <PartnerTab t={t} tenantId={tenant.id || ""} />
             </TabsContent>
-
             <TabsContent value="acronis">
                 <AcronisTab t={t} tenantId={tenant.id || ""} />
             </TabsContent>

@@ -28,6 +28,7 @@ export default function ApplicationsPage() {
                 <TabsTrigger value="approved">{ta("approved")}</TabsTrigger>
                 <TabsTrigger value="resolved">{ta("resolved")}</TabsTrigger>
             </TabsList>
+
             <TabsContent value="waiting">
                 <WaitingTab />
             </TabsContent>

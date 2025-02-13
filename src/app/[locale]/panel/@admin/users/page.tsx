@@ -290,9 +290,9 @@ export default function UsersPage() {
             sortingFn: (rowA, rowB, id) => {
                 const a = new Date(rowA.original[id]);
                 const b = new Date(rowB.original[id]);
-                
+
                 return a.getTime() - b.getTime();
-            }
+            },
         },
         {
             accessorKey: "emailVerified",
@@ -424,7 +424,13 @@ export default function UsersPage() {
                                     </AlertDialogHeader>
 
                                     <div className="text-sm text-muted-foreground">
-                                        {t("selectedItem", { name: data.name })}
+                                        {t("selectedItem", {
+                                            name:
+                                                data.name +
+                                                " (" +
+                                                data.email +
+                                                ")",
+                                        })}
                                     </div>
 
                                     <AlertDialogFooter>
@@ -497,7 +503,7 @@ export default function UsersPage() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

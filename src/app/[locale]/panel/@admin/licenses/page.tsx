@@ -46,6 +46,7 @@ export default function LicensesPage() {
                     </TabsTrigger>
                     <TabsTrigger value="assigned">{tl("assigned")}</TabsTrigger>
                 </TabsList>
+
                 {tab === "assigned" && (
                     <div>
                         <Select
@@ -84,6 +85,7 @@ export default function LicensesPage() {
                     </div>
                 )}
             </div>
+
             <TabsContent value="unassigned">
                 <UnassignedTab />
             </TabsContent>

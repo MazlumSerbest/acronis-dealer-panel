@@ -17,9 +17,13 @@ export default function UsersPage() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error, isLoading } = useSWR(`/api/user?partnerAcronisId=${currentUser?.partnerAcronisId}`, null, {
-        revalidateOnFocus: false,
-    });
+    const { data, error, isLoading } = useSWR(
+        `/api/user?partnerAcronisId=${currentUser?.partnerAcronisId}`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
 
     //#region Table
     const visibleColumns = {};
@@ -115,7 +119,7 @@ export default function UsersPage() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />
@@ -125,7 +129,7 @@ export default function UsersPage() {
         <DataTable
             zebra
             columns={columns}
-            data={data}
+            data={data || []}
             visibleColumns={visibleColumns}
             isLoading={isLoading}
             defaultPageSize={30}

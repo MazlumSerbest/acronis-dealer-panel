@@ -142,7 +142,7 @@ export default function WaitingTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />

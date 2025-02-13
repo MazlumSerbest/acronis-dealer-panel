@@ -93,7 +93,7 @@ export default function UnassignedTab() {
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
-    const { data, error, mutate } = useSWR(
+    const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/license?status=unassigned`,
         null,
         {
@@ -393,7 +393,7 @@ export default function UnassignedTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

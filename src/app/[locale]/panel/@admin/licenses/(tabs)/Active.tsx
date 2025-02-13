@@ -14,9 +14,13 @@ import { calculateRemainingDays } from "@/utils/functions";
 export default function ActiveTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(`/api/admin/license?status=active`, null, {
-        revalidateOnFocus: false,
-    });
+    const { data, error, isLoading } = useSWR(
+        `/api/admin/license?status=active`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
 
     //#region Table
     const visibleColumns = {
@@ -234,7 +238,7 @@ export default function ActiveTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

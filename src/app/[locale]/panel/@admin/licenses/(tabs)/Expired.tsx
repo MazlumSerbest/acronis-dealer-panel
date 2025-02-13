@@ -13,9 +13,13 @@ import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
 export default function ExpiredTab() {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(`/api/admin/license?status=expired`, null, {
-        revalidateOnFocus: false,
-    });
+    const { data, error, isLoading } = useSWR(
+        `/api/admin/license?status=expired`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
 
     //#region Table
     const visibleColumns = {
@@ -188,7 +192,7 @@ export default function ExpiredTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

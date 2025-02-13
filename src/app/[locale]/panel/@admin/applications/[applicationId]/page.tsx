@@ -133,7 +133,7 @@ export default function ApplicationDetail({
 
     const [submitting, setSubmitting] = useState(false);
 
-    const { data, error, mutate } = useSWR(
+    const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/application/${params.applicationId}`,
         null,
         {
@@ -235,7 +235,7 @@ export default function ApplicationDetail({
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <DefaultSkeleton />
