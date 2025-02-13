@@ -21,7 +21,7 @@ export default function GeneralTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/${currentUser?.acronisTenantId}/info`,
         null,
         {
@@ -35,7 +35,7 @@ export default function GeneralTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <DefaultSkeleton />

@@ -16,7 +16,7 @@ type Props = {
 export default function CompletedTab({ tenant }: Props) {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/license?status=completed&${tenant.kind}AcronisId=${tenant.id}`,
         null,
         {
@@ -194,7 +194,7 @@ export default function CompletedTab({ tenant }: Props) {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

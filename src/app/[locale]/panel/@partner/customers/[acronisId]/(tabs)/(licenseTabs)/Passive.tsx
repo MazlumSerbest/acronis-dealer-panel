@@ -17,7 +17,7 @@ type Props = {
 export default function PassiveTab({ tenant }: Props) {
     const t = useTranslations("General");
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/license?status=inactive&partnerAcronisId=${tenant.id}`,
         null,
         {
@@ -175,7 +175,7 @@ export default function PassiveTab({ tenant }: Props) {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

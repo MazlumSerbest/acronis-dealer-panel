@@ -179,16 +179,16 @@ export const partnerPaths: Path[] = [
             />
         ),
     },
-    {
-        path: "/panel/management",
-        key: "management",
-        icon: (
-            <LuUnplug
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Management Page"
-            />
-        ),
-    },
+    // {
+    //     path: "/panel/management",
+    //     key: "management",
+    //     icon: (
+    //         <LuUnplug
+    //             className="size-6 group-hover:text-blue-400"
+    //             aria-label="Management Page"
+    //         />
+    //     ),
+    // },
     {
         path: "/panel/settings",
         key: "settings",

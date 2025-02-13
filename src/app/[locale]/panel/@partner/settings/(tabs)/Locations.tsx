@@ -17,6 +17,14 @@ export default function LocationsTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
+    const { data, error, isLoading } = useSWR(
+        `/api/acronis/tenants/${currentUser?.acronisTenantId}/locations`,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
+
     //#region Table
     const columns: ColumnDef<TenantLocation>[] = [
         {
@@ -56,21 +64,13 @@ export default function LocationsTab() {
     ];
     //#endregion
 
-    const { data, error, isLoading } = useSWR(
-        `/api/acronis/tenants/${currentUser?.acronisTenantId}/locations`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
-
     if (error)
         return (
             <div className="flex min-h-24 justify-center items-center">
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

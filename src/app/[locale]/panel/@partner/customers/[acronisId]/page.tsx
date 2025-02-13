@@ -31,7 +31,7 @@ export default function CustomerDetail({
     const [children, setChildren] = useState(undefined);
 
     //#region Fetch Data
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/${params.acronisId}`,
         null,
         {
@@ -102,7 +102,7 @@ export default function CustomerDetail({
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />

@@ -8,7 +8,7 @@ export default function AlertsPage() {
     const t = useTranslations("Alerts");
     const { user: currentUser } = useUserStore();
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/alert/${currentUser?.acronisTenantId}`,
         null,
         {

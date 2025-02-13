@@ -75,7 +75,7 @@ export default function PassiveTab() {
     const [openAssignToPartner, setOpenAssignToPartner] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
-    const { data, error, mutate } = useSWR(
+    const { data, error, isLoading, mutate } = useSWR(
         `/api/license?status=inactive&partnerAcronisId=${currentUser?.partnerAcronisId}`,
         null,
         {
@@ -84,7 +84,6 @@ export default function PassiveTab() {
     );
 
     // #region Form
-
     const assignToCustomerForm = useForm<AssignToCustomerFormValues>({
         resolver: zodResolver(assignToCustomerFormSchema),
     });
@@ -371,7 +370,7 @@ export default function PassiveTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

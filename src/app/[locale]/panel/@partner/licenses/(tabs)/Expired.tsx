@@ -14,7 +14,7 @@ export default function ExpiredTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         currentUser?.partnerAcronisId
             ? `/api/license?status=expired&partnerAcronisId=${currentUser?.partnerAcronisId}`
             : null,
@@ -170,7 +170,7 @@ export default function ExpiredTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

@@ -20,7 +20,7 @@ export default function LessonPage({
     const t = useTranslations("General");
 
     //#region Fetch Data
-    const { data: lesson, error } = useSWR(
+    const { data: lesson, error, isLoading } = useSWR(
         `/api/lesson/${params.lessonId}`,
         null,
         {
@@ -35,7 +35,7 @@ export default function LessonPage({
                 {t("failedToLoad")}
             </div>
         );
-    if (!lesson)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />

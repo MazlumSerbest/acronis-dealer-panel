@@ -514,7 +514,7 @@ export default function CustomersPage() {
         <div className="flex flex-col gap-4">
             <PageHeader title={t("customers")} />
 
-            {!data ? (
+            {isLoading ? (
                 <Skeleton>
                     <TableSkeleton />
                 </Skeleton>
@@ -527,7 +527,6 @@ export default function CustomersPage() {
                     defaultPageSize={50}
                     defaultSort="name"
                     defaultSortDirection="asc"
-                    isLoading={isLoading}
                     facetedFilters={[
                         {
                             column: "kind",

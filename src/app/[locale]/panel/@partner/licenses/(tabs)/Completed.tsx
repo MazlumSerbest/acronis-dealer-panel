@@ -14,7 +14,7 @@ export default function CompletedTab() {
     const t = useTranslations("General");
     const { user: currentUser } = useUserStore();
 
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/license?status=completed&partnerAcronisId=${currentUser?.partnerAcronisId}`,
         null,
         {
@@ -202,7 +202,7 @@ export default function CompletedTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />

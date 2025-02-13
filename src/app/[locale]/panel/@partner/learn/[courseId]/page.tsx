@@ -33,27 +33,25 @@ export default function CourseDetail({
     const [lessonCount, setLessonCount] = useState(0);
 
     //#region Fetch Data
-    const { data: course, error } = useSWR(
-        `/api/course/${params.courseId}`,
-        null,
-        {
-            revalidateOnFocus: false,
-            onSuccess: (data) => {
-                let chapters = 0;
-                let lessons = 0;
-                data.chapters.forEach((c: Chapter) => {
-                    if (c.active) {
-                        chapters++;
-                        lessons += c.lessons.filter(
-                            (l: Lesson) => l.active,
-                        ).length;
-                    }
-                });
-                setChapterCount(chapters);
-                setLessonCount(lessons);
-            },
+    const {
+        data: course,
+        error,
+        isLoading,
+    } = useSWR(`/api/course/${params.courseId}`, null, {
+        revalidateOnFocus: false,
+        onSuccess: (data) => {
+            let chapters = 0;
+            let lessons = 0;
+            data.chapters.forEach((c: Chapter) => {
+                if (c.active) {
+                    chapters++;
+                    lessons += c.lessons.filter((l: Lesson) => l.active).length;
+                }
+            });
+            setChapterCount(chapters);
+            setLessonCount(lessons);
         },
-    );
+    });
     //#endregion
 
     if (error)
@@ -62,7 +60,7 @@ export default function CourseDetail({
                 {t("failedToLoad")}
             </div>
         );
-    if (!course)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />
