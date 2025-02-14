@@ -22,12 +22,12 @@ type Tenant = AcronisEntity & {
 };
 
 type TenantUser = AcronisEntity & {
-    tenant_id: string;
+    tenant_id?: string;
     login: string;
     activated?: boolean;
     enabled?: boolean;
     mfa_status?: string;
-    language: string;
+    language?: string;
     contact: TenantContact;
 };
 

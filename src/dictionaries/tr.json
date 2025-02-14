@@ -221,7 +221,7 @@
         "partialLicense": "Kısmi Lisans",
         "partialLicenseDescription": "Bu lisansı kısmi lisans yaparsanız, lisans ilk atamadan sonra etkinleştirilir. Bu lisansın bir kısmını herhangi bir müşteriye atamadığınız sürece, daha sonra normal bir lisansa dönüştürebilirsiniz.",
         "areYouSure": "İşlemi gerçekleştirmek istediğinize emin misiniz?",
-        "areYouSureDescription": "Bu işlem geri alınamaz. Seçilen kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
+        "areYouSureDescription": "Bu işlem geri alınamaz. Seçilen kayıt kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
         "selectedItem": "Seçilen: {name}",
         "assignLicense": "Lisans Ata",
         "showOnAcronis": "Acronis Cyber Protect Cloud'da Göster",
@@ -313,7 +313,15 @@
         "image": "Resim",
         "content": "İçerik",
         "contentEditorPlaceholder": "İçeriği buraya yazın...",
-        "draft": "Taslak"
+        "draft": "Taslak",
+        "notifications": "Bildirimler",
+        "roles": "Roller",
+        "contactTypes": "İletişim Tipleri",
+        "acronisUsers": "Acronis Users",
+        "firstname": "Ad",
+        "lastname": "Soyad",
+        "editNotifications": "Bildirimleri Düzenle",
+        "setRoleToReadonly": "Rolünü Salt Okunur Yap"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",
@@ -372,7 +380,18 @@
     "FormMessages": {
         "User": {
             "active": {
-                "description": "Bu değer aktif durumu için geçerlidir. Kullanıcı aktif ise, sisteme giriş yapabilir."
+                "description": "Bu değer kullanıcı aktif durumu içindir. Kullanıcı aktif ise, sisteme giriş yapabilir."
+            },
+            "enabled": {
+                "description": "Bu değer Acronis kullanıcı durumu içindir. Kullanıcı etkinse, Acronis Cyber Protect Cloud'a giriş yapabilir."
+            },
+            "login": {
+                "required": "Kullanıcı adı zorunludur",
+                "alreadyTaken": "Bu kullanıcı adı kullanılmış",
+                "checkFailed": "Kullanıcı adı kontrolü başarısız",
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır",
+                "description": "Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
+                "invalidType": "Geçerli bir kullanıcı adı olmalıdır"
             },
             "licensed": {
                 "description": "Bu değer lisanslı durumu için geçerlidir. Kullanıcı lisanslı ise bazı sayfalar bu kullanıcı için değişebilir."
@@ -384,9 +403,19 @@
                 "required": "Ad zorunludur",
                 "minLength": "En az 3 karakter uzunluğunda olmalıdır"
             },
+            "firstname": {
+                "required": "Ad zorunludur"
+            },
+            "lastname": {
+                "required": "Soyad zorunludur"
+            },
             "email": {
                 "required": "E-posta zorunludur",
                 "invalidType": "E-posta geçerli bir e-posta olmalıdır"
+            },
+            "phone": {
+                "maxLength": "En fazla 15 karakter uzunluğunda olmalıdır",
+                "invalidType": "Geçerli bir telefon numarası olmalıdır"
             }
         },
         "Partner": {
@@ -396,7 +425,7 @@
             },
             "login": {
                 "required": "Kullanıcı adı zorunludur",
-                "alreadyTaken": "Bu kullanıcı adı zaten alınmış",
+                "alreadyTaken": "Bu kullanıcı adı kullanılmış",
                 "checkFailed": "Kullanıcı adı kontrolü başarısız",
                 "minLength": "En az 6 karakter uzunluğunda olmalıdır",
                 "description": "Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
@@ -420,7 +449,7 @@
             },
             "login": {
                 "required": "Kullanıcı adı zorunludur",
-                "alreadyTaken": "Bu kullanıcı adı zaten alınmış",
+                "alreadyTaken": "Bu kullanıcı adı kullanılmış",
                 "checkFailed": "Kullanıcı adı kontrolü başarısız",
                 "minLength": "En az 6 karakter uzunluğunda olmalıdır",
                 "description": "Bu, Acronis Cyber Protect Cloud'a giriş için kullanılacaktır ve benzersiz bir değer olmalıdır.",
@@ -719,6 +748,40 @@
         "expired": "Son Kullanma Süresi Geçmiş",
         "status": "Durum",
         "passive": "Pasif"
+    },
+    "Users": {
+        "Notifications": {
+            "maintenance": "Bakım",
+            "quota": "Kota",
+            "reports": "Raporlar",
+            "backup_error": "Yedekleme Hatası",
+            "backup_warning": "Yedekleme Uyarısı",
+            "backup_info": "Yedekleme Bilgisi",
+            "backup_daily_report": "Günlük Yedekleme Raporu",
+            "backup_critical": "Kritik Yedekleme Hatası",
+            "device_control_warning": "Cihaz Kontrol Uyarısı",
+            "certificate_management_error": "Sertifika Yönetimi Hatası",
+            "certificate_management_warning": "Sertifika Yönetimi Uyarısı",
+            "certificate_management_info": "Sertifika Yönetimi Bilgisi"
+        },
+        "Roles": {
+            "partner_admin": "Partner Yöneticisi",
+            "accounts_admin": "Management Portal Yöneticisi",
+            "accounts_ro_admin": "Management Portal Yöneticisi (Readonly)",
+            "protection_admin": "Koruma Yöneticisi",
+            "protection_ro_admin": "Koruma Yöneticisi (Readonly)",
+            "company_admin": "Şirket Yöneticisi"
+        },
+        "ContactTypes": {
+            "legal": "Yasal",
+            "primary": "Birincil",
+            "billing": "Billing",
+            "business": "Business",
+            "management": "Management",
+            "technical": "Technical"
+        },
+        "partner": "Partner",
+        "acronis": "Acronis"
     },
     "Alerts": {
         "title": "Uyarılar"

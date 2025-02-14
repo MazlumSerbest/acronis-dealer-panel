@@ -53,6 +53,11 @@ import FormError from "@/components/FormError";
 import { DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 
+type Props = {
+    t: Function;
+    tenant: Tenant;
+};
+
 const userFormSchema = z.object({
     id: z.string().cuid().optional(),
     active: z.boolean(),
@@ -76,24 +81,21 @@ const userFormSchema = z.object({
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 
-type Props = {
-    t: Function;
-    tenantId: string;
-};
-
-export default function PartnerTab({ t, tenantId }: Props) {
+export default function PartnerTab({ t, tenant }: Props) {
     const tf = useTranslations("FormMessages.User");
+
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
-    const { data: users, error, isLoading, mutate } = useSWR(
-        `/api/user?partnerAcronisId=${tenantId}`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const {
+        data: users,
+        error,
+        isLoading,
+        mutate,
+    } = useSWR(`/api/user?partnerAcronisId=${tenant.id}`, null, {
+        revalidateOnFocus: false,
+    });
 
     //#region Form
     const form = useForm<UserFormValues>({
@@ -109,7 +111,7 @@ export default function PartnerTab({ t, tenantId }: Props) {
 
         if (isNew) {
             values.role = "partner";
-            values.partnerAcronisId = tenantId;
+            values.partnerAcronisId = tenant.id;
 
             fetch("/api/admin/user", {
                 method: "POST",

@@ -800,6 +800,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 )}
+                                
                                 {!panelTenant && tenant.kind == "partner" && (
                                     <AlertDialog
                                         open={openPartnerDialog}

@@ -313,7 +313,15 @@
         "image": "Image",
         "content": "Content",
         "contentEditorPlaceholder": "Write your content here...",
-        "draft": "Draft"
+        "draft": "Draft",
+        "notifications": "Notifications",
+        "roles": "Roles",
+        "contactTypes": "Contact Types",
+        "acronisUsers": "Acronis Users",
+        "firstname": "First Name",
+        "lastname": "Last Name",
+        "editNotifications": "Edit Notifications",
+        "setRoleToReadonly": "Set Role to Readonly"
     },
     "SignIn": {
         "signIn": "Welcome",
@@ -374,6 +382,17 @@
             "active": {
                 "description": "This value is for the active status. If the user is active, the user can login to the system."
             },
+            "enabled": {
+                "description": "This value is for the active status of Acronis user account. If the user is enabled, the user can login to the Acronis Cyber Protect Cloud."
+            },
+            "login": {
+                "required": "Login is required",
+                "alreadyTaken": "Username is already taken",
+                "checkFailed": "Failed to check username availability",
+                "minLength": "Must be at least 6 characters long",
+                "description": "This will be used to login to Acronis Cyber Protect Cloud and must be unique value.",
+                "invalidType": "Must be valid username"
+            },
             "licensed": {
                 "description": "This value is for the licensed status. If the user is licensed, some pages may change for this user."
             },
@@ -384,9 +403,19 @@
                 "required": "Name is required",
                 "minLength": "Must be at least 3 characters long"
             },
+            "firstname": {
+                "required": "First Name is required"
+            },
+            "lastname": {
+                "required": "Last Name is required"
+            },
             "email": {
                 "required": "Email is required",
                 "invalidType": "Email must be a valid email"
+            },
+            "phone": {
+                "maxLength": "Must be 15 characters or less",
+                "invalidType": "Must be a valid phone number"
             }
         },
         "Partner": {
@@ -479,7 +508,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be under 60 characters long"
+                "maxLength": "Must be 60 characters or less"
             },
             "category": {
                 "required": "Category is required"
@@ -492,7 +521,7 @@
             },
             "shortDescription": {
                 "required": "Short Description is required",
-                "maxLength": "Must be under 80 characters long"
+                "maxLength": "Must be 80 characters or less"
             },
             "description": {
                 "required": "Description is required"
@@ -504,7 +533,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be under 60 characters long"
+                "maxLength": "Must be 60 characters or less"
             },
             "order": {
                 "required": "Order is required",
@@ -517,7 +546,7 @@
             },
             "name": {
                 "required": "Name is required",
-                "maxLength": "Must be under 60 characters long"
+                "maxLength": "Must be 60 characters or less"
             },
             "order": {
                 "required": "Order is required",
@@ -564,7 +593,7 @@
                 "required": "Tax No is required",
                 "invalidType": "Must be a valid number",
                 "minLength": "Must be at least 10 characters long",
-                "maxLength": "Must be more than 11 characters long"
+                "maxLength": "Must be 11 characters or less"
             },
             "taxOffice": {
                 "required": "Tax Office is required"
@@ -720,6 +749,40 @@
         "expired": "Expired",
         "status": "Status",
         "passive": "Passive"
+    },
+    "Users": {
+        "Notifications": {
+            "maintenance": "Maintenance",
+            "quota": "Quota",
+            "reports": "Reports",
+            "backup_error": "Backup Error",
+            "backup_warning": "Backup Warning",
+            "backup_info": "Backup Info",
+            "backup_daily_report": "Daily Backup Report",
+            "backup_critical": "Backup Critical",
+            "device_control_warning": "Device Control Warning",
+            "certificate_management_error": "Certificate Management Error",
+            "certificate_management_warning": "Certificate Management Warning",
+            "certificate_management_info": "Certificate Management Info"
+        },
+        "Roles": {
+            "partner_admin": "Partner Admin",
+            "accounts_admin": "Management Portal Admin",
+            "accounts_ro_admin": "Management Portal Admin (Readonly)",
+            "protection_admin": "Protection Admin",
+            "protection_ro_admin": "Protection Admin (Readonly)",
+            "company_admin": "Company Admin"
+        },
+        "ContactTypes": {
+            "legal": "Legal",
+            "primary": "Primary",
+            "billing": "Billing",
+            "business": "Business",
+            "management": "Management",
+            "technical": "Technical"
+        },
+        "partner": "Partner",
+        "acronis": "Acronis"
     },
     "Alerts": {
         "title": "Alerts"

@@ -1,14 +1,11 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import useSWR from "swr";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import Loader from "@/components/loaders/Loader";
 
 import { useTranslations } from "next-intl";
 import PartnerTab from "./(userTabs)/Partner";
 import AcronisTab from "./(userTabs)/Acronis";
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import { cn } from "@/lib/utils";
 
 type Props = {
     t: Function;
@@ -24,23 +21,28 @@ export default function UsersTab({ t, tenant }: Props) {
 
     return (
         <Tabs
-            defaultValue="active"
-            value={status}
+            value={tenant.kind !== "partner" ? "acronis" : status}
+            defaultValue={"partner"}
             onValueChange={(value) =>
                 router.push(`${pathname}?tab=users&status=${value}`)
             }
             className="flex flex-col w-full"
         >
-            <TabsList className="max-w-fit">
+            <TabsList
+                className={cn(
+                    "max-w-fit",
+                    tenant.kind !== "partner" ? "hidden" : "",
+                )}
+            >
                 <TabsTrigger value="partner">{tu("partner")}</TabsTrigger>
                 <TabsTrigger value="acronis">{tu("acronis")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="partner">
-                <PartnerTab t={t} tenantId={tenant.id || ""} />
+                <PartnerTab t={t} tenant={tenant} />
             </TabsContent>
             <TabsContent value="acronis">
-                <AcronisTab t={t} tenantId={tenant.id || ""} />
+                <AcronisTab t={t} tenant={tenant} />
             </TabsContent>
         </Tabs>
     );

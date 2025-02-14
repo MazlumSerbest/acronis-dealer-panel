@@ -14,6 +14,7 @@ import Loader from "@/components/loaders/Loader";
 import ClientsTab from "./(tabs)/Clients";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
+import UsersTab from "./(tabs)/Users";
 
 export default function TenantDetail({
     params,
@@ -29,7 +30,7 @@ export default function TenantDetail({
     const [updatedChildren, setUpdatedChildren] = useState(undefined);
 
     //#region Fetch Data
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/${params.acronisId}`,
         null,
         {
@@ -110,7 +111,7 @@ export default function TenantDetail({
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <div className="h-80">
                 <Loader />
@@ -153,7 +154,7 @@ export default function TenantDetail({
                     }
                     className="flex flex-col w-full"
                 >
-                    <TabsList className="mx-auto md:*:w-[200px] *:w-full mb-2">
+                    <TabsList className="mx-auto md:*:w-[180px] *:w-full mb-2">
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
@@ -165,7 +166,13 @@ export default function TenantDetail({
                         <TabsTrigger value="licenses">
                             {t("licenses")}
                         </TabsTrigger>
+                        <TabsTrigger value="users">
+                            {data?.kind == "partner"
+                                ? t("users")
+                                : t("acronisUsers")}
+                        </TabsTrigger>
                     </TabsList>
+
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>
@@ -184,6 +191,9 @@ export default function TenantDetail({
                     </TabsContent>
                     <TabsContent value="licenses">
                         <LicensesTab t={t} tenant={data} />
+                    </TabsContent>
+                    <TabsContent value="users">
+                        <UsersTab t={t} tenant={data} />
                     </TabsContent>
                 </Tabs>
             </div>
