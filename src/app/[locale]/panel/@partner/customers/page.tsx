@@ -93,8 +93,8 @@ export default function CustomersPage() {
     const [updatedData, setUpdatedData] = useState<any[]>([]);
 
     const [open, setOpen] = useState(false);
-    const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
     const [loginCheckLoading, setLoginCheckLoading] = useState(false);
     const [loginValid, setLoginValid] = useState(false);
 
@@ -688,7 +688,7 @@ export default function CustomersPage() {
                                                     }}
                                                 />
                                                 {loginCheckLoading && (
-                                                    <LuLoader2 className="size-4 animate-spin absolute right-2" />
+                                                    <LuLoader2 className="size-4 text-blue-400 animate-spin absolute right-2" />
                                                 )}
                                                 {loginAlreadyTaken && (
                                                     <LuAlertCircle className="size-4 text-destructive absolute right-2" />
