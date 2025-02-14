@@ -40,7 +40,7 @@ export const GET = auth(async (req: any) => {
                         customers: true,
                         children: true,
                     },
-                }
+                },
             },
         });
 
@@ -70,6 +70,23 @@ export const POST = auth(async (req: any) => {
 
         const partner = await req.json();
         partner.createdBy = req.auth.user.email;
+
+        const checkParent = await prisma.partner.findUnique({
+            where: {
+                acronisId: partner.parentAcronisId,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!checkParent?.id)
+            return NextResponse.json({
+                message:
+                    "Üst partner bulunamadı! Lütfen önce bu partnerin bir üstündeki partneri oluşturunuz.",
+                status: 400,
+                ok: false,
+            });
 
         const existingPartner = await prisma.partner.findFirst({
             where: {

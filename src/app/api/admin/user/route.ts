@@ -50,6 +50,23 @@ export const POST = auth(async (req: any) => {
         const user = await req.json();
         user.createdBy = req.auth.user.email;
 
+        const checkPartner = await prisma.partner.findUnique({
+            where: {
+                acronisId: user.partnerAcronisId,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!checkPartner?.id)
+            return NextResponse.json({
+                message:
+                    "Panel partneri bulunamadı! Lütfen önce bu partnerin panel üzerindeki partnerini oluşturunuz.",
+                status: 400,
+                ok: false,
+            });
+
         const checkEmail = await prisma.user.findUnique({
             where: {
                 email: user.email,
