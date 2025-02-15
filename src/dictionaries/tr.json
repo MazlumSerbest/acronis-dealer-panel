@@ -321,7 +321,9 @@
         "firstname": "Ad",
         "lastname": "Soyad",
         "editNotifications": "Bildirimleri Düzenle",
-        "setRoleToReadonly": "Rolünü Salt Okunur Yap"
+        "editNotificationsDescription": "Bu kullanıcının almasını istediğiniz bildirimleri seçiniz.",
+        "setRoleToReadonly": "Salt Okunur Kullanıcı Yap",
+        "update": "Güncelle"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

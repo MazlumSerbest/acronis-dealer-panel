@@ -321,7 +321,9 @@
         "firstname": "First Name",
         "lastname": "Last Name",
         "editNotifications": "Edit Notifications",
-        "setRoleToReadonly": "Set Role to Readonly"
+        "editNotificationsDescription": "Select the notifications you want this user to receive.",
+        "setRoleToReadonly": "Make This User Readonly",
+        "update": "Update"
     },
     "SignIn": {
         "signIn": "Welcome",

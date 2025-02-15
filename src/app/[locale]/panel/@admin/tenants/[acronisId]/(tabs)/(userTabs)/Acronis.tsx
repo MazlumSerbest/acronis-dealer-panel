@@ -13,6 +13,7 @@ import {
     DialogContent,
     DialogClose,
     DialogFooter,
+    DialogDescription,
 } from "@/components/ui/dialog";
 import {
     Form,
@@ -58,6 +59,8 @@ import {
     LuLoader2,
     LuMoreHorizontal,
 } from "react-icons/lu";
+import { Checkbox } from "@/components/ui/checkbox";
+import { userNotifications } from "@/lib/constants";
 
 type Props = {
     t: Function;
@@ -102,11 +105,17 @@ const userFormSchema = z.object({
 
 type UserFormValues = z.infer<typeof userFormSchema>;
 
+type NotificationsFormValues = {
+    id: string;
+    notifications: string[];
+};
+
 export default function AcronisTab({ t, tenant }: Props) {
     const tu = useTranslations("Users");
     const tf = useTranslations("FormMessages.User");
 
-    const [open, setOpen] = useState(false);
+    const [openUser, setOpenUser] = useState(false);
+    const [openNotification, setOpenNotification] = useState(false);
     const [isNew, setIsNew] = useState(true);
     const [submitting, setSubmitting] = useState(false);
     const [loginAlreadyTaken, setLoginAlreadyTaken] = useState(false);
@@ -127,14 +136,14 @@ export default function AcronisTab({ t, tenant }: Props) {
     );
 
     //#region Form
-    const form = useForm<UserFormValues>({
+    const userForm = useForm<UserFormValues>({
         resolver: zodResolver(userFormSchema),
         defaultValues: {
             enabled: true,
         },
     });
 
-    function onSubmit(values: UserFormValues) {
+    function onSubmitUser(values: UserFormValues) {
         if (submitting) return;
         setSubmitting(true);
 
@@ -163,9 +172,9 @@ export default function AcronisTab({ t, tenant }: Props) {
                         toast({
                             description: res.message,
                         });
-                        setOpen(false);
+                        setOpenUser(false);
                         mutate();
-                        form.reset();
+                        userForm.reset();
                     } else {
                         toast({
                             variant: "destructive",
@@ -173,9 +182,8 @@ export default function AcronisTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         } else {
             fetch(`/api/acronis/users/${values.id}`, {
                 method: "PUT",
@@ -187,9 +195,9 @@ export default function AcronisTab({ t, tenant }: Props) {
                         toast({
                             description: res.message,
                         });
-                        setOpen(false);
+                        setOpenUser(false);
                         mutate();
-                        form.reset();
+                        userForm.reset();
                     } else {
                         toast({
                             variant: "destructive",
@@ -197,11 +205,40 @@ export default function AcronisTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         }
     }
+
+    const notificationsForm = useForm<NotificationsFormValues>();
+
+    const onSubmitNotification = (values: NotificationsFormValues) => {
+        if (submitting) return;
+        setSubmitting(true);
+
+        fetch(`/api/acronis/users/${values.id}`, {
+            method: "PUT",
+            body: JSON.stringify(values),
+        })
+            .then((res) => res.json())
+            .then((res) => {
+                if (res.ok) {
+                    toast({
+                        description: res.message,
+                    });
+                    setOpenUser(false);
+                    mutate();
+                    userForm.reset();
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: t("errorTitle"),
+                        description: res.message,
+                    });
+                }
+            })
+            .finally(() => setSubmitting(false));
+    };
     //#endregion
 
     //#region Table
@@ -298,7 +335,7 @@ export default function AcronisTab({ t, tenant }: Props) {
             cell: ({ row }) => {
                 const notifications: string[] = row.getValue("notifications");
 
-                if (!notifications) return "-";
+                if (!notifications || notifications.length < 1) return "-";
                 return (
                     <div className="*:before:content-['•'] *:before:mr-1">
                         {notifications.map((n) => {
@@ -393,33 +430,114 @@ export default function AcronisTab({ t, tenant }: Props) {
                             <DropdownMenuItem
                                 onClick={() => {
                                     setIsNew(false);
-                                    setOpen(true);
-                                    form.reset(user);
+                                    setOpenUser(true);
+                                    userForm.reset(user);
                                 }}
                             >
                                 {t("edit")}
                             </DropdownMenuItem>
 
-                            {/* 
                             <DropdownMenuItem
                                 onClick={() => {
-                                    // setIsNew(false);
-                                    // setOpen(true);
-                                    // form.reset(user);
+                                    setOpenNotification(true);
+                                    notificationsForm.reset({
+                                        id: data.id,
+                                        notifications:
+                                            data?.notifications || [],
+                                    });
                                 }}
                             >
                                 {t("editNotifications")}
                             </DropdownMenuItem>
 
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    // setIsNew(false);
-                                    // setOpen(true);
-                                    // form.reset(user);
-                                }}
-                            >
-                                {t("setRoleToReadonly")}
-                            </DropdownMenuItem> */}
+                            {tenant.kind === "partner" && (
+                                <AlertDialog>
+                                    <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem
+                                            onSelect={(e) => e.preventDefault()}
+                                        >
+                                            {t("setRoleToReadonly")}
+                                        </DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                    <AlertDialogContent>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>
+                                                {t("areYouSure")}
+                                            </AlertDialogTitle>
+                                            <AlertDialogDescription>
+                                                {t("areYouSureDescription")}
+                                            </AlertDialogDescription>
+                                        </AlertDialogHeader>
+
+                                        <div className="text-sm text-muted-foreground">
+                                            {t("selectedItem", {
+                                                name: user.login,
+                                            })}
+                                        </div>
+
+                                        <AlertDialogFooter>
+                                            <AlertDialogCancel>
+                                                {t("close")}
+                                            </AlertDialogCancel>
+                                            <AlertDialogAction asChild>
+                                                <Button
+                                                    disabled={submitting}
+                                                    variant="destructive"
+                                                    className="bg-destructive hover:bg-destructive/90"
+                                                    onClick={() => {
+                                                        setSubmitting(true);
+
+                                                        fetch(
+                                                            `/api/acronis/users/${user.id}/role`,
+                                                            {
+                                                                method: "PUT",
+                                                                body: JSON.stringify(
+                                                                    {
+                                                                        tenant_id:
+                                                                            tenant.id,
+                                                                    },
+                                                                ),
+                                                            },
+                                                        )
+                                                            .then((res) =>
+                                                                res.json(),
+                                                            )
+                                                            .then((res) => {
+                                                                if (res.ok) {
+                                                                    toast({
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                    mutate();
+                                                                } else {
+                                                                    toast({
+                                                                        variant:
+                                                                            "destructive",
+                                                                        title: t(
+                                                                            "errorTitle",
+                                                                        ),
+                                                                        description:
+                                                                            res.message,
+                                                                    });
+                                                                }
+                                                            })
+                                                            .finally(() =>
+                                                                setSubmitting(
+                                                                    false,
+                                                                ),
+                                                            );
+                                                    }}
+                                                >
+                                                    {t("update")}
+                                                    {submitting && (
+                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    )}
+                                                </Button>
+                                            </AlertDialogAction>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
+                            )}
 
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
@@ -485,11 +603,11 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                                 });
                                                             }
                                                         })
-                                                        .finally(() => {
+                                                        .finally(() =>
                                                             setSubmitting(
                                                                 false,
-                                                            );
-                                                        });
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
@@ -527,7 +645,7 @@ export default function AcronisTab({ t, tenant }: Props) {
             if (!loginRegex.test(username)) {
                 setLoginValid(false);
                 setLoginAlreadyTaken(false);
-                form.setError("login", {
+                userForm.setError("login", {
                     type: "manual",
                     message: "Customer.login.invalidType",
                 });
@@ -547,11 +665,11 @@ export default function AcronisTab({ t, tenant }: Props) {
                 if (data.ok) {
                     setLoginAlreadyTaken(false);
                     setLoginValid(true);
-                    form.clearErrors("login");
+                    userForm.clearErrors("login");
                 } else {
                     setLoginAlreadyTaken(true);
                     setLoginValid(false);
-                    form.setError("login", {
+                    userForm.setError("login", {
                         type: "manual",
                         message: "Customer.login.alreadyTaken",
                     });
@@ -559,7 +677,7 @@ export default function AcronisTab({ t, tenant }: Props) {
             } catch (error) {
                 setLoginAlreadyTaken(true);
                 setLoginValid(false);
-                form.setError("login", {
+                userForm.setError("login", {
                     type: "manual",
                     message: "Customer.login.checkFailed",
                 });
@@ -567,7 +685,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                 setLoginCheckLoading(false);
             }
         },
-        [form],
+        [userForm],
     );
 
     const debouncedCheckLogin = useMemo(
@@ -609,12 +727,12 @@ export default function AcronisTab({ t, tenant }: Props) {
                 ]}
                 onAddNew={() => {
                     setIsNew(true);
-                    setOpen(true);
-                    form.reset({ enabled: true });
+                    setOpenUser(true);
+                    userForm.reset({ enabled: true });
                 }}
             />
 
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog open={openUser} onOpenChange={setOpenUser}>
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
@@ -622,15 +740,15 @@ export default function AcronisTab({ t, tenant }: Props) {
                         </DialogTitle>
                     </DialogHeader>
 
-                    <Form {...form}>
+                    <Form {...userForm}>
                         <form
-                            onSubmit={form.handleSubmit(onSubmit)}
+                            onSubmit={userForm.handleSubmit(onSubmitUser)}
                             autoComplete="off"
                             className="space-y-4"
                         >
                             {!isNew && (
                                 <FormField
-                                    control={form.control}
+                                    control={userForm.control}
                                     name="enabled"
                                     render={({ field }) => (
                                         <FormItem className="flex flex-row items-center justify-between">
@@ -657,7 +775,7 @@ export default function AcronisTab({ t, tenant }: Props) {
 
                             {isNew && (
                                 <FormField
-                                    control={form.control}
+                                    control={userForm.control}
                                     name="login"
                                     render={({ field }) => (
                                         <FormItem>
@@ -712,7 +830,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                             </FormControl>
                                             <FormError
                                                 error={
-                                                    form?.formState?.errors
+                                                    userForm?.formState?.errors
                                                         ?.login
                                                 }
                                             />
@@ -722,7 +840,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                             )}
 
                             <FormField
-                                control={form.control}
+                                control={userForm.control}
                                 name="firstname"
                                 render={({ field }) => (
                                     <FormItem>
@@ -734,7 +852,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                         </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors
+                                                userForm?.formState?.errors
                                                     ?.firstname
                                             }
                                         />
@@ -743,7 +861,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                             />
 
                             <FormField
-                                control={form.control}
+                                control={userForm.control}
                                 name="lastname"
                                 render={({ field }) => (
                                     <FormItem>
@@ -755,7 +873,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                         </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors
+                                                userForm?.formState?.errors
                                                     ?.lastname
                                             }
                                         />
@@ -764,7 +882,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                             />
 
                             <FormField
-                                control={form.control}
+                                control={userForm.control}
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
@@ -776,7 +894,8 @@ export default function AcronisTab({ t, tenant }: Props) {
                                         </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors?.email
+                                                userForm?.formState?.errors
+                                                    ?.email
                                             }
                                         />
                                     </FormItem>
@@ -784,7 +903,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                             />
 
                             <FormField
-                                control={form.control}
+                                control={userForm.control}
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
@@ -794,9 +913,107 @@ export default function AcronisTab({ t, tenant }: Props) {
                                         </FormControl>
                                         <FormError
                                             error={
-                                                form?.formState?.errors?.phone
+                                                userForm?.formState?.errors
+                                                    ?.phone
                                             }
                                         />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <DialogFooter>
+                                <DialogClose asChild>
+                                    <Button variant="outline">
+                                        {t("close")}
+                                    </Button>
+                                </DialogClose>
+                                <Button
+                                    disabled={submitting}
+                                    type="submit"
+                                    className="bg-green-600 hover:bg-green-600/90"
+                                >
+                                    {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+
+            <Dialog open={openNotification} onOpenChange={setOpenNotification}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{t("editNotifications")}</DialogTitle>
+                        <DialogDescription>{t("editNotificationsDescription")}</DialogDescription>
+                    </DialogHeader>
+
+                    <Form {...userForm}>
+                        <form
+                            onSubmit={notificationsForm.handleSubmit(
+                                onSubmitNotification,
+                            )}
+                            autoComplete="off"
+                            className="space-y-4"
+                        >
+                            <FormField
+                                control={notificationsForm.control}
+                                name="notifications"
+                                render={() => (
+                                    <FormItem>
+                                        {userNotifications.map((not) => (
+                                            <FormField
+                                                key={not}
+                                                control={
+                                                    notificationsForm.control
+                                                }
+                                                name="notifications"
+                                                render={({ field }) => {
+                                                    return (
+                                                        <FormItem
+                                                            key={not}
+                                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                                        >
+                                                            <FormControl>
+                                                                <Checkbox
+                                                                    checked={field.value?.includes(
+                                                                        not,
+                                                                    )}
+                                                                    onCheckedChange={(
+                                                                        checked,
+                                                                    ) => {
+                                                                        return checked
+                                                                            ? field.onChange(
+                                                                                  [
+                                                                                      ...field.value,
+                                                                                      not,
+                                                                                  ],
+                                                                              )
+                                                                            : field.onChange(
+                                                                                  field.value?.filter(
+                                                                                      (
+                                                                                          value,
+                                                                                      ) =>
+                                                                                          value !==
+                                                                                          not,
+                                                                                  ),
+                                                                              );
+                                                                    }}
+                                                                />
+                                                            </FormControl>
+                                                            <FormLabel className="font-normal">
+                                                                {tu(
+                                                                    "Notifications." +
+                                                                        not,
+                                                                )}
+                                                            </FormLabel>
+                                                        </FormItem>
+                                                    );
+                                                }}
+                                            />
+                                        ))}
                                     </FormItem>
                                 )}
                             />

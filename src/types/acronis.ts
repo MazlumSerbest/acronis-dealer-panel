@@ -29,6 +29,7 @@ type TenantUser = AcronisEntity & {
     mfa_status?: string;
     language?: string;
     contact: TenantContact;
+    notifications?: string[];
 };
 
 type TenantContact = AcronisEntity & {
@@ -93,7 +94,7 @@ type OfferingItem = AcronisEntity & {
         overage: number;
         version: number;
     };
-}
+};
 
 // V1
 type Alert = {

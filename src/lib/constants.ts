@@ -3,7 +3,7 @@ export const chartColors = {
     green: "rgba(22, 163, 74, 0.9)",
     red: "rgba(239, 68, 68, 0.9)",
     yellow: "rgba(250, 204, 21, 0.9)",
-}
+};
 
 export const dealers = [
     {
@@ -1495,4 +1495,19 @@ export const usageNames = [
         key: "storage",
         name: "Storage",
     },
+];
+
+export const userNotifications = [
+    "maintenance",
+    "quota",
+    "reports",
+    "backup_error",
+    "backup_warning",
+    "backup_info",
+    "backup_daily_report",
+    "backup_critical",
+    "device_control_warning",
+    "certificate_management_error",
+    "certificate_management_warning",
+    "certificate_management_info",
 ];
