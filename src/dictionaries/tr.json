@@ -323,6 +323,7 @@
         "editNotifications": "Bildirimleri Düzenle",
         "editNotificationsDescription": "Bu kullanıcının almasını istediğiniz bildirimleri seçiniz.",
         "setRoleToReadonly": "Salt Okunur Kullanıcı Yap",
+        "setRoleToReadonlyDescription": "Seçilen Acronis kullanıcısını salt okunur yapılcak. Devam etmek istediğinize emin misiniz?",
         "update": "Güncelle"
     },
     "SignIn": {

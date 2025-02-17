@@ -323,6 +323,7 @@
         "editNotifications": "Edit Notifications",
         "editNotificationsDescription": "Select the notifications you want this user to receive.",
         "setRoleToReadonly": "Make This User Readonly",
+        "setRoleToReadonlyDescription": "Selected Acronis user will be readonly. Are you sure you want to proceed?",
         "update": "Update"
     },
     "SignIn": {

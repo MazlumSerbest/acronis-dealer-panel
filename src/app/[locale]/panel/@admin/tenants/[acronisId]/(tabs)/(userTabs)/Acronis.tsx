@@ -447,7 +447,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                     });
                                 }}
                             >
-                                {t("editNotifications")}
+                                {t("notifications")}
                             </DropdownMenuItem>
 
                             {tenant.kind === "partner" && (
@@ -465,7 +465,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                 {t("areYouSure")}
                                             </AlertDialogTitle>
                                             <AlertDialogDescription>
-                                                {t("areYouSureDescription")}
+                                                {t("setRoleToReadonlyDescription")}
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
 
