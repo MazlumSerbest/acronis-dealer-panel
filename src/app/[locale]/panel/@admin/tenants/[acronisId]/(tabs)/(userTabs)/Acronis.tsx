@@ -226,7 +226,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                     toast({
                         description: res.message,
                     });
-                    setOpenUser(false);
+                    setOpenNotification(false);
                     mutate();
                     userForm.reset();
                 } else {

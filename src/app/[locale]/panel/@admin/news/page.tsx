@@ -117,8 +117,6 @@ export default function NewsPage() {
         if (submitting) return;
         setSubmitting(true);
 
-        console.log(values.content);
-
         const formData = new FormData();
         formData.append("title", values.title);
         formData.append("order", values.order.toString());
