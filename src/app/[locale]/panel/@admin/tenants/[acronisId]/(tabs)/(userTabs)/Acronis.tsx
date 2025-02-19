@@ -155,6 +155,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                 email: values.email,
                 phone: values.phone,
             },
+            notifications: ["backup_error", "backup_info"],
         };
 
         if (isNew) {
@@ -243,6 +244,7 @@ export default function AcronisTab({ t, tenant }: Props) {
 
     //#region Table
     const visibleColumns = {
+        contactTypes: false,
         created_at: false,
         updated_at: false,
     };
@@ -366,7 +368,7 @@ export default function AcronisTab({ t, tenant }: Props) {
             },
         },
         {
-            accessorKey: "contact",
+            accessorKey: "contactTypes",
             header: t("contactTypes"),
             cell: ({ row }) => {
                 const contact: TenantContact = row.getValue("contact");
@@ -449,8 +451,8 @@ export default function AcronisTab({ t, tenant }: Props) {
                             >
                                 {t("notifications")}
                             </DropdownMenuItem>
-
-                            {tenant.kind === "partner" && (
+                            
+                            {/* {tenant.kind === "partner" && (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
                                         <DropdownMenuItem
@@ -465,7 +467,9 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                 {t("areYouSure")}
                                             </AlertDialogTitle>
                                             <AlertDialogDescription>
-                                                {t("setRoleToReadonlyDescription")}
+                                                {t(
+                                                    "setRoleToReadonlyDescription",
+                                                )}
                                             </AlertDialogDescription>
                                         </AlertDialogHeader>
 
@@ -537,7 +541,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
-                            )}
+                            )} */}
 
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
@@ -947,7 +951,9 @@ export default function AcronisTab({ t, tenant }: Props) {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>{t("editNotifications")}</DialogTitle>
-                        <DialogDescription>{t("editNotificationsDescription")}</DialogDescription>
+                        <DialogDescription>
+                            {t("editNotificationsDescription")}
+                        </DialogDescription>
                     </DialogHeader>
 
                     <Form {...userForm}>
