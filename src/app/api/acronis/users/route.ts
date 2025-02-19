@@ -109,6 +109,7 @@ export const POST = auth(async (req: any, { params }) => {
             login: user.login,
             contact: user.contact as TenantContact,
             language: "tr",
+            notifications: user.notifications,
         };
 
         const checkLoginRes = await fetch(

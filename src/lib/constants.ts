@@ -1498,7 +1498,7 @@ export const usageNames = [
 ];
 
 export const userNotifications = [
-    "maintenance",
+    // "maintenance",
     "quota",
     "reports",
     "backup_error",
@@ -1506,8 +1506,8 @@ export const userNotifications = [
     "backup_info",
     "backup_daily_report",
     "backup_critical",
-    "device_control_warning",
-    "certificate_management_error",
-    "certificate_management_warning",
-    "certificate_management_info",
+    // "device_control_warning",
+    // "certificate_management_error",
+    // "certificate_management_warning",
+    // "certificate_management_info",
 ];
