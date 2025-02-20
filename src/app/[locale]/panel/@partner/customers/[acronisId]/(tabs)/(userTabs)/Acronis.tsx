@@ -293,6 +293,16 @@ export default function AcronisTab({ t, tenant }: Props) {
             },
         },
         {
+            accessorKey: "activated",
+            header: t("activated"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("activated");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+        },
+        {
             accessorKey: "enabled",
             header: t("enabled"),
             enableGlobalFilter: false,
@@ -593,6 +603,14 @@ export default function AcronisTab({ t, tenant }: Props) {
                 data={users.items.filter((u: User) => u.id) || []}
                 visibleColumns={visibleColumns}
                 facetedFilters={[
+                    {
+                        column: "activated",
+                        title: t("activated"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
                     {
                         column: "enabled",
                         title: t("enabled"),
