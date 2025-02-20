@@ -78,34 +78,6 @@ export default function GeneralTab() {
 
             <Card className="w-full">
                 <CardHeader className="flex flex-row items-center gap-3 p-4">
-                    <LuCoins className="size-8 text-yellow-500/60" />
-                    <div>
-                        <CardTitle className="font-medium text-xl">
-                            {t("pricing")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("pricingSubtitle")}
-                        </CardDescription>
-                    </div>
-                </CardHeader>
-                <CardContent className="flex flex-col divide-y text-sm leading-6">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
-                        <dt className="font-medium">{t("mode")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {t(data.pricing?.mode || "")}
-                        </dd>
-                    </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
-                        <dt className="font-medium">{t("currency")}</dt>
-                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                            {data.pricing?.currency || "-"}
-                        </dd>
-                    </div>
-                </CardContent>
-            </Card>
-
-            <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-3 p-4">
                     <LuTag className="size-8 text-blue-400/90" />
                     <div>
                         <CardTitle className="font-medium text-xl">
@@ -179,6 +151,34 @@ export default function GeneralTab() {
                             ) : (
                                 "-"
                             )}
+                        </dd>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card className="w-full">
+                <CardHeader className="flex flex-row items-center gap-3 p-4">
+                    <LuCoins className="size-8 text-yellow-500/60" />
+                    <div>
+                        <CardTitle className="font-medium text-xl">
+                            {t("pricing")}
+                        </CardTitle>
+                        <CardDescription>
+                            {t("pricingSubtitle")}
+                        </CardDescription>
+                    </div>
+                </CardHeader>
+                <CardContent className="flex flex-col divide-y text-sm leading-6">
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                        <dt className="font-medium">{t("mode")}</dt>
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                            {t(data.pricing?.mode || "")}
+                        </dd>
+                    </div>
+                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                        <dt className="font-medium">{t("currency")}</dt>
+                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                            {data.pricing?.currency || "-"}
                         </dd>
                     </div>
                 </CardContent>
