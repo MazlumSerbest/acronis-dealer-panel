@@ -151,35 +151,42 @@ export const POST = auth(async (req: any, { params }) => {
 
         let roles;
         if (user.kind === "partner") {
-            roles = {
-                items: [
-                    {
-                        id: "00000000-0000-0000-0000-000000000000",
-                        issuer_id: "00000000-0000-0000-0000-000000000000",
-                        version: 0,
-                        trustee_type: "user",
-                        tenant_id: newUser.tenant_id,
-                        trustee_id: createdUser.id,
-                        role_id: "accounts_ro_admin",
-                    },
-                    {
-                        id: "00000000-0000-0000-0000-000000000000",
-                        issuer_id: "00000000-0000-0000-0000-000000000000",
-                        version: 0,
-                        trustee_type: "user",
-                        tenant_id: newUser.tenant_id,
-                        trustee_id: createdUser.id,
-                        role_id: "protection_ro_admin",
-                        resource_namespace: "backup",
-                    },
-                ],
-            };
+            if (user.isPartnerAdmin) {
+                roles = {
+                    items: [
+                        {
+                            role_id: "partner_admin",
+                            tenant_id: newUser.tenant_id,
+                            trustee_id: createdUser.id,
+                            trustee_type: "user",
+                            version: 0,
+                        },
+                    ],
+                };
+            } else {
+                roles = {
+                    items: [
+                        {
+                            role_id: "accounts_admin",
+                            tenant_id: newUser.tenant_id,
+                            trustee_id: createdUser.id,
+                            trustee_type: "user",
+                            version: 0,
+                        },
+                        {
+                            role_id: "protection_admin",
+                            tenant_id: newUser.tenant_id,
+                            trustee_id: createdUser.id,
+                            trustee_type: "user",
+                            version: 0,
+                        },
+                    ],
+                };
+            }
         } else {
             roles = {
                 items: [
                     {
-                        id: "00000000-0000-0000-0000-000000000000",
-                        issuer_id: "00000000-0000-0000-0000-000000000000",
                         role_id: "company_admin",
                         tenant_id: newUser.tenant_id,
                         trustee_id: createdUser.id,

@@ -30,6 +30,7 @@ export const PUT = auth(async (req: any, { params }) => {
                 email: true,
             },
         });
+        
         if (checkEmail && checkEmail?.id != user.id)
             return NextResponse.json({
                 message: "Bu e-posta önceden kullanılmıştır!",

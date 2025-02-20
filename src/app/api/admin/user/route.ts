@@ -75,6 +75,7 @@ export const POST = auth(async (req: any) => {
                 email: true,
             },
         });
+
         if (checkEmail)
             return NextResponse.json({
                 message: "Bu e-posta önceden kullanılmıştır!",
@@ -85,6 +86,7 @@ export const POST = auth(async (req: any) => {
         const newUser = await prisma.user.create({
             data: user,
         });
+        
         if (newUser.id) {
             return NextResponse.json({
                 message: "Kullanıcı başarıyla kaydedildi!",

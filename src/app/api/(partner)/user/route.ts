@@ -72,3 +72,79 @@ export const GET = auth(async (req: any) => {
         });
     }
 });
+
+export const POST = auth(async (req: any) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (!req.auth)
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+
+        const user = await req.json();
+        user.createdBy = req.auth.user.email;
+
+        const checkPartner = await prisma.partner.findUnique({
+            where: {
+                acronisId: user.partnerAcronisId,
+            },
+            select: {
+                id: true,
+            },
+        });
+
+        if (!checkPartner?.id)
+            return NextResponse.json({
+                message:
+                    "Panel partneri bulunamadı! Lütfen önce bu partnerin panel üzerindeki partnerini oluşturunuz.",
+                status: 400,
+                ok: false,
+            });
+
+        const checkEmail = await prisma.user.findUnique({
+            where: {
+                email: user.email,
+            },
+            select: {
+                email: true,
+            },
+        });
+
+        if (checkEmail)
+            return NextResponse.json({
+                message: "Bu e-posta önceden kullanılmıştır!",
+                status: 400,
+                ok: false,
+            });
+
+        const newUser = await prisma.user.create({
+            data: user,
+        });
+
+        if (newUser.id) {
+            return NextResponse.json({
+                message: "Kullanıcı başarıyla kaydedildi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Kullanıcı kaydedilemedi!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
