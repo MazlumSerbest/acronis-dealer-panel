@@ -14,6 +14,7 @@ import Loader from "@/components/loaders/Loader";
 import CustomersTab from "./(tabs)/Customers";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
+import UsersTab from "./(tabs)/Users";
 import useUserStore from "@/store/user";
 
 export default function CustomerDetail({
@@ -148,11 +149,11 @@ export default function CustomerDetail({
                     {data?.kind === "customer" && !currentUser?.licensed ? (
                         <></>
                     ) : (
-                        <TabsList className="mx-auto  md:*:w-[200px] *:w-full mb-2">
+                        <TabsList className="mx-auto md:*:w-[180px] *:w-full mb-2">
                             <TabsTrigger value="general">
                                 {t("general")}
                             </TabsTrigger>
-                            {data?.kind == "partner" && (
+                            {data?.kind === "partner" && (
                                 <TabsTrigger value="customers">
                                     {t("customers")}
                                 </TabsTrigger>
@@ -162,6 +163,11 @@ export default function CustomerDetail({
                                     {t("licenses")}
                                 </TabsTrigger>
                             )}
+                            <TabsTrigger value="users">
+                                {data?.kind === "partner"
+                                    ? t("users")
+                                    : t("acronisUsers")}
+                            </TabsTrigger>
                         </TabsList>
                     )}
 
@@ -179,6 +185,9 @@ export default function CustomerDetail({
                     </TabsContent>
                     <TabsContent value="licenses">
                         <LicensesTab t={t} tenant={data} />
+                    </TabsContent>
+                    <TabsContent value="users">
+                        <UsersTab t={t} tenant={data} />
                     </TabsContent>
                 </Tabs>
             </div>
