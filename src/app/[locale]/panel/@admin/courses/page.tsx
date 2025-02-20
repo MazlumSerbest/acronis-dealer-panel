@@ -357,7 +357,6 @@ export default function CoursesPage() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
-                isLoading={isLoading}
                 facetedFilters={[
                     {
                         column: "category",

@@ -440,7 +440,6 @@ export default function ProductsPage() {
                 columns={columns}
                 data={data}
                 visibleColumns={visibleColumns}
-                isLoading={isLoading}
                 facetedFilters={[
                     {
                         column: "unit",

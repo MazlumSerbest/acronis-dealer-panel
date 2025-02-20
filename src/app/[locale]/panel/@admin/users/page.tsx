@@ -516,7 +516,6 @@ export default function UsersPage() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
-                isLoading={isLoading}
                 defaultPageSize={50}
                 defaultSearch={search || ""}
                 defaultSort="createdAt"

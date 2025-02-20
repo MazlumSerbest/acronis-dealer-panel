@@ -79,7 +79,7 @@ export default function LocationsTab() {
     return (
         <div className="flex flex-col gap-4">
             <AcronisWarning />
-            <DataTable columns={columns} data={data} isLoading={isLoading} />
+            <DataTable columns={columns} data={data} />
         </div>
     );
 }

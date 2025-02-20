@@ -436,7 +436,6 @@ export default function CourseDetail({
             <Chapters
                 courseId={params.courseId}
                 chapters={data.chapters}
-                isLoading={isLoading}
                 mutate={mutate}
             />
         </>

@@ -70,12 +70,10 @@ type ChapterFormValues = z.infer<typeof chapterFormSchema>;
 export default function Chapters({
     courseId,
     chapters,
-    isLoading,
     mutate,
 }: {
     courseId: string;
     chapters: Chapter[];
-    isLoading: boolean;
     mutate: () => void;
 }) {
     const t = useTranslations("General");
@@ -336,7 +334,6 @@ export default function Chapters({
                         columns={columns}
                         data={chapters || []}
                         visibleColumns={visibleColumns}
-                        isLoading={isLoading}
                         defaultSort="order"
                         defaultSortDirection="asc"
                         facetedFilters={[

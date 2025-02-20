@@ -87,12 +87,10 @@ type LessonFormValues = z.infer<typeof lessonFormSchema>;
 export default function Lessons({
     chapterId,
     lessons,
-    isLoading,
     mutate,
 }: {
     chapterId: string;
     lessons: Lesson[];
-    isLoading: boolean;
     mutate: () => void;
 }) {
     const t = useTranslations("General");
@@ -395,7 +393,6 @@ export default function Lessons({
                         columns={columns}
                         data={lessons || []}
                         visibleColumns={visibleColumns}
-                        isLoading={isLoading}
                         defaultSort="order"
                         defaultSortDirection="asc"
                         facetedFilters={[

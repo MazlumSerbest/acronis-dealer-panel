@@ -280,7 +280,6 @@ export default function ChapterDetail({
             <Lessons
                 chapterId={params.chapterId}
                 lessons={data.lessons}
-                isLoading={isLoading}
                 mutate={mutate}
             />
         </>

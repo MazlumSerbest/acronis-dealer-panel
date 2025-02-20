@@ -125,7 +125,6 @@ export default function LicenseHistoryPage() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
-            isLoading={isLoading}
             defaultPageSize={50}
             facetedFilters={[
                 {

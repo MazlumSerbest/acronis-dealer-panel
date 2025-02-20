@@ -10,7 +10,7 @@ export default function ProfileTab() {
     const { user: currentUser } = useUserStore();
 
     //#region Fetch Data
-    const { data, error } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/${currentUser?.acronisTenantId}`,
         null,
         {
@@ -25,7 +25,7 @@ export default function ProfileTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!data)
+    if (isLoading)
         return (
             <Skeleton>
                 <DefaultSkeleton />

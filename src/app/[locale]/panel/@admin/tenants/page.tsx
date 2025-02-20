@@ -534,7 +534,6 @@ export default function TenantsPage() {
                     columns={columns}
                     visibleColumns={visibleColumns}
                     defaultPageSize={50}
-                    isLoading={isLoading}
                     defaultSort="name"
                     defaultSortDirection="asc"
                     facetedFilters={[

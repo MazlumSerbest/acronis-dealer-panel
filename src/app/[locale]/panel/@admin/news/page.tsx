@@ -497,7 +497,6 @@ export default function NewsPage() {
                 columns={columns}
                 data={data || []}
                 visibleColumns={visibleColumns}
-                isLoading={isLoading}
                 defaultSort="order"
                 defaultSortDirection="asc"
                 facetedFilters={[

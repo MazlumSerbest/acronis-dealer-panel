@@ -14,6 +14,7 @@ export default function ManagementPage() {
                     <TabsTrigger value="profile">{t("profile")}</TabsTrigger>
                     <TabsTrigger value="contacts">{t("contacts")}</TabsTrigger>
                 </TabsList>
+                
                 <TabsContent value="profile">
                     <ProfileTab />
                 </TabsContent>

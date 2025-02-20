@@ -103,7 +103,7 @@ export default function ContactsTab() {
                 {t("failedToLoad")}
             </div>
         );
-    if (!contacts)
+    if (isLoading)
         return (
             <Skeleton>
                 <TableSkeleton />
@@ -115,7 +115,6 @@ export default function ContactsTab() {
             <DataTable
                 columns={columns}
                 data={contacts}
-                isLoading={isLoading}
             />
         </div>
     );
