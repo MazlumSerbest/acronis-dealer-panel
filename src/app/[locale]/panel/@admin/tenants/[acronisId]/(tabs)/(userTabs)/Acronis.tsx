@@ -414,10 +414,10 @@ export default function AcronisTab({ t, tenant }: Props) {
                     id: data.id,
                     login: data.login,
                     enabled: data.enabled,
-                    firstname: data.contact.firstname,
-                    lastname: data.contact.lastname,
-                    email: data.contact.email,
-                    phone: data.contact.phone,
+                    firstname: data.contact?.firstname,
+                    lastname: data.contact?.lastname,
+                    email: data.contact?.email,
+                    phone: data.contact?.phone,
                 };
 
                 return (
@@ -451,7 +451,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                             >
                                 {t("notifications")}
                             </DropdownMenuItem>
-                            
+
                             {/* {tenant.kind === "partner" && (
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
@@ -715,10 +715,8 @@ export default function AcronisTab({ t, tenant }: Props) {
             <DataTable
                 zebra
                 columns={columns}
-                data={users.items || []}
+                data={users.items.filter((u: User) => u.id) || []}
                 visibleColumns={visibleColumns}
-                isLoading={isLoading}
-                defaultPageSize={30}
                 facetedFilters={[
                     {
                         column: "enabled",

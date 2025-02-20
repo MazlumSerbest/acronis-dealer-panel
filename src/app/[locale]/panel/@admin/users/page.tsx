@@ -531,14 +531,6 @@ export default function UsersPage() {
                         ],
                     },
                     {
-                        column: "emailVerified",
-                        title: t("verified"),
-                        options: [
-                            { value: true, label: t("true") },
-                            { value: false, label: t("false") },
-                        ],
-                    },
-                    {
                         column: "active",
                         title: t("active"),
                         options: [
