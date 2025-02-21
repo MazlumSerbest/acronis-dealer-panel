@@ -285,9 +285,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         else
             fetch(`/api/${tenant?.kind}`, {
                 method: "POST",
@@ -308,9 +307,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
     }
     //#endregion
 

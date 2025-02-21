@@ -119,8 +119,8 @@ export default function PassiveTab() {
                         description: res.message,
                     });
                 }
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
 
     const assignToPartnerForm = useForm<AssignToPartnerFormValues>({
@@ -158,9 +158,8 @@ export default function PassiveTab() {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     // #endregion
 

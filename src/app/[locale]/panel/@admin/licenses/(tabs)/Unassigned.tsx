@@ -160,9 +160,8 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
 
     const assignForm = useForm<AssignFormValues>({
@@ -194,9 +193,8 @@ export default function UnassignedTab() {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     // #endregion
 
@@ -754,9 +752,8 @@ export default function UnassignedTab() {
                                                 description: res.message,
                                             });
                                         }
-
-                                        setSubmitting(false);
-                                    });
+                                    })
+                                    .finally(() => setSubmitting(false));
                             }}
                         >
                             {t("delete")}

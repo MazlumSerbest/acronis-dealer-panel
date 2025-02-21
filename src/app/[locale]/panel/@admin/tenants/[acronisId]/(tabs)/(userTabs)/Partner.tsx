@@ -133,9 +133,8 @@ export default function PartnerTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         } else {
             fetch(`/api/admin/user/${values.id}`, {
                 method: "PUT",
@@ -157,9 +156,8 @@ export default function PartnerTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         }
     }
     //#endregion
@@ -372,9 +370,13 @@ export default function PartnerTab({ t, tenant }: Props) {
                                         </AlertDialogCancel>
                                         <AlertDialogAction asChild>
                                             <Button
+                                                disabled={submitting}
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
+                                                    setSubmitting(true);
+
                                                     fetch(
                                                         `/api/admin/user/${data.id}`,
                                                         {
@@ -402,10 +404,18 @@ export default function PartnerTab({ t, tenant }: Props) {
                                                                         res.message,
                                                                 });
                                                             }
-                                                        });
+                                                        })
+                                                        .finally(() =>
+                                                            setSubmitting(
+                                                                false,
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
+                                                {submitting && (
+                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                )}
                                             </Button>
                                         </AlertDialogAction>
                                     </AlertDialogFooter>

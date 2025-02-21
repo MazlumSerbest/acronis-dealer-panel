@@ -170,8 +170,8 @@ export default function Application() {
                         description: res.message,
                     });
                 }
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 

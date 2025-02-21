@@ -171,9 +171,8 @@ export default function ApplicationDetail({
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
 
     const partnerForm = useForm<PartnerFormValues>({
@@ -216,9 +215,8 @@ export default function ApplicationDetail({
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 
@@ -365,8 +363,12 @@ export default function ApplicationDetail({
                                             </Button>
                                         </AlertDialogCancel>
                                         <Button
+                                            disabled={submitting}
                                             className="bg-blue-400 hover:bg-blue-400/90"
                                             onClick={() => {
+                                                if (submitting) return;
+                                                setSubmitting(true);
+
                                                 fetch(
                                                     `/api/admin/application/${data.id}/approve`,
                                                     {
@@ -398,10 +400,16 @@ export default function ApplicationDetail({
                                                                 false,
                                                             );
                                                         }
-                                                    });
+                                                    })
+                                                    .finally(() =>
+                                                        setSubmitting(false),
+                                                    );
                                             }}
                                         >
                                             {t("approve")}
+                                            {submitting && (
+                                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                                            )}
                                         </Button>
                                     </AlertDialogFooter>
                                 </AlertDialogContent>

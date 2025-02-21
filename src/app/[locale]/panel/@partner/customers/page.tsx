@@ -99,7 +99,12 @@ export default function CustomersPage() {
     const [loginValid, setLoginValid] = useState(false);
 
     // #region Fetch Data
-    const { data: customers, error, isLoading, mutate } = useSWR(
+    const {
+        data: customers,
+        error,
+        isLoading,
+        mutate,
+    } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
             : null,
@@ -204,9 +209,8 @@ export default function CustomersPage() {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 

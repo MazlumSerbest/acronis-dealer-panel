@@ -132,9 +132,8 @@ export default function CourseDetail({
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 

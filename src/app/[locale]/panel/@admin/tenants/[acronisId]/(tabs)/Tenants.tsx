@@ -200,9 +200,8 @@ export default function TenantsTab({ t, tenant }: Props) {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 

@@ -136,9 +136,8 @@ export default function CoursesPage() {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 
@@ -291,9 +290,13 @@ export default function CoursesPage() {
                                         </AlertDialogCancel>
                                         <AlertDialogAction asChild>
                                             <Button
+                                                disabled={submitting}
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
+                                                    setSubmitting(true);
+
                                                     fetch(
                                                         `/api/admin/course/${data.id}`,
                                                         {
@@ -321,10 +324,18 @@ export default function CoursesPage() {
                                                                         res.message,
                                                                 });
                                                             }
-                                                        });
+                                                        })
+                                                        .finally(() =>
+                                                            setSubmitting(
+                                                                false,
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
+                                                {submitting && (
+                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                )}
                                             </Button>
                                         </AlertDialogAction>
                                     </AlertDialogFooter>

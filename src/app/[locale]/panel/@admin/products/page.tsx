@@ -130,9 +130,8 @@ export default function ProductsPage() {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         } else {
             fetch(`/api/admin/product/${values.id}`, {
                 method: "PUT",
@@ -154,9 +153,8 @@ export default function ProductsPage() {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
         }
     }
     //#endregion
@@ -374,9 +372,13 @@ export default function ProductsPage() {
                                         </AlertDialogCancel>
                                         <AlertDialogAction asChild>
                                             <Button
+                                                disabled={submitting}
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
+                                                    setSubmitting(true);
+
                                                     fetch(
                                                         `/api/admin/product/${data.id}`,
                                                         {
@@ -404,10 +406,18 @@ export default function ProductsPage() {
                                                                         res.message,
                                                                 });
                                                             }
-                                                        });
+                                                        })
+                                                        .finally(() =>
+                                                            setSubmitting(
+                                                                false,
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
+                                                {submitting && (
+                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                )}
                                             </Button>
                                         </AlertDialogAction>
                                     </AlertDialogFooter>

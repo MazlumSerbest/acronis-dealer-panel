@@ -328,9 +328,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                     }
-
-                    setSubmitting(false);
-                });
+                })
+                .finally(() => setSubmitting(false));
     }
 
     const userForm = useForm<UserFormValues>({
@@ -369,9 +368,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                         description: res.message,
                     });
                 }
-
-                setSubmitting(false);
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 
@@ -800,7 +798,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         </AlertDialogContent>
                                     </AlertDialog>
                                 )}
-                                
+
                                 {!panelTenant && tenant.kind == "partner" && (
                                     <AlertDialog
                                         open={openPartnerDialog}
@@ -901,11 +899,12 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                         false,
                                                                     );
                                                                 }
-
+                                                            })
+                                                            .finally(() =>
                                                                 setSubmitting(
                                                                     false,
-                                                                );
-                                                            });
+                                                                ),
+                                                            );
                                                     }}
                                                 >
                                                     {t("create")}

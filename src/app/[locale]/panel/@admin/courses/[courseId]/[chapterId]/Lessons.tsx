@@ -50,7 +50,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const lessonFormSchema = z.object({
@@ -95,8 +95,10 @@ export default function Lessons({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Lesson");
+
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     //#region Form
     const form = useForm<LessonFormValues>({
@@ -104,6 +106,9 @@ export default function Lessons({
     });
 
     function onSubmit(values: LessonFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         if (isNew) {
             values.chapterId = chapterId;
             fetch("/api/admin/lesson", {
@@ -126,7 +131,8 @@ export default function Lessons({
                             description: res.message,
                         });
                     }
-                });
+                })
+                .finally(() => setSubmitting(false));
         } else
             fetch(`/api/admin/lesson/${values.id}`, {
                 method: "PUT",
@@ -148,7 +154,8 @@ export default function Lessons({
                             description: res.message,
                         });
                     }
-                });
+                })
+                .finally(() => setSubmitting(false));
     }
     //#endregion
 
@@ -335,6 +342,9 @@ export default function Lessons({
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
+                                                    setSubmitting(true);
+
                                                     fetch(
                                                         `/api/admin/lesson/${data.id}`,
                                                         {
@@ -362,10 +372,18 @@ export default function Lessons({
                                                                         res.message,
                                                                 });
                                                             }
-                                                        });
+                                                        })
+                                                        .finally(() =>
+                                                            setSubmitting(
+                                                                false,
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
+                                                {submitting && (
+                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                )}
                                             </Button>
                                         </AlertDialogAction>
                                     </AlertDialogFooter>
@@ -560,10 +578,14 @@ export default function Lessons({
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>

@@ -49,7 +49,7 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
 
 const chapterFormSchema = z.object({
     courseId: z.string().cuid().optional(),
@@ -78,7 +78,9 @@ export default function Chapters({
 }) {
     const t = useTranslations("General");
     const router = useRouter();
+
     const [open, setOpen] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     //#region Form
     const form = useForm<ChapterFormValues>({
@@ -86,6 +88,9 @@ export default function Chapters({
     });
 
     function onSubmit(values: ChapterFormValues) {
+        if (submitting) return;
+        setSubmitting(true);
+
         values.courseId = courseId;
         fetch("/api/admin/chapter", {
             method: "POST",
@@ -107,7 +112,8 @@ export default function Chapters({
                         description: res.message,
                     });
                 }
-            });
+            })
+            .finally(() => setSubmitting(false));
     }
     //#endregion
 
@@ -276,6 +282,9 @@ export default function Chapters({
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
+                                                    setSubmitting(true);
+
                                                     fetch(
                                                         `/api/admin/chapter/${data.id}`,
                                                         {
@@ -303,7 +312,12 @@ export default function Chapters({
                                                                         res.message,
                                                                 });
                                                             }
-                                                        });
+                                                        })
+                                                        .finally(() =>
+                                                            setSubmitting(
+                                                                false,
+                                                            ),
+                                                        );
                                                 }}
                                             >
                                                 {t("delete")}
@@ -413,10 +427,14 @@ export default function Chapters({
                                     </Button>
                                 </DialogClose>
                                 <Button
+                                    disabled={submitting}
                                     type="submit"
                                     className="bg-green-600 hover:bg-green-600/90"
                                 >
                                     {t("save")}
+                                    {submitting && (
+                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    )}
                                 </Button>
                             </DialogFooter>
                         </form>
