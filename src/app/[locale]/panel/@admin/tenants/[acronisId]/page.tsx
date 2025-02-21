@@ -105,9 +105,11 @@ export default function TenantDetail({
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>
-                    <TabsContent value="tenants">
-                        <TenantsTab t={t} tenant={data} />
-                    </TabsContent>
+                    {data?.kind == "partner" && (
+                        <TabsContent value="tenants">
+                            <TenantsTab t={t} tenant={data} />
+                        </TabsContent>
+                    )}
                     <TabsContent value="licenses">
                         <LicensesTab t={t} tenant={data} />
                     </TabsContent>

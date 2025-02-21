@@ -1,9 +1,10 @@
-import React from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 
@@ -11,17 +12,67 @@ import { LuChevronsUpDown } from "react-icons/lu";
 import { formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 import useUserStore from "@/store/user";
+import useSWR from "swr";
 
 type Props = {
     t: Function;
-    customers: Tenant[];
+    tenant: Tenant;
 };
 
-export default function CustomersTab({ t, customers }: Props) {
+export default function CustomersTab({ t, tenant }: Props) {
     const router = useRouter();
-    const { user: currentUser } = useUserStore();
 
-    //#region Table
+    const [updatedChildren, setUpdatedChildren] = useState();
+
+    // #region Fetch Data
+    const {
+        data: children,
+        error,
+        isLoading,
+        mutate,
+    } = useSWR(`/api/acronis/tenants/children/${tenant.id}`, null, {
+        onSuccess: async (data) => {
+            if (!data) return;
+
+            try {
+                const [customersResponse, partnersResponse] = await Promise.all(
+                    [
+                        fetch(`/api/customer?partnerAcronisId=${tenant.id}`),
+                        fetch(`/api/partner?parentAcronisId=${tenant.id}`),
+                    ],
+                );
+
+                const [customers, partners] = await Promise.all([
+                    customersResponse.json(),
+                    partnersResponse.json(),
+                ]);
+
+                const newData = data.map((item: any) => ({
+                    id: item.id,
+                    name: item.name,
+                    kind: item.kind,
+                    enabled: item.enabled,
+                    mfa_status: item.mfa_status,
+                    billingDate:
+                        item.kind === "customer"
+                            ? customers.find(
+                                  (c: Customer) => c.acronisId === item.id,
+                              )?.billingDate
+                            : partners.find(
+                                  (p: Partner) => p.acronisId === item.id,
+                              )?.billingDate,
+                    usages: item.usages,
+                }));
+
+                setUpdatedChildren(newData);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        },
+    });
+    // #endregion
+
+    // #region Table
     const visibleColumns = { created_at: false, updated_at: false };
 
     const columns: ColumnDef<any, any>[] = [
@@ -172,12 +223,24 @@ export default function CustomersTab({ t, customers }: Props) {
             },
         },
     ];
-    //#endregion
+    // #endregion
 
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
+    if (isLoading)
+        return (
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
+        );
     return (
         <DataTable
             zebra
-            data={customers || []}
+            data={updatedChildren || children}
             columns={columns}
             visibleColumns={visibleColumns}
             defaultPageSize={50}
