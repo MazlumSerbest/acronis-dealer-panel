@@ -1,7 +1,5 @@
 "use client";
-import React, { useState } from "react";
 import useSWR from "swr";
-import useSWRMutation from "swr/mutation";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 
@@ -9,9 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
-import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Loader from "@/components/loaders/Loader";
-import ClientsTab from "./(tabs)/Clients";
+import TenantsTab from "./(tabs)/Tenants";
 import GeneralTab from "./(tabs)/General";
 import LicensesTab from "./(tabs)/Licenses";
 import UsersTab from "./(tabs)/Users";
@@ -27,80 +24,12 @@ export default function TenantDetail({
     const pathname = usePathname();
     const t = useTranslations("General");
 
-    const [updatedChildren, setUpdatedChildren] = useState(undefined);
-
     //#region Fetch Data
     const { data, error, isLoading } = useSWR(
         `/api/acronis/tenants/${params.acronisId}`,
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (data) => {
-                if (data.kind === "partner") trigger();
-            },
-        },
-    );
-
-    const {
-        data: children,
-        trigger,
-        isMutating,
-    } = useSWRMutation(
-        `/api/acronis/tenants/children/${params.acronisId}`,
-        async (url) => {
-            const response = await fetch(url);
-            if (!response.ok)
-                throw new Error("Failed to fetch tenant children");
-            return response.json();
-        },
-        {
-            onSuccess: async (data) => {
-                if (!data) return;
-
-                try {
-                    const [customersResponse, partnersResponse] =
-                        await Promise.all([
-                            fetch(
-                                `/api/customer?partnerAcronisId=${params?.acronisId}`,
-                            ),
-                            fetch(
-                                `/api/partner?parentAcronisId=${params?.acronisId}`,
-                            ),
-                        ]);
-
-                    const [customers, partners] = await Promise.all([
-                        customersResponse.json(),
-                        partnersResponse.json(),
-                    ]);
-
-                    const newData = data.map((item: any) => ({
-                        id: item.id,
-                        name: item.name,
-                        kind: item.kind,
-                        enabled: item.enabled,
-                        mfa_status: item.mfa_status,
-                        licensed:
-                            item.kind === "partner"
-                                ? partners.find(
-                                      (p: Partner) => p.acronisId === item.id,
-                                  )?.licensed
-                                : null,
-                        billingDate:
-                            item.kind === "customer"
-                                ? customers.find(
-                                      (c: Customer) => c.acronisId === item.id,
-                                  )?.billingDate
-                                : partners.find(
-                                      (p: Partner) => p.acronisId === item.id,
-                                  )?.billingDate,
-                        usages: item.usages,
-                    }));
-
-                    setUpdatedChildren(newData);
-                } catch (error) {
-                    console.error("Error fetching data:", error);
-                }
-            },
         },
     );
     //#endregion
@@ -159,8 +88,8 @@ export default function TenantDetail({
                             {t("general")}
                         </TabsTrigger>
                         {data?.kind == "partner" && (
-                            <TabsTrigger value="clients">
-                                {t("clients")}
+                            <TabsTrigger value="tenants">
+                                {t("tenants")}
                             </TabsTrigger>
                         )}
                         <TabsTrigger value="licenses">
@@ -176,18 +105,8 @@ export default function TenantDetail({
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>
-                    <TabsContent value="clients">
-                        {!isMutating && children ? (
-                            <ClientsTab
-                                t={t}
-                                clients={children}
-                                updatedClients={updatedChildren}
-                            />
-                        ) : (
-                            <Skeleton>
-                                <TableSkeleton />
-                            </Skeleton>
-                        )}
+                    <TabsContent value="tenants">
+                        <TenantsTab t={t} tenant={data} />
                     </TabsContent>
                     <TabsContent value="licenses">
                         <LicensesTab t={t} tenant={data} />

@@ -325,7 +325,8 @@
         "setRoleToReadonly": "Salt Okunur Kullanıcı Yap",
         "setRoleToReadonlyDescription": "Seçilen Acronis kullanıcısını salt okunur yapılcak. Devam etmek istediğinize emin misiniz?",
         "update": "Güncelle",
-        "activated": "Aktive Edilmiş"
+        "activated": "Aktive Edilmiş",
+        "newTenant": "Yeni Kiracı"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

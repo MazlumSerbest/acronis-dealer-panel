@@ -325,7 +325,8 @@
         "setRoleToReadonly": "Make This User Readonly",
         "setRoleToReadonlyDescription": "Selected Acronis user will be readonly. Are you sure you want to proceed?",
         "update": "Update",
-        "activated": "Activated"
+        "activated": "Activated",
+        "newTenant": "New Tenant"
     },
     "SignIn": {
         "signIn": "Welcome",
