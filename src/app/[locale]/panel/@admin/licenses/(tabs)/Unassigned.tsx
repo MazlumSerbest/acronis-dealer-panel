@@ -731,6 +731,7 @@ export default function UnassignedTab() {
                             disabled={submitting}
                             className="bg-destructive hover:bg-destructive/90"
                             onClick={() => {
+                                if (submitting) return;
                                 setSubmitting(true);
 
                                 fetch("/api/admin/license", {

@@ -587,6 +587,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                 variant="destructive"
                                                 className="bg-destructive hover:bg-destructive/90"
                                                 onClick={() => {
+                                                    if (submitting) return;
                                                     setSubmitting(true);
 
                                                     fetch(

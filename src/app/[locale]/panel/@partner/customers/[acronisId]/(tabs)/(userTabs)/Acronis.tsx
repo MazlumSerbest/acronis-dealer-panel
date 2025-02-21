@@ -132,7 +132,7 @@ export default function AcronisTab({ t, tenant }: Props) {
     });
 
     function onSubmitUser(values: UserFormValues) {
-        if (submitting) return;
+        if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
         let user: any = {

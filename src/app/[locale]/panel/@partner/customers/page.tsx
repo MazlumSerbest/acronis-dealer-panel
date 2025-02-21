@@ -169,7 +169,7 @@ export default function CustomersPage() {
     });
 
     function onSubmit(values: CustomerFormValues) {
-        if (submitting) return;
+        if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
         const customer = {
