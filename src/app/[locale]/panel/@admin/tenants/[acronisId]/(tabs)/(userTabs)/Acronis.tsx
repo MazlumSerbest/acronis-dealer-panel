@@ -138,6 +138,7 @@ export default function AcronisTab({ t, tenant }: Props) {
     //#region Form
     const userForm = useForm<UserFormValues>({
         resolver: zodResolver(userFormSchema),
+        mode: "onChange",
         defaultValues: {
             enabled: true,
         },

@@ -53,7 +53,7 @@ import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
-const customerFormSchema = z.object({
+const tenantFormSchema = z.object({
     kind: z.enum(["partner"]),
     name: z
         .string({
@@ -81,7 +81,7 @@ const customerFormSchema = z.object({
         }),
 });
 
-type CustomerFormValues = z.infer<typeof customerFormSchema>;
+type TenantFormValues = z.infer<typeof tenantFormSchema>;
 
 export default function TenantsPage() {
     const t = useTranslations("General");
@@ -96,7 +96,7 @@ export default function TenantsPage() {
     const [loginCheckLoading, setLoginCheckLoading] = useState(false);
     const [loginValid, setLoginValid] = useState(false);
 
-    // #region Fetch Data
+    // #region Data
     const { data, error, isLoading, mutate } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
@@ -160,16 +160,16 @@ export default function TenantsPage() {
     // #endregion
 
     //#region Form
-    const form = useForm<CustomerFormValues>({
-        resolver: zodResolver(customerFormSchema),
+    const form = useForm<TenantFormValues>({
+        resolver: zodResolver(tenantFormSchema),
         mode: "onChange",
     });
 
-    function onSubmit(values: CustomerFormValues) {
-        if (submitting) return;
+    function onSubmit(values: TenantFormValues) {
+        if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
-        const customer = {
+        const tenant = {
             name: values.name,
             login: values.login,
             parentAcronisId: currentUser?.acronisTenantId,
@@ -183,7 +183,7 @@ export default function TenantsPage() {
 
         fetch("/api/acronis/tenants", {
             method: "POST",
-            body: JSON.stringify(customer),
+            body: JSON.stringify(tenant),
         })
             .then((res) => res.json())
             .then((res) => {

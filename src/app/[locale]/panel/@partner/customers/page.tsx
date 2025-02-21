@@ -90,7 +90,7 @@ export default function CustomersPage() {
     const router = useRouter();
     const { user: currentUser } = useUserStore();
 
-    const [updatedData, setUpdatedData] = useState<any[]>([]);
+    const [updatedCustomers, setUpdatedCustomers] = useState<Tenant[]>([]);
 
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
@@ -99,7 +99,7 @@ export default function CustomersPage() {
     const [loginValid, setLoginValid] = useState(false);
 
     // #region Fetch Data
-    const { data, error, isLoading, mutate } = useSWR(
+    const { data: customers, error, isLoading, mutate } = useSWR(
         currentUser?.acronisTenantId
             ? `/api/acronis/tenants/children/${currentUser.acronisTenantId}`
             : null,
@@ -153,7 +153,7 @@ export default function CustomersPage() {
                     return newItem;
                 });
 
-                setUpdatedData(newData);
+                setUpdatedCustomers(newData);
             },
         },
     );
@@ -172,7 +172,7 @@ export default function CustomersPage() {
         if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
-        const customer = {
+        const newTenant = {
             name: values.name,
             login: values.login,
             parentAcronisId: currentUser?.acronisTenantId,
@@ -186,7 +186,7 @@ export default function CustomersPage() {
 
         fetch("/api/acronis/tenants", {
             method: "POST",
-            body: JSON.stringify(customer),
+            body: JSON.stringify(newTenant),
         })
             .then((res) => res.json())
             .then((res) => {
@@ -294,7 +294,7 @@ export default function CustomersPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");
 
-                return !updatedData ? (
+                return !updatedCustomers ? (
                     <Skeleton>
                         <div className="rounded-sm bg-slate-200 w-full h-5"></div>
                     </Skeleton>
@@ -336,7 +336,7 @@ export default function CustomersPage() {
                 const data: string = row.getValue("billingDate");
                 const remainingDays = calculateRemainingDays(data);
 
-                return !updatedData ? (
+                return !updatedCustomers ? (
                     <Skeleton>
                         <div className="rounded-sm bg-slate-200 w-full h-5"></div>
                     </Skeleton>
@@ -521,7 +521,7 @@ export default function CustomersPage() {
             ) : (
                 <DataTable
                     zebra
-                    data={updatedData || data}
+                    data={updatedCustomers || customers}
                     columns={columns}
                     visibleColumns={visibleColumns}
                     defaultPageSize={50}
