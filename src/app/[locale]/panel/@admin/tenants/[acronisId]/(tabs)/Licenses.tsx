@@ -1,11 +1,10 @@
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import useSWR from "swr";
+import { useTranslations } from "next-intl";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import Loader from "@/components/loaders/Loader";
-
-import { useTranslations } from "next-intl";
+import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
 import PassiveTab from "./(licenseTabs)/Passive";
 import ActiveTab from "./(licenseTabs)/Active";
@@ -32,22 +31,22 @@ export default function LicensesTab({ t, tenant }: Props) {
         },
     );
 
+    if (error)
+        return (
+            <div className="flex min-h-24 justify-center items-center">
+                {t("failedToLoad")}
+            </div>
+        );
     if (isLoading)
         return (
-            <div className="h-80">
-                <Loader />
-            </div>
+            <Skeleton>
+                <TableSkeleton />
+            </Skeleton>
         );
     if (!data)
         return (
             <div className="flex min-h-24 justify-center items-center">
                 {t("registrationNotFound")}
-            </div>
-        );
-    if (error)
-        return (
-            <div className="flex min-h-24 justify-center items-center">
-                {t("failedToLoad")}
             </div>
         );
     return (
