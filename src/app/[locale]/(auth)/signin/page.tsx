@@ -41,6 +41,7 @@ export default function SignIn({
     >();
 
     async function handleSubmit(event: any) {
+        if (submitting) return;
         event.preventDefault();
         const email = event.target.email.value;
 
