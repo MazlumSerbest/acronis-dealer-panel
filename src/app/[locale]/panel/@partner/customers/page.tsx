@@ -177,6 +177,15 @@ export default function CustomersPage() {
         if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
+        if (customers.find((t: Tenant) => t.name === values.name.trim())) {
+            setSubmitting(false);
+            return toast({
+                variant: "destructive",
+                title: t("errorTitle"),
+                description: tf("name.alreadyTaken"),
+            });
+        }
+
         const newTenant = {
             name: values.name,
             login: values.login,

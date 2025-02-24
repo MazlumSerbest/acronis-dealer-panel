@@ -450,7 +450,8 @@
         "Customer": {
             "name": {
                 "required": "Name is required",
-                "minLength": "Must be at least 6 characters long"
+                "minLength": "Must be at least 6 characters long",
+                "alreadyTaken": "This name is already taken"
             },
             "login": {
                 "required": "Login is required",

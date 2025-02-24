@@ -33,6 +33,7 @@ import {
     TooltipTrigger,
     TooltipContent,
 } from "@/components/ui/tooltip";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
@@ -54,7 +55,7 @@ import { calculateRemainingDays, formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
 
 const tenantFormSchema = z.object({
-    kind: z.enum(["partner"]),
+    kind: z.enum(["partner", "customer"]),
     name: z
         .string({
             required_error: "Customer.name.required",
@@ -163,18 +164,30 @@ export default function TenantsPage() {
     const form = useForm<TenantFormValues>({
         resolver: zodResolver(tenantFormSchema),
         mode: "onChange",
+        defaultValues: {
+            kind: "partner",
+        },
     });
 
     function onSubmit(values: TenantFormValues) {
         if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
+        if (data.find((t: Tenant) => t.name === values.name.trim())) {
+            setSubmitting(false);
+            return toast({
+                variant: "destructive",
+                title: t("errorTitle"),
+                description: tf("name.alreadyTaken"),
+            });
+        }
+
         const tenant = {
             name: values.name,
             login: values.login,
             parentAcronisId: currentUser?.acronisTenantId,
             partnerAcronisId: currentUser?.partnerAcronisId,
-            kind: "partner",
+            kind: values.kind,
             licensed: currentUser?.licensed,
             contact: {
                 email: values.email,
@@ -590,6 +603,42 @@ export default function TenantsPage() {
                             autoComplete="off"
                             className="space-y-4"
                         >
+                            <FormField
+                                control={form.control}
+                                name="kind"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-3">
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("kind")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <RadioGroup
+                                                onValueChange={field.onChange}
+                                                defaultValue={field.value}
+                                                className="flex flex-col space-y-1"
+                                            >
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="customer" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t("customer")}
+                                                    </FormLabel>
+                                                </FormItem>
+                                                <FormItem className="flex items-center space-x-3 space-y-0">
+                                                    <FormControl>
+                                                        <RadioGroupItem value="partner" />
+                                                    </FormControl>
+                                                    <FormLabel className="font-normal">
+                                                        {t("partner")}
+                                                    </FormLabel>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
                             <FormField
                                 control={form.control}
                                 name="name"

@@ -168,6 +168,15 @@ export default function TenantsTab({ t, tenant }: Props) {
         if (submitting || loginAlreadyTaken || !loginValid) return;
         setSubmitting(true);
 
+        if (tenants.find((t: Tenant) => t.name === values.name.trim())) {
+            setSubmitting(false);
+            return toast({
+                variant: "destructive",
+                title: t("errorTitle"),
+                description: tf("name.alreadyTaken"),
+            });
+        }
+
         const newTenant = {
             name: values.name,
             login: values.login,

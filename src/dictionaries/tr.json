@@ -450,7 +450,8 @@
         "Customer": {
             "name": {
                 "required": "Ad zorunludur",
-                "minLength": "En az 6 karakter uzunluğunda olmalıdır"
+                "minLength": "En az 6 karakter uzunluğunda olmalıdır",
+                "alreadyTaken": "Bu ad daha önceden kullanılmış"
             },
             "login": {
                 "required": "Kullanıcı adı zorunludur",
