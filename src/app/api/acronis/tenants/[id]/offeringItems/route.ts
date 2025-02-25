@@ -1,18 +1,23 @@
 import { NextResponse } from "next/server";
-import getToken from "@/lib/getToken";
+import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
 export const PUT = auth(async (req: any, { params }) => {
     try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
         if (!req.auth)
             return NextResponse.json({
-                message: "Authorization Needed!",
+                message: tm("authorizationNeeded"),
                 status: 401,
                 ok: false,
             });
 
-        const token = await getToken();
+        const token = await getAcronisToken();
 
         if (!token)
             return NextResponse.json({

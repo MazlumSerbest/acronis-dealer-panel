@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import getToken from "@/lib/getToken";
+import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
@@ -18,7 +18,7 @@ export const GET = auth(async (req: any, { params }) => {
             });
         }
 
-        const token = await getToken();
+        const token = await getAcronisToken();
 
         if (!token) {
             return NextResponse.json({

@@ -1,6 +1,6 @@
 import "server-only";
 
-export default async function getToken() {
+export async function getAcronisToken() {
     const encodedClientCreds = btoa(
         `${process.env.ACRONIS_CLIENT_ID}:${process.env.ACRONIS_CLIENT_SECRET}`,
     );
@@ -21,3 +21,5 @@ export default async function getToken() {
     const auth = await res.json();
     return await auth.access_token;
 }
+
+export async function getParasutToken() {}

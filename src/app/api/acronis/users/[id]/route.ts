@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import getToken from "@/lib/getToken";
+import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
@@ -17,7 +17,7 @@ export const PUT = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const token = await getToken();
+        const token = await getAcronisToken();
 
         if (!token)
             return NextResponse.json({
@@ -89,7 +89,7 @@ export const DELETE = auth(async (req: any, { params }) => {
                 ok: false,
             });
 
-        const token = await getToken();
+        const token = await getAcronisToken();
 
         if (!token)
             return NextResponse.json({
