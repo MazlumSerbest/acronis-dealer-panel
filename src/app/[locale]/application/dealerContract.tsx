@@ -20,7 +20,6 @@ import {
     FormLabel,
 } from "@/components/ui/form";
 
-import { jsPDF } from "jspdf";
 // @ts-ignore
 import html2pdf from "html2pdf.js/dist/html2pdf.min.js";
 import { useTranslations } from "next-intl";
