@@ -24,7 +24,7 @@ export default function Editor({
         <BlockNoteView
             className={
                 editable
-                    ? "w-full rounded-md border border-input bg-transparent py-2 shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-400!"
+                    ? "w-full rounded-md border border-input bg-transparent py-2 shadow-xs transition-colors placeholder:text-muted-foreground focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-400"
                     : "*:p-2!"
             }
             editor={editor}
