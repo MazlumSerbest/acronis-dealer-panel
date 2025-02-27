@@ -326,7 +326,8 @@
         "setRoleToReadonlyDescription": "Seçilen Acronis kullanıcısını salt okunur yapılcak. Devam etmek istediğinize emin misiniz?",
         "update": "Güncelle",
         "activated": "Aktive Edilmiş",
-        "newTenant": "Yeni Kiracı"
+        "newTenant": "Yeni Kiracı",
+        "parasutId": "Paraşüt Müşteri Id"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

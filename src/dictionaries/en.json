@@ -326,7 +326,8 @@
         "setRoleToReadonlyDescription": "Selected Acronis user will be readonly. Are you sure you want to proceed?",
         "update": "Update",
         "activated": "Activated",
-        "newTenant": "New Tenant"
+        "newTenant": "New Tenant",
+        "parasutId": "Paraşüt Contact Id"
     },
     "SignIn": {
         "signIn": "Welcome",

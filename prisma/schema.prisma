@@ -78,6 +78,7 @@ model Partner {
   parentAcronisId        String?
   name                   String?
   licensed               Boolean          @default(true)
+  parasutId              String?
   customers              Customer[]
   licenses               License[]
   licenseHistory         LicenseHistory[]
