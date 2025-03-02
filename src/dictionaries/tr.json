@@ -327,7 +327,16 @@
         "update": "Güncelle",
         "activated": "Aktive Edilmiş",
         "newTenant": "Yeni Kiracı",
-        "parasutId": "Paraşüt Müşteri Id"
+        "parasutId": "Paraşüt Müşteri ID",
+        "customerNotFound": "Müşteri bulunamadı!",
+        "invoices": "Faturalar",
+        "invoicesCaption": "Kalan son faturaların listesi.",
+        "invoiceNo": "Fatura No",
+        "issueDate": "Düzenlenme Tarihi",
+        "dueDate": "Vade Tarihi",
+        "netTotal": "Net Toplam",
+        "remaining": "Kalan",
+        "showInvoice": "Faturayı Görüntüle"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

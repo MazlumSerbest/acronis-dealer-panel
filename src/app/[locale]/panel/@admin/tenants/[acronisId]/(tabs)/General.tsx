@@ -51,6 +51,15 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
@@ -70,6 +79,7 @@ import {
     LuAlertTriangle,
     LuArrowUpRight,
     LuCopy,
+    LuEye,
     LuGauge,
     LuInfo,
     LuLoader2,
@@ -81,6 +91,12 @@ import {
 } from "react-icons/lu";
 import { Input } from "@/components/ui/input";
 import FormError from "@/components/FormError";
+import { currencies } from "@/lib/constants";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Props = {
     t: Function;
@@ -153,6 +169,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             onSuccess: (data) => {
                 const daysDiff = calculateRemainingDays(data.billingDate);
                 seDaysUntilNextBillingDate(daysDiff);
+                invoicesMutate();
             },
         },
     );
@@ -291,6 +308,21 @@ export default function GeneralTab({ t, tenant }: Props) {
 
                 usagesTrigger();
             },
+        },
+    );
+
+    const {
+        data: invoices,
+        error: invoicesError,
+        isLoading: invoicesIsLoading,
+        mutate: invoicesMutate,
+    } = useSWR(
+        panelTenant?.parasutId
+            ? `/api/parasut/salesInvoices/${panelTenant?.parasutId}`
+            : null,
+        null,
+        {
+            revalidateOnFocus: false,
         },
     );
     // #endregion
@@ -609,6 +641,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         </dd>
                                     )}
                                 </div>
+
+                                {panelTenant?.parasutId && (
+                                    <div>
+                                        <dt className="font-medium">
+                                            {t("parasutId")}
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                                            {panelTenant?.parasutId}
+                                        </dd>
+                                    </div>
+                                )}
 
                                 <div>
                                     <dt className="font-medium">
@@ -1212,7 +1255,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 {!usages ? (
                     <div className="col-span-3 mt-2">
                         <Skeleton>
-                            <DefaultSkeleton />
+                            <DefaultSkeleton className="h-[10rem]" />
                         </Skeleton>
                     </div>
                 ) : (
@@ -1297,6 +1340,114 @@ export default function GeneralTab({ t, tenant }: Props) {
                     </>
                 )}
             </Tabs>
+
+            {tenant.kind === "partner" && panelTenant?.parasutId && (
+                <>
+                    <div className="col-span-full">
+                        <h2 className="font-medium text-xl">{t("invoices")}</h2>
+                    </div>
+
+                    <Card className="col-span-full">
+                        <CardContent className="p-4">
+                            <Table>
+                                <TableCaption>
+                                    {t("invoicesCaption")}
+                                </TableCaption>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>{t("invoiceNo")}</TableHead>
+                                        <TableHead>{t("issueDate")}</TableHead>
+                                        <TableHead>{t("dueDate")}</TableHead>
+                                        <TableHead className="text-right">
+                                            {t("netTotal")}
+                                        </TableHead>
+                                        <TableHead className="text-right">
+                                            {t("remaining")}
+                                        </TableHead>
+                                        <TableHead></TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {invoices?.data?.map((invoice: any) => (
+                                        <TableRow key={invoice.id}>
+                                            <TableCell>
+                                                {invoice.attributes
+                                                    .invoice_no || "-"}
+                                            </TableCell>
+                                            <TableCell>
+                                                {DateFormat(
+                                                    invoice.attributes
+                                                        .issue_date,
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {DateFormat(
+                                                    invoice.attributes.due_date,
+                                                )}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                {invoice.attributes.net_total
+                                                    ? `${
+                                                          invoice.attributes
+                                                              .net_total
+                                                      } ${
+                                                          currencies.find(
+                                                              (c) =>
+                                                                  c.key ===
+                                                                  invoice
+                                                                      .attributes
+                                                                      .currency,
+                                                          )?.symbol
+                                                      }`
+                                                    : "-"}
+                                            </TableCell>
+                                            <TableCell className="text-right">
+                                                {invoice.attributes.remaining
+                                                    ? `${
+                                                          invoice.attributes
+                                                              .remaining
+                                                      } ${
+                                                          currencies.find(
+                                                              (c) =>
+                                                                  c.key ===
+                                                                  invoice
+                                                                      .attributes
+                                                                      .currency,
+                                                          )?.symbol
+                                                      }`
+                                                    : "-"}
+                                            </TableCell>
+                                            <TableCell className="items-end justify-end">
+                                                <Link
+                                                    target="_blank"
+                                                    href={
+                                                        invoice.attributes
+                                                            .sharing_preview_url
+                                                    }
+                                                    className="flex items-center justify-end"
+                                                >
+                                                    <Tooltip>
+                                                        <TooltipTrigger>
+                                                            <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            <p>
+                                                                {t(
+                                                                    "showInvoice",
+                                                                )}
+                                                            </p>
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </Link>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </CardContent>
+                    </Card>
+                </>
+            )}
         </div>
     );
 }

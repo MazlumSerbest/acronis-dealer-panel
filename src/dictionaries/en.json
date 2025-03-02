@@ -327,7 +327,16 @@
         "update": "Update",
         "activated": "Activated",
         "newTenant": "New Tenant",
-        "parasutId": "Paraşüt Contact Id"
+        "parasutId": "Paraşüt Contact ID",
+        "customerNotFound": "Customer not found!",
+        "invoices": "Invoices",
+        "invoicesCaption": "A list of your recent invoices.",
+        "invoiceNo": "Invoice No",
+        "issueDate": "Issue Date",
+        "dueDate": "Due Date",
+        "netTotal": "Net Total",
+        "remaining": "Remaining",
+        "showInvoice": "Show Invoice"
     },
     "SignIn": {
         "signIn": "Welcome",

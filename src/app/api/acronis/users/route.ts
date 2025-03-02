@@ -41,14 +41,14 @@ export const GET = auth(async (req: any, { params }) => {
 
         const useIds = (await userIdsRes.json()) || [];
 
-        const params = new URLSearchParams({
+        const searchParams = new URLSearchParams({
             lod: req.nextUrl.searchParams.get("lod") || "full",
             uuids: useIds.items.map((id: string) => id).join(","),
             with_access_policies:
                 req.nextUrl.searchParams.get("withAccessPolicies") || "false",
         });
         const res = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/users?${params}`,
+            `${process.env.ACRONIS_API_V2_URL}/users?${searchParams}`,
             {
                 method: "GET",
                 headers: headers,

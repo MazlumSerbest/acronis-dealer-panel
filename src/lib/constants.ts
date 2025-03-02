@@ -1511,3 +1511,19 @@ export const userNotifications = [
     // "certificate_management_warning",
     // "certificate_management_info",
 ];
+
+// Paraşüt
+export const currencies = [
+    {
+        key: "TRL",
+        symbol: "₺",
+    },
+    {
+        key: "USD",
+        symbol: "$",
+    },
+    {
+        key: "EUR",
+        symbol: "€",
+    },
+];
