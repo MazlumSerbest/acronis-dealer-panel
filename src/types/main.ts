@@ -34,6 +34,7 @@ type Partner = Entity & {
     licensed: boolean;
     active?: boolean;
     billingDate?: string;
+    parasutId?: string;
     application?: Application;
     users?: User[];
     customers?: Customer[];
