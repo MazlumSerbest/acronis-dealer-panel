@@ -13,6 +13,8 @@ import {
     LuGraduationCap,
     LuHistory,
     LuNewspaper,
+    LuFileText,
+    LuScrollText,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -73,6 +75,16 @@ export const adminPaths: Path[] = [
             <LuArchiveRestore
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Applications Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/invoices",
+        key: "invoices",
+        icon: (
+            <LuScrollText
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Invoices Page"
             />
         ),
     },
@@ -176,6 +188,16 @@ export const partnerPaths: Path[] = [
             <LuUser2
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Users Page"
+            />
+        ),
+    },
+    {
+        path: "/panel/invoices",
+        key: "invoices",
+        icon: (
+            <LuScrollText
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Invoices Page"
             />
         ),
     },
