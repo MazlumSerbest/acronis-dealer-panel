@@ -14,6 +14,7 @@
             "partners": "Partnerler",
             "users": "Kullanıcılar",
             "settings": "Ayarlar",
+            "invoices": "Faturalar",
             "news": "Haberler",
             "courses": "Kurslar",
             "learn": "Öğren"
@@ -330,13 +331,22 @@
         "parasutId": "Paraşüt Müşteri ID",
         "customerNotFound": "Müşteri bulunamadı!",
         "invoices": "Faturalar",
-        "invoicesCaption": "Kalan son faturaların listesi.",
+        "invoicesCaption": "Kiracının kalan son faturaların listesi.",
         "invoiceNo": "Fatura No",
         "issueDate": "Düzenlenme Tarihi",
         "dueDate": "Vade Tarihi",
         "netTotal": "Net Toplam",
         "remaining": "Kalan",
-        "showInvoice": "Faturayı Görüntüle"
+        "showInvoice": "Faturayı Görüntüle",
+        "parasutIntegration": "Paraşüt Entegrasyonu",
+        "available": "Var",
+        "unavailable": "Yok",
+        "overdue": "Gecikmiş",
+        "unpaid": "Ödenmemiş",
+        "paid": "Ödenmiş",
+        "partiallyPaid": "Kısmi Ödenmiş",
+        "all": "Hepsi",
+        "paymentStatus": "Tahsilat Durumu"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

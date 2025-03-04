@@ -1526,4 +1526,8 @@ export const currencies = [
         key: "EUR",
         symbol: "€",
     },
+    {
+        key: "GBP",
+        symbol: "£",
+    },
 ];

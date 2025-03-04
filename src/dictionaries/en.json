@@ -14,6 +14,7 @@
             "partners": "Partners",
             "users": "Users",
             "settings": "Settings",
+            "invoices": "Invoices",
             "news": "News",
             "courses": "Courses",
             "learn": "Learn"
@@ -330,13 +331,22 @@
         "parasutId": "Paraşüt Contact ID",
         "customerNotFound": "Customer not found!",
         "invoices": "Invoices",
-        "invoicesCaption": "A list of your recent invoices.",
+        "invoicesCaption": "A list of tenants remaining invoices.",
         "invoiceNo": "Invoice No",
         "issueDate": "Issue Date",
         "dueDate": "Due Date",
         "netTotal": "Net Total",
         "remaining": "Remaining",
-        "showInvoice": "Show Invoice"
+        "showInvoice": "Show Invoice",
+        "parasutIntegration": "Paraşüt Integration",
+        "available": "Available",
+        "unavailable": "Unavailable",
+        "overdue": "Overdue",
+        "unpaid": "Unpaid",
+        "paid": "Paid",
+        "partiallyPaid": "Partially Paid",
+        "all": "All",
+        "paymentStatus": "Payment Status"
     },
     "SignIn": {
         "signIn": "Welcome",
