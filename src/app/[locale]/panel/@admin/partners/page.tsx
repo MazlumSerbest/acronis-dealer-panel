@@ -221,6 +221,23 @@ export default function PartnersPage() {
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
+            accessorKey: "parasutId",
+            header: "Paraşüt",
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("parasutId");
+                const enabled: boolean = data ? true : false;
+
+                return <BoolChip size="size-4" value={enabled} />;
+            },
+            filterFn: (row, id, value) => {
+                const data: string = row.getValue(id);
+                const enabled: boolean = data ? true : false;
+
+                return value.includes(enabled);
+            },
+        },
+        {
             accessorKey: "createdAt",
             header: t("createdAt"),
             enableGlobalFilter: false,
@@ -399,6 +416,14 @@ export default function PartnersPage() {
                             options: [
                                 { value: true, label: t("true") },
                                 { value: false, label: t("false") },
+                            ],
+                        },
+                        {
+                            column: "parasutId",
+                            title: t("parasutIntegration"),
+                            options: [
+                                { value: true, label: t("available") },
+                                { value: false, label: t("unavailable") },
                             ],
                         },
                     ]}
