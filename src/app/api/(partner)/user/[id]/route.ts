@@ -40,6 +40,7 @@ export const GET = auth(async (req: any, { params }) => {
                         name: true,
                         acronisId: true,
                         licensed: true,
+                        parasutId: true,
                         // application: {
                         //     select: {
                         //         name: true,
@@ -166,4 +167,3 @@ export const DELETE = auth(async (req: any, { params }) => {
         });
     }
 });
-

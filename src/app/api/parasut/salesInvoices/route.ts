@@ -10,7 +10,7 @@ export const GET = auth(async (req: any, { params }) => {
             namespace: "Messages",
         });
 
-        if (!req.auth)
+        if (req.auth.user.role !== "admin")
             return NextResponse.json({
                 message: "Authorization Needed!",
                 status: 401,
@@ -31,12 +31,20 @@ export const GET = auth(async (req: any, { params }) => {
             Authorization: authorization,
         };
 
+        const currentPage = req.nextUrl.searchParams.get("currentPage") || 1;
+        const paymentStatus =
+            req.nextUrl.searchParams.get("paymentStatus") ||
+            "overdue,not_due,paid,unpaid";
+        const sort = req.nextUrl.searchParams.get("sort") || "-issue_date";
+
         const searchParams = new URLSearchParams({
-            "filter[contact_id]": params?.contactId as string,
+            "filter[item_type]": "invoice",
             "filter[category]": "6549838",
+            "filter[payment_status]": paymentStatus,
+            "page[number]": currentPage,
             "page[size]": "25",
-            "filter[payment_status]": "overdue,not_due",
-            sort: "issue_date",
+            sort: sort,
+            include: "contact",
         });
 
         const res = await fetch(
