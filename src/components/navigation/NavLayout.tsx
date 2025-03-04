@@ -15,6 +15,7 @@ import { Separator } from "../ui/separator";
 import { LuArrowUpRight, LuMenu } from "react-icons/lu";
 import useAcronisStore from "@/store/acronis";
 import useUserStore from "@/store/user";
+import { cn } from "@/lib/utils";
 
 export default function NavLayout() {
     const t = useTranslations("General");
@@ -121,7 +122,7 @@ export default function NavLayout() {
                                                 ? "secondary"
                                                 : "ghost"
                                         }
-                                        key={p.key}
+                                        key={index}
                                         asChild
                                     >
                                         <Link
@@ -157,8 +158,16 @@ export default function NavLayout() {
                             let withoutLocale = pathName.substring(
                                 pathName.indexOf("/panel"),
                             );
+
+                            if (
+                                p.key === "invoices" &&
+                                !currentUser?.partner?.parasutId
+                            )
+                                return;
+
                             return (
                                 <Button
+                                    className={cn("")}
                                     variant={
                                         p.path === withoutLocale ||
                                         (p.path != "/panel" &&
@@ -166,7 +175,7 @@ export default function NavLayout() {
                                             ? "secondary"
                                             : "ghost"
                                     }
-                                    key={p.key}
+                                    key={index}
                                     asChild
                                 >
                                     <Link

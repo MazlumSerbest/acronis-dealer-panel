@@ -40,7 +40,12 @@ import { DataTableFacetedFilter } from "./FacetedFilter";
 import { useTranslations } from "next-intl";
 import Loader from "../loaders/Loader";
 import { cn } from "@/lib/utils";
-import { Cross2Icon, MagicWandIcon, PlusIcon } from "@radix-ui/react-icons";
+import {
+    Cross2Icon,
+    MagicWandIcon,
+    PlusIcon,
+    MagnifyingGlassIcon,
+} from "@radix-ui/react-icons";
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -147,25 +152,30 @@ export function DataTable<TData, TValue>({
             <div className="flex md:items-center justify-between gap-2">
                 <div className="flex flex-1 items-center gap-2">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                        <Input
-                            className="w-full"
-                            placeholder={tc("searchPlaceholder")}
-                            value={globalFilter ?? ""}
-                            onChange={(e) => setGlobalFilter(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (
-                                    e.key === "Enter" &&
-                                    selectable &&
-                                    onSearchEnter
-                                ) {
-                                    onSearchEnter(
-                                        table,
-                                        globalFilter,
-                                        setGlobalFilter,
-                                    );
+                        <div className="relative">
+                            <MagnifyingGlassIcon className="absolute left-2 top-2 size-5 text-muted-foreground" />
+                            <Input
+                                className="w-full pl-8"
+                                placeholder={tc("searchPlaceholder")}
+                                value={globalFilter ?? ""}
+                                onChange={(e) =>
+                                    setGlobalFilter(e.target.value)
                                 }
-                            }}
-                        />
+                                onKeyDown={(e) => {
+                                    if (
+                                        e.key === "Enter" &&
+                                        selectable &&
+                                        onSearchEnter
+                                    ) {
+                                        onSearchEnter(
+                                            table,
+                                            globalFilter,
+                                            setGlobalFilter,
+                                        );
+                                    }
+                                }}
+                            />
+                        </div>
 
                         <div className="flex gap-2 items-center">
                             {facetedFilters?.map(
@@ -342,6 +352,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
+            
             <Pagination table={table} />
         </div>
     );
