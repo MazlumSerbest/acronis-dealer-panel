@@ -97,6 +97,7 @@ import {
     TooltipContent,
     TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { PriceFormat } from "@/utils/price";
 
 type Props = {
     t: Function;
@@ -1388,8 +1389,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             <TableCell className="text-right">
                                                 {invoice.attributes.net_total
                                                     ? `${
-                                                          invoice.attributes
-                                                              .net_total
+                                                          PriceFormat(invoice.attributes
+                                                              .net_total)
                                                       } ${
                                                           currencies.find(
                                                               (c) =>
@@ -1403,10 +1404,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             </TableCell>
                                             <TableCell className="text-right">
                                                 {invoice.attributes.remaining
-                                                    ? `${
+                                                    ? `${PriceFormat(
                                                           invoice.attributes
-                                                              .remaining
-                                                      } ${
+                                                              .remaining,
+                                                      )} ${
                                                           currencies.find(
                                                               (c) =>
                                                                   c.key ===
