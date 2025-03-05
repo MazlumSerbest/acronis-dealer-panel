@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/use-toast";
+import { useTranslations } from "next-intl";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
@@ -38,6 +39,8 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsContent, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
     Popover,
     PopoverContent,
@@ -54,12 +57,16 @@ import {
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
@@ -67,17 +74,13 @@ import DatePicker from "@/components/DatePicker";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
+import FormError from "@/components/FormError";
 
-import {
-    calculateRemainingDays,
-    CopyToClipboard,
-    parseBytes,
-} from "@/utils/functions";
-import { DateFormat, DateTimeFormat } from "@/utils/date";
 import useUserStore from "@/store/user";
 import {
     LuAlertTriangle,
     LuArrowUpRight,
+    LuChevronsUpDown,
     LuCopy,
     LuEye,
     LuGauge,
@@ -89,15 +92,21 @@ import {
     LuShieldCheck,
     LuShieldOff,
 } from "react-icons/lu";
-import { Input } from "@/components/ui/input";
-import FormError from "@/components/FormError";
-import { currencies } from "@/lib/constants";
 import {
-    Tooltip,
-    TooltipContent,
-    TooltipTrigger,
-} from "@/components/ui/tooltip";
+    ChevronLeftIcon,
+    ChevronRightIcon,
+    DoubleArrowLeftIcon,
+    DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
+import { currencies } from "@/lib/constants";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { PriceFormat } from "@/utils/price";
+import {
+    calculateRemainingDays,
+    CopyToClipboard,
+    parseBytes,
+} from "@/utils/functions";
+import { cn } from "@/lib/utils";
 
 type Props = {
     t: Function;
@@ -133,6 +142,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     const router = useRouter();
     const pathname = usePathname();
     const { user: currentUser } = useUserStore();
+    const tc = useTranslations("Components");
 
     const [openPartnerDialog, setOpenPartnerDialog] = useState(false);
     const [openUserDialog, setOpenUserDialog] = useState(false);
@@ -160,6 +170,9 @@ export default function GeneralTab({ t, tenant }: Props) {
         useState<number>(0);
     const [expiredLicenseCount, setExpiredLicenseCount] = useState<number>(0);
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
+
+    const [invoicesCurrentPage, setInvoicesCurrentPage] = useState(1);
+    const [invoicesSort, setInvoicesSort] = useState("-issue_date");
 
     // #region Fetch Data
     const { data: panelTenant, mutate: panelTenantMutate } = useSWR(
@@ -319,7 +332,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate: invoicesMutate,
     } = useSWR(
         panelTenant?.parasutId
-            ? `/api/parasut/salesInvoices/${panelTenant?.parasutId}`
+            ? `/api/parasut/salesInvoices/${panelTenant?.parasutId}?currentPage=${invoicesCurrentPage}&sort=${invoicesSort}`
             : null,
         null,
         {
@@ -1346,107 +1359,300 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <>
                     <div className="col-span-full">
                         <h2 className="font-medium text-xl">{t("invoices")}</h2>
+                        <p className="text-sm text-muted-foreground">
+                            {t("invoicesCaption")}
+                        </p>
                     </div>
 
-                    <Card className="col-span-full">
-                        <CardContent className="p-4">
-                            <Table>
-                                <TableCaption>
-                                    {t("invoicesCaption")}
-                                </TableCaption>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>{t("invoiceNo")}</TableHead>
-                                        <TableHead>{t("issueDate")}</TableHead>
-                                        <TableHead>{t("dueDate")}</TableHead>
-                                        <TableHead className="text-right">
-                                            {t("netTotal")}
-                                        </TableHead>
-                                        <TableHead className="text-right">
-                                            {t("remaining")}
-                                        </TableHead>
-                                        <TableHead></TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {invoices?.data?.map((invoice: any) => (
-                                        <TableRow key={invoice.id}>
-                                            <TableCell>
-                                                {invoice.attributes
-                                                    .invoice_no || "-"}
-                                            </TableCell>
-                                            <TableCell>
-                                                {DateFormat(
-                                                    invoice.attributes
-                                                        .issue_date,
-                                                )}
-                                            </TableCell>
-                                            <TableCell>
-                                                {DateFormat(
-                                                    invoice.attributes.due_date,
-                                                )}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {invoice.attributes.net_total
-                                                    ? `${
-                                                          PriceFormat(invoice.attributes
-                                                              .net_total)
-                                                      } ${
-                                                          currencies.find(
-                                                              (c) =>
-                                                                  c.key ===
-                                                                  invoice
-                                                                      .attributes
-                                                                      .currency,
-                                                          )?.symbol
-                                                      }`
-                                                    : "-"}
-                                            </TableCell>
-                                            <TableCell className="text-right">
-                                                {invoice.attributes.remaining
-                                                    ? `${PriceFormat(
+                    <div className="rounded-md border col-span-full">
+                        <Table>
+                            {/* <TableCaption className="my-3">
+                                {t("invoicesCaption")}
+                            </TableCaption> */}
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>{t("invoiceNo")}</TableHead>
+                                    <TableHead>
+                                        <Button
+                                            variant="ghost"
+                                            className="-ml-4"
+                                            onClick={() =>
+                                                setInvoicesSort(
+                                                    invoicesSort ===
+                                                        "-issue_date"
+                                                        ? "issue_date"
+                                                        : "-issue_date",
+                                                )
+                                            }
+                                        >
+                                            {t("issueDate")}
+                                            <LuChevronsUpDown className="size-4 ml-2" />
+                                        </Button>
+                                    </TableHead>
+                                    <TableHead>
+                                        <Button
+                                            variant="ghost"
+                                            className="-ml-4"
+                                            onClick={() =>
+                                                setInvoicesSort(
+                                                    invoicesSort === "-due_date"
+                                                        ? "due_date"
+                                                        : "-due_date",
+                                                )
+                                            }
+                                        >
+                                            {t("dueDate")}
+                                            <LuChevronsUpDown className="size-4 ml-2" />
+                                        </Button>
+                                    </TableHead>
+                                    <TableHead className="truncate">
+                                        {t("paymentStatus")}
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        {t("netTotal")}
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        {t("remaining")}
+                                    </TableHead>
+                                    <TableHead></TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {invoicesIsLoading
+                                    ? Array.from({ length: 4 }).map((_, i) => (
+                                          <TableRow
+                                              key={i}
+                                              className="odd:bg-zinc-100/50"
+                                          >
+                                              {Array.from({ length: 6 }).map(
+                                                  (_, i) => (
+                                                      <TableCell key={i}>
+                                                          <Skeleton>
+                                                              <div className="rounded-sm bg-slate-200 w-full h-5"></div>
+                                                          </Skeleton>
+                                                      </TableCell>
+                                                  ),
+                                              )}
+                                          </TableRow>
+                                      ))
+                                    : invoices?.data?.map(
+                                          (invoice: ParasutInvoice) => (
+                                              <TableRow
+                                                  key={invoice.id}
+                                                  className="odd:bg-zinc-100/50"
+                                              >
+                                                  <TableCell className="font-medium">
+                                                      {invoice.attributes
+                                                          .invoice_no || "-"}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {DateFormat(
                                                           invoice.attributes
-                                                              .remaining,
-                                                      )} ${
-                                                          currencies.find(
-                                                              (c) =>
-                                                                  c.key ===
-                                                                  invoice
-                                                                      .attributes
-                                                                      .currency,
-                                                          )?.symbol
-                                                      }`
-                                                    : "-"}
-                                            </TableCell>
-                                            <TableCell className="items-end justify-end">
-                                                <Link
-                                                    target="_blank"
-                                                    href={
-                                                        invoice.attributes
-                                                            .sharing_preview_url
-                                                    }
-                                                    className="flex items-center justify-end"
-                                                >
-                                                    <Tooltip>
-                                                        <TooltipTrigger>
-                                                            <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
-                                                        </TooltipTrigger>
-                                                        <TooltipContent>
-                                                            <p>
-                                                                {t(
-                                                                    "showInvoice",
-                                                                )}
-                                                            </p>
-                                                        </TooltipContent>
-                                                    </Tooltip>
-                                                </Link>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </CardContent>
-                    </Card>
+                                                              .issue_date,
+                                                      )}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      {DateFormat(
+                                                          invoice.attributes
+                                                              .due_date,
+                                                      )}
+                                                  </TableCell>
+                                                  <TableCell>
+                                                      <Badge
+                                                          variant={
+                                                              invoice.attributes
+                                                                  .payment_status ===
+                                                              "overdue"
+                                                                  ? "destructive"
+                                                                  : "default"
+                                                          }
+                                                          className={cn(
+                                                              invoice.attributes
+                                                                  .payment_status ===
+                                                                  "paid"
+                                                                  ? "bg-green-600 hover:bg-green-600/90"
+                                                                  : invoice
+                                                                        .attributes
+                                                                        .payment_status ===
+                                                                    "unpaid"
+                                                                  ? "bg-yellow-500 hover:bg-yellow-500/90"
+                                                                  : "",
+                                                          )}
+                                                      >
+                                                          {t(
+                                                              invoice.attributes
+                                                                  .payment_status,
+                                                          )}
+                                                      </Badge>
+                                                  </TableCell>
+                                                  <TableCell className="text-right">
+                                                      {invoice.attributes
+                                                          .net_total
+                                                          ? `${PriceFormat(
+                                                                invoice
+                                                                    .attributes
+                                                                    .net_total,
+                                                            )} ${
+                                                                currencies.find(
+                                                                    (c) =>
+                                                                        c.key ===
+                                                                        invoice
+                                                                            .attributes
+                                                                            .currency,
+                                                                )?.symbol
+                                                            }`
+                                                          : "-"}
+                                                  </TableCell>
+                                                  <TableCell className="text-right">
+                                                      {invoice.attributes
+                                                          .remaining
+                                                          ? `${PriceFormat(
+                                                                invoice
+                                                                    .attributes
+                                                                    .remaining,
+                                                            )} ${
+                                                                currencies.find(
+                                                                    (c) =>
+                                                                        c.key ===
+                                                                        invoice
+                                                                            .attributes
+                                                                            .currency,
+                                                                )?.symbol
+                                                            }`
+                                                          : "-"}
+                                                  </TableCell>
+                                                  <TableCell className="items-end justify-end">
+                                                      <Link
+                                                          target="_blank"
+                                                          href={
+                                                              invoice.attributes
+                                                                  .sharing_preview_url
+                                                          }
+                                                          className="flex items-center justify-end"
+                                                      >
+                                                          <Tooltip>
+                                                              <TooltipTrigger>
+                                                                  <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                                                              </TooltipTrigger>
+                                                              <TooltipContent>
+                                                                  <p>
+                                                                      {t(
+                                                                          "showInvoice",
+                                                                      )}
+                                                                  </p>
+                                                              </TooltipContent>
+                                                          </Tooltip>
+                                                      </Link>
+                                                  </TableCell>
+                                              </TableRow>
+                                          ),
+                                      )}
+                                {invoices?.data?.length === 0 && (
+                                    <TableRow>
+                                        <TableCell
+                                            colSpan={8}
+                                            className="h-24 text-center"
+                                        >
+                                            {tc("noResults")}
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                            </TableBody>
+                        </Table>
+                    </div>
+
+                    <div className="col-span-full flex items-center justify-between px-2">
+                        <div className="flex-1 text-sm font-medium">
+                            {tc("totalRows", {
+                                length: invoices?.meta?.total_count || 0,
+                            })}
+                        </div>
+
+                        <div className="flex items-center space-x-6 lg:space-x-8">
+                            <div className="flex items-center space-x-2">
+                                <p className="text-sm font-medium sr-only lg:not-sr-only">
+                                    {tc("rowsPerPage")}: 25
+                                </p>
+                            </div>
+                            <div className="flex w-[100px] items-center justify-center text-sm font-medium">
+                                {`${tc("page")} ${
+                                    invoices?.meta?.current_page || 0
+                                }/${invoices?.meta?.total_pages || 0}`}
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Button
+                                    variant="outline"
+                                    className="hidden size-8 p-0 lg:flex"
+                                    onClick={() => {
+                                        if (invoicesCurrentPage > 1)
+                                            setInvoicesCurrentPage(1);
+                                    }}
+                                    disabled={invoicesCurrentPage <= 1}
+                                >
+                                    <span className="sr-only">
+                                        {tc("goToFirstPage")}
+                                    </span>
+                                    <DoubleArrowLeftIcon className="size-4" />
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="size-8 p-0"
+                                    onClick={() => {
+                                        if (invoicesCurrentPage > 1)
+                                            setInvoicesCurrentPage(
+                                                invoicesCurrentPage - 1,
+                                            );
+                                    }}
+                                    disabled={invoicesCurrentPage <= 1}
+                                >
+                                    <span className="sr-only">
+                                        {tc("goToPreviousPage")}
+                                    </span>
+                                    <ChevronLeftIcon className="size-4" />
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="size-8 p-0"
+                                    onClick={() => {
+                                        if (
+                                            invoicesCurrentPage <
+                                            invoices?.meta.total_pages
+                                        )
+                                            setInvoicesCurrentPage(
+                                                invoicesCurrentPage + 1,
+                                            );
+                                    }}
+                                    disabled={
+                                        invoices?.meta?.current_page >=
+                                        invoices?.meta?.total_pages
+                                    }
+                                >
+                                    <span className="sr-only">
+                                        {tc("goToNextPage")}
+                                    </span>
+                                    <ChevronRightIcon className="size-4" />
+                                </Button>
+                                <Button
+                                    variant="outline"
+                                    className="hidden size-8 p-0 lg:flex"
+                                    onClick={() =>
+                                        setInvoicesCurrentPage(
+                                            invoices?.meta?.total_pages,
+                                        )
+                                    }
+                                    disabled={
+                                        invoicesCurrentPage >=
+                                        invoices?.meta?.total_pages
+                                    }
+                                >
+                                    <span className="sr-only">
+                                        {tc("goToLastPage")}
+                                    </span>
+                                    <DoubleArrowRightIcon className="size-4" />
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
                 </>
             )}
         </div>

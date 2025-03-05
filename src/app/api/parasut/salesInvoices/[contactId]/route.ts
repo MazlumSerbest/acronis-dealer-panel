@@ -31,12 +31,16 @@ export const GET = auth(async (req: any, { params }) => {
             Authorization: authorization,
         };
 
+        const currentPage = req.nextUrl.searchParams.get("currentPage") || 1;
+        const sort = req.nextUrl.searchParams.get("sort") || "-issue_date";
+
         const searchParams = new URLSearchParams({
             "filter[contact_id]": params?.contactId as string,
             "filter[category]": "6549838",
-            "page[size]": "25",
             "filter[payment_status]": "overdue,not_due",
-            sort: "issue_date",
+            "page[number]": currentPage,
+            "page[size]": "25",
+            sort: sort,
         });
 
         const res = await fetch(
