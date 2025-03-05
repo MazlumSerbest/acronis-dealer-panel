@@ -32,12 +32,15 @@ export const GET = auth(async (req: any, { params }) => {
         };
 
         const currentPage = req.nextUrl.searchParams.get("currentPage") || 1;
+        const paymentStatus =
+            req.nextUrl.searchParams.get("paymentStatus") ||
+            "overdue,not_due,paid,unpaid";
         const sort = req.nextUrl.searchParams.get("sort") || "-issue_date";
 
         const searchParams = new URLSearchParams({
             "filter[contact_id]": params?.contactId as string,
             "filter[category]": "6549838",
-            "filter[payment_status]": "overdue,not_due",
+            "filter[payment_status]": paymentStatus,
             "page[number]": currentPage,
             "page[size]": "25",
             sort: sort,
