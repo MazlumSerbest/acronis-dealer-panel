@@ -332,7 +332,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate: invoicesMutate,
     } = useSWR(
         panelTenant?.parasutId
-            ? `/api/parasut/salesInvoices/${panelTenant?.parasutId}?currentPage=${invoicesCurrentPage}&sort=${invoicesSort}`
+            ? `/api/parasut/salesInvoices/${panelTenant?.parasutId}?currentPage=${invoicesCurrentPage}&paymentStatus=overdue,not_due&sort=${invoicesSort}`
             : null,
         null,
         {

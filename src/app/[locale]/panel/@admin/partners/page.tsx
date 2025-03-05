@@ -493,67 +493,65 @@ export default function PartnersPage() {
                                     <FormItem>
                                         <FormLabel>{t("parasutId")}</FormLabel>
                                         <FormControl>
-                                            <div className="relative flex items-center">
-                                                <Input
-                                                    type="number"
-                                                    {...field}
-                                                    onChange={async (e) => {
-                                                        form.setValue(
-                                                            "parasutId",
-                                                            e.target.value,
+                                            <Input
+                                                type="number"
+                                                {...field}
+                                                onChange={async (e) => {
+                                                    form.setValue(
+                                                        "parasutId",
+                                                        e.target.value,
+                                                    );
+
+                                                    setParasutContactName(
+                                                        undefined,
+                                                    );
+                                                    if (e.target.value) {
+                                                        setParasutNameLoading(
+                                                            true,
                                                         );
 
-                                                        setParasutContactName(
-                                                            undefined,
-                                                        );
-                                                        if (e.target.value) {
-                                                            setParasutNameLoading(
-                                                                true,
-                                                            );
-
-                                                            await fetch(
-                                                                `/api/parasut/contacts/${e.target.value}`,
+                                                        await fetch(
+                                                            `/api/parasut/contacts/${e.target.value}`,
+                                                        )
+                                                            .then((res) =>
+                                                                res.json(),
                                                             )
-                                                                .then((res) =>
-                                                                    res.json(),
+                                                            .then((res) => {
+                                                                if (
+                                                                    res.ok ===
+                                                                    false
                                                                 )
-                                                                .then((res) => {
-                                                                    if (
-                                                                        res.ok ===
-                                                                        false
-                                                                    )
-                                                                        setParasutContactName(
-                                                                            t(
-                                                                                "customerNotFound",
-                                                                            ),
-                                                                        );
-                                                                    else
-                                                                        setParasutContactName(
-                                                                            res
-                                                                                .attributes
-                                                                                .name,
-                                                                        );
-                                                                })
-                                                                .finally(() =>
-                                                                    setParasutNameLoading(
-                                                                        false,
-                                                                    ),
-                                                                );
-                                                        }
-                                                    }}
-                                                />
-                                                {parasutNameLoading && (
-                                                    <FormDescription>
-                                                        <LuLoader2 className="size-4 animate-spin absolute right-2 top-2" />
-                                                    </FormDescription>
-                                                )}
-                                                {parasutContactName && (
-                                                    <FormDescription className="absolute right-2">
-                                                        {parasutContactName}
-                                                    </FormDescription>
-                                                )}
-                                            </div>
+                                                                    setParasutContactName(
+                                                                        t(
+                                                                            "customerNotFound",
+                                                                        ),
+                                                                    );
+                                                                else
+                                                                    setParasutContactName(
+                                                                        res
+                                                                            .attributes
+                                                                            .name,
+                                                                    );
+                                                            })
+                                                            .finally(() =>
+                                                                setParasutNameLoading(
+                                                                    false,
+                                                                ),
+                                                            );
+                                                    }
+                                                }}
+                                            />
                                         </FormControl>
+                                        {parasutNameLoading && (
+                                            <FormDescription>
+                                                <LuLoader2 className="size-4 animate-spin absolute right-2 top-2" />
+                                            </FormDescription>
+                                        )}
+                                        {parasutContactName && (
+                                            <FormDescription className="">
+                                                {parasutContactName}
+                                            </FormDescription>
+                                        )}
                                         <FormError
                                             error={
                                                 form?.formState?.errors

@@ -55,9 +55,7 @@ export default function InvoicesPage() {
         error,
         isLoading,
     } = useSWR(
-        [
-            `/api/parasut/salesInvoices?currentPage=${currentPage}&paymentStatus=${paymentStatus}&sort=${sort}`,
-        ],
+        `/api/parasut/salesInvoices?currentPage=${currentPage}&paymentStatus=${paymentStatus}&sort=${sort}`,
         null,
         {
             revalidateOnFocus: false,
