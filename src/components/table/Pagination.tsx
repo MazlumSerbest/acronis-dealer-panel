@@ -26,7 +26,7 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
 
     return (
         <div className="flex items-center justify-between px-2">
-            <div className="flex-1 text-sm text-muted-foreground">
+            <div className="flex-1 text-sm font-medium">
                 {table.getFilteredSelectedRowModel().rows.length > 0
                     ? tc("totalRowsSelected", {
                           selected:
