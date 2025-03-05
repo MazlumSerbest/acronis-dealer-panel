@@ -5,14 +5,6 @@ import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
     Table,
@@ -36,7 +28,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { DateFormat } from "@/utils/date";
+import Skeleton from "@/components/loaders/Skeleton";
 import { LuChevronsUpDown, LuEye } from "react-icons/lu";
 import {
     ChevronLeftIcon,
@@ -44,62 +36,15 @@ import {
     DoubleArrowLeftIcon,
     DoubleArrowRightIcon,
 } from "@radix-ui/react-icons";
-import { cn } from "@/lib/utils";
-import Loader from "@/components/loaders/Loader";
 import { currencies } from "@/lib/constants";
-import Skeleton from "@/components/loaders/Skeleton";
+import { DateFormat } from "@/utils/date";
 import { PriceFormat } from "@/utils/price";
-
-// Mock data for demonstration
-const mockInvoices = [
-    {
-        id: "INV-001",
-        customer: "Acme Corp",
-        date: "2023-11-01",
-        amount: 1250.0,
-        status: "paid",
-    },
-    {
-        id: "INV-002",
-        customer: "Globex Inc",
-        date: "2023-11-03",
-        amount: 890.5,
-        status: "pending",
-    },
-    {
-        id: "INV-003",
-        customer: "Stark Industries",
-        date: "2023-11-05",
-        amount: 2340.75,
-        status: "overdue",
-    },
-    {
-        id: "INV-004",
-        customer: "Wayne Enterprises",
-        date: "2023-11-08",
-        amount: 1100.25,
-        status: "paid",
-    },
-    {
-        id: "INV-005",
-        customer: "LexCorp",
-        date: "2023-11-10",
-        amount: 3200.0,
-        status: "pending",
-    },
-];
-
-// Status badge colors
-const statusColors: Record<string, string> = {
-    paid: "bg-green-100 text-green-800",
-    pending: "bg-yellow-100 text-yellow-800",
-    overdue: "bg-red-100 text-red-800",
-};
+import { cn } from "@/lib/utils";
 
 export default function InvoicesPage() {
     const t = useTranslations("General");
     const tc = useTranslations("Components");
-    const searchParams = useSearchParams();
+    // const searchParams = useSearchParams();
 
     const [currentPage, setCurrentPage] = useState(1);
     const [paymentStatus, setPaymentStatus] = useState("");
@@ -109,7 +54,6 @@ export default function InvoicesPage() {
         data: invoices,
         error,
         isLoading,
-        mutate,
     } = useSWR(
         [
             `/api/parasut/salesInvoices?currentPage=${currentPage}&paymentStatus=${paymentStatus}&sort=${sort}`,
@@ -144,17 +88,26 @@ export default function InvoicesPage() {
                         if (status === "all") setPaymentStatus("");
                         else setPaymentStatus(status);
                         setCurrentPage(1);
-                        mutate();
                     }}
                 >
-                    <SelectTrigger className="w-48">
+                    <SelectTrigger className="w-40">
                         <SelectValue placeholder={t("paymentStatus")} />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem value="all">{t("all")}</SelectItem>
-                        <SelectItem value="overdue">{t("overdue")}</SelectItem>
-                        <SelectItem value="not_due">{t("unpaid")}</SelectItem>
-                        <SelectItem value="paid">{t("paid")}</SelectItem>
+                        <SelectItem value="overdue">
+                            <Badge variant="destructive">{t("overdue")}</Badge>
+                        </SelectItem>
+                        <SelectItem value="not_due">
+                            <Badge className="bg-yellow-500 hover:bg-yellow-500/90">
+                                {t("unpaid")}
+                            </Badge>
+                        </SelectItem>
+                        <SelectItem value="paid">
+                            <Badge className="bg-green-600 hover:bg-green-600/90">
+                                {t("paid")}
+                            </Badge>
+                        </SelectItem>
                     </SelectContent>
                 </Select>
             </div>
@@ -169,32 +122,29 @@ export default function InvoicesPage() {
                                 <Button
                                     variant="ghost"
                                     className="-ml-4"
-                                    onClick={() => {
+                                    onClick={() =>
                                         setSort(
                                             sort === "-issue_date"
                                                 ? "issue_date"
                                                 : "-issue_date",
-                                        );
-                                        mutate();
-                                    }}
+                                        )
+                                    }
                                 >
                                     {t("issueDate")}
                                     <LuChevronsUpDown className="size-4 ml-2" />
                                 </Button>
                             </TableHead>
-
                             <TableHead>
                                 <Button
                                     variant="ghost"
                                     className="-ml-4"
-                                    onClick={() => {
+                                    onClick={() =>
                                         setSort(
                                             sort === "-due_date"
                                                 ? "due_date"
                                                 : "-due_date",
-                                        );
-                                        mutate();
-                                    }}
+                                        )
+                                    }
                                 >
                                     {t("dueDate")}
                                     <LuChevronsUpDown className="size-4 ml-2" />
@@ -209,14 +159,13 @@ export default function InvoicesPage() {
                             <TableHead className="flex items-center justify-end -mr-4">
                                 <Button
                                     variant="ghost"
-                                    onClick={() => {
+                                    onClick={() =>
                                         setSort(
                                             sort === "-remaining"
                                                 ? "remaining"
                                                 : "-remaining",
-                                        );
-                                        mutate();
-                                    }}
+                                        )
+                                    }
                                 >
                                     {t("remaining")}
                                     <LuChevronsUpDown className="size-4 ml-2" />
@@ -227,8 +176,11 @@ export default function InvoicesPage() {
                     </TableHeader>
                     <TableBody>
                         {isLoading
-                            ? Array.from({ length: 15 }).map((_, i) => (
-                                  <TableRow key={i} className="odd:bg-zinc-100/50">
+                            ? Array.from({ length: 25 }).map((_, i) => (
+                                  <TableRow
+                                      key={i}
+                                      className="odd:bg-zinc-100/50"
+                                  >
                                       {Array.from({ length: 7 }).map((_, i) => (
                                           <TableCell key={i}>
                                               <Skeleton>
@@ -344,7 +296,7 @@ export default function InvoicesPage() {
                                       </TableCell>
                                   </TableRow>
                               ))}
-                        {invoices?.length === 0 && (
+                        {invoices?.data?.length === 0 && (
                             <TableRow>
                                 <TableCell
                                     colSpan={8}
@@ -359,7 +311,7 @@ export default function InvoicesPage() {
             </div>
 
             <div className="flex items-center justify-between px-2">
-                <div className="flex-1 text-sm text-muted-foreground">
+                <div className="flex-1 text-sm font-medium">
                     {tc("totalRows", {
                         length: invoices?.meta?.total_count || 0,
                     })}
@@ -381,10 +333,7 @@ export default function InvoicesPage() {
                             variant="outline"
                             className="hidden size-8 p-0 lg:flex"
                             onClick={() => {
-                                if (currentPage > 1) {
-                                    setCurrentPage(1);
-                                    mutate();
-                                }
+                                if (currentPage > 1) setCurrentPage(1);
                             }}
                             disabled={currentPage <= 1}
                         >
@@ -397,10 +346,8 @@ export default function InvoicesPage() {
                             variant="outline"
                             className="size-8 p-0"
                             onClick={() => {
-                                if (currentPage > 1) {
+                                if (currentPage > 1)
                                     setCurrentPage(currentPage - 1);
-                                    mutate();
-                                }
                             }}
                             disabled={currentPage <= 1}
                         >
@@ -413,10 +360,8 @@ export default function InvoicesPage() {
                             variant="outline"
                             className="size-8 p-0"
                             onClick={() => {
-                                if (currentPage < invoices?.meta.total_pages) {
+                                if (currentPage < invoices?.meta.total_pages)
                                     setCurrentPage(currentPage + 1);
-                                    mutate();
-                                }
                             }}
                             disabled={
                                 invoices?.meta?.current_page >=
