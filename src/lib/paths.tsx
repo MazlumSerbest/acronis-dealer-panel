@@ -82,7 +82,7 @@ export const adminPaths: Path[] = [
         path: "/panel/invoices",
         key: "invoices",
         icon: (
-            <LuScrollText
+            <LuFileText
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Invoices Page"
             />
@@ -195,7 +195,7 @@ export const partnerPaths: Path[] = [
         path: "/panel/invoices",
         key: "invoices",
         icon: (
-            <LuScrollText
+            <LuFileText
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Invoices Page"
             />

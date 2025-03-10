@@ -336,6 +336,8 @@
         "issueDate": "Düzenlenme Tarihi",
         "dueDate": "Vade Tarihi",
         "netTotal": "Net Toplam",
+        "grossTotal": "Ara Toplam",
+        "taxTotal": "Toplam KDV",
         "remaining": "Kalan",
         "showInvoice": "Faturayı Görüntüle",
         "parasutIntegration": "Paraşüt Entegrasyonu",
@@ -346,7 +348,11 @@
         "paid": "Ödenmiş",
         "partiallyPaid": "Kısmi Ödenmiş",
         "all": "Hepsi",
-        "paymentStatus": "Tahsilat Durumu"
+        "paymentStatus": "Tahsilat Durumu",
+        "tax": "Vergi",
+        "quantity": "Miktar",
+        "unitPrice": "Birim Fiyatı",
+        "invoiceDetail": "Fatura Detayı"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

@@ -336,6 +336,8 @@
         "issueDate": "Issue Date",
         "dueDate": "Due Date",
         "netTotal": "Net Total",
+        "grossTotal": "Gross Total",
+        "taxTotal": "Tax Total",
         "remaining": "Remaining",
         "showInvoice": "Show Invoice",
         "parasutIntegration": "Paraşüt Integration",
@@ -346,7 +348,11 @@
         "paid": "Paid",
         "partiallyPaid": "Partially Paid",
         "all": "All",
-        "paymentStatus": "Payment Status"
+        "paymentStatus": "Payment Status",
+        "tax": "Tax",
+        "quantity": "Quantity",
+        "unitPrice": "Unit Price",
+        "invoiceDetail": "Invoice Detail"
     },
     "SignIn": {
         "signIn": "Welcome",
