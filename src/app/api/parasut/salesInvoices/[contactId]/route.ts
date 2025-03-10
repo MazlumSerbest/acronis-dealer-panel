@@ -41,6 +41,7 @@ export const GET = auth(async (req: any, { params }) => {
             "filter[contact_id]": params?.contactId as string,
             "filter[category]": "6549838",
             "filter[payment_status]": paymentStatus,
+            "filter[print_status]": "e_invoice_sent,e_archive_sent,e_smm_sent",
             "page[number]": currentPage,
             "page[size]": "25",
             sort: sort,

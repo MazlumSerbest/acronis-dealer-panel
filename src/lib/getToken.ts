@@ -14,7 +14,7 @@ export async function getAcronisToken() {
         body: new URLSearchParams({
             grant_type: "client_credentials",
         }),
-        next: { revalidate: 7200 },
+        next: { revalidate: 7000 },
         // next: { revalidate: 0 },
     });
 
@@ -33,7 +33,7 @@ export async function getParasutToken() {
             password: process.env.PARASUT_PASSWORD ?? "",
             redirect_uri: process.env.PARASUT_CALLBACK_URL ?? "",
         }),
-        next: { revalidate: 7200 },
+        next: { revalidate: 7000 },
     });
 
     const auth = await res.json();
