@@ -1,17 +1,26 @@
+import { useState } from "react";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { toast } from "@/components/ui/use-toast";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
+
 import { DateFormat, DateTimeFormat } from "@/utils/date";
+import { createZPLFromIds } from "@/utils/createZPL";
+import { createPDF } from "@/utils/zpl";
 import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
 
 export default function AssignedTab() {
     const t = useTranslations("General");
+
+    const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
     const { data, error, isLoading } = useSWR(
         `/api/admin/license?status=assigned`,
@@ -30,6 +39,45 @@ export default function AssignedTab() {
     };
 
     const columns: ColumnDef<any, any>[] = [
+        {
+            id: "select",
+            enableSorting: false,
+            enableHiding: false,
+            enableGlobalFilter: false,
+            header: ({ table }) => (
+                <Checkbox
+                    checked={
+                        table.getIsAllPageRowsSelected() ||
+                        (table.getIsSomePageRowsSelected() && "indeterminate")
+                    }
+                    onCheckedChange={async (value) => {
+                        await table.toggleAllPageRowsSelected(!!value);
+                        setSelectedIds(
+                            table
+                                .getSelectedRowModel()
+                                .rows.map((row) => row.original?.id),
+                        );
+                    }}
+                    aria-label="Select all"
+                    className="translate-y-[2px]"
+                />
+            ),
+            cell: ({ table, row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={async (value) => {
+                        await row.toggleSelected(!!value);
+                        setSelectedIds(
+                            table
+                                .getSelectedRowModel()
+                                .rows.map((row) => row.original?.id),
+                        );
+                    }}
+                    aria-label="Select row"
+                    className="translate-y-[2px]"
+                />
+            ),
+        },
         {
             accessorKey: "productName",
             enableHiding: false,
@@ -187,7 +235,10 @@ export default function AssignedTab() {
             enableGlobalFilter: false,
             enableHiding: false,
             cell: ({ row }) => (
-                <div className="flex flex-row gap-2">
+                <div
+                    className="flex flex-row gap-2"
+                    onClick={(event) => event.stopPropagation()}
+                >
                     <LicenseHistorySheet
                         licenseId={row.original.id}
                         trigger={
@@ -215,6 +266,7 @@ export default function AssignedTab() {
     return (
         <DataTable
             zebra
+            selectable
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
@@ -240,6 +292,71 @@ export default function AssignedTab() {
                     ],
                 },
             ]}
+            actions={
+                selectedIds.length > 0 && [
+                    <DropdownMenuItem
+                        key="print"
+                        onClick={async () => {
+                            if (selectedIds.length > 25) {
+                                toast({
+                                    variant: "destructive",
+                                    title: t("errorTitle"),
+                                    description: t("printLimit"),
+                                });
+                                return;
+                            }
+
+                            const zpl: any = await createZPLFromIds(
+                                selectedIds,
+                            );
+
+                            createPDF(zpl);
+
+                            // await printZPL(zpl).then((res: any) => {
+                            //     if (res.ok) {
+                            //         toast({
+                            //             description:
+                            //                 "Sended to printed successfully!",
+                            //         });
+                            //         mutate();
+                            //     } else {
+                            //         toast({
+                            //             variant: "destructive",
+                            //             title: t("errorTitle"),
+                            //             description: res?.message?.message,
+                            //         });
+                            //     }
+                            // });
+                        }}
+                    >
+                        {t("printSelected")}
+                    </DropdownMenuItem>,
+                ]
+            }
+            selectOnClick={async (table, row) => {
+                await row.toggleSelected();
+                setSelectedIds(
+                    table
+                        .getSelectedRowModel()
+                        .rows.map((r: any) => r.original?.id),
+                );
+            }}
+            onSearchEnter={(table, value, setValue) => {
+                const license = data?.find(
+                    (d: License) => d.serialNo === value,
+                );
+                if (license) {
+                    const selected: any = table
+                        .getRowModel()
+                        .rows.find(
+                            (row: any) => row.original.serialNo === value,
+                        );
+
+                    selected.toggleSelected(true);
+                    setValue("");
+                    setSelectedIds([license.id, ...selectedIds]);
+                }
+            }}
         />
     );
 }

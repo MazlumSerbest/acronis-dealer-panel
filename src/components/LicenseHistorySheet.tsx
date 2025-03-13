@@ -39,7 +39,7 @@ export function LicenseHistorySheet({ licenseId, trigger }: Props) {
                     <SheetHeader>
                         <SheetTitle className="flex flex-row items-center gap-3">
                             {tc("licenseHistory")}
-                            <LuHistory className="size-5" />
+                            <LuHistory className="size-5 text-blue-400/90" />
                         </SheetTitle>
                     </SheetHeader>
                     <div className="flex flex-col items-center justify-center h-full gap-4 text-sm overflow-y-auto">
