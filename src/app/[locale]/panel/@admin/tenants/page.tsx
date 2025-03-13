@@ -227,18 +227,16 @@ export default function TenantsPage() {
             accessorKey: "name",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("name")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
@@ -299,18 +297,16 @@ export default function TenantsPage() {
             enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("billingDate")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("billingDate");

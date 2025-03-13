@@ -39,18 +39,16 @@ export default function CompletedTab({ tenant }: Props) {
             accessorKey: "product",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("name")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: Product = row.getValue("product");
@@ -103,18 +101,16 @@ export default function CompletedTab({ tenant }: Props) {
             enableGlobalFilter: false,
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("activatedAt")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("activatedAt");
@@ -127,18 +123,16 @@ export default function CompletedTab({ tenant }: Props) {
             enableGlobalFilter: false,
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("completionDate")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("completionDate");

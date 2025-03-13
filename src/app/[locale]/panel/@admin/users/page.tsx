@@ -188,18 +188,16 @@ export default function UsersPage() {
             accessorKey: "name",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("name")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
@@ -211,18 +209,16 @@ export default function UsersPage() {
             accessorKey: "email",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("email")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("email");
@@ -267,18 +263,16 @@ export default function UsersPage() {
             enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("lastLogin")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("lastLogin");

@@ -242,18 +242,16 @@ export default function NewsPage() {
             accessorKey: "title",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("title")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("title");
@@ -265,18 +263,16 @@ export default function NewsPage() {
             accessorKey: "order",
             enableHiding: false,
             header: ({ column }) => (
-                <div className="flex flex-row items-center">
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
                     {t("order")}
-                    <Button
-                        variant="ghost"
-                        className="p-1"
-                        onClick={() =>
-                            column.toggleSorting(column.getIsSorted() === "asc")
-                        }
-                    >
-                        <LuChevronsUpDown className="size-4" />
-                    </Button>
-                </div>
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
             ),
             enableGlobalFilter: false,
             cell: ({ row }) => {
