@@ -277,9 +277,12 @@ export default function InvoicesPage() {
                                           <Link
                                               target="_blank"
                                               href={
-                                                  invoice.attributes
-                                                      .sharing_preview_url
+                                                  "https://uygulama.parasut.com/338085/satislar/" +
+                                                  invoice.id
                                               }
+                                              //   invoice.attributes
+                                              //       .sharing_preview_url
+                                              //   }
                                               className="flex items-center justify-end"
                                           >
                                               <Tooltip>
