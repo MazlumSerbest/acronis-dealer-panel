@@ -2,10 +2,10 @@ import {
     LuLayoutDashboard,
     LuHeartHandshake,
     LuKeyRound,
-    LuAlertTriangle,
+    LuTriangleAlert,
     LuUnplug,
     LuSettings,
-    LuUser2,
+    LuUserRound,
     LuArchiveRestore,
     LuBriefcase,
     LuKey,
@@ -14,7 +14,9 @@ import {
     LuHistory,
     LuNewspaper,
     LuFileText,
-    LuScrollText,
+    LuUserRoundSearch,
+    LuReceiptText,
+    LuHandshake,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -32,7 +34,7 @@ export const adminPaths: Path[] = [
         path: "/panel/tenants",
         key: "tenants",
         icon: (
-            <LuHeartHandshake
+            <LuHandshake
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Tenants Page"
             />
@@ -69,20 +71,10 @@ export const adminPaths: Path[] = [
         ),
     },
     {
-        path: "/panel/applications",
-        key: "applications",
-        icon: (
-            <LuArchiveRestore
-                className="size-6 group-hover:text-blue-400"
-                aria-label="Applications Page"
-            />
-        ),
-    },
-    {
         path: "/panel/invoices",
         key: "invoices",
         icon: (
-            <LuFileText
+            <LuReceiptText
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Invoices Page"
             />
@@ -102,7 +94,7 @@ export const adminPaths: Path[] = [
         path: "/panel/users",
         key: "users",
         icon: (
-            <LuUser2
+            <LuUserRound
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Users Page"
             />
@@ -128,6 +120,26 @@ export const adminPaths: Path[] = [
             />
         ),
     },
+    {
+        path: "/panel/potentialPartners",
+        key: "potentialPartners",
+        icon: (
+            <LuUserRoundSearch
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Potential Partners Page"
+            />
+        ),
+    },
+    // {
+    //     path: "/panel/applications",
+    //     key: "applications",
+    //     icon: (
+    //         <LuArchiveRestore
+    //             className="size-6 group-hover:text-blue-400"
+    //             aria-label="Applications Page"
+    //         />
+    //     ),
+    // },
 ];
 
 export const partnerPaths: Path[] = [
@@ -145,7 +157,7 @@ export const partnerPaths: Path[] = [
         path: "/panel/customers",
         key: "customers",
         icon: (
-            <LuHeartHandshake
+            <LuHandshake
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Customers Page"
             />
@@ -175,7 +187,7 @@ export const partnerPaths: Path[] = [
     //     path: "/panel/alerts",
     //     key: "alerts",
     //     icon: (
-    //         <LuAlertTriangle
+    //         <LuTriangleAlert
     //             className="size-6 group-hover:text-blue-400"
     //             aria-label="Alerts Page"
     //         />
@@ -185,7 +197,7 @@ export const partnerPaths: Path[] = [
         path: "/panel/users",
         key: "users",
         icon: (
-            <LuUser2
+            <LuUserRound
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Users Page"
             />
