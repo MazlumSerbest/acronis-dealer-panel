@@ -1,22 +1,18 @@
 import {
     LuLayoutDashboard,
-    LuHeartHandshake,
-    LuKeyRound,
-    LuTriangleAlert,
     LuUnplug,
     LuSettings,
     LuUserRound,
-    LuArchiveRestore,
     LuBriefcase,
-    LuKey,
     LuPackage,
     LuGraduationCap,
     LuHistory,
     LuNewspaper,
     LuFileText,
-    LuUserRoundSearch,
     LuReceiptText,
     LuHandshake,
+    LuShield,
+    LuBinoculars,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -44,7 +40,7 @@ export const adminPaths: Path[] = [
         path: "/panel/licenses",
         key: "licenses",
         icon: (
-            <LuKey
+            <LuShield
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Licenses Page"
             />
@@ -124,7 +120,7 @@ export const adminPaths: Path[] = [
         path: "/panel/potentialPartners",
         key: "potentialPartners",
         icon: (
-            <LuUserRoundSearch
+            <LuBinoculars
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Potential Partners Page"
             />
@@ -167,7 +163,7 @@ export const partnerPaths: Path[] = [
         path: "/panel/licenses",
         key: "licenses",
         icon: (
-            <LuKeyRound
+            <LuShield
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Licenses Page"
             />
