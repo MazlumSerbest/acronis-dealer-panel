@@ -53,7 +53,7 @@ import { toast } from "../ui/use-toast";
 import FormError from "@/components/FormError";
 
 import { useLocale, useTranslations } from "next-intl";
-import { LuLoader2, LuLogOut } from "react-icons/lu";
+import { LuLoaderCircle, LuLogOut } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import useAcronisStore from "@/store/acronis";
 import { getFullNameInitials } from "@/lib/utils";
@@ -258,7 +258,7 @@ export default function UserCard() {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </div>

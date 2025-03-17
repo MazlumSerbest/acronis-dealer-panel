@@ -40,7 +40,7 @@ import FormError from "@/components/FormError";
 import BoolChip from "@/components/BoolChip";
 import Lessons from "./Lessons";
 import Link from "next/link";
-import { LuChevronLeft, LuLoader2 } from "react-icons/lu";
+import { LuChevronLeft, LuLoaderCircle } from "react-icons/lu";
 
 const chapterFormSchema = z.object({
     id: z.string().cuid(),
@@ -267,7 +267,7 @@ export default function ChapterDetail({
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

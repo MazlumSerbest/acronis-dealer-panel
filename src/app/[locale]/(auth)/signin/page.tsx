@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import Link from "next/link";
 import { redirect, useRouter, usePathname } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Logo from "@/components/navigation/Logo";
-import { LuLoader2 } from "react-icons/lu";
+import { LuLoaderCircle } from "react-icons/lu";
 import { Turnstile } from "@marsidev/react-turnstile";
 import { cn } from "@/lib/utils";
 import {
@@ -19,7 +18,6 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 
 export default function SignIn({
@@ -161,7 +159,7 @@ export default function SignIn({
                                 >
                                     {ts("signInWithEmail")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
 

@@ -48,7 +48,7 @@ import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
 import { DateTimeFormat } from "@/utils/date";
 import { cities } from "@/lib/constants";
-import { LuLoader2 } from "react-icons/lu";
+import { LuLoaderCircle } from "react-icons/lu";
 
 const applicationFormSchema = z.object({
     name: z
@@ -408,7 +408,7 @@ export default function ApplicationDetail({
                                         >
                                             {t("approve")}
                                             {submitting && (
-                                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                             )}
                                         </Button>
                                     </AlertDialogFooter>
@@ -609,7 +609,7 @@ export default function ApplicationDetail({
                                                     >
                                                         {t("create")}
                                                         {submitting && (
-                                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                         )}
                                                     </Button>
                                                 </DialogFooter>
@@ -776,7 +776,7 @@ export default function ApplicationDetail({
                                                     >
                                                         {t("save")}
                                                         {submitting && (
-                                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                         )}
                                                     </Button>
                                                 </DialogFooter>

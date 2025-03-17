@@ -31,16 +31,15 @@ import SmallCard from "@/components/cards/SmallCard";
 import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import {
-    LuAlertTriangle,
+    LuTriangleAlert,
     LuArrowUpRight,
     LuInfo,
-    LuLoader2,
+    LuLoaderCircle,
     LuPencil,
     LuShield,
-    LuShieldAlert,
     LuShieldCheck,
     LuShieldOff,
-    LuSigma,
+    LuShieldBan,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -327,7 +326,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     u.value > u.offering_item.quota.value,
             ) && (
                 <Alert className="col-span-3" variant="destructive">
-                    <LuAlertTriangle className="size-4" />
+                    <LuTriangleAlert className="size-4" />
                     <AlertTitle>{t("limitExceeded")}</AlertTitle>
                     <AlertDescription>
                         {t("limitExceededDescription")}
@@ -339,7 +338,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 customer?.billingDate &&
                 (new Date(customer?.billingDate) < new Date() ? (
                     <Alert className="col-span-3" variant="destructive">
-                        <LuAlertTriangle className="size-4" />
+                        <LuTriangleAlert className="size-4" />
                         <AlertTitle>{t("billingDatePassed")}</AlertTitle>
                         <AlertDescription>
                             {t("billingDatePassedDescription")}
@@ -564,7 +563,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     >
                                         {t("save")}
                                         {submitting && (
-                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                         )}
                                     </Button>
                                 </CardFooter>
@@ -581,7 +580,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             ? t("createCustomer")
                                             : t("createPartner")}
                                         {submitting && (
-                                            <LuLoader2 className="size-4 animate-spin ml-2" />
+                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                         )}
                                     </Button>
                                 </CardFooter>
@@ -689,7 +688,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         <SmallCard
                             title={t("completed")}
                             icon={
-                                <LuShieldAlert className="size-5 text-muted-foreground" />
+                                <LuShieldOff className="size-5 text-muted-foreground" />
                             }
                             value={completedLicenseCount}
                             description={t("completedSmallCardDescription")}
@@ -704,7 +703,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             <SmallCard
                                 title={t("expired")}
                                 icon={
-                                    <LuShieldOff className="size-5 text-muted-foreground" />
+                                    <LuShieldBan className="size-5 text-muted-foreground" />
                                 }
                                 value={expiredLicenseCount}
                                 description={t("expiredSmallCardDescription")}

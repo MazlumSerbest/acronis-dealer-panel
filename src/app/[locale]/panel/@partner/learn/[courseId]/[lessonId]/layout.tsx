@@ -23,7 +23,7 @@ import {
     LuArrowRight,
     LuChevronLeft,
     LuChevronRight,
-    LuPlayCircle,
+    LuCirclePlay,
 } from "react-icons/lu";
 import Loader from "@/components/loaders/Loader";
 import { useTranslations } from "next-intl";
@@ -179,7 +179,7 @@ export default function CourseLayout({
                                                                     : "*:text-muted-foreground",
                                                             )}
                                                         >
-                                                            <LuPlayCircle className="size-5 group-hover:text-blue-400" />
+                                                            <LuCirclePlay className="size-5 group-hover:text-blue-400" />
                                                             <span className="flex-1">
                                                                 {lesson.name}
                                                             </span>

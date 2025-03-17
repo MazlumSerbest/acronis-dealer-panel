@@ -50,7 +50,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
-import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const lessonFormSchema = z.object({
@@ -291,7 +291,7 @@ export default function Lessons({
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4" />
+                            <LuEllipsisVertical className="size-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -378,7 +378,7 @@ export default function Lessons({
                                             >
                                                 {t("delete")}
                                                 {submitting && (
-                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                 )}
                                             </Button>
                                         </AlertDialogAction>
@@ -580,7 +580,7 @@ export default function Lessons({
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

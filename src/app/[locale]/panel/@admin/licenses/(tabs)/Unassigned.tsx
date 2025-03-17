@@ -46,7 +46,7 @@ import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoader2 } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
 import { createZPLFromIds, createZPLFromObjects } from "@/utils/createZPL";
@@ -626,7 +626,7 @@ export default function UnassignedTab() {
                                 >
                                     {t("add")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>
@@ -696,7 +696,7 @@ export default function UnassignedTab() {
                                 >
                                     {t("assign")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>
@@ -754,7 +754,7 @@ export default function UnassignedTab() {
                         >
                             {t("delete")}
                             {submitting && (
-                                <LuLoader2 className="size-4 animate-spin ml-2" />
+                                <LuLoaderCircle className="size-4 animate-spin ml-2" />
                             )}
                         </AlertDialogAction>
                     </AlertDialogFooter>

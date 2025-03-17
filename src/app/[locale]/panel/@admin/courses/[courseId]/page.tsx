@@ -49,7 +49,7 @@ import FormError from "@/components/FormError";
 
 import Chapters from "./Chapters";
 import Link from "next/link";
-import { LuChevronLeft, LuLoader2 } from "react-icons/lu";
+import { LuChevronLeft, LuLoaderCircle } from "react-icons/lu";
 
 const courseFormSchema = z.object({
     id: z.string().cuid(),
@@ -423,7 +423,7 @@ export default function CourseDetail({
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

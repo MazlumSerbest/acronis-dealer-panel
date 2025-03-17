@@ -34,7 +34,7 @@ import FormError from "@/components/FormError";
 import Combobox from "@/components/Combobox";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoader2, LuMinus } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { getCustomers, getPartners } from "@/lib/data";
 
@@ -567,7 +567,7 @@ export default function PassiveTab() {
                                 >
                                     {t("assign")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>
@@ -642,7 +642,7 @@ export default function PassiveTab() {
                                 >
                                     {t("assign")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

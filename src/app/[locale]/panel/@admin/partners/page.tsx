@@ -39,7 +39,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
 
-import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
@@ -286,7 +286,7 @@ export default function PartnersPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -542,7 +542,7 @@ export default function PartnersPage() {
                                         </FormControl>
                                         {parasutNameLoading && (
                                             <FormDescription>
-                                                <LuLoader2 className="size-4 animate-spin absolute right-2 top-2" />
+                                                <LuLoaderCircle className="size-4 animate-spin absolute right-2 top-2" />
                                             </FormDescription>
                                         )}
                                         {parasutContactName && (
@@ -573,7 +573,7 @@ export default function PartnersPage() {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

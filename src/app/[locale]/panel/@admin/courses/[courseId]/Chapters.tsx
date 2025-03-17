@@ -49,7 +49,7 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 
 const chapterFormSchema = z.object({
     courseId: z.string().cuid().optional(),
@@ -231,7 +231,7 @@ export default function Chapters({
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4" />
+                            <LuEllipsisVertical className="size-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -429,7 +429,7 @@ export default function Chapters({
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

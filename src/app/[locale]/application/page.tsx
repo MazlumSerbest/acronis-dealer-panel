@@ -34,7 +34,7 @@ import Logo from "@/components/navigation/Logo";
 import FormError from "@/components/FormError";
 
 import { cities, dealers } from "@/lib/constants";
-import { LuBuilding2, LuLoader2, LuUser } from "react-icons/lu";
+import { LuBuilding2, LuLoaderCircle, LuUser } from "react-icons/lu";
 import { cn } from "@/lib/utils";
 
 import DealerContract from "./dealerContract";
@@ -931,7 +931,7 @@ export default function Application() {
                             >
                                 {t("apply")}
                                 {submitting && (
-                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                    <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                 )}
                             </Button>
                         </CardFooter>

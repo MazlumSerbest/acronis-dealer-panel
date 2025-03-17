@@ -33,7 +33,7 @@ import Editor from "@/components/editor/editor";
 import useUserStore from "@/store/user";
 import {
     LuShield,
-    LuShieldAlert,
+    LuShieldBan,
     LuShieldCheck,
     LuShieldOff,
 } from "react-icons/lu";
@@ -316,7 +316,7 @@ export default function PanelPage() {
                                         title={t("completed")}
                                         value={completedLicenseCount}
                                         icon={
-                                            <LuShieldAlert className="size-5 text-muted-foreground" />
+                                            <LuShieldOff className="size-5 text-muted-foreground" />
                                         }
                                         description={t(
                                             "completedSmallCardDescription",
@@ -331,7 +331,7 @@ export default function PanelPage() {
                                         title={t("expired")}
                                         value={expiredLicenseCount}
                                         icon={
-                                            <LuShieldOff className="size-5 text-muted-foreground" />
+                                            <LuShieldBan className="size-5 text-muted-foreground" />
                                         }
                                         description={t(
                                             "expiredSmallCardDescription",

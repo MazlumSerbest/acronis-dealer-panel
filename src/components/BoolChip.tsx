@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { LuCheckCircle2, LuXCircle } from "react-icons/lu";
+import { LuCircleCheck, LuCircleX } from "react-icons/lu";
 
 interface Props {
     value: boolean;
@@ -18,7 +18,12 @@ interface Props {
     //     | undefined;
 }
 
-export default function BoolChip({ value, showText, size = "size-5", className }: Props) {
+export default function BoolChip({
+    value,
+    showText,
+    size = "size-5",
+    className,
+}: Props) {
     return (
         <div className={className}>
             <div
@@ -29,9 +34,9 @@ export default function BoolChip({ value, showText, size = "size-5", className }
                 )}
             >
                 {value ? (
-                    <LuCheckCircle2 className={cn(size, "text-green-600")} />
+                    <LuCircleCheck className={cn(size, "text-green-600")} />
                 ) : (
-                    <LuXCircle className={cn(size, "text-destructive")} />
+                    <LuCircleX className={cn(size, "text-destructive")} />
                 )}
                 {showText && (
                     <p

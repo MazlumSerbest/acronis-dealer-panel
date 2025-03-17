@@ -14,7 +14,7 @@ import {
     TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-import { LuArrowDownCircle, LuHistory } from "react-icons/lu";
+import { LuCircleArrowDown, LuHistory } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 type Props = {
@@ -64,7 +64,7 @@ export function LicenseHistorySheet({ licenseId, trigger }: Props) {
                                         {item.createdBy}
                                     </div>
                                     {index !== data.length - 1 && (
-                                        <LuArrowDownCircle
+                                        <LuCircleArrowDown
                                             strokeWidth={1}
                                             className="size-10 text-blue-400/90"
                                         />

@@ -44,11 +44,11 @@ import PageHeader from "@/components/PageHeader";
 import { DateFormat } from "@/utils/date";
 import {
     LuChevronsUpDown,
-    LuLoader2,
-    LuAlertCircle,
+    LuLoaderCircle,
+    LuCircleAlert,
     LuCheck,
     LuInfo,
-    LuAlertTriangle,
+    LuTriangleAlert,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
@@ -314,7 +314,7 @@ export default function CustomersPage() {
                             (new Date(data) < new Date() ? (
                                 <Tooltip>
                                     <TooltipTrigger>
-                                        <LuAlertTriangle className="size-4 text-destructive" />
+                                        <LuTriangleAlert className="size-4 text-destructive" />
                                     </TooltipTrigger>
                                     <TooltipContent>
                                         <p>{t("billingDatePassed")}</p>
@@ -697,10 +697,10 @@ export default function CustomersPage() {
                                                     }}
                                                 />
                                                 {loginCheckLoading && (
-                                                    <LuLoader2 className="size-4 text-blue-400 animate-spin absolute right-2" />
+                                                    <LuLoaderCircle className="size-4 text-blue-400 animate-spin absolute right-2" />
                                                 )}
                                                 {loginAlreadyTaken && (
-                                                    <LuAlertCircle className="size-4 text-destructive absolute right-2" />
+                                                    <LuCircleAlert className="size-4 text-destructive absolute right-2" />
                                                 )}
                                                 {loginValid && (
                                                     <LuCheck className="size-4 text-green-600 absolute right-2" />
@@ -753,7 +753,7 @@ export default function CustomersPage() {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

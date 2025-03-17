@@ -53,11 +53,11 @@ import FormError from "@/components/FormError";
 
 import { DateTimeFormat } from "@/utils/date";
 import {
-    LuAlertCircle,
+    LuCircleAlert,
     LuCheck,
     LuChevronsUpDown,
-    LuLoader2,
-    LuMoreHorizontal,
+    LuLoaderCircle,
+    LuEllipsisVertical,
 } from "react-icons/lu";
 import { Checkbox } from "@/components/ui/checkbox";
 import { userNotifications } from "@/lib/constants";
@@ -432,7 +432,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
                             <DropdownMenuLabel>
@@ -543,7 +543,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                 >
                                                     {t("update")}
                                                     {submitting && (
-                                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                     )}
                                                 </Button>
                                             </AlertDialogAction>
@@ -626,7 +626,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                             >
                                                 {t("delete")}
                                                 {submitting && (
-                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                 )}
                                             </Button>
                                         </AlertDialogAction>
@@ -838,10 +838,10 @@ export default function AcronisTab({ t, tenant }: Props) {
                                                         }}
                                                     />
                                                     {loginCheckLoading && (
-                                                        <LuLoader2 className="size-4 text-blue-400 animate-spin absolute right-2" />
+                                                        <LuLoaderCircle className="size-4 text-blue-400 animate-spin absolute right-2" />
                                                     )}
                                                     {loginAlreadyTaken && (
-                                                        <LuAlertCircle className="size-4 text-destructive absolute right-2" />
+                                                        <LuCircleAlert className="size-4 text-destructive absolute right-2" />
                                                     )}
                                                     {loginValid && (
                                                         <LuCheck className="size-4 text-green-600 absolute right-2" />
@@ -954,7 +954,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>
@@ -1053,7 +1053,7 @@ export default function AcronisTab({ t, tenant }: Props) {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>

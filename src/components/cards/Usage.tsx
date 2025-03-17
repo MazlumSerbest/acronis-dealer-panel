@@ -12,6 +12,7 @@ import {
     LuDatabaseBackup,
     LuHardDrive,
     LuInbox,
+    LuMailbox,
     LuMonitor,
     LuServer,
 } from "react-icons/lu";
@@ -102,7 +103,7 @@ export default function UsageCard({
                             )}
                         />
                     ) : description?.includes("mailbox") ? (
-                        <LuInbox
+                        <LuMailbox
                             className={cn(
                                 quotaExceeded
                                     ? "text-destructive"

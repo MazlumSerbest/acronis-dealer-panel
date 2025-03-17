@@ -20,7 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { useTranslations } from "next-intl";
-import { LuPlayCircle } from "react-icons/lu";
+import { LuCirclePlay } from "react-icons/lu";
 import Loader from "@/components/loaders/Loader";
 
 export default function CourseDetail({
@@ -137,7 +137,7 @@ export default function CourseDetail({
                                                                 href={`/panel/learn/${course.id}/${lesson.id}`}
                                                                 className="flex w-full place-items-start hover:text-blue-400 text-muted-foreground gap-2"
                                                             >
-                                                                <LuPlayCircle className="size-5 group-hover:text-blue-400" />
+                                                                <LuCirclePlay className="size-5 group-hover:text-blue-400" />
                                                                 <span className="flex-1">
                                                                     {
                                                                         lesson.name

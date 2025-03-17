@@ -57,7 +57,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
-import { LuChevronsUpDown, LuLoader2, LuMoreHorizontal } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const productFormSchema = z.object({
@@ -314,13 +314,13 @@ export default function ProductsPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuMoreHorizontal className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
                             {/* <Button
                                 aria-haspopup="true"
                                 size="icon"
                                 variant="ghost"
                             >
-                                <LuMoreHorizontal className="size-4" />
+                                <LuEllipsisVertical className="size-4" />
                                 <span className="sr-only">
                                     {t("toggleMenu")}
                                 </span>
@@ -412,7 +412,7 @@ export default function ProductsPage() {
                                             >
                                                 {t("delete")}
                                                 {submitting && (
-                                                    <LuLoader2 className="size-4 animate-spin ml-2" />
+                                                    <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                 )}
                                             </Button>
                                         </AlertDialogAction>
@@ -678,7 +678,7 @@ export default function ProductsPage() {
                                 >
                                     {t("save")}
                                     {submitting && (
-                                        <LuLoader2 className="size-4 animate-spin ml-2" />
+                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                     )}
                                 </Button>
                             </DialogFooter>
