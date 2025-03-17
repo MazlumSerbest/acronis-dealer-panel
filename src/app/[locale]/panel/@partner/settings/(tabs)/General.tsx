@@ -14,7 +14,7 @@ import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 
 import AcronisWarning from "@/components/AcronisWarning";
-import { LuFolderLock, LuCoins, LuTag } from "react-icons/lu";
+import { LuTags, LuHandCoins, LuCctv } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
 export default function GeneralTab() {
@@ -46,19 +46,14 @@ export default function GeneralTab() {
             <AcronisWarning />
 
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-3 p-4">
-                    <LuFolderLock className="size-8 text-green-500/60" />
-                    <div>
-                        <CardTitle className="font-medium text-xl">
-                            {t("security")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("securitySubtitle")}
-                        </CardDescription>
-                    </div>
+                <CardHeader>
+                    <CardTitle className="font-medium text-xl">
+                        {t("security")}
+                    </CardTitle>
+                    <CardDescription>{t("securitySubtitle")}</CardDescription>
                 </CardHeader>
-                <CardContent className="flex flex-col divide-y text-sm leading-6">
-                    <div className="grid grid-cols-2 md:grid-cols-3 w-full p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:px-4 *:py-2">
+                    <div>
                         <dt className="font-medium">{t("twoFactorAuth")}</dt>
                         <dd className="col-span-1 md:col-span-2">
                             <BoolChip
@@ -67,7 +62,7 @@ export default function GeneralTab() {
                             />
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("usersCount")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.mfa?.users_count}
@@ -77,31 +72,26 @@ export default function GeneralTab() {
             </Card>
 
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-3 p-4">
-                    <LuTag className="size-8 text-blue-400/90" />
-                    <div>
-                        <CardTitle className="font-medium text-xl">
-                            {t("branding")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("brandingSubtitle")}
-                        </CardDescription>
-                    </div>
+                <CardHeader>
+                    <CardTitle className="font-medium text-xl">
+                        {t("branding")}
+                    </CardTitle>
+                    <CardDescription>{t("brandingSubtitle")}</CardDescription>
                 </CardHeader>
-                <CardContent className="flex flex-col divide-y text-sm leading-6">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:px-4 *:py-2">
+                    <div>
                         <dt className="font-medium">{t("companyName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.branding?.company_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("serviceName")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.branding?.service_name || "-"}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("platformTermsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0 truncate">
                             {data.branding?.platform_terms_url ? (
@@ -121,7 +111,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("termsUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.branding?.terms_url ? (
@@ -137,7 +127,7 @@ export default function GeneralTab() {
                             )}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("privacyPolicyUrl")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.branding?.privacy_policy_url ? (
@@ -157,25 +147,20 @@ export default function GeneralTab() {
             </Card>
 
             <Card className="w-full">
-                <CardHeader className="flex flex-row items-center gap-3 p-4">
-                    <LuCoins className="size-8 text-yellow-500/60" />
-                    <div>
-                        <CardTitle className="font-medium text-xl">
-                            {t("pricing")}
-                        </CardTitle>
-                        <CardDescription>
-                            {t("pricingSubtitle")}
-                        </CardDescription>
-                    </div>
+                <CardHeader>
+                    <CardTitle className="font-medium text-xl">
+                        {t("pricing")}
+                    </CardTitle>
+                    <CardDescription>{t("pricingSubtitle")}</CardDescription>
                 </CardHeader>
-                <CardContent className="flex flex-col divide-y text-sm leading-6">
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:px-4 *:py-2">
+                    <div>
                         <dt className="font-medium">{t("mode")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {t(data.pricing?.mode || "")}
                         </dd>
                     </div>
-                    <div className="sm:grid sm:grid-cols-2 md:grid-cols-3 w-full p-2">
+                    <div>
                         <dt className="font-medium">{t("currency")}</dt>
                         <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                             {data.pricing?.currency || "-"}
