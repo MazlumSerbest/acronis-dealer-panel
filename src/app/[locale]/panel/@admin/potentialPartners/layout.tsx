@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import PageHeader from "@/components/PageHeader";
 
-export default function PotentialPartnersLayout({
+export default function PotentialPartnerLayout({
     children,
 }: {
     children: React.ReactNode;
