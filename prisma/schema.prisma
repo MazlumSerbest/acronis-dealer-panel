@@ -235,11 +235,33 @@ model News {
   title       String
   content     String?
   image       String
+  publishedAt DateTime?
   createdBy   String
   createdAt   DateTime  @default(now())
   updatedBy   String?
   updatedAt   DateTime  @updatedAt
-  publishedAt DateTime?
+}
+
+model PotentialPartner {
+  id               String    @id @default(cuid())
+  companyType      String?
+  status           String
+  name             String
+  authorizedPerson String?
+  taxNo            String?
+  taxOffice        String?
+  email            String?
+  phone            String?
+  city             Int?
+  district         String?
+  address          String?
+  postalCode       String?
+  contactedAt      DateTime?
+  note             String?
+  createdAt        DateTime  @default(now())
+  createdBy        String
+  updatedAt        DateTime  @updatedAt
+  updatedBy        String?
 }
 
 /// Views
