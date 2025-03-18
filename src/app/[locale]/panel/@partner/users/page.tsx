@@ -15,7 +15,7 @@ export default function UsersPage() {
 
     return (
         <Tabs
-            defaultValue="general"
+            defaultValue="partner"
             value={tab}
             onValueChange={(value) => router.push(`${pathname}?tab=${value}`)}
             className="flex flex-col w-full"
