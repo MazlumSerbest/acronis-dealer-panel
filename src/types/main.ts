@@ -134,3 +134,20 @@ type News = Entity & {
     image: File | string;
     content?: string;
 };
+
+type PotentialPartner = Entity & {
+    companyType?: "business" | "person";
+    status: "potential" | "contacted" | "won" | "lost";
+    name: string;
+    authorizedPerson?: string;
+    taxNo?: string;
+    taxOffice?: string;
+    email?: string;
+    phone?: string;
+    city: number;
+    district?: string;
+    address?: string;
+    postalCode: string;
+    contactedAt?: string;
+    note?: string;
+};
