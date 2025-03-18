@@ -245,14 +245,14 @@ model News {
 model PotentialPartner {
   id               String    @id @default(cuid())
   companyType      String?
-  status           String
+  status           String    @default("potential")
   name             String
   authorizedPerson String?
   taxNo            String?
   taxOffice        String?
   email            String?
   phone            String?
-  city             Int?
+  city             Int
   district         String?
   address          String?
   postalCode       String?

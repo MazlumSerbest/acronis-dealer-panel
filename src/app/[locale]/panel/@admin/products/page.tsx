@@ -57,7 +57,11 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
-import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuLoaderCircle,
+    LuEllipsisVertical,
+} from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const productFormSchema = z.object({
@@ -484,9 +488,7 @@ export default function ProductsPage() {
                 <DialogContent>
                     <DialogHeader>
                         <DialogTitle>
-                            {isNew
-                                ? `${t("new")} ${t("product")}`
-                                : `${t("edit")} ${t("product")}`}
+                            {isNew ? t("newProduct") : t("editProduct")}
                         </DialogTitle>
                     </DialogHeader>
 

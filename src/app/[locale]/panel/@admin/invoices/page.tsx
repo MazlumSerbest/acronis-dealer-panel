@@ -58,7 +58,7 @@ export default function InvoicesPage() {
         `/api/parasut/salesInvoices?currentPage=${currentPage}&paymentStatus=${paymentStatus}&sort=${sort}`,
         null,
         {
-            revalidateOnFocus: false,
+            // revalidateOnFocus: false,
         },
     );
 
