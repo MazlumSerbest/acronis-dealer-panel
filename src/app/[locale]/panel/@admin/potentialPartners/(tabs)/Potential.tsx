@@ -81,7 +81,7 @@ export default function PotentialTab() {
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
 
-    const { data, error, isLoading, mutate } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/admin/potentialPartner?status=potential`,
         null,
         {
@@ -113,8 +113,6 @@ export default function PotentialTab() {
                         description: res.message,
                     });
                     setOpen(false);
-                    mutate();
-                    form.reset();
                     router.push("potentialPartners/" + res.data.id);
                 } else {
                     toast({

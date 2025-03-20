@@ -17,7 +17,7 @@ export default function LostTab() {
     const t = useTranslations("General");
     const router = useRouter();
 
-    const { data, error, isLoading, mutate } = useSWR(
+    const { data, error, isLoading } = useSWR(
         `/api/admin/potentialPartner?status=lost`,
         null,
         {
