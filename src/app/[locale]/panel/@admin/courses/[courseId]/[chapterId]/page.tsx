@@ -125,7 +125,7 @@ export default function ChapterDetail({
             </div>
         );
     return (
-        <>
+        <div className="xl:container flex flex-col gap-4">
             <div className="w-full">
                 <Button
                     size="sm"
@@ -281,6 +281,6 @@ export default function ChapterDetail({
                 lessons={data.lessons}
                 mutate={mutate}
             />
-        </>
+        </div>
     );
 }

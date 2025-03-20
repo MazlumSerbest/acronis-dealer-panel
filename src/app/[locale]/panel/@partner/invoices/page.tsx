@@ -411,7 +411,7 @@ export default function InvoicesPage() {
             <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
                 <DrawerContent>
                     <div className="max-h-2/3 overflow-y-auto">
-                        <div className="container pb-4">
+                        <div className="xl:container pb-4">
                             {selectedInvoiceLoading ? (
                                 <Skeleton>
                                     <DefaultSkeleton className="h-80 mt-4" />

@@ -150,12 +150,12 @@ export default function CourseDetail({
             </div>
         );
     return (
-        <>
+        <div className="xl:container flex flex-col gap-4">
             <div className="w-full">
                 <Button
                     size="sm"
                     variant="link"
-                    className="text-sm text-muted-foreground underline-muted-foreground"
+                    className="text-sm text-foreground underline-foreground p-0"
                     asChild
                 >
                     <Link href={`/panel/courses`}>
@@ -437,6 +437,6 @@ export default function CourseDetail({
                 chapters={data.chapters}
                 mutate={mutate}
             />
-        </>
+        </div>
     );
 }

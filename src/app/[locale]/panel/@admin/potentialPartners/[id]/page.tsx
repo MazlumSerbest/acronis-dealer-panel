@@ -7,7 +7,13 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/use-toast";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,10 +35,11 @@ import Combobox from "@/components/Combobox";
 import DatePicker from "@/components/DatePicker";
 import Skeleton from "@/components/loaders/Skeleton";
 
-import { LuLoaderCircle, LuSave, LuTrash2 } from "react-icons/lu";
+import { LuChevronLeft, LuLoaderCircle, LuSave, LuTrash2 } from "react-icons/lu";
 import { cities } from "@/lib/constants";
 import FormError from "@/components/FormError";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 const potentialPartnerFormSchema = z.object({
     status: z.enum(["potential", "contacted", "won", "lost"]),
@@ -152,7 +159,7 @@ export default function PotentialPartnerDetail({
     if (isLoading)
         return (
             <Skeleton>
-                <div className="grid grid-cols-5 gap-3">
+                <div className="container grid grid-cols-5 gap-3">
                     <div className="col-span-5 md:col-span-3 rounded-xl bg-slate-200 w-full h-[480px]"></div>
                     <div className="col-span-5 md:col-span-2 rounded-xl bg-slate-200 w-full h-[480px]"></div>
                 </div>
@@ -161,53 +168,67 @@ export default function PotentialPartnerDetail({
     return (
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
-                <div className="grid grid-cols-5 gap-3">
-                    <div className="absolute top-4 right-4 flex flex-row gap-2">
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    type="button"
-                                    disabled={deleteSubmitting}
-                                    variant="destructive"
-                                    size="icon"
-                                >
-                                    {deleteSubmitting ? (
-                                        <LuLoaderCircle className="size-5 animate-spin" />
-                                    ) : (
-                                        <LuTrash2
-                                            className="size-5"
-                                            strokeWidth={1.5}
-                                        />
-                                    )}
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{t("delete")}</TooltipContent>
-                        </Tooltip>
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Button
-                                    type="submit"
-                                    disabled={submitting}
-                                    className="bg-blue-400 hover:bg-blue-400/90"
-                                    size="icon"
-                                >
-                                    {submitting ? (
-                                        <LuLoaderCircle className="size-5 animate-spin" />
-                                    ) : (
-                                        <LuSave
-                                            className="size-5"
-                                            strokeWidth={1.5}
-                                        />
-                                    )}
-                                </Button>
-                            </TooltipTrigger>
-                            <TooltipContent>{t("save")}</TooltipContent>
-                        </Tooltip>
+                <div className="xl:container grid grid-cols-5 gap-3">
+                    <div className="col-span-full flex flex-row justify-between">
+                            <Button
+                                size="sm"
+                                variant="link"
+                                className="text-sm text-foreground underline-foreground p-0"
+                                asChild
+                            >
+                                <Link href={`/panel/potentialPartners`} className="">
+                                    <LuChevronLeft className="size-4 mr-1" />
+                                    {t("backToList")}
+                                </Link>
+                            </Button>
+
+                        <div className="flex flex-row gap-2">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        type="button"
+                                        disabled={deleteSubmitting}
+                                        variant="destructive"
+                                        size="icon"
+                                    >
+                                        {deleteSubmitting ? (
+                                            <LuLoaderCircle className="size-5 animate-spin" />
+                                        ) : (
+                                            <LuTrash2
+                                                className="size-5"
+                                                strokeWidth={1.5}
+                                            />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("delete")}</TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="bg-blue-400 hover:bg-blue-400/90"
+                                        size="icon"
+                                    >
+                                        {submitting ? (
+                                            <LuLoaderCircle className="size-5 animate-spin" />
+                                        ) : (
+                                            <LuSave
+                                                className="size-5"
+                                                strokeWidth={1.5}
+                                            />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("save")}</TooltipContent>
+                            </Tooltip>
+                        </div>
                     </div>
 
                     <Card className="col-span-5 md:col-span-3 max-h-min">
                         <CardHeader className="pb-2">
-                            <CardTitle className="flex flex-row gap-4 text-xl">
+                            <CardTitle className="flex flex-row gap-2 text-xl">
                                 {partner?.name}
                                 {partner?.status === "potential" ? (
                                     <Badge variant="outline">

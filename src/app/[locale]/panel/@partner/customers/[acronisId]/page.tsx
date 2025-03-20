@@ -48,7 +48,7 @@ export default function CustomerDetail({
         );
     return (
         <div className="flex flex-col gap-2">
-            <div className="container relative flex w-full items-center gap-2">
+            <div className="xl:container relative flex w-full items-center gap-2">
                 <h1 className="flex-1 font-semibold text-2xl text-blue-400 text-center mt-4 md:mt-2 truncate">
                     {data?.name || ""}
                 </h1>

@@ -318,7 +318,7 @@ export default function GeneralTab({ t, tenant }: Props) {
             </div>
         );
     return (
-        <div className="container grid grid-cols-3 gap-3">
+        <div className="xl:container grid grid-cols-3 gap-3">
             {usages?.items?.some(
                 (u: TenantUsage) =>
                     u.offering_item?.quota &&

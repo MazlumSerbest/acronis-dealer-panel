@@ -283,7 +283,7 @@ export default function PanelPage() {
                         {t("failedToLoad")}
                     </div>
                 ) : (
-                    <div className="container m-auto flex flex-col gap-3">
+                    <div className="xl:container m-auto flex flex-col gap-3">
                         <h1 className="text-xl font-semibold">
                             {t("licenses")}
                         </h1>
