@@ -38,7 +38,7 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
                       })}
             </div>
             <div className="flex items-center space-x-6 lg:space-x-8">
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                     <p className="text-sm font-medium sr-only lg:not-sr-only">
                         {tc("rowsPerPage")}
                     </p>
@@ -72,7 +72,7 @@ export function Pagination<TData>({ table }: DataTablePaginationProps<TData>) {
                         table.getState().pagination.pageIndex + 1
                     }/${table.getPageCount()}`}
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-1">
                     <Button
                         variant="outline"
                         className="hidden size-8 p-0 lg:flex"

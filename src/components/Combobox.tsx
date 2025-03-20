@@ -23,6 +23,7 @@ type Props = {
     data: ListBoxItem[];
     form: any;
     field: any;
+    onChange?: () => void;
     value?: string | number | null | undefined;
     placeholder?: string;
     inputPlaceholder?: string;
@@ -34,6 +35,7 @@ export default function Combobox({
     data,
     form,
     field,
+    onChange,
     value,
     placeholder = "Select",
     inputPlaceholder = "Search...",
@@ -75,6 +77,7 @@ export default function Combobox({
                                     onSelect={() => {
                                         form.setValue(name, i.id);
                                         setOpen(false);
+                                        onChange?.();
                                     }}
                                 >
                                     {i.name}

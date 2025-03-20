@@ -32,10 +32,10 @@ export default function DatePicker({
                         variant={"outline"}
                         className={cn(
                             "flex w-full pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground",
+                            !field?.value && "text-muted-foreground",
                         )}
                     >
-                        {field.value ? (
+                        {field?.value ? (
                             DateFormat(field?.value?.toString())
                         ) : (
                             <span>
@@ -51,8 +51,8 @@ export default function DatePicker({
                     initialFocus
                     fixedWeeks
                     mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
+                    selected={field?.value}
+                    onSelect={field?.onChange}
                     captionLayout="dropdown-buttons"
                     fromDate={from}
                     toDate={to}
