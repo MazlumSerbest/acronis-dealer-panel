@@ -214,6 +214,8 @@
         "newUser": "New User",
         "editUser": "Edit User",
         "editPartner": "Edit Partner",
+        "newProduct": "New Product",
+        "editProduct": "Edit Product",
         "makePartialLicense": "Make Partial License",
         "assignToCustomer": "Assign to Customer",
         "addLicense": "Add License",
@@ -353,7 +355,15 @@
         "tax": "Tax",
         "quantity": "Quantity",
         "unitPrice": "Unit Price",
-        "invoiceDetail": "Invoice Detail"
+        "invoiceDetail": "Invoice Detail",
+        "potential": "Potential",
+        "contacted": "Contacted",
+        "won": "Won",
+        "lost": "Lost",
+        "newPotentialPartner": "New Potential Partner",
+        "authorizedPerson": "Authorized Person",
+        "note": "Note",
+        "contactedAt": "Contacted At"
     },
     "SignIn": {
         "signIn": "Welcome",
