@@ -23,7 +23,7 @@ export default function PotentialPartnersPage() {
             onValueChange={(value) => router.push(`${pathname}?tab=${value}`)}
             className="flex flex-col w-full"
         >
-            <TabsList className="mx-auto  md:*:w-[200px] *:w-full mb-2">
+            <TabsList className="mx-auto md:*:w-[180px] *:w-full mb-2">
                 <TabsTrigger value="potential">{t("potential")}</TabsTrigger>
                 <TabsTrigger value="contacted">{t("contacted")}</TabsTrigger>
                 <TabsTrigger value="won">{t("won")}</TabsTrigger>

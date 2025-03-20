@@ -20,7 +20,7 @@ export default function UsersPage() {
             onValueChange={(value) => router.push(`${pathname}?tab=${value}`)}
             className="flex flex-col w-full"
         >
-            <TabsList className="mx-auto  md:*:w-[200px] *:w-full mb-2">
+            <TabsList className="mx-auto md:*:w-[180px] *:w-full mb-2">
                 <TabsTrigger value="partner">{t("partner")}</TabsTrigger>
                 <TabsTrigger value="acronis">{t("acronis")}</TabsTrigger>
             </TabsList>
