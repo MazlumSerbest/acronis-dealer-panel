@@ -17,7 +17,12 @@ export const GET = auth(async (req: any) => {
                 ok: false,
             });
 
+        const status = req.nextUrl.searchParams.get("status");
+
         const data = await prisma.potentialPartner.findMany({
+            where: {
+                status: status,
+            },
             orderBy: {
                 createdAt: "asc",
             },
@@ -59,6 +64,7 @@ export const POST = auth(async (req: any) => {
                 message: "Potansiyel partner başarıyla kaydedildi!",
                 status: 200,
                 ok: true,
+                data: newPartner,
             });
         } else {
             return NextResponse.json({
