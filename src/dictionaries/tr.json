@@ -363,7 +363,8 @@
         "newPotentialPartner": "Yeni Potansiyel Partner",
         "authorizedPerson": "Yetkili Kişi",
         "note": "Not",
-        "contactedAt": "İletişim Tarihi"
+        "contactedAt": "İletişim Tarihi",
+        "backToList": "Listeye Dön"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

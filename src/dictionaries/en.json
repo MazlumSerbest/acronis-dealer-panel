@@ -363,7 +363,8 @@
         "newPotentialPartner": "New Potential Partner",
         "authorizedPerson": "Authorized Person",
         "note": "Note",
-        "contactedAt": "Contacted At"
+        "contactedAt": "Contacted At",
+        "backToList": "Back to List"
     },
     "SignIn": {
         "signIn": "Welcome",
