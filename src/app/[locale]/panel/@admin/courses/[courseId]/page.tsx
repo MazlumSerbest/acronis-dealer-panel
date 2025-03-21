@@ -296,8 +296,8 @@ export default function CourseDetail({
                                             {t("category")}
                                         </FormLabel>
                                         <Select
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>

@@ -599,8 +599,8 @@ export default function UsersPage() {
                                             {t("role")}
                                         </FormLabel>
                                         <Select
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>

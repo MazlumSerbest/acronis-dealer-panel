@@ -35,7 +35,12 @@ import Combobox from "@/components/Combobox";
 import DatePicker from "@/components/DatePicker";
 import Skeleton from "@/components/loaders/Skeleton";
 
-import { LuChevronLeft, LuLoaderCircle, LuSave, LuTrash2 } from "react-icons/lu";
+import {
+    LuChevronLeft,
+    LuLoaderCircle,
+    LuSave,
+    LuTrash2,
+} from "react-icons/lu";
 import { cities } from "@/lib/constants";
 import FormError from "@/components/FormError";
 import { Badge } from "@/components/ui/badge";
@@ -170,17 +175,20 @@ export default function PotentialPartnerDetail({
             <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
                 <div className="xl:container grid grid-cols-5 gap-3">
                     <div className="col-span-full flex flex-row justify-between">
-                            <Button
-                                size="sm"
-                                variant="link"
-                                className="text-sm text-foreground underline-foreground p-0"
-                                asChild
+                        <Button
+                            size="sm"
+                            variant="link"
+                            className="text-sm text-foreground underline-foreground p-0"
+                            asChild
+                        >
+                            <Link
+                                href={`/panel/potentialPartners`}
+                                className=""
                             >
-                                <Link href={`/panel/potentialPartners`} className="">
-                                    <LuChevronLeft className="size-4 mr-1" />
-                                    {t("backToList")}
-                                </Link>
-                            </Button>
+                                <LuChevronLeft className="size-4 mr-1" />
+                                {t("backToList")}
+                            </Link>
+                        </Button>
 
                         <div className="flex flex-row gap-2">
                             <Tooltip>
@@ -263,8 +271,8 @@ export default function PotentialPartnerDetail({
                                         </dt>
                                         <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <Select
+                                                value={field.value}
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger className="max-w-full md:max-w-sm">
@@ -311,8 +319,8 @@ export default function PotentialPartnerDetail({
                                         </dt>
                                         <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <Select
+                                                value={field.value}
                                                 onValueChange={field.onChange}
-                                                defaultValue={field.value}
                                             >
                                                 <FormControl>
                                                     <SelectTrigger className="max-w-full md:max-w-sm">

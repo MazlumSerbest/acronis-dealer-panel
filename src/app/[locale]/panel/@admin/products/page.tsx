@@ -572,8 +572,8 @@ export default function ProductsPage() {
                                     <FormItem>
                                         <FormLabel>{t("model")}</FormLabel>
                                         <Select
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
@@ -629,8 +629,8 @@ export default function ProductsPage() {
                                     <FormItem>
                                         <FormLabel>{t("unit")}</FormLabel>
                                         <Select
+                                            value={field.value ?? undefined}
                                             onValueChange={field.onChange}
-                                            // defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>

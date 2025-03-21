@@ -81,12 +81,12 @@ export default function InvoicesPage() {
                     />*/}
                 </div>
                 <Select
-                    value={paymentStatus}
                     onValueChange={(status) => {
                         if (status === "all") setPaymentStatus("");
                         else setPaymentStatus(status);
                         setCurrentPage(1);
                     }}
+                    value={paymentStatus}
                 >
                     <SelectTrigger className="w-40">
                         <SelectValue placeholder={t("paymentStatus")} />

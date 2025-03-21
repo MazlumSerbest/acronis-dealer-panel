@@ -58,7 +58,11 @@ import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 
-import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuLoaderCircle,
+    LuEllipsisVertical,
+} from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const courseFormSchema = z.object({
@@ -432,8 +436,8 @@ export default function CoursesPage() {
                                             {t("category")}
                                         </FormLabel>
                                         <Select
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>

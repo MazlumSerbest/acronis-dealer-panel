@@ -274,7 +274,7 @@ export default function UserCard() {
                         <div className="grid grid-cols-2 items-center gap-4">
                             <Label>{t("language")}</Label>
                             <Select
-                                defaultValue={locale}
+                                value={locale}
                                 onValueChange={(v) => {
                                     const newPath = pathName.replace(
                                         `/${locale}/`,

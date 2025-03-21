@@ -348,8 +348,8 @@ export default function PotentialTab() {
                                             {t("companyType")}
                                         </FormLabel>
                                         <Select
+                                            value={field.value}
                                             onValueChange={field.onChange}
-                                            defaultValue={field.value}
                                         >
                                             <FormControl>
                                                 <SelectTrigger>
