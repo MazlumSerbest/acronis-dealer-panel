@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -7,13 +9,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/use-toast";
 
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import {
@@ -30,21 +26,32 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Badge } from "@/components/ui/badge";
 
 import Combobox from "@/components/Combobox";
 import DatePicker from "@/components/DatePicker";
 import Skeleton from "@/components/loaders/Skeleton";
+import FormError from "@/components/FormError";
 
 import {
     LuChevronLeft,
+    LuDoorClosed,
     LuLoaderCircle,
     LuSave,
     LuTrash2,
 } from "react-icons/lu";
 import { cities } from "@/lib/constants";
-import FormError from "@/components/FormError";
-import { Badge } from "@/components/ui/badge";
-import Link from "next/link";
 
 const potentialPartnerFormSchema = z.object({
     status: z.enum(["potential", "contacted", "won", "lost"]),
@@ -80,6 +87,7 @@ export default function PotentialPartnerDetail({
     params: { id: string };
 }) {
     const t = useTranslations("General");
+    const router = useRouter();
 
     const [submitting, setSubmitting] = useState(false);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
@@ -193,21 +201,96 @@ export default function PotentialPartnerDetail({
                         <div className="flex flex-row gap-2">
                             <Tooltip>
                                 <TooltipTrigger asChild>
-                                    <Button
-                                        type="button"
-                                        disabled={deleteSubmitting}
-                                        variant="destructive"
-                                        size="icon"
-                                    >
-                                        {deleteSubmitting ? (
-                                            <LuLoaderCircle className="size-5 animate-spin" />
-                                        ) : (
-                                            <LuTrash2
-                                                className="size-5"
-                                                strokeWidth={1.5}
-                                            />
-                                        )}
-                                    </Button>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                disabled={deleteSubmitting}
+                                                variant="destructive"
+                                                size="icon"
+                                            >
+                                                {deleteSubmitting ? (
+                                                    <LuLoaderCircle className="size-5 animate-spin" />
+                                                ) : (
+                                                    <LuTrash2
+                                                        className="size-5"
+                                                        strokeWidth={1.5}
+                                                    />
+                                                )}
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    {t("areYouSure")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("areYouSureDescription")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    {t("close")}
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction asChild>
+                                                    <Button
+                                                        disabled={submitting}
+                                                        variant="destructive"
+                                                        className="bg-destructive hover:bg-destructive/90"
+                                                        onClick={() => {
+                                                            if (submitting)
+                                                                return;
+                                                            setSubmitting(true);
+
+                                                            fetch(
+                                                                `/api/admin/potentialPartner/${params.id}`,
+                                                                {
+                                                                    method: "DELETE",
+                                                                },
+                                                            )
+                                                                .then((res) =>
+                                                                    res.json(),
+                                                                )
+                                                                .then((res) => {
+                                                                    if (
+                                                                        res.ok
+                                                                    ) {
+                                                                        toast({
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                        router.push(
+                                                                            "/panel/potentialPartners",
+                                                                        );
+                                                                    } else {
+                                                                        toast({
+                                                                            variant:
+                                                                                "destructive",
+                                                                            title: t(
+                                                                                "errorTitle",
+                                                                            ),
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                    }
+                                                                })
+                                                                .finally(() =>
+                                                                    setSubmitting(
+                                                                        false,
+                                                                    ),
+                                                                );
+                                                        }}
+                                                    >
+                                                        {t("delete")}
+                                                        {submitting && (
+                                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
+                                                        )}
+                                                    </Button>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
                                 </TooltipTrigger>
                                 <TooltipContent>{t("delete")}</TooltipContent>
                             </Tooltip>
@@ -549,6 +632,20 @@ export default function PotentialPartnerDetail({
                                     </FormItem>
                                 )}
                             />
+
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdBy")}
+                                </dt>
+                                <dd>{partner.createdBy}</dd>
+                            </div>
+
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdAt")}
+                                </dt>
+                                <dd>{partner.createdAt}</dd>
+                            </div>
                         </CardContent>
                     </Card>
 

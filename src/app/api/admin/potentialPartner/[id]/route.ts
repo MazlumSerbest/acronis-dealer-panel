@@ -79,3 +79,45 @@ export const PUT = auth(async (req: any, { params }) => {
         });
     }
 });
+
+export const DELETE = auth(async (req: any, { params }) => {
+    try {
+        const tm = await getTranslations({
+            locale: "en",
+            namespace: "Messages",
+        });
+
+        if (req.auth.user.role !== "admin")
+            return NextResponse.json({
+                message: tm("authorizationNeeded"),
+                status: 401,
+                ok: false,
+            });
+
+        const deletedPotentialPartner = await prisma.potentialPartner.delete({
+            where: {
+                id: params?.id as string,
+            },
+        });
+
+        if (deletedPotentialPartner.id) {
+            return NextResponse.json({
+                message: "Potansiyel partner başarıyla silindi!",
+                status: 200,
+                ok: true,
+            });
+        } else {
+            return NextResponse.json({
+                message: "Potansiyel partner silinemedi!",
+                status: 400,
+                ok: false,
+            });
+        }
+    } catch (error: any) {
+        return NextResponse.json({
+            message: error?.message,
+            status: 500,
+            ok: false,
+        });
+    }
+});
