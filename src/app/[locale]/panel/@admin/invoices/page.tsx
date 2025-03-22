@@ -287,7 +287,7 @@ export default function InvoicesPage() {
                                           >
                                               <Tooltip>
                                                   <TooltipTrigger>
-                                                      <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                                                      <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
                                                   </TooltipTrigger>
                                                   <TooltipContent>
                                                       <p>{t("showInvoice")}</p>

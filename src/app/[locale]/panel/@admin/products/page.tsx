@@ -318,7 +318,7 @@ export default function ProductsPage() {
                 return (
                     <DropdownMenu>
                         <DropdownMenuTrigger className="flex items-center">
-                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
                             {/* <Button
                                 aria-haspopup="true"
                                 size="icon"

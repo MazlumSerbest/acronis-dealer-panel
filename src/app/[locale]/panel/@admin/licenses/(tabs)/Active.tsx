@@ -217,7 +217,7 @@ export default function ActiveTab() {
                     <LicenseHistorySheet
                         licenseId={row.original.id}
                         trigger={
-                            <LuHistory className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                            <LuHistory className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
                         }
                     />
                 </div>

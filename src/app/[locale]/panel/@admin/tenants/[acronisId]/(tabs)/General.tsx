@@ -527,7 +527,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     <dd className="flex flex-row items-center gap-2 col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
                                         {tenant?.id || "-"}
                                         <LuCopy
-                                            className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60"
+                                            className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60"
                                             onClick={() => {
                                                 CopyToClipboard(
                                                     tenant?.id || "",
@@ -1535,7 +1535,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                       >
                                                           <Tooltip>
                                                               <TooltipTrigger>
-                                                                  <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-500 active:text-blue-500/60" />
+                                                                  <LuEye className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
                                                               </TooltipTrigger>
                                                               <TooltipContent>
                                                                   <p>
