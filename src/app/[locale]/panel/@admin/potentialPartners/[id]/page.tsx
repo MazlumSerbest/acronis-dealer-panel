@@ -48,6 +48,9 @@ import {
     LuChevronLeft,
     LuDoorClosed,
     LuLoaderCircle,
+    LuMail,
+    LuPhone,
+    LuPhoneCall,
     LuSave,
     LuTrash2,
 } from "react-icons/lu";
@@ -544,8 +547,25 @@ export default function PotentialPartnerDetail({
                                 name="email"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <dt className="font-medium my-auto">
+                                        <dt className="flex flex-row gap-1 items-center font-medium my-auto">
                                             {t("email")}
+                                            {field.value && (
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Link
+                                                            href={
+                                                                "mailto:" +
+                                                                field.value
+                                                            }
+                                                        >
+                                                            <LuMail className="size-4 ml-1 cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
+                                                        </Link>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        {t("sendEmail")}
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            )}
                                         </dt>
                                         <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <FormControl>
@@ -571,8 +591,25 @@ export default function PotentialPartnerDetail({
                                 name="phone"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <dt className="font-medium my-auto">
+                                        <dt className="flex flex-row gap-1 items-center font-medium my-auto">
                                             {t("phone")}
+                                            {field.value && (
+                                                <Tooltip>
+                                                    <TooltipTrigger asChild>
+                                                        <Link
+                                                            href={
+                                                                "tel:" +
+                                                                field.value
+                                                            }
+                                                        >
+                                                            <LuPhone className="size-4 ml-1 cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
+                                                        </Link>
+                                                    </TooltipTrigger>
+                                                    <TooltipContent>
+                                                        {t("call")}
+                                                    </TooltipContent>
+                                                </Tooltip>
+                                            )}
                                         </dt>
                                         <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <FormControl>
@@ -669,14 +706,26 @@ export default function PotentialPartnerDetail({
                                                 <FormControl>
                                                     <Combobox
                                                         name="city"
-                                                        data={
-                                                            cities.map((c) => {
-                                                                return {
+                                                        data={[
+                                                            {
+                                                                id: 6,
+                                                                name: "Ankara",
+                                                            },
+                                                            {
+                                                                id: 34,
+                                                                name: "İstanbul",
+                                                            },
+                                                            {
+                                                                id: 35,
+                                                                name: "İzmir",
+                                                            },
+                                                            ...(cities
+                                                                .filter(c => c.code !== 6 && c.code !== 34 && c.code !== 35)
+                                                                .map(c => ({
                                                                     id: c.code,
                                                                     name: c.name,
-                                                                };
-                                                            }) || []
-                                                        }
+                                                                })) || []),
+                                                        ]}
                                                         form={form}
                                                         field={field}
                                                         onChange={() => {

@@ -364,7 +364,9 @@
         "authorizedPerson": "Yetkili Kişi",
         "note": "Not",
         "contactedAt": "İletişim Tarihi",
-        "backToList": "Listeye Dön"
+        "backToList": "Listeye Dön",
+        "sendEmail": "Email Gönder",
+        "call": "Ara"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

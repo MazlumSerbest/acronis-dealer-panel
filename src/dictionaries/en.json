@@ -364,7 +364,9 @@
         "authorizedPerson": "Authorized Person",
         "note": "Note",
         "contactedAt": "Contacted At",
-        "backToList": "Back to List"
+        "backToList": "Back to List",
+        "sendEmail": "Send Email",
+        "call": "Call"
     },
     "SignIn": {
         "signIn": "Welcome",

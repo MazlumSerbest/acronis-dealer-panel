@@ -280,9 +280,6 @@ export default function InvoicesPage() {
                                                   "https://uygulama.parasut.com/338085/satislar/" +
                                                   invoice.id
                                               }
-                                              //   invoice.attributes
-                                              //       .sharing_preview_url
-                                              //   }
                                               className="flex items-center justify-end"
                                           >
                                               <Tooltip>

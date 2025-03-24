@@ -412,14 +412,31 @@ export default function PotentialTab() {
                                         <FormControl>
                                             <Combobox
                                                 name="city"
-                                                data={
-                                                    cities.map((c) => {
-                                                        return {
+                                                data={[
+                                                    {
+                                                        id: 6,
+                                                        name: "Ankara",
+                                                    },
+                                                    {
+                                                        id: 34,
+                                                        name: "İstanbul",
+                                                    },
+                                                    {
+                                                        id: 35,
+                                                        name: "İzmir",
+                                                    },
+                                                    ...(cities
+                                                        .filter(
+                                                            (c) =>
+                                                                c.code !== 6 &&
+                                                                c.code !== 34 &&
+                                                                c.code !== 35,
+                                                        )
+                                                        .map((c) => ({
                                                             id: c.code,
                                                             name: c.name,
-                                                        };
-                                                    }) || []
-                                                }
+                                                        })) || []),
+                                                ]}
                                                 form={form}
                                                 field={field}
                                                 placeholder={t("select")}
