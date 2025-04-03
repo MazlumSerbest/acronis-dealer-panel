@@ -348,6 +348,7 @@
         "unavailable": "Unavailable",
         "overdue": "Overdue",
         "unpaid": "Unpaid",
+        "partially_paid": "Partially Paid",
         "paid": "Paid",
         "partiallyPaid": "Partially Paid",
         "all": "All",

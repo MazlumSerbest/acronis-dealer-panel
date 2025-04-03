@@ -348,6 +348,7 @@
         "unavailable": "Yok",
         "overdue": "Gecikmiş",
         "unpaid": "Ödenmemiş",
+        "partially_paid": "Kısmi Ödenmiş",
         "paid": "Ödenmiş",
         "partiallyPaid": "Kısmi Ödenmiş",
         "all": "Hepsi",

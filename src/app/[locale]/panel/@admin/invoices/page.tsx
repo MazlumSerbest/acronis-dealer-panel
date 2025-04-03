@@ -234,6 +234,10 @@ export default function InvoicesPage() {
                                                             .payment_status ===
                                                         "unpaid"
                                                       ? "bg-yellow-500 hover:bg-yellow-500/90"
+                                                      : invoice.attributes
+                                                            .payment_status ===
+                                                        "partially_paid"
+                                                      ? "bg-orange-400 hover:bg-orange-400/90"
                                                       : "",
                                               )}
                                           >
