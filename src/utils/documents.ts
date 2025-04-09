@@ -16,6 +16,9 @@ export async function createZPLFromIds(ids: string[]) {
             key: true,
             productId: true,
         },
+        orderBy: {
+            productId: "asc",
+        },
     });
 
     let zpl = "";
@@ -80,6 +83,9 @@ export async function createLicensePDFFromIds(ids: string[]) {
             serialNo: true,
             key: true,
             productId: true,
+        },
+        orderBy: {
+            productId: "asc",
         },
     });
 

@@ -490,9 +490,7 @@ export default function UnassignedTab() {
                         </DropdownMenuItem>,
                         <DropdownMenuItem
                             key="delete"
-                            onClick={() => {
-                                setDeleteOpen(true);
-                            }}
+                            onClick={() => setDeleteOpen(true)}
                         >
                             {t("deleteSelected")}
                         </DropdownMenuItem>,
