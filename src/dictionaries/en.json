@@ -303,6 +303,8 @@
         "quotaEdit": "Quota Edit",
         "deleteSelected": "Delete Selected",
         "printSelected": "Print Selected",
+        "printAsLabel": "Print as Label",
+        "printAsLicense": "Print as License",
         "deleteLicenseDescription": "{length} license(s) will be deleted permanently. Are you sure you want to proceed?",
         "createCustomer": "Create Customer",
         "localStorage": "Local Storage",

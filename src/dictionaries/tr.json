@@ -303,6 +303,8 @@
         "quotaEdit": "Kotayı Düzenle",
         "deleteSelected": "Seçilenleri Sil",
         "printSelected": "Seçilenleri Yazdır",
+        "printAsLabel": "Etiket Olarak Yazdır",
+        "printAsLicense": "Lisans Olarak Yazdır",
         "deleteLicenseDescription": "{length} lisans kalıcı olarak silinecek. Devam etmek istediğinize emin misiniz?",
         "createCustomer": "Müşteri Oluştur",
         "localStorage": "Yerel Depolama",
