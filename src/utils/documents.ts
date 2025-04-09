@@ -63,6 +63,25 @@ export async function createZPLFromObjects(licenses: License[]) {
         zpl += `^FO50,33^BC,60^FD${l.key}^FS`;
         zpl += "^XZ";
     });
-    
+
     return zpl;
+}
+
+export async function createLicensePDFFromIds(ids: string[]) {
+    const licenses: any = await prisma.license.findMany({
+        where: {
+            id: { in: ids },
+        },
+        select: {
+            product: {
+                select: { name: true, code: true },
+            },
+            expiresAt: true,
+            serialNo: true,
+            key: true,
+            productId: true,
+        },
+    });
+
+    return licenses;
 }
