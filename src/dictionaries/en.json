@@ -747,6 +747,7 @@
             "pw_base_vms": "Virtual Machines",
             "pw_base_m365_seats": "Microsoft 365 Seats",
             "pw_base_secondary_m365_seats_shared": "Microsoft 365 Shared Seats (included features)",
+            "pw_base_m365_sharepoint_sites": "Microsoft 365 SharePoint Sites",
             "pw_base_c2c_storage": "Cloud-to-Cloud Storage",
             "pw_pack_adv_management": "Advanced Management",
             "pw_pack_adv_security": "Advanced Security",
