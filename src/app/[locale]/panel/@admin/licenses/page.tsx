@@ -20,6 +20,7 @@ import AssignedTab from "./(tabs)/Assigned";
 import ActiveTab from "./(tabs)/Active";
 import CompletedTab from "./(tabs)/Completed";
 import ExpiredTab from "./(tabs)/Expired";
+import { Label } from "@/components/ui/label";
 
 export default function LicensesPage() {
     const router = useRouter();
@@ -48,7 +49,9 @@ export default function LicensesPage() {
                 </TabsList>
 
                 {tab === "assigned" && (
-                    <div>
+                    <div className="flex flex-row items-center gap-2">
+                        <Label className="text-sm font-semibold">{tl("status") + ":"}</Label>
+
                         <Select
                             value={status}
                             onValueChange={(value) =>

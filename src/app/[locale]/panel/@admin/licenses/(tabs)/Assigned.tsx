@@ -13,8 +13,8 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { createZPLFromIds } from "@/utils/createZPL";
-import { createPDF } from "@/utils/zpl";
+import { createLicensePDFFromIds, createZPLFromIds } from "@/utils/documents";
+import { createLicenseAsPDF, createZPLAsPDF } from "@/utils/pdf";
 import { LuChevronsUpDown, LuHistory } from "react-icons/lu";
 
 export default function AssignedTab() {
@@ -304,7 +304,7 @@ export default function AssignedTab() {
                                 selectedIds,
                             );
 
-                            createPDF(zpl);
+                            createZPLAsPDF(zpl);
 
                             // await printZPL(zpl).then((res: any) => {
                             //     if (res.ok) {
@@ -324,6 +324,18 @@ export default function AssignedTab() {
                         }}
                     >
                         {t("printSelected")}
+                    </DropdownMenuItem>,
+                    <DropdownMenuItem
+                        key="print"
+                        onClick={async () => {
+                            const licenses = await createLicensePDFFromIds(
+                                selectedIds,
+                            );
+
+                            createLicenseAsPDF(licenses);
+                        }}
+                    >
+                        {t("printAsLicense")}
                     </DropdownMenuItem>,
                 ]
             }

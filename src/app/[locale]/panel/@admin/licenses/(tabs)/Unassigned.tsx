@@ -49,8 +49,13 @@ import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
-import { createZPLFromIds, createZPLFromObjects } from "@/utils/createZPL";
-import { createPDF } from "@/utils/zpl";
+import {
+    createZPLFromIds,
+    createZPLFromObjects,
+    createLicensePDFFromIds,
+} from "@/utils/documents";
+import { createLicenseAsPDF } from "@/utils/pdf";
+import { createZPLAsPDF } from "@/utils/pdf";
 import { Switch } from "@/components/ui/switch";
 
 const licenseFormSchema = z.object({
@@ -135,7 +140,7 @@ export default function UnassignedTab() {
                             res.data,
                         );
 
-                        createPDF(zpl);
+                        createZPLAsPDF(zpl);
 
                         // await printZPL(zpl).then((printRes: any) => {
                         //     if (printRes.ok) {
@@ -450,7 +455,7 @@ export default function UnassignedTab() {
                                     selectedIds,
                                 );
 
-                                createPDF(zpl);
+                                createZPLAsPDF(zpl);
 
                                 // await printZPL(zpl).then((res: any) => {
                                 //     if (res.ok) {
@@ -469,7 +474,19 @@ export default function UnassignedTab() {
                                 // });
                             }}
                         >
-                            {t("printSelected")}
+                            {t("printAsLabel")}
+                        </DropdownMenuItem>,
+                        <DropdownMenuItem
+                            key="print"
+                            onClick={async () => {
+                                const licenses = await createLicensePDFFromIds(
+                                    selectedIds,
+                                );
+
+                                createLicenseAsPDF(licenses);
+                            }}
+                        >
+                            {t("printAsLicense")}
                         </DropdownMenuItem>,
                         <DropdownMenuItem
                             key="delete"
