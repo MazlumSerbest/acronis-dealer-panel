@@ -73,7 +73,7 @@ const potentialPartnerFormSchema = z.object({
         .optional(),
     city: z.coerce.number().optional(),
     district: z.string().optional(),
-    taxNo: z.number().optional(),
+    taxNo: z.string().optional(),
     taxOffice: z.string().optional(),
     phone: z.string().optional(),
     postalCode: z.string().optional(),
@@ -238,13 +238,19 @@ export default function PotentialPartnerDetail({
                                                 </AlertDialogCancel>
                                                 <AlertDialogAction asChild>
                                                     <Button
-                                                        disabled={submitting}
+                                                        disabled={
+                                                            deleteSubmitting
+                                                        }
                                                         variant="destructive"
                                                         className="bg-destructive hover:bg-destructive/90"
                                                         onClick={() => {
-                                                            if (submitting)
+                                                            if (
+                                                                deleteSubmitting
+                                                            )
                                                                 return;
-                                                            setSubmitting(true);
+                                                            setDeleteSubmitting(
+                                                                true,
+                                                            );
 
                                                             fetch(
                                                                 `/api/admin/potentialPartner/${params.id}`,
@@ -279,14 +285,14 @@ export default function PotentialPartnerDetail({
                                                                     }
                                                                 })
                                                                 .finally(() =>
-                                                                    setSubmitting(
+                                                                    setDeleteSubmitting(
                                                                         false,
                                                                     ),
                                                                 );
                                                         }}
                                                     >
                                                         {t("delete")}
-                                                        {submitting && (
+                                                        {deleteSubmitting && (
                                                             <LuLoaderCircle className="size-4 animate-spin ml-2" />
                                                         )}
                                                     </Button>
@@ -297,6 +303,7 @@ export default function PotentialPartnerDetail({
                                 </TooltipTrigger>
                                 <TooltipContent>{t("delete")}</TooltipContent>
                             </Tooltip>
+
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button
@@ -720,8 +727,16 @@ export default function PotentialPartnerDetail({
                                                                 name: "İzmir",
                                                             },
                                                             ...(cities
-                                                                .filter(c => c.code !== 6 && c.code !== 34 && c.code !== 35)
-                                                                .map(c => ({
+                                                                .filter(
+                                                                    (c) =>
+                                                                        c.code !==
+                                                                            6 &&
+                                                                        c.code !==
+                                                                            34 &&
+                                                                        c.code !==
+                                                                            35,
+                                                                )
+                                                                .map((c) => ({
                                                                     id: c.code,
                                                                     name: c.name,
                                                                 })) || []),
@@ -830,7 +845,7 @@ export default function PotentialPartnerDetail({
                                                 <FormError
                                                     error={
                                                         form?.formState?.errors
-                                                            ?.taxNo
+                                                            ?.postalCode
                                                     }
                                                 />
                                             </dd>
@@ -855,7 +870,7 @@ export default function PotentialPartnerDetail({
                                                 <FormError
                                                     error={
                                                         form?.formState?.errors
-                                                            ?.taxNo
+                                                            ?.address
                                                     }
                                                 />
                                             </dd>
