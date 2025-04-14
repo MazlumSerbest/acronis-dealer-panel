@@ -694,6 +694,15 @@
             "turnstile": {
                 "required": "Captcha çözülmelidir"
             }
+        },
+        "PotentialPartner": {
+            "name": {
+                "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır"
+            },
+            "email": {
+                "invalidType": "Geçerli bir e-posta olmalıdır"
+            }
         }
     },
     "Components": {

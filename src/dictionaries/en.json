@@ -694,6 +694,15 @@
             "turnstile": {
                 "required": "Must resolve the captcha"
             }
+        },
+        "PotentialPartner": {
+            "name": {
+                "required": "Name is required",
+                "minLength": "Must be at least 3 characters long"
+            },
+            "email": {
+                "invalidType": "Must be a valid email"
+            }
         }
     },
     "Components": {
