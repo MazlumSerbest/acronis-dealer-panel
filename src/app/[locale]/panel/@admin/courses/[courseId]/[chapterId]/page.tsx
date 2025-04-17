@@ -38,6 +38,8 @@ import {
 import Loader from "@/components/loaders/Loader";
 import FormError from "@/components/FormError";
 import BoolChip from "@/components/BoolChip";
+import DestructiveToast from "@/components/DestructiveToast";
+
 import Lessons from "./Lessons";
 import Link from "next/link";
 import { LuChevronLeft, LuLoaderCircle } from "react-icons/lu";
@@ -101,10 +103,10 @@ export default function ChapterDetail({
                     form.reset({});
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

@@ -51,6 +51,7 @@ import { Input } from "../ui/input";
 import { toast } from "../ui/use-toast";
 
 import FormError from "@/components/FormError";
+import DestructiveToast from "../DestructiveToast";
 
 import { useLocale, useTranslations } from "next-intl";
 import { LuLoaderCircle, LuLogOut } from "react-icons/lu";
@@ -103,10 +104,10 @@ export default function UserCard() {
                     user.name = values.name;
                     updateUser(user);
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t: (key: string) => t(key),
                     });
                 }
             })

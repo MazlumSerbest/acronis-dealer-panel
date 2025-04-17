@@ -27,6 +27,7 @@ import BoolChip from "@/components/BoolChip";
 import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { calculateRemainingDays } from "@/utils/functions";
 import { DateFormat, DateTimeFormat } from "@/utils/date";
@@ -278,10 +279,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                         customerMutate();
                         setEdit(false);
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })
@@ -300,10 +301,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                         customerMutate();
                         setEdit(false);
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })

@@ -46,6 +46,7 @@ import {
 import Loader from "@/components/loaders/Loader";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import Chapters from "./Chapters";
 import Link from "next/link";
@@ -126,10 +127,10 @@ export default function CourseDetail({
                     form.reset({});
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

@@ -6,11 +6,11 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { toast } from "@/components/ui/use-toast";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { createLicensePDFFromIds, createZPLFromIds } from "@/utils/documents";
@@ -292,10 +292,10 @@ export default function AssignedTab() {
                         key="print"
                         onClick={async () => {
                             if (selectedIds.length > 25) {
-                                toast({
-                                    variant: "destructive",
+                                DestructiveToast({
                                     title: t("errorTitle"),
                                     description: t("printLimit"),
+                                    t,
                                 });
                                 return;
                             }
@@ -305,22 +305,6 @@ export default function AssignedTab() {
                             );
 
                             createZPLAsPDF(zpl);
-
-                            // await printZPL(zpl).then((res: any) => {
-                            //     if (res.ok) {
-                            //         toast({
-                            //             description:
-                            //                 "Sended to printed successfully!",
-                            //         });
-                            //         mutate();
-                            //     } else {
-                            //         toast({
-                            //             variant: "destructive",
-                            //             title: t("errorTitle"),
-                            //             description: res?.message?.message,
-                            //         });
-                            //     }
-                            // });
                         }}
                     >
                         {t("printSelected")}

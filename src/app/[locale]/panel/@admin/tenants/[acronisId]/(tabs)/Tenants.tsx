@@ -38,6 +38,7 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateFormat } from "@/utils/date";
 import {
@@ -170,10 +171,10 @@ export default function TenantsTab({ t, tenant }: Props) {
 
         if (tenants.find((t: Tenant) => t.name === values.name.trim())) {
             setSubmitting(false);
-            return toast({
-                variant: "destructive",
+            return DestructiveToast({
                 title: t("errorTitle"),
                 description: tf("name.alreadyTaken"),
+                t: (key: string) => t(key)
             });
         }
 
@@ -203,10 +204,10 @@ export default function TenantsTab({ t, tenant }: Props) {
                     mutate();
                     form.reset();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t: (key: string) => t(key)
                     });
                 }
             })

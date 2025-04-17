@@ -34,11 +34,13 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import {
     LuCircleAlert,
@@ -47,7 +49,6 @@ import {
     LuLoaderCircle,
     LuEllipsisVertical,
 } from "react-icons/lu";
-import { Checkbox } from "@/components/ui/checkbox";
 import { userNotifications } from "@/lib/constants";
 
 type Props = {
@@ -166,10 +167,10 @@ export default function AcronisTab({ t, tenant }: Props) {
                         mutate();
                         userForm.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })
@@ -189,10 +190,10 @@ export default function AcronisTab({ t, tenant }: Props) {
                         mutate();
                         userForm.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })
@@ -220,10 +221,10 @@ export default function AcronisTab({ t, tenant }: Props) {
                     mutate();
                     userForm.reset();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t: (key: string) => t(key),
                     });
                 }
             })

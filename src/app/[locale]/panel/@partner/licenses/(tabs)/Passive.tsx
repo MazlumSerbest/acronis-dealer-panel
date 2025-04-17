@@ -32,6 +32,7 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
 import Combobox from "@/components/Combobox";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
@@ -113,10 +114,10 @@ export default function PassiveTab() {
                     assignToCustomerForm.reset();
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
@@ -152,10 +153,10 @@ export default function PassiveTab() {
                     assignToPartnerForm.reset();
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
@@ -407,15 +408,15 @@ export default function PassiveTab() {
                             key="assignToCustomer"
                             onClick={() => {
                                 if (selectedIds.length === 1) {
-                                    setOpenAssignToCustomer(true);
                                     assignToCustomerForm.reset();
+                                    setOpenAssignToCustomer(true);
                                 } else {
-                                    toast({
-                                        variant: "destructive",
+                                    DestructiveToast({
                                         title: t("errorTitle"),
                                         description: t(
                                             "moreThanOneLicenseError",
                                         ),
+                                        t,
                                     });
                                 }
                             }}
@@ -426,8 +427,8 @@ export default function PassiveTab() {
                             <DropdownMenuItem
                                 key="assignToPartner"
                                 onClick={() => {
-                                    setOpenAssignToPartner(true);
                                     assignToPartnerForm.reset();
+                                    setOpenAssignToPartner(true);
                                 }}
                             >
                                 {t("assignToPartner")}
@@ -489,10 +490,6 @@ export default function PassiveTab() {
                             autoComplete="off"
                             className="space-y-4"
                         >
-                            {/* <FormField
-
-                            /> */}
-
                             <FormField
                                 control={assignToCustomerForm.control}
                                 name="customerAcronisId"

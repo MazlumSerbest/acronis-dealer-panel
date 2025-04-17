@@ -33,17 +33,22 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import BoolChip from "@/components/BoolChip";
 import PageHeader from "@/components/PageHeader";
-
-import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
-import { DateTimeFormat } from "@/utils/date";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
+import DestructiveToast from "@/components/DestructiveToast";
 import FormError from "@/components/FormError";
+
+import {
+    LuChevronsUpDown,
+    LuLoaderCircle,
+    LuEllipsisVertical,
+} from "react-icons/lu";
+import { DateTimeFormat } from "@/utils/date";
 
 const partnerFormSchema = z.object({
     acronisId: z.string().uuid().optional(),
@@ -109,10 +114,10 @@ export default function PartnersPage() {
                     mutate();
                     form.reset();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

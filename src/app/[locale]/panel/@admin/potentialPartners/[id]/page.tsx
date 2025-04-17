@@ -43,14 +43,13 @@ import Combobox from "@/components/Combobox";
 import DatePicker from "@/components/DatePicker";
 import Skeleton from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import {
     LuChevronLeft,
-    LuDoorClosed,
     LuLoaderCircle,
     LuMail,
     LuPhone,
-    LuPhoneCall,
     LuSave,
     LuTrash2,
 } from "react-icons/lu";
@@ -155,10 +154,10 @@ export default function PotentialPartnerDetail({
                     mutate();
                     form.reset();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

@@ -32,6 +32,7 @@ import { Turnstile } from "@marsidev/react-turnstile";
 import Combobox from "@/components/Combobox";
 import Logo from "@/components/navigation/Logo";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { cities, dealers } from "@/lib/constants";
 import { LuBuilding2, LuLoaderCircle, LuUser } from "react-icons/lu";
@@ -164,10 +165,10 @@ export default function Application() {
                     form.reset();
                     setSuccess(true);
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

@@ -58,8 +58,13 @@ import BoolChip from "@/components/BoolChip";
 import Combobox from "@/components/Combobox";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
-import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuLoaderCircle,
+    LuEllipsisVertical,
+} from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 import { getPartners } from "@/lib/data";
 import useUserStore from "@/store/user";
@@ -139,10 +144,10 @@ export default function UsersPage() {
                         mutate();
                         form.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })
@@ -162,10 +167,10 @@ export default function UsersPage() {
                         mutate();
                         form.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key),
                         });
                     }
                 })

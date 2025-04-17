@@ -39,11 +39,13 @@ import { Input } from "@/components/ui/input";
 import DatePicker from "@/components/DatePicker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { Switch } from "@/components/ui/switch";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
@@ -56,7 +58,6 @@ import {
 } from "@/utils/documents";
 import { createLicenseAsPDF } from "@/utils/pdf";
 import { createZPLAsPDF } from "@/utils/pdf";
-import { Switch } from "@/components/ui/switch";
 
 const licenseFormSchema = z.object({
     productId: z.string({
@@ -141,28 +142,12 @@ export default function UnassignedTab() {
                         );
 
                         createZPLAsPDF(zpl);
-
-                        // await printZPL(zpl).then((printRes: any) => {
-                        //     if (printRes.ok) {
-                        //         toast({
-                        //             description:
-                        //                 "Sended to printed successfully!",
-                        //         });
-                        //         mutate();
-                        //     } else {
-                        //         toast({
-                        //             variant: "destructive",
-                        //             title: t("errorTitle"),
-                        //             description: printRes?.message?.message,
-                        //         });
-                        //     }
-                        // });
                     }
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
@@ -192,10 +177,10 @@ export default function UnassignedTab() {
                     assignForm.reset();
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
@@ -443,10 +428,10 @@ export default function UnassignedTab() {
                             key="print"
                             onClick={async () => {
                                 if (selectedIds.length > 25) {
-                                    toast({
-                                        variant: "destructive",
+                                    DestructiveToast({
                                         title: t("errorTitle"),
                                         description: t("printLimit"),
+                                        t,
                                     });
                                     return;
                                 }
@@ -456,22 +441,6 @@ export default function UnassignedTab() {
                                 );
 
                                 createZPLAsPDF(zpl);
-
-                                // await printZPL(zpl).then((res: any) => {
-                                //     if (res.ok) {
-                                //         toast({
-                                //             description:
-                                //                 "Sended to printed successfully!",
-                                //         });
-                                //         mutate();
-                                //     } else {
-                                //         toast({
-                                //             variant: "destructive",
-                                //             title: t("errorTitle"),
-                                //             description: res?.message?.message,
-                                //         });
-                                //     }
-                                // });
                             }}
                         >
                             {t("printAsLabel")}
@@ -757,10 +726,10 @@ export default function UnassignedTab() {
                                             setDeleteOpen(false);
                                             mutate();
                                         } else {
-                                            toast({
-                                                variant: "destructive",
+                                            DestructiveToast({
                                                 title: t("errorTitle"),
                                                 description: res.message,
+                                                t,
                                             });
                                         }
                                     })

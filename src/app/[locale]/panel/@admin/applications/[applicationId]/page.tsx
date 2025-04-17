@@ -46,6 +46,8 @@ import { Button } from "@/components/ui/button";
 
 import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
+
 import { DateTimeFormat } from "@/utils/date";
 import { cities } from "@/lib/constants";
 import { LuLoaderCircle } from "react-icons/lu";
@@ -165,10 +167,10 @@ export default function ApplicationDetail({
                     setOpenUpdate(false);
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
@@ -209,10 +211,10 @@ export default function ApplicationDetail({
                     setOpenCreatePartner(false);
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

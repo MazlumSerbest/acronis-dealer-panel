@@ -57,6 +57,8 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
+
 import {
     LuChevronsUpDown,
     LuLoaderCircle,
@@ -128,10 +130,10 @@ export default function ProductsPage() {
                         mutate();
                         form.reset({ active: true, model: "perGB" });
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })
@@ -151,10 +153,10 @@ export default function ProductsPage() {
                         mutate();
                         form.reset({ active: true, model: "perGB" });
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })

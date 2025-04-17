@@ -57,6 +57,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import {
     LuChevronsUpDown,
@@ -134,10 +135,10 @@ export default function CoursesPage() {
                     form.reset({});
                     mutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })

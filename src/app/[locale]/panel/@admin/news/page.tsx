@@ -45,17 +45,18 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Badge } from "@/components/ui/badge";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import Editor from "@/components/editor/editor";
 
@@ -167,10 +168,10 @@ export default function NewsPage() {
                         mutate();
                         form.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })
@@ -216,10 +217,10 @@ export default function NewsPage() {
                         mutate();
                         form.reset();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })

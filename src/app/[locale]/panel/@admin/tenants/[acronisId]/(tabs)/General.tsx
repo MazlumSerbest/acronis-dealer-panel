@@ -75,6 +75,7 @@ import StorageCard from "@/components/cards/Storage";
 import UsageCard from "@/components/cards/Usage";
 import SmallCard from "@/components/cards/SmallCard";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import useUserStore from "@/store/user";
 import {
@@ -368,10 +369,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                         panelTenantMutate();
                         setEdit(false);
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t: (key: string) => t(key)
                         });
                     }
                 })
@@ -408,10 +409,10 @@ export default function GeneralTab({ t, tenant }: Props) {
                     setOpenUserDialog(false);
                     panelTenantMutate();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t: (key: string) => t(key)
                     });
                 }
             })
@@ -1069,13 +1070,13 @@ export default function GeneralTab({ t, tenant }: Props) {
                                                                         description:
                                                                             res.message,
                                                                     });
+                                                                    setOpenQuotaDialog(
+                                                                        false,
+                                                                    );
                                                                 }
                                                             })
                                                             .finally(() => {
                                                                 setSubmittingQuota(
-                                                                    false,
-                                                                );
-                                                                setOpenQuotaDialog(
                                                                     false,
                                                                 );
                                                             });

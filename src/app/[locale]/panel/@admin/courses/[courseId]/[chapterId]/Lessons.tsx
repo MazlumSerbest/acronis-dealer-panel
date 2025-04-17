@@ -49,6 +49,7 @@ import {
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
@@ -125,10 +126,10 @@ export default function Lessons({
                         form.reset({});
                         mutate();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })
@@ -148,10 +149,10 @@ export default function Lessons({
                         form.reset({});
                         mutate();
                     } else {
-                        toast({
-                            variant: "destructive",
+                        DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
+                            t,
                         });
                     }
                 })

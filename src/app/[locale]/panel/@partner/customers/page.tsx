@@ -40,6 +40,7 @@ import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import PageHeader from "@/components/PageHeader";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateFormat } from "@/utils/date";
 import {
@@ -179,10 +180,10 @@ export default function CustomersPage() {
 
         if (customers.find((t: Tenant) => t.name === values.name.trim())) {
             setSubmitting(false);
-            return toast({
-                variant: "destructive",
+            return DestructiveToast({
                 title: t("errorTitle"),
                 description: tf("name.alreadyTaken"),
+                t: (key: string) => t(key),
             });
         }
 
@@ -212,10 +213,10 @@ export default function CustomersPage() {
                     mutate();
                     form.reset();
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t: (key: string) => t(key),
                     });
                 }
             })

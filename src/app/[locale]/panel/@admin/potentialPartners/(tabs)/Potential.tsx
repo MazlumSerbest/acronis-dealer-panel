@@ -38,6 +38,7 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import FormError from "@/components/FormError";
 import Combobox from "@/components/Combobox";
+import DestructiveToast from "@/components/DestructiveToast";
 
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
@@ -104,10 +105,10 @@ export default function PotentialTab() {
                     setOpen(false);
                     router.push("potentialPartners/" + res.data.id);
                 } else {
-                    toast({
-                        variant: "destructive",
+                    DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
+                        t,
                     });
                 }
             })
