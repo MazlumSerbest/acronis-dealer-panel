@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
+import { getAcronisToken } from "@/lib/getToken";
 
 export const PUT = auth(async (req: any) => {
     try {
@@ -60,6 +61,43 @@ export const PUT = auth(async (req: any) => {
             ) {
                 return NextResponse.json({
                     message: `Bu müşterinin ${modelCheck?.product.model} modelinde lisansı bulunduğundan, ${keyCheck?.product.model} modelinde lisans atayamazsınız!`,
+                    status: 400,
+                    ok: false,
+                });
+            }
+
+            const token = await getAcronisToken();
+
+            if (!token)
+                return NextResponse.json({
+                    message: "Authentication failed!",
+                    status: 401,
+                    ok: false,
+                });
+
+            const acronisEditionCheck = await fetch(
+                `${process.env.ACRONIS_API_V2_URL}/tenants/${
+                    values.customerAcronisId
+                }/offering_items?edition=${
+                    keyCheck?.product.model === "perGB"
+                        ? "pck_per_workload"
+                        : "pck_per_gigabyte"
+                }`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                },
+            ).then((res) => res.json());
+
+            if (
+                acronisEditionCheck?.items?.some(
+                    (i: any) => i.edition !== null && i.status === 1,
+                )
+            ) {
+                return NextResponse.json({
+                    message: `Bu müşteriye "${keyCheck?.product.model}" modelinde lisans atayamazsınız! Müşterinin modelini değiştirmek için Acronis Cyber Protect Cloud üzerinden müşteri modelini değiştiriniz.`,
                     status: 400,
                     ok: false,
                 });
