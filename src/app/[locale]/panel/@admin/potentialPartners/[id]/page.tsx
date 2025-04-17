@@ -349,9 +349,6 @@ export default function PotentialPartnerDetail({
                                     </Badge>
                                 )}
                             </CardTitle>
-                            {/* <CardDescription>
-                                Mazlum Serbest
-                            </CardDescription> */}
                         </CardHeader>
                         <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:py-2">
                             <FormField

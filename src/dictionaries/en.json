@@ -369,7 +369,8 @@
         "contactedAt": "Contacted At",
         "backToList": "Back to List",
         "sendEmail": "Send Email",
-        "call": "Call"
+        "call": "Call",
+        "copy": "Copy"
     },
     "SignIn": {
         "signIn": "Welcome",

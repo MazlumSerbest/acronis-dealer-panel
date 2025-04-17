@@ -369,7 +369,8 @@
         "contactedAt": "İletişim Tarihi",
         "backToList": "Listeye Dön",
         "sendEmail": "Email Gönder",
-        "call": "Ara"
+        "call": "Ara",
+        "copy": "Kopyala"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",
