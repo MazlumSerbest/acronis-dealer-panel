@@ -532,12 +532,24 @@ export default function PassiveTab() {
                                         <FormControl>
                                             <Input
                                                 {...field}
-                                                onChange={(e) =>
+                                                onChange={(e) => {
+                                                    const value = e.target.value
+                                                        .replace(
+                                                            /[^A-Za-z0-9]/g,
+                                                            "",
+                                                        )
+                                                        .toUpperCase()
+                                                        .replace(
+                                                            /(.{4})(?=.)/g,
+                                                            "$1-",
+                                                        )
+                                                        .slice(0, 14);
+
                                                     assignToCustomerForm.setValue(
                                                         "key",
-                                                        e.target.value.toUpperCase(),
-                                                    )
-                                                }
+                                                        value,
+                                                    );
+                                                }}
                                                 placeholder="A1B2-C3D4-E5F6"
                                             />
                                         </FormControl>
