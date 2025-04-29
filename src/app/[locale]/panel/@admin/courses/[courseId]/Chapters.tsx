@@ -11,13 +11,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
     Dialog,
     DialogClose,
     DialogContent,
@@ -32,17 +25,6 @@ import {
     FormItem,
     FormLabel,
 } from "@/components/ui/form";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
@@ -50,13 +32,16 @@ import FormError from "@/components/FormError";
 import DestructiveToast from "@/components/DestructiveToast";
 
 import { DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoaderCircle, LuEllipsisVertical } from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 
 const chapterFormSchema = z.object({
     courseId: z.string().cuid().optional(),
     name: z
         .string({
             required_error: "Chapter.name.required",
+        })
+        .min(3, {
+            message: "Chapter.name.minLength",
         })
         .max(60, {
             message: "Chapter.name.maxLength",
@@ -221,113 +206,6 @@ export default function Chapters({
                 return data || "-";
             },
         },
-        {
-            accessorKey: "actions",
-            header: "",
-            enableGlobalFilter: false,
-            enableHiding: false,
-            cell: ({ row }) => {
-                const data: Partner = row.original;
-
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center">
-                            <LuEllipsisVertical className="size-4" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>
-                                {t("actions")}
-                            </DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    router.push(
-                                        `/panel/courses/${courseId}/${row.original.id}`,
-                                    );
-                                }}
-                            >
-                                {t("edit")}
-                            </DropdownMenuItem>
-
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <DropdownMenuItem
-                                        onSelect={(e) => e.preventDefault()}
-                                    >
-                                        {t("delete")}
-                                    </DropdownMenuItem>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            {t("areYouSure")}
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {t("areYouSureDescription")}
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-
-                                    <div className="text-sm text-muted-foreground">
-                                        {t("selectedItem", { name: data.name })}
-                                    </div>
-
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            {t("close")}
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction asChild>
-                                            <Button
-                                                variant="destructive"
-                                                className="bg-destructive hover:bg-destructive/90"
-                                                onClick={() => {
-                                                    if (submitting) return;
-                                                    setSubmitting(true);
-
-                                                    fetch(
-                                                        `/api/admin/chapter/${data.id}`,
-                                                        {
-                                                            method: "DELETE",
-                                                        },
-                                                    )
-                                                        .then((res) =>
-                                                            res.json(),
-                                                        )
-                                                        .then((res) => {
-                                                            if (res.ok) {
-                                                                toast({
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                mutate();
-                                                            } else {
-                                                                toast({
-                                                                    variant:
-                                                                        "destructive",
-                                                                    title: t(
-                                                                        "errorTitle",
-                                                                    ),
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                            }
-                                                        })
-                                                        .finally(() =>
-                                                            setSubmitting(
-                                                                false,
-                                                            ),
-                                                        );
-                                                }}
-                                            >
-                                                {t("delete")}
-                                            </Button>
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                );
-            },
-        },
     ];
     //#endregion
 
@@ -359,6 +237,11 @@ export default function Chapters({
                         ]}
                         onAddNew={() => {
                             setOpen(true);
+                        }}
+                        onClick={(item) => {
+                            router.push(
+                                `/panel/courses/${courseId}/${item?.original?.id}`,
+                            );
                         }}
                     />
                 </CardContent>

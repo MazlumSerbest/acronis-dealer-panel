@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import useSWR from "swr";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
@@ -14,35 +15,46 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
 import {
     Form,
     FormControl,
     FormDescription,
     FormField,
     FormItem,
-    FormLabel,
 } from "@/components/ui/form";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
 
-import Loader from "@/components/loaders/Loader";
 import FormError from "@/components/FormError";
-import BoolChip from "@/components/BoolChip";
 import DestructiveToast from "@/components/DestructiveToast";
 
 import Lessons from "./Lessons";
 import Link from "next/link";
-import { LuChevronLeft, LuLoaderCircle } from "react-icons/lu";
+import {
+    LuChevronLeft,
+    LuLoaderCircle,
+    LuSave,
+    LuTrash2,
+} from "react-icons/lu";
+import { DateTimeFormat } from "@/utils/date";
 
 const chapterFormSchema = z.object({
     id: z.string().cuid(),
@@ -50,6 +62,9 @@ const chapterFormSchema = z.object({
     name: z
         .string({
             required_error: "Chapter.name.required",
+        })
+        .min(3, {
+            message: "Chapter.name.minLength",
         })
         .max(60, {
             message: "Chapter.name.maxLength",
@@ -68,15 +83,20 @@ export default function ChapterDetail({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Chapter");
+    const router = useRouter();
 
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/chapter/${params.chapterId}`,
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: (d) => {
+                form.reset(d);
+            },
         },
     );
 
@@ -122,96 +142,188 @@ export default function ChapterDetail({
         );
     if (isLoading)
         return (
-            <div className="h-80">
-                <Loader />
-            </div>
+            <Skeleton>
+                <div className="container">
+                    <DefaultSkeleton />
+                </div>
+            </Skeleton>
         );
     return (
-        <div className="xl:container flex flex-col gap-4">
-            <div className="w-full">
-                <Button
-                    size="sm"
-                    variant="link"
-                    className="text-sm text-muted-foreground underline-muted-foreground"
-                    asChild
-                >
-                    <Link href={`/panel/courses/${params.courseId}`}>
-                        <LuChevronLeft className="size-4 mr-1" />
-                        {t("backToCourse")}
-                    </Link>
-                </Button>
-            </div>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
+                <div className="xl:container flex flex-col gap-3">
+                    <div className="col-span-full flex flex-row justify-between">
+                        <Button
+                            size="sm"
+                            variant="link"
+                            className="text-sm text-foreground underline-foreground p-0"
+                            asChild
+                        >
+                            <Link href={`/panel/courses/${params.courseId}`}>
+                                <LuChevronLeft className="size-4 mr-1" />
+                                {t("backToCourse")}
+                            </Link>
+                        </Button>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-medium text-xl">
-                        {t("chapterDetail")}
-                    </CardTitle>
-                    <CardDescription>{data.name || "-"}</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-2">
-                    <div className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:px-4 *:py-2">
-                        <div>
-                            <dt className="font-medium">{t("active")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                <BoolChip value={data.active} />
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">{t("name")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.name || "-"}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">{t("order")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.order || "-"}
-                            </dd>
+                        <div className="flex flex-row gap-2">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                disabled={deleteSubmitting}
+                                                variant="destructive"
+                                                size="icon"
+                                            >
+                                                {deleteSubmitting ? (
+                                                    <LuLoaderCircle className="size-5 animate-spin" />
+                                                ) : (
+                                                    <LuTrash2
+                                                        className="size-5"
+                                                        strokeWidth={1.5}
+                                                    />
+                                                )}
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    {t("areYouSure")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("areYouSureDescription")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    {t("close")}
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction asChild>
+                                                    <Button
+                                                        disabled={
+                                                            deleteSubmitting
+                                                        }
+                                                        variant="destructive"
+                                                        className="bg-destructive hover:bg-destructive/90"
+                                                        onClick={() => {
+                                                            if (
+                                                                deleteSubmitting
+                                                            )
+                                                                return;
+                                                            setDeleteSubmitting(
+                                                                true,
+                                                            );
+
+                                                            fetch(
+                                                                `/api/admin/chapter/${params.chapterId}`,
+                                                                {
+                                                                    method: "DELETE",
+                                                                },
+                                                            )
+                                                                .then((res) =>
+                                                                    res.json(),
+                                                                )
+                                                                .then((res) => {
+                                                                    if (
+                                                                        res.ok
+                                                                    ) {
+                                                                        toast({
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                        router.push(
+                                                                            `/panel/courses/${params.courseId}`,
+                                                                        );
+                                                                    } else {
+                                                                        toast({
+                                                                            variant:
+                                                                                "destructive",
+                                                                            title: t(
+                                                                                "errorTitle",
+                                                                            ),
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                    }
+                                                                })
+                                                                .finally(() =>
+                                                                    setDeleteSubmitting(
+                                                                        false,
+                                                                    ),
+                                                                );
+                                                        }}
+                                                    >
+                                                        {t("delete")}
+                                                        {deleteSubmitting && (
+                                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
+                                                        )}
+                                                    </Button>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("delete")}</TooltipContent>
+                            </Tooltip>
+
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="bg-blue-400 hover:bg-blue-400/90"
+                                        size="icon"
+                                    >
+                                        {submitting ? (
+                                            <LuLoaderCircle className="size-5 animate-spin" />
+                                        ) : (
+                                            <LuSave
+                                                className="size-5"
+                                                strokeWidth={1.5}
+                                            />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("save")}</TooltipContent>
+                            </Tooltip>
                         </div>
                     </div>
-                </CardContent>
-                <CardFooter className="flex flex-row gap-2 justify-end">
-                    <Button
-                        className="bg-green-600 hover:bg-green-600/90"
-                        onClick={() => {
-                            form.reset(data);
-                            setOpen(true);
-                        }}
-                    >
-                        {t("editChapter")}
-                    </Button>
-                </CardFooter>
-            </Card>
 
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="max-h-screen overflow-auto">
-                    <DialogHeader>
-                        <DialogTitle>{t("editChapter")}</DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            autoComplete="off"
-                            className="space-y-4"
-                        >
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-xl">
+                                {t("chapterDetail")}
+                            </CardTitle>
+                            <CardDescription>
+                                {data.name || "-"}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:py-2">
                             <FormField
                                 control={form.control}
                                 name="active"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between">
-                                        <div className="space-y-0.5">
-                                            <FormLabel>{t("active")}</FormLabel>
-                                            <FormDescription>
-                                                {tf("active.description")}
-                                            </FormDescription>
-                                        </div>
-                                        <FormControl>
+                                    <FormItem>
+                                        <dt className="font-medium my-auto">
+                                            {t("active")}
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                             />
-                                        </FormControl>
+                                            <FormDescription>
+                                                {tf("active.description")}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.active
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -221,17 +333,23 @@ export default function ChapterDetail({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("name")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} maxLength={60} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.name
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.name
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -241,48 +359,51 @@ export default function ChapterDetail({
                                 name="order"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("order")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input type="number" {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.order
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    type="number"
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.order
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
 
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">
-                                        {t("close")}
-                                    </Button>
-                                </DialogClose>
-                                <Button
-                                    disabled={submitting}
-                                    type="submit"
-                                    className="bg-green-600 hover:bg-green-600/90"
-                                >
-                                    {t("save")}
-                                    {submitting && (
-                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
-                                    )}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdBy")}
+                                </dt>
+                                <dd>{data.createdBy}</dd>
+                            </div>
 
-            <Lessons
-                chapterId={params.chapterId}
-                lessons={data.lessons}
-                mutate={mutate}
-            />
-        </div>
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdAt")}
+                                </dt>
+                                <dd>{DateTimeFormat(data.createdAt)}</dd>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Lessons
+                        chapterId={params.chapterId}
+                        lessons={data.lessons}
+                        mutate={mutate}
+                    />
+                </div>
+            </form>
+        </Form>
     );
 }

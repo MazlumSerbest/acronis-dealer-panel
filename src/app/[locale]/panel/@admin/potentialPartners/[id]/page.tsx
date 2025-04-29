@@ -95,6 +95,7 @@ export default function PotentialPartnerDetail({
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
     const [districts, setDistricts] = useState<ListBoxItem[]>([]);
 
+    //#region Data
     const {
         data: partner,
         error,
@@ -131,6 +132,7 @@ export default function PotentialPartnerDetail({
             } as PotentialPartnerFormValues);
         },
     });
+    //#endregion
 
     //#region Form
     const form = useForm<PotentialPartnerFormValues>({

@@ -559,6 +559,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır",
                 "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "category": {
@@ -584,6 +585,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır",
                 "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "order": {
@@ -597,6 +599,7 @@
             },
             "name": {
                 "required": "Ad zorunludur",
+                "minLength": "En az 3 karakter uzunluğunda olmalıdır",
                 "maxLength": "En fazla 60 karakter uzunluğunda olmalıdır"
             },
             "order": {

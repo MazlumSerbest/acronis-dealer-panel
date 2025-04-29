@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import useSWR from "swr";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -15,7 +16,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -42,15 +42,36 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-import Loader from "@/components/loaders/Loader";
-import BoolChip from "@/components/BoolChip";
 import FormError from "@/components/FormError";
 import DestructiveToast from "@/components/DestructiveToast";
 
 import Chapters from "./Chapters";
 import Link from "next/link";
-import { LuChevronLeft, LuLoaderCircle } from "react-icons/lu";
+import {
+    LuChevronLeft,
+    LuLoaderCircle,
+    LuSave,
+    LuTrash2,
+} from "react-icons/lu";
+import Skeleton, { DefaultSkeleton } from "@/components/loaders/Skeleton";
+import { DateTimeFormat } from "@/utils/date";
 
 const courseFormSchema = z.object({
     id: z.string().cuid(),
@@ -92,15 +113,20 @@ export default function CourseDetail({
 }) {
     const t = useTranslations("General");
     const tf = useTranslations("FormMessages.Course");
+    const router = useRouter();
 
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/course/${params.courseId}`,
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: (d) => {
+                form.reset(d);
+            },
         },
     );
 
@@ -146,124 +172,188 @@ export default function CourseDetail({
         );
     if (isLoading)
         return (
-            <div className="h-80">
-                <Loader />
-            </div>
+            <Skeleton>
+                <div className="container">
+                    <DefaultSkeleton />
+                </div>
+            </Skeleton>
         );
     return (
-        <div className="xl:container flex flex-col gap-4">
-            <div className="w-full">
-                <Button
-                    size="sm"
-                    variant="link"
-                    className="text-sm text-foreground underline-foreground p-0"
-                    asChild
-                >
-                    <Link href={`/panel/courses`}>
-                        <LuChevronLeft className="size-4 mr-1" />
-                        {t("backToCourses")}
-                    </Link>
-                </Button>
-            </div>
+        <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
+                <div className="xl:container flex flex-col gap-3">
+                    <div className="col-span-full flex flex-row justify-between">
+                        <Button
+                            size="sm"
+                            variant="link"
+                            className="text-sm text-foreground underline-foreground p-0"
+                            asChild
+                        >
+                            <Link href={`/panel/courses`}>
+                                <LuChevronLeft className="size-4 mr-1" />
+                                {t("backToCourses")}
+                            </Link>
+                        </Button>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle className="font-medium text-xl">
-                        {t("courseDetail")}
-                    </CardTitle>
-                    <CardDescription>{data.name || "-"}</CardDescription>
-                </CardHeader>
-                <CardContent className="grid gap-2">
-                    <div className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:px-4 *:py-2">
-                        <div>
-                            <dt className="font-medium">{t("active")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                <BoolChip value={data.active} />
-                            </dd>
-                        </div>
-                        {
-                            <div>
-                                <dt className="font-medium">{t("category")}</dt>
-                                <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                    {t(data.category)}
-                                </dd>
-                            </div>
-                        }
-                        <div>
-                            <dt className="font-medium">{t("name")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.name || "-"}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">{t("duration")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.duration || "-"}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">{t("level")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.level || "-"}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">
-                                {t("shortDescription")}
-                            </dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.shortDescription || "-"}
-                            </dd>
-                        </div>
-                        <div>
-                            <dt className="font-medium">{t("description")}</dt>
-                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                {data.description || "-"}
-                            </dd>
+                        <div className="flex flex-row gap-2">
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <AlertDialog>
+                                        <AlertDialogTrigger asChild>
+                                            <Button
+                                                type="button"
+                                                disabled={deleteSubmitting}
+                                                variant="destructive"
+                                                size="icon"
+                                            >
+                                                {deleteSubmitting ? (
+                                                    <LuLoaderCircle className="size-5 animate-spin" />
+                                                ) : (
+                                                    <LuTrash2
+                                                        className="size-5"
+                                                        strokeWidth={1.5}
+                                                    />
+                                                )}
+                                            </Button>
+                                        </AlertDialogTrigger>
+                                        <AlertDialogContent>
+                                            <AlertDialogHeader>
+                                                <AlertDialogTitle>
+                                                    {t("areYouSure")}
+                                                </AlertDialogTitle>
+                                                <AlertDialogDescription>
+                                                    {t("areYouSureDescription")}
+                                                </AlertDialogDescription>
+                                            </AlertDialogHeader>
+
+                                            <AlertDialogFooter>
+                                                <AlertDialogCancel>
+                                                    {t("close")}
+                                                </AlertDialogCancel>
+                                                <AlertDialogAction asChild>
+                                                    <Button
+                                                        disabled={
+                                                            deleteSubmitting
+                                                        }
+                                                        variant="destructive"
+                                                        className="bg-destructive hover:bg-destructive/90"
+                                                        onClick={() => {
+                                                            if (
+                                                                deleteSubmitting
+                                                            )
+                                                                return;
+                                                            setDeleteSubmitting(
+                                                                true,
+                                                            );
+
+                                                            fetch(
+                                                                `/api/admin/chapter/${params.courseId}`,
+                                                                {
+                                                                    method: "DELETE",
+                                                                },
+                                                            )
+                                                                .then((res) =>
+                                                                    res.json(),
+                                                                )
+                                                                .then((res) => {
+                                                                    if (
+                                                                        res.ok
+                                                                    ) {
+                                                                        toast({
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                        router.push(
+                                                                            "/panel/courses",
+                                                                        );
+                                                                    } else {
+                                                                        toast({
+                                                                            variant:
+                                                                                "destructive",
+                                                                            title: t(
+                                                                                "errorTitle",
+                                                                            ),
+                                                                            description:
+                                                                                res.message,
+                                                                        });
+                                                                    }
+                                                                })
+                                                                .finally(() =>
+                                                                    setDeleteSubmitting(
+                                                                        false,
+                                                                    ),
+                                                                );
+                                                        }}
+                                                    >
+                                                        {t("delete")}
+                                                        {deleteSubmitting && (
+                                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
+                                                        )}
+                                                    </Button>
+                                                </AlertDialogAction>
+                                            </AlertDialogFooter>
+                                        </AlertDialogContent>
+                                    </AlertDialog>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("delete")}</TooltipContent>
+                            </Tooltip>
+
+                            <Tooltip>
+                                <TooltipTrigger asChild>
+                                    <Button
+                                        type="submit"
+                                        disabled={submitting}
+                                        className="bg-blue-400 hover:bg-blue-400/90"
+                                        size="icon"
+                                    >
+                                        {submitting ? (
+                                            <LuLoaderCircle className="size-5 animate-spin" />
+                                        ) : (
+                                            <LuSave
+                                                className="size-5"
+                                                strokeWidth={1.5}
+                                            />
+                                        )}
+                                    </Button>
+                                </TooltipTrigger>
+                                <TooltipContent>{t("save")}</TooltipContent>
+                            </Tooltip>
                         </div>
                     </div>
-                </CardContent>
-                <CardFooter className="flex flex-row gap-2 justify-end">
-                    <Button
-                        className="bg-green-600 hover:bg-green-600/90"
-                        onClick={() => {
-                            form.reset(data);
-                            setOpen(true);
-                        }}
-                    >
-                        {t("editCourse")}
-                    </Button>
-                </CardFooter>
-            </Card>
 
-            <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent className="max-h-screen overflow-auto">
-                    <DialogHeader>
-                        <DialogTitle>{t("editCourse")}</DialogTitle>
-                    </DialogHeader>
-                    <Form {...form}>
-                        <form
-                            onSubmit={form.handleSubmit(onSubmit)}
-                            autoComplete="off"
-                            className="space-y-4"
-                        >
+                    <Card>
+                        <CardHeader className="pb-2">
+                            <CardTitle className="text-xl">
+                                {t("courseDetail")}
+                            </CardTitle>
+                            <CardDescription>
+                                {data.name || "-"}
+                            </CardDescription>
+                        </CardHeader>
+                        <CardContent className="flex flex-col divide-y text-sm leading-6 sm:*:grid sm:*:grid-cols-2 md:*:grid-cols-3 *:items-center *:py-2">
                             <FormField
                                 control={form.control}
                                 name="active"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between">
-                                        <div className="space-y-0.5">
-                                            <FormLabel>{t("active")}</FormLabel>
-                                            <FormDescription>
-                                                {tf("active.description")}
-                                            </FormDescription>
-                                        </div>
-                                        <FormControl>
+                                    <FormItem>
+                                        <dt className="font-medium my-auto">
+                                            {t("active")}
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
                                             <Switch
                                                 checked={field.value}
                                                 onCheckedChange={field.onChange}
                                             />
-                                        </FormControl>
+                                            <FormDescription>
+                                                {tf("active.description")}
+                                            </FormDescription>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.active
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -273,17 +363,23 @@ export default function CourseDetail({
                                 name="name"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("name")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} maxLength={60} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.name
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.name
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -293,37 +389,39 @@ export default function CourseDetail({
                                 name="category"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("category")}
-                                        </FormLabel>
-                                        <Select
-                                            value={field.value}
-                                            onValueChange={field.onChange}
-                                        >
-                                            <FormControl>
-                                                <SelectTrigger>
-                                                    <SelectValue
-                                                        placeholder={t(
-                                                            "select",
-                                                        )}
-                                                    />
-                                                </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="panel">
-                                                    {t("panel")}
-                                                </SelectItem>
-                                                <SelectItem value="acronis">
-                                                    {t("acronis")}
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.category
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <Select
+                                                value={field.value}
+                                                onValueChange={field.onChange}
+                                            >
+                                                <FormControl>
+                                                    <SelectTrigger className="max-w-full md:max-w-sm">
+                                                        <SelectValue
+                                                            placeholder={t(
+                                                                "category",
+                                                            )}
+                                                        />
+                                                    </SelectTrigger>
+                                                </FormControl>
+                                                <SelectContent>
+                                                    <SelectItem value="panel">
+                                                        {t("panel")}
+                                                    </SelectItem>
+                                                    <SelectItem value="acronis">
+                                                        {t("acronis")}
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.category
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -333,18 +431,23 @@ export default function CourseDetail({
                                 name="duration"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("duration")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.duration
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.duration
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -354,17 +457,23 @@ export default function CourseDetail({
                                 name="level"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("level")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.level
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.level
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -374,18 +483,23 @@ export default function CourseDetail({
                                 name="shortDescription"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("shortDescription")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} maxLength={80} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.shortDescription
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Input
+                                                    className="max-w-full md:max-w-sm"
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.shortDescription
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
@@ -395,49 +509,51 @@ export default function CourseDetail({
                                 name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("description")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Textarea {...field} rows={4} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.description
-                                            }
-                                        />
+                                        </dt>
+                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                            <FormControl>
+                                                <Textarea
+                                                    className="max-w-full md:max-w-sm"
+                                                    rows={4}
+                                                    {...field}
+                                                />
+                                            </FormControl>
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.description
+                                                }
+                                            />
+                                        </dd>
                                     </FormItem>
                                 )}
                             />
 
-                            <DialogFooter>
-                                <DialogClose asChild>
-                                    <Button variant="outline">
-                                        {t("close")}
-                                    </Button>
-                                </DialogClose>
-                                <Button
-                                    disabled={submitting}
-                                    type="submit"
-                                    className="bg-green-600 hover:bg-green-600/90"
-                                >
-                                    {t("save")}
-                                    {submitting && (
-                                        <LuLoaderCircle className="size-4 animate-spin ml-2" />
-                                    )}
-                                </Button>
-                            </DialogFooter>
-                        </form>
-                    </Form>
-                </DialogContent>
-            </Dialog>
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdBy")}
+                                </dt>
+                                <dd>{data.createdBy}</dd>
+                            </div>
 
-            <Chapters
-                courseId={params.courseId}
-                chapters={data.chapters}
-                mutate={mutate}
-            />
-        </div>
+                            <div>
+                                <dt className="font-medium">
+                                    {t("createdAt")}
+                                </dt>
+                                <dd>{DateTimeFormat(data.createdAt)}</dd>
+                            </div>
+                        </CardContent>
+                    </Card>
+
+                    <Chapters
+                        courseId={params.courseId}
+                        chapters={data.chapters}
+                        mutate={mutate}
+                    />
+                </div>
+            </form>
+        </Form>
     );
 }

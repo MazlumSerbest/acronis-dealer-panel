@@ -238,117 +238,6 @@ export default function CoursesPage() {
                 return data || "-";
             },
         },
-        {
-            accessorKey: "actions",
-            header: "",
-            enableGlobalFilter: false,
-            enableHiding: false,
-            cell: ({ row }) => {
-                const data: Partner = row.original;
-
-                return (
-                    <DropdownMenu>
-                        <DropdownMenuTrigger className="flex items-center">
-                            <LuEllipsisVertical className="size-4 text-muted-foreground cursor-pointer hover:text-blue-400 active:text-blue-400/60" />
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuLabel>
-                                {t("actions")}
-                            </DropdownMenuLabel>
-                            <DropdownMenuItem
-                                onClick={() => {
-                                    router.push(
-                                        `/panel/courses/${row.original.id}`,
-                                    );
-                                }}
-                            >
-                                {t("edit")}
-                            </DropdownMenuItem>
-
-                            <AlertDialog>
-                                <AlertDialogTrigger asChild>
-                                    <DropdownMenuItem
-                                        onSelect={(e) => e.preventDefault()}
-                                    >
-                                        {t("delete")}
-                                    </DropdownMenuItem>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            {t("areYouSure")}
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            {t("areYouSureDescription")}
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-
-                                    <div className="text-sm text-muted-foreground">
-                                        {t("selectedItem", { name: data.name })}
-                                    </div>
-
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            {t("close")}
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction asChild>
-                                            <Button
-                                                disabled={submitting}
-                                                variant="destructive"
-                                                className="bg-destructive hover:bg-destructive/90"
-                                                onClick={() => {
-                                                    if (submitting) return;
-                                                    setSubmitting(true);
-
-                                                    fetch(
-                                                        `/api/admin/course/${data.id}`,
-                                                        {
-                                                            method: "DELETE",
-                                                        },
-                                                    )
-                                                        .then((res) =>
-                                                            res.json(),
-                                                        )
-                                                        .then((res) => {
-                                                            if (res.ok) {
-                                                                toast({
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                                mutate();
-                                                            } else {
-                                                                toast({
-                                                                    variant:
-                                                                        "destructive",
-                                                                    title: t(
-                                                                        "errorTitle",
-                                                                    ),
-                                                                    description:
-                                                                        res.message,
-                                                                });
-                                                            }
-                                                        })
-                                                        .finally(() =>
-                                                            setSubmitting(
-                                                                false,
-                                                            ),
-                                                        );
-                                                }}
-                                            >
-                                                {t("delete")}
-                                                {submitting && (
-                                                    <LuLoaderCircle className="size-4 animate-spin ml-2" />
-                                                )}
-                                            </Button>
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                );
-            },
-        },
     ];
     //#endregion
 
@@ -391,6 +280,9 @@ export default function CoursesPage() {
                 ]}
                 onAddNew={() => {
                     setOpen(true);
+                }}
+                onClick={(item) => {
+                    router.push("courses/" + item?.original?.id);
                 }}
             />
 
