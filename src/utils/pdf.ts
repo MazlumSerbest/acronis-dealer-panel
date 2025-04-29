@@ -4,6 +4,8 @@ import html2pdf from "html2pdf.js";
 import { DateFormat } from "./date";
 
 export async function createZPLAsPDF(zpl: string) {
+    if (!self) return;
+
     await fetch(
         `${window.location.protocol}//api.labelary.com/v1/printers/8dpmm/labels/2.36x0.59`,
         {
@@ -39,7 +41,7 @@ export async function createLicenseAsPDF(licenses: License[]) {
 
     let licensesHtml = "";
 
-    licenses.forEach(
+    await licenses.forEach(
         (l: License) =>
             (licensesHtml += `
                 <div style="position: relative; width: 324px; height: 204px; background-color: rgba(239, 246, 255, 0.6); display: grid; grid-template-columns: repeat(3, 1fr); padding: 10px; color: #3f3f46;">
@@ -116,5 +118,7 @@ export async function createLicenseAsPDF(licenses: License[]) {
         },
     };
 
+    // @ts-ignore
+    const html2pdf = (await import("html2pdf.js")).default;
     html2pdf().set(opt).from(html).save();
 }

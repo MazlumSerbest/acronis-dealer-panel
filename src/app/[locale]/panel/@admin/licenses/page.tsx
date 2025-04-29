@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import {
@@ -23,13 +22,12 @@ import ExpiredTab from "./(tabs)/Expired";
 import { Label } from "@/components/ui/label";
 
 export default function LicensesPage() {
+    const tl = useTranslations("Licenses");
     const router = useRouter();
     const searchParams = useSearchParams();
     const tab = searchParams.get("tab") || "unassigned";
     const status = searchParams.get("status") || "active";
     const pathname = usePathname();
-
-    const tl = useTranslations("Licenses");
 
     return (
         <Tabs

@@ -47,17 +47,16 @@ import Combobox from "@/components/Combobox";
 import FormError from "@/components/FormError";
 import DestructiveToast from "@/components/DestructiveToast";
 
-import { DateFormat, DateTimeFormat } from "@/utils/date";
-import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import { getPartners, getProducts } from "@/lib/data";
 import useUserStore from "@/store/user";
+import { DateFormat, DateTimeFormat } from "@/utils/date";
 import {
     createZPLFromIds,
     createZPLFromObjects,
     createLicensePDFFromIds,
 } from "@/utils/documents";
-import { createLicenseAsPDF } from "@/utils/pdf";
-import { createZPLAsPDF } from "@/utils/pdf";
+import { createLicenseAsPDF, createZPLAsPDF } from "@/utils/pdf";
+import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 
 const licenseFormSchema = z.object({
     productId: z.string({
