@@ -22,9 +22,12 @@ export default function Error({
             <body>
                 <div className="container h-dvh flex flex-col items-center justify-center gap-4">
                     <h2 className="text-2xl font-bold">{t("errorTitle")}</h2>
-                    <Button variant="default" onClick={() => reset()}>
+                    <Button
+                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                        onClick={() => reset()}
+                    >
                         {t("tryAgain")}
-                        <LuRefreshCw className="ml-2 size-4" />
+                        <LuRefreshCw className="size-5" />
                     </Button>
                 </div>
             </body>

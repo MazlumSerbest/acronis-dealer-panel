@@ -3,7 +3,7 @@ export async function getPartners(
     forListBox?: boolean,
     licensed?: boolean,
 ) {
-    let partners: Partner[];
+    let partners;
     const res = await fetch(
         !parentAcronisId
             ? `/api/partner`
