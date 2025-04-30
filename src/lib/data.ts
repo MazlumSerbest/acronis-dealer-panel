@@ -3,7 +3,7 @@ export async function getPartners(
     forListBox?: boolean,
     licensed?: boolean,
 ) {
-    let partners;
+    let partners: Partner[];
     const res = await fetch(
         !parentAcronisId
             ? `/api/partner`
@@ -11,14 +11,14 @@ export async function getPartners(
     );
     const response = await res.json();
 
-    partners = response.filter((p: Partner) => p.active);
+    partners = response?.filter((p: Partner) => p.active);
 
     if (licensed) {
-        partners = partners.filter((p: Partner) => p.licensed);
+        partners = partners?.filter((p: Partner) => p.licensed);
     }
 
     if (forListBox) {
-        return partners.map((p: Partner) => ({
+        return partners?.map((p: Partner) => ({
             id: p.acronisId,
             name: p?.name,
         }));
@@ -45,8 +45,8 @@ export async function getCustomers(
 
     if (forListBox)
         return customers
-            .filter((c: Customer) => c.active)
-            .map((c: Customer) => ({
+            ?.filter((c: Customer) => c.active)
+            ?.map((c: Customer) => ({
                 id: c.acronisId,
                 name: c.name,
             }));
@@ -59,8 +59,8 @@ export async function getProducts(forListBox?: boolean) {
 
     if (forListBox)
         return products
-            .filter((p: Product) => p.active)
-            .map((p: Product) => ({
+            ?.filter((p: Product) => p.active)
+            ?.map((p: Product) => ({
                 id: p.id,
                 name: p?.name,
             }));
