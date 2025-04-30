@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import Skeleton from "@/components/loaders/Skeleton";
-import { LuChevronsUpDown, LuEye } from "react-icons/lu";
+import { LuChevronsUpDown, LuEye, LuRefreshCw } from "react-icons/lu";
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
@@ -54,11 +54,13 @@ export default function InvoicesPage() {
         data: invoices,
         error,
         isLoading,
+        isValidating,
+        mutate,
     } = useSWR(
         `/api/parasut/salesInvoices?currentPage=${currentPage}&paymentStatus=${paymentStatus}&sort=${sort}`,
         null,
         {
-            // revalidateOnFocus: false,
+            revalidateOnFocus: false,
         },
     );
 
@@ -80,34 +82,46 @@ export default function InvoicesPage() {
                         onChange={(e) => setSearchTerm(e.target.value)}
                     />*/}
                 </div>
-                <Select
-                    value={paymentStatus}
-                    onValueChange={(status) => {
-                        if (status === "all") setPaymentStatus("");
-                        else setPaymentStatus(status);
-                        setCurrentPage(1);
-                    }}
-                >
-                    <SelectTrigger className="w-40">
-                        <SelectValue placeholder={t("paymentStatus")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">{t("all")}</SelectItem>
-                        <SelectItem value="overdue">
-                            <Badge variant="destructive">{t("overdue")}</Badge>
-                        </SelectItem>
-                        <SelectItem value="not_due">
-                            <Badge className="bg-yellow-500 hover:bg-yellow-500/90">
-                                {t("unpaid")}
-                            </Badge>
-                        </SelectItem>
-                        <SelectItem value="paid">
-                            <Badge className="bg-green-600 hover:bg-green-600/90">
-                                {t("paid")}
-                            </Badge>
-                        </SelectItem>
-                    </SelectContent>
-                </Select>
+                <div className="flex items-center gap-4">
+                    <LuRefreshCw
+                        className={cn(
+                            "size-5 cursor-pointer hover:text-blue-400 active:text-blue-400/60",
+                            (isLoading || isValidating) && "animate-spin",
+                        )}
+                        onClick={() => mutate()}
+                    />
+
+                    <Select
+                        value={paymentStatus}
+                        onValueChange={(status) => {
+                            if (status === "all") setPaymentStatus("");
+                            else setPaymentStatus(status);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        <SelectTrigger className="w-40">
+                            <SelectValue placeholder={t("paymentStatus")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="all">{t("all")}</SelectItem>
+                            <SelectItem value="overdue">
+                                <Badge variant="destructive">
+                                    {t("overdue")}
+                                </Badge>
+                            </SelectItem>
+                            <SelectItem value="not_due">
+                                <Badge className="bg-yellow-500 hover:bg-yellow-500/90">
+                                    {t("unpaid")}
+                                </Badge>
+                            </SelectItem>
+                            <SelectItem value="paid">
+                                <Badge className="bg-green-600 hover:bg-green-600/90">
+                                    {t("paid")}
+                                </Badge>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
             </div>
 
             <div className="rounded-md border">

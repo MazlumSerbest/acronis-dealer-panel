@@ -92,6 +92,8 @@ import {
     LuShieldCheck,
     LuShieldOff,
     LuShieldBan,
+    LuRefreshCw,
+    LuRefreshCcw,
 } from "react-icons/lu";
 import {
     ChevronLeftIcon,
@@ -330,6 +332,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         data: invoices,
         error: invoicesError,
         isLoading: invoicesIsLoading,
+        isValidating: invoicesIsValidating,
         mutate: invoicesMutate,
     } = useSWR(
         panelTenant?.parasutId
@@ -372,7 +375,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                         DestructiveToast({
                             title: t("errorTitle"),
                             description: res.message,
-                            t: (key: string) => t(key)
+                            t: (key: string) => t(key),
                         });
                     }
                 })
@@ -412,7 +415,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                     DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
-                        t: (key: string) => t(key)
+                        t: (key: string) => t(key),
                     });
                 }
             })
@@ -1358,11 +1361,20 @@ export default function GeneralTab({ t, tenant }: Props) {
 
             {tenant.kind === "partner" && panelTenant?.parasutId && (
                 <>
-                    <div className="col-span-full">
+                    <div className="relative col-span-full">
                         <h2 className="font-medium text-xl">{t("invoices")}</h2>
                         <p className="text-sm text-muted-foreground">
                             {t("invoicesCaption")}
                         </p>
+
+                        <LuRefreshCcw
+                            className={cn(
+                                "size-5 bottom-0 right-2 absolute cursor-pointer hover:text-blue-400 active:text-blue-400/60",
+                                (invoicesIsLoading || invoicesIsValidating) &&
+                                    "animate-spin",
+                            )}
+                            onClick={() => invoicesMutate()}
+                        />
                     </div>
 
                     <div className="rounded-md border col-span-full">
