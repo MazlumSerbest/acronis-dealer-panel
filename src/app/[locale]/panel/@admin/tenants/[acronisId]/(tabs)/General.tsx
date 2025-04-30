@@ -1367,14 +1367,24 @@ export default function GeneralTab({ t, tenant }: Props) {
                             {t("invoicesCaption")}
                         </p>
 
-                        <LuRefreshCcw
-                            className={cn(
-                                "size-5 bottom-0 right-2 absolute cursor-pointer hover:text-blue-400 active:text-blue-400/60",
-                                (invoicesIsLoading || invoicesIsValidating) &&
-                                    "animate-spin",
-                            )}
-                            onClick={() => invoicesMutate()}
-                        />
+                        <div className="bottom-0 right-2 absolute ">
+                            <Tooltip>
+                                <TooltipTrigger>
+                                    <LuRefreshCcw
+                                        className={cn(
+                                            "size-5 cursor-pointer hover:text-blue-400 active:text-blue-400/60",
+                                            (invoicesIsLoading ||
+                                                invoicesIsValidating) &&
+                                                "animate-spin",
+                                        )}
+                                        onClick={() => invoicesMutate()}
+                                    />
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>{t("refresh")}</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
                     </div>
 
                     <div className="rounded-md border col-span-full">

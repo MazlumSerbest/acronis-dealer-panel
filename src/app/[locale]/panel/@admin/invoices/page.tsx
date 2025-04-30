@@ -83,13 +83,21 @@ export default function InvoicesPage() {
                     />*/}
                 </div>
                 <div className="flex items-center gap-4">
-                    <LuRefreshCw
-                        className={cn(
-                            "size-5 cursor-pointer hover:text-blue-400 active:text-blue-400/60",
-                            (isLoading || isValidating) && "animate-spin",
-                        )}
-                        onClick={() => mutate()}
-                    />
+                    <Tooltip>
+                        <TooltipTrigger>
+                            <LuRefreshCw
+                                className={cn(
+                                    "size-5 cursor-pointer hover:text-blue-400 active:text-blue-400/60",
+                                    (isLoading || isValidating) &&
+                                        "animate-spin",
+                                )}
+                                onClick={() => mutate()}
+                            />
+                        </TooltipTrigger>
+                        <TooltipContent>
+                            <p>{t("refresh")}</p>
+                        </TooltipContent>
+                    </Tooltip>
 
                     <Select
                         value={paymentStatus}

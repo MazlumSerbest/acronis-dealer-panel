@@ -371,7 +371,8 @@
         "backToList": "Listeye Dön",
         "sendEmail": "Email Gönder",
         "call": "Ara",
-        "copy": "Kopyala"
+        "copy": "Kopyala",
+        "refresh": "Yenile"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",
