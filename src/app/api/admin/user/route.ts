@@ -49,6 +49,8 @@ export const POST = auth(async (req: any) => {
 
         const user = await req.json();
         user.createdBy = req.auth.user.email;
+        user.partnerAcronisId = user.partnerAcronisId || null;
+        user.acronisTenantId = user.acronisTenantId || null;
 
         const checkPartner = await prisma.partner.findUnique({
             where: {
@@ -86,7 +88,7 @@ export const POST = auth(async (req: any) => {
         const newUser = await prisma.user.create({
             data: user,
         });
-        
+
         if (newUser.id) {
             return NextResponse.json({
                 message: "Kullanıcı başarıyla kaydedildi!",

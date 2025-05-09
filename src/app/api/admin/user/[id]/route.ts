@@ -20,6 +20,8 @@ export const PUT = auth(async (req: any, { params }) => {
         const user: any = await req.json();
         user.updatedAt = new Date().toISOString();
         user.updatedBy = req.auth.user.email;
+        user.partnerAcronisId = user.partnerAcronisId || null;
+        user.acronisTenantId = user.acronisTenantId || null;
 
         const checkEmail = await prisma.user.findUnique({
             where: {
@@ -30,7 +32,7 @@ export const PUT = auth(async (req: any, { params }) => {
                 email: true,
             },
         });
-        
+
         if (checkEmail && checkEmail?.id != user.id)
             return NextResponse.json({
                 message: "Bu e-posta önceden kullanılmıştır!",
