@@ -1,5 +1,4 @@
 "use server";
-
 import { dcube, acronisServiceProvider } from "./logos";
 
 export async function sendVerificationRequest(params: any) {
@@ -20,6 +19,7 @@ export async function sendVerificationRequest(params: any) {
             subject: "DBackup Partner Panele Giriş Yap",
             html: html({ url, host }),
             text: text({ url, host }),
+            preview: "DBackup Partner Panele Giriş Yap",
         }),
     });
 
@@ -199,5 +199,5 @@ text-decoration: none
 
 // Email Text body (fallback for email clients that don't render HTML, e.g. feature phones)
 function text({ url, host }: { url: string; host: string }) {
-    return `DBackup Partner Panele giriş yapmak için aşağıdaki butona tıklayınız.\n${url}\n\n`;
+    return `DBackup Partner Panele giriş yapmak için aşağıdaki butona tıklayınız.`;
 }

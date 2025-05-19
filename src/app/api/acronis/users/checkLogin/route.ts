@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 
-export const GET = auth(async (req: any, { params }) => {
+export const GET = auth(async (req: any) => {
     try {
         if (!req.auth)
             return NextResponse.json({

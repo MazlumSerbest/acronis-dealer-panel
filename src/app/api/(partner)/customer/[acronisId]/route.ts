@@ -3,7 +3,7 @@ import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
 
-export const GET = auth(async (req: any, { params }) => {
+export const GET = auth(async (req: any, { params }: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
@@ -26,7 +26,7 @@ export const GET = auth(async (req: any, { params }) => {
                     select: {
                         name: true,
                     },
-                }
+                },
             },
         });
 
@@ -40,7 +40,7 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-export const PUT = auth(async (req: any, { params }) => {
+export const PUT = auth(async (req: any, { params }: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",

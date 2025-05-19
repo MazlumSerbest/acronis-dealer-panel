@@ -3,7 +3,7 @@ import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
-export const GET = auth(async (req: any, { params }) => {
+export const GET = auth(async (req: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
@@ -73,7 +73,7 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-export const POST = auth(async (req: any, { params }) => {
+export const POST = auth(async (req: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",

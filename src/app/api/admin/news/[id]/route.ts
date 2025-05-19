@@ -7,7 +7,7 @@ import path from "path";
 
 const uploadDir = path.join(process.env.UPLOAD_DIR || "", "news");
 
-export const PUT = auth(async (req: any, { params }) => {
+export const PUT = auth(async (req: any, { params }: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
@@ -95,7 +95,7 @@ export const PUT = auth(async (req: any, { params }) => {
     }
 });
 
-export const DELETE = auth(async (req: any, { params }) => {
+export const DELETE = auth(async (req: any, { params }: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",

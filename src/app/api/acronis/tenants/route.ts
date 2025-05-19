@@ -4,7 +4,7 @@ import { getAcronisToken } from "@/lib/getToken";
 import { auth } from "@/auth";
 import { getTranslations } from "next-intl/server";
 
-export const GET = auth(async (req: any, { params }) => {
+export const GET = auth(async (req: any) => {
     try {
         const tm = await getTranslations({
             locale: "en",
@@ -30,12 +30,12 @@ export const GET = auth(async (req: any, { params }) => {
         const headers = {
             Authorization: `Bearer ${token}`,
         };
-        const params = new URLSearchParams({
+        const searchParams = new URLSearchParams({
             lod: req.nextUrl.searchParams.get("lod") || "basic",
             uuids: req.nextUrl.searchParams.get("uuids"),
         });
         const res = await fetch(
-            `${process.env.ACRONIS_API_V2_URL}/tenants?${params}`,
+            `${process.env.ACRONIS_API_V2_URL}/tenants?${searchParams}`,
             {
                 method: "GET",
                 headers: headers,
@@ -55,7 +55,7 @@ export const GET = auth(async (req: any, { params }) => {
     }
 });
 
-export const POST = auth(async (req: any, { params }) => {
+export const POST = auth(async (req: any) => {
     try {
         if (!req.auth)
             return NextResponse.json({
