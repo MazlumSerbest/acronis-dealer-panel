@@ -1,8 +1,10 @@
 import NextAuth, { DefaultSession } from "next-auth";
 import ForwardEmail from "next-auth/providers/forwardemail";
 // import Nodemailer from "next-auth/providers/nodemailer";
+import Loops from "next-auth/providers/loops";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import prisma from "@/utils/db";
+import { sendVerificationRequest } from "@/lib/authSendRequest";
 
 declare module "next-auth" {
     interface Session {
@@ -13,9 +15,6 @@ declare module "next-auth" {
 }
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-    theme: {
-        logo: "https://d3bilisim.com.tr/themes/dcube/images/logo.png",
-    },
     adapter: PrismaAdapter(prisma),
     session: {
         strategy: "database",
@@ -28,7 +27,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             from: process.env.EMAIL_FROM,
             apiKey: process.env.AUTH_FORWARDEMAIL_KEY,
             maxAge: 5 * 60, // 5 minutes
+            sendVerificationRequest({ identifier: email, url }) {
+                sendVerificationRequest({
+                    identifier: email,
+                    url,
+                });
+            },
         }),
+        // Loops({
+        //     apiKey: process.env.AUTH_LOOPS_KEY,
+        //     transactionalId: process.env.AUTH_LOOPS_TRANSACTIONAL_ID,
+        //     maxAge: 5 * 60, // 5 minutes
+        // }),
     ],
     pages: {
         signIn: "/signin",

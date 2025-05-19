@@ -396,6 +396,13 @@
             "AccessDenied": "Bu sayfaya erişim izniniz yok. Lütfen yönetici ile iletişime geçin.",
             "Verification": "Jetonun süresi dolmuş veya daha önce kullanılmış. Lütfen yeni bir tane talep edin.",
             "turnstile": "Captcha çözülmedi!"
+        },
+        "MagicLink": {
+            "subject": "DBackup Partner Panele Giriş Yap",
+            "signIn": "Giriş Yap",
+            "hello": "Merhaba",
+            "description": "DBackup Partner Panele hoşgeldiniz. DBackup Partner Panele giriş yapmak için aşağıdaki butona tıklayınız.",
+            "footer": "Eğer bu e-postayı siz talep etmediyseniz, göz ardı edebilirsiniz."
         }
     },
     "Application": {

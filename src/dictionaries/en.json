@@ -396,6 +396,13 @@
             "AccessDenied": "You do not have permission to access this page. Please contact the administrator.",
             "Verification": "The token has expired or has already been used. Please request a new one.",
             "turnstile": "Please resolve the captcha!"
+        },
+        "MagicLink": {
+            "subject": "Sign In to DBackup Partner Panel",
+            "signIn": "Sign In",
+            "hello": "Hello",
+            "description": "You have received this email because you have requested to sign in to your DBackup Partner Panel account. Please click the button below to sign in.",
+            "footer": "If you did not request this, you can safely ignore this email."
         }
     },
     "Application": {
