@@ -9,7 +9,7 @@ export default function Loader() {
     );
 }
 
-export function MainLoader() {
+export function LogoLoader() {
     return (
         <div className="flex animate-pulse w-screen h-dvh items-center justify-center">
             <Logo

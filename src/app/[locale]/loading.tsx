@@ -1,5 +1,5 @@
-import { MainLoader } from "@/components/loaders/Loader";
+import { LogoLoader } from "@/components/loaders/Loader";
 
 export default function Loading() {
-    return <MainLoader />;
+    return <LogoLoader />;
 }
