@@ -164,8 +164,8 @@ text-decoration: none
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" align="center" id="innerTable"><tr><td><div class="t41" style="mso-line-height-rule:exactly;mso-line-height-alt:50px;line-height:50px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr><tr><td align="center">
 <table class="t45" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;"><tr><td width="600" class="t44" style="width:600px;">
 <table class="t43" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;"><tr><td class="t42" style="border:1px solid #EBEBEB;overflow:hidden;background-color:#FFFFFF;padding:44px 42px 32px 42px;border-radius:3px 3px 3px 3px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100% !important;"><tr><td align="center">
-<table class="t4" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;"><tr><td width="120" class="t3" style="width:120px;">
-<table class="t2" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;"><tr><td class="t1"><div style="font-size:0px;"><img class="t0" style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;" width="120" height="120" alt="" src="${dcube}"/></div></td></tr></table>
+<table class="t4" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;"><tr><td width="120" class="t3" style="width:100px;">
+<table class="t2" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;"><tr><td class="t1"><div style="font-size:0px;"><img class="t0" style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;" width="100" height="100" alt="" src="https://d3bilisim.com.tr/themes/dcube/images/logo.png"/></div></td></tr></table>
 </td></tr></table>
 </td></tr><tr><td><div class="t5" style="mso-line-height-rule:exactly;mso-line-height-alt:18px;line-height:18px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr><tr><td align="center">
 <table class="t10" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;"><tr><td width="514" class="t9" style="width:600px;">
@@ -189,7 +189,7 @@ text-decoration: none
 </td></tr></table>
 </td></tr><tr><td><div class="t35" style="mso-line-height-rule:exactly;mso-line-height-alt:24px;line-height:24px;font-size:1px;display:block;">&nbsp;&nbsp;</div></td></tr><tr><td align="center">
 <table class="t40" role="presentation" cellpadding="0" cellspacing="0" style="Margin-left:auto;Margin-right:auto;"><tr><td width="200" class="t39" style="width:200px;">
-<table class="t38" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;"><tr><td class="t37"><div style="font-size:0px;"><img class="t36" style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;" width="200" height="76.66666666666666" alt="" src="${acronisServiceProvider}"/></div></td></tr></table>
+<table class="t38" role="presentation" cellpadding="0" cellspacing="0" width="100%" style="width:100%;"><tr><td class="t37"><div style="font-size:0px;"><img class="t36" style="display:block;border:0;height:auto;width:100%;Margin:0;max-width:100%;" width="200" height="76.66666666666666" alt="" src="https://images.squarespace-cdn.com/content/v1/6385e30af8cfbb2962f000b1/5ff4e572-e97b-42e0-94c8-ac71ccae8c35/Acronis_platinum_service-provider_light.png"/></div></td></tr></table>
 </td></tr></table>
 </td></tr></table></td></tr></table>
 </td></tr></table>
