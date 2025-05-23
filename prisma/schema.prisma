@@ -269,7 +269,7 @@ model Notification {
   id         String   @id @default(cuid())
   entityType String
   entityId   String
-  step       String
+  step       Int
   sentAt     DateTime @default(now())
 
   @@unique([entityType, entityId, step])
