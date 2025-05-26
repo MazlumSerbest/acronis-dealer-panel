@@ -1,5 +1,4 @@
 "use server";
-import { dcube, acronisServiceProvider } from "./logos";
 
 export async function sendVerificationRequest(params: any) {
     const { identifier: to, url } = params;
