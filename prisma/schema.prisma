@@ -269,10 +269,11 @@ model Notification {
   id         String   @id @default(cuid())
   entityType String
   entityId   String
-  step       Int
   sentAt     DateTime @default(now())
+  step       Int
+  sentTo     String
 
-  @@unique([entityType, entityId, step])
+  @@unique([entityType, entityId, step, sentTo])
 }
 
 /// Views
@@ -361,4 +362,38 @@ view v_User {
   updatedBy        String?
   partnerName      String?
   lastLogin        DateTime?
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_LicenseReminder {
+  licenseId   String?
+  email       String?
+  activatedAt DateTime?
+  daysLeft    Int?
+  step        Int?
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_CustomerBillingReminder {
+  customerId  String?
+  email       String?
+  billingDate DateTime?
+  daysLeft    Int?
+  step        Int?
+
+  @@ignore
+}
+
+/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+view v_PartnerBillingReminder {
+  partnerId   String?
+  partnerName String?
+  email       String?
+  billingDate DateTime? @db.Timestamp(6)
+  daysLeft    Int?
+  step        Int?
+
+  @@ignore
 }
