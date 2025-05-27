@@ -15,7 +15,10 @@ FROM
         JOIN "User" u ON (
           (
             (u."partnerAcronisId" = p."parentAcronisId")
-            OR (u."acronisTenantId" = p."parentAcronisId")
+            OR (
+              (u."acronisTenantId" = p."parentAcronisId")
+              AND (u."emailVerified" IS NOT NULL)
+            )
           )
         )
       )

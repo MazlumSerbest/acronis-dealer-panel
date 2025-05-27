@@ -366,22 +366,27 @@ view v_User {
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view v_LicenseReminder {
-  licenseId   String?
-  email       String?
-  activatedAt DateTime?
-  daysLeft    Int?
-  step        Int?
+  licenseId    String?
+  serialNo     String?
+  customerId   String?
+  customerName String?
+  productName  String?
+  email        String?
+  expiresAt    DateTime? @db.Timestamp(6)
+  daysLeft     Int?
+  step         Int?
 
   @@ignore
 }
 
 /// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view v_CustomerBillingReminder {
-  customerId  String?
-  email       String?
-  billingDate DateTime?
-  daysLeft    Int?
-  step        Int?
+  customerId   String?
+  customerName String?
+  email        String?
+  billingDate  DateTime? @db.Timestamp(6)
+  daysLeft     Int?
+  step         Int?
 
   @@ignore
 }

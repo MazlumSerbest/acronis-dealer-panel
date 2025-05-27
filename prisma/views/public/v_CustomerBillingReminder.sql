@@ -1,15 +1,23 @@
 SELECT
   c.id AS "customerId",
+  c.name AS "customerName",
   COALESCE(u."notificationEmails", u.email) AS email,
-  c."billingDate",
-  (date(c."billingDate") - CURRENT_DATE) AS "daysLeft",
+  (c."billingDate" + '1 day' :: INTERVAL) AS "billingDate",
+  (
+    date((c."billingDate" + '1 day' :: INTERVAL)) - CURRENT_DATE
+  ) AS "daysLeft",
   s.step
 FROM
   (
     (
       (
         "Customer" c
-        JOIN "User" u ON ((u."partnerAcronisId" = c."partnerAcronisId"))
+        JOIN "User" u ON (
+          (
+            (u."partnerAcronisId" = c."partnerAcronisId")
+            AND (u."emailVerified" IS NOT NULL)
+          )
+        )
       )
       CROSS JOIN (
         SELECT
@@ -26,6 +34,10 @@ FROM
   )
 WHERE
   (
-    ((date(c."billingDate") - CURRENT_DATE) = s.step)
+    (
+      (
+        date((c."billingDate" + '1 day' :: INTERVAL)) - CURRENT_DATE
+      ) = s.step
+    )
     AND (n.id IS NULL)
   );

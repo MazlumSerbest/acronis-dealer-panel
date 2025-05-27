@@ -1,7 +1,11 @@
 SELECT
   l.id AS "licenseId",
+  l."serialNo",
+  c.id AS "customerId",
+  c.name AS "customerName",
+  p.name AS "productName",
   COALESCE(u."notificationEmails", u.email) AS email,
-  l."activatedAt",
+  (l."activatedAt" + '1 year' :: INTERVAL) AS "expiresAt",
   (
     date((l."activatedAt" + '1 year' :: INTERVAL)) - CURRENT_DATE
   ) AS "daysLeft",
@@ -10,13 +14,24 @@ FROM
   (
     (
       (
-        "License" l
-        JOIN "User" u ON ((u."partnerAcronisId" = l."partnerAcronisId"))
+        (
+          (
+            "License" l
+            JOIN "User" u ON (
+              (
+                (u."partnerAcronisId" = l."partnerAcronisId")
+                AND (u."emailVerified" IS NOT NULL)
+              )
+            )
+          )
+          CROSS JOIN (
+            SELECT
+              unnest(ARRAY [30, 15, 7, 1]) AS step
+          ) s
+        )
+        LEFT JOIN "Customer" c ON ((c."acronisId" = l."customerAcronisId"))
       )
-      CROSS JOIN (
-        SELECT
-          unnest(ARRAY [30, 15, 7, 1]) AS step
-      ) s
+      LEFT JOIN "Product" p ON ((p.id = l."productId"))
     )
     LEFT JOIN "Notification" n ON (
       (
