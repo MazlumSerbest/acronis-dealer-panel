@@ -13,7 +13,7 @@ export async function sendVerificationRequest(params: any) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            from: process.env.EMAIL_FROM,
+            from: "DBackup Partner Panel <" + process.env.EMAIL_FROM + ">",
             to,
             subject: "DBackup Partner Panele Giriş Yap",
             html: html({ url, host }),
