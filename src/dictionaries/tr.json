@@ -372,7 +372,9 @@
         "sendEmail": "Email Gönder",
         "call": "Ara",
         "copy": "Kopyala",
-        "refresh": "Yenile"
+        "refresh": "Yenile",
+        "notificationEmails": "Bildirim E-postaları",
+        "notificationEmailsDescription": "Bildirim almak istediğiniz e-posta adreslerini girin. Birden fazla e-posta adresi virgül(,) ile ayırarak girin."
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

@@ -16,6 +16,7 @@ SELECT
   u."createdBy",
   u."updatedAt",
   u."updatedBy",
+  u."notificationEmails",
   COALESCE(p.name, '' :: text) AS "partnerName",
   s."createdAt" AS "lastLogin"
 FROM

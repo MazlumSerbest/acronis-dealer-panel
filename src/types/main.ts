@@ -20,6 +20,7 @@ type User = Entity & {
     name: string;
     email: string;
     emailVerified?: string;
+    notificationEmails?: string;
     role: "admin" | "partner";
     licensed: boolean;
     partner?: Partner;

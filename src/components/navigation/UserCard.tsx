@@ -67,6 +67,7 @@ const userFormSchema = z.object({
         .min(3, {
             message: "User.name.minLength",
         }),
+    notificationEmails: z.string().optional(),
 });
 
 type UserFormValues = z.infer<typeof userFormSchema>;
@@ -91,9 +92,16 @@ export default function UserCard() {
         if (submitting || !user) return;
         setSubmitting(true);
 
+        const data = {
+            id: user.id,
+            name: values.name,
+            email: user.email,
+            notificationEmails: values.notificationEmails,
+        };
+
         fetch(`/api/user/${user.id}`, {
             method: "PUT",
-            body: JSON.stringify(values),
+            body: JSON.stringify(data),
         })
             .then((res) => res.json())
             .then((res) => {
@@ -131,6 +139,7 @@ export default function UserCard() {
                             role: data?.role,
                             name: data?.name,
                             email: data?.email,
+                            notificationEmails: data?.notificationEmails,
                             acronisTenantId: data?.acronisTenantId,
                             createdAt: data?.createdAt,
                             createdBy: data?.createdBy,
@@ -145,6 +154,7 @@ export default function UserCard() {
                             role: data?.role,
                             name: data?.name,
                             email: data?.email,
+                            notificationEmails: data?.notificationEmails,
                             acronisTenantId: data?.partnerAcronisId,
                             createdAt: data?.createdAt,
                             createdBy: data?.createdBy,
@@ -164,6 +174,7 @@ export default function UserCard() {
                     .then((data) => updateMainTenant(data));
 
             form.setValue("name", user?.name || "");
+            form.setValue("notificationEmails", user?.notificationEmails || "");
         }
     }, [
         form,
@@ -171,6 +182,7 @@ export default function UserCard() {
         updateMainTenant,
         updateUser,
         user?.name,
+        user?.notificationEmails,
         user?.partnerAcronisId,
         locale,
     ]);
@@ -233,6 +245,30 @@ export default function UserCard() {
                                         <FormError
                                             error={
                                                 form?.formState?.errors?.name
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                control={form.control}
+                                name="notificationEmails"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t("notificationEmails")}
+                                        </FormLabel>
+                                        <FormDescription>
+                                            {t("notificationEmailsDescription")}
+                                        </FormDescription>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors
+                                                    ?.notificationEmails
                                             }
                                         />
                                     </FormItem>
@@ -322,7 +358,6 @@ export default function UserCard() {
                             <Button
                                 variant="destructive"
                                 className="bg-destructive hover:bg-destructive/90"
-                                // onClick={() => signOut()}
                                 onClick={() => signOut()}
                             >
                                 {t("logout")}

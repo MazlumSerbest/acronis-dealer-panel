@@ -92,6 +92,7 @@ const userFormSchema = z.object({
         }),
     partnerAcronisId: z.string().optional().nullable(),
     acronisTenantId: z.string().optional().nullable(),
+    notificationEmails: z.string().optional(),
 });
 
 type UserFormValues = z.infer<typeof userFormSchema>;
@@ -712,6 +713,30 @@ export default function UsersPage() {
                                     />
                                 </>
                             )}
+
+                            <FormField
+                                control={form.control}
+                                name="notificationEmails"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>
+                                            {t("notificationEmails")}
+                                        </FormLabel>
+                                        <FormDescription>
+                                            {t("notificationEmailsDescription")}
+                                        </FormDescription>
+                                        <FormControl>
+                                            <Input {...field} />
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors
+                                                    ?.notificationEmails
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
 
                             <DialogFooter>
                                 <DialogClose asChild>

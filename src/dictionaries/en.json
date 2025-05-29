@@ -372,7 +372,9 @@
         "sendEmail": "Send Email",
         "call": "Call",
         "copy": "Copy",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "notificationEmails": "Notification Emails",
+        "notificationEmailsDescription": "Enter the email addresses you want to receive notifications. Separate multiple email addresses with a comma(,)."
     },
     "SignIn": {
         "signIn": "Welcome",

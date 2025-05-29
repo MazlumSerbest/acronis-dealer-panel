@@ -31,6 +31,7 @@ export const GET = auth(async (req: any, { params }: any) => {
                 partnerAcronisId: true,
                 acronisTenantId: true,
                 role: true,
+                notificationEmails: true,
                 createdBy: true,
                 createdAt: true,
                 updatedBy: true,
