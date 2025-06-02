@@ -65,6 +65,13 @@ export const PUT = auth(async (req: any, { params }: any) => {
             },
         });
 
+        await prisma.notification.deleteMany({
+            where: {
+                entityType: "billing",
+                entityId: updatedCustomer.id,
+            },
+        });
+
         if (updatedCustomer.id) {
             return NextResponse.json({
                 message: "Müşteri başarıyla güncellendi!",
