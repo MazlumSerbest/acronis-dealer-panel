@@ -2,9 +2,9 @@ SELECT
   p.id AS "partnerId",
   p.name AS "partnerName",
   COALESCE(u."notificationEmails", u.email) AS email,
-  (p."billingDate" + '1 day' :: INTERVAL) AS "billingDate",
+  (p."billingDate" + '03:00:00' :: INTERVAL) AS "billingDate",
   (
-    date((p."billingDate" + '1 day' :: INTERVAL)) - CURRENT_DATE
+    date((p."billingDate" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
   ) AS "daysLeft",
   s.step
 FROM
@@ -14,10 +14,11 @@ FROM
         "Partner" p
         JOIN "User" u ON (
           (
-            (u."partnerAcronisId" = p."parentAcronisId")
-            OR (
-              (u."acronisTenantId" = p."parentAcronisId")
-              AND (u."emailVerified" IS NOT NULL)
+            (u.active = TRUE)
+            AND (u."emailVerified" IS NOT NULL)
+            AND (
+              (u."partnerAcronisId" = p."parentAcronisId")
+              OR (u."acronisTenantId" = p."parentAcronisId")
             )
           )
         )
@@ -39,7 +40,7 @@ WHERE
   (
     (
       (
-        date((p."billingDate" + '1 day' :: INTERVAL)) - CURRENT_DATE
+        date((p."billingDate" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
       ) = s.step
     )
     AND (n.id IS NULL)

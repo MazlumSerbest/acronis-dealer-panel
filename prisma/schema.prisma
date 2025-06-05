@@ -9,27 +9,25 @@ datasource db {
 }
 
 model User {
-  id                  String    @id @default(cuid())
-  name                String?
-  email               String    @unique
-  emailVerified       DateTime?
-  image               String?
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  role                String?
-  active              Boolean   @default(true)
-  createdBy           String
-  updatedBy           String?
-  acronisTenantId     String?
-  language            String?   @default("tr")
-  deleted             Boolean   @default(false)
-  partnerAcronisId    String?
-  notificationEmails  String?
-  billingNotification Boolean   @default(true)
-  licenseNotification Boolean   @default(true)
-  accounts            Account[]
-  sessions            Session[]
-  partner             Partner?  @relation(fields: [partnerAcronisId], references: [acronisId])
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String    @unique
+  emailVerified      DateTime?
+  image              String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  role               String?
+  active             Boolean   @default(true)
+  createdBy          String
+  updatedBy          String?
+  acronisTenantId    String?
+  language           String?   @default("tr")
+  deleted            Boolean   @default(false)
+  partnerAcronisId   String?
+  notificationEmails String?
+  accounts           Account[]
+  sessions           Session[]
+  partner            Partner?  @relation(fields: [partnerAcronisId], references: [acronisId])
 }
 
 model Account {

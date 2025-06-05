@@ -5,9 +5,9 @@ SELECT
   c.name AS "customerName",
   p.name AS "productName",
   COALESCE(u."notificationEmails", u.email) AS email,
-  (l."activatedAt" + '1 year' :: INTERVAL) AS "expiresAt",
+  (l."activatedAt" + '03:00:00' :: INTERVAL) AS "expiresAt",
   (
-    date((l."activatedAt" + '1 year' :: INTERVAL)) - CURRENT_DATE
+    date((l."activatedAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
   ) AS "daysLeft",
   s.step
 FROM
@@ -19,8 +19,9 @@ FROM
             "License" l
             JOIN "User" u ON (
               (
-                (u."partnerAcronisId" = l."partnerAcronisId")
+                (u.active = TRUE)
                 AND (u."emailVerified" IS NOT NULL)
+                AND (u."partnerAcronisId" = l."partnerAcronisId")
               )
             )
           )
@@ -45,7 +46,7 @@ WHERE
   (
     (
       (
-        date((l."activatedAt" + '1 year' :: INTERVAL)) - CURRENT_DATE
+        date((l."activatedAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
       ) = s.step
     )
     AND (n.id IS NULL)
