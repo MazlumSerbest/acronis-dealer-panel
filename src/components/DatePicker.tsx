@@ -19,7 +19,7 @@ type Props = {
 export default function DatePicker({
     field,
     placeholder,
-    from = new Date(),
+    from = new Date(new Date().setFullYear(new Date().getFullYear() - 5)),
     to = new Date(new Date().setFullYear(new Date().getFullYear() + 10)),
 }: Props) {
     const tc = useTranslations("Components");
@@ -48,16 +48,13 @@ export default function DatePicker({
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
-                    initialFocus
                     fixedWeeks
                     mode="single"
                     selected={field?.value}
                     onSelect={field?.onChange}
-                    captionLayout="dropdown-buttons"
-                    fromDate={from}
-                    toDate={to}
-                    // fromYear={new Date().getFullYear() - 5}
-                    // toYear={new Date().getFullYear() + 10}
+                    captionLayout="dropdown"
+                    startMonth={from}
+                    endMonth={to}
                 />
             </PopoverContent>
         </Popover>
