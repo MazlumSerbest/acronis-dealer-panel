@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { redirect, useRouter, usePathname } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import { useLocale, useTranslations } from "next-intl";
@@ -140,11 +140,18 @@ export default function SignIn({
                                         language: locale,
                                         theme: "light",
                                     }}
+                                    style={{
+                                        minWidth: "0 !important",
+                                        overflow: "hidden !important",
+                                    }}
                                     className={cn(
-                                        "*:-mb-[6px]",
+                                        "*:-mb-[6px] has-[iframe]:!w-min-[200px]",
+                                        turnstile === "solved"
+                                            ? "ring-green-600 ring-1"
+                                            : "",
                                         turnstile === "error" ||
                                             turnstile === "expired"
-                                            ? "ring-destructive ring-2"
+                                            ? "ring-destructive ring-1"
                                             : "",
                                     )}
                                     onError={() => setTurnstile("error")}

@@ -329,7 +329,6 @@ view v_LicensedCustomers {
   @@ignore
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view v_LicenseHistory {
   id                       String    @id
   action                   String?
@@ -344,7 +343,6 @@ view v_LicenseHistory {
   customer                 String?
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view v_User {
   id                 String    @id
   name               String?
