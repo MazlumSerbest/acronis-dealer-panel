@@ -118,6 +118,7 @@ type Props = {
 
 const partnerFormSchema = z.object({
     billingDate: z.date().optional(),
+    parasutId: z.string().optional(),
 });
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;
@@ -328,6 +329,16 @@ export default function GeneralTab({ t, tenant }: Props) {
         },
     );
 
+    const { data: parasutCustomer } = useSWR(
+        panelTenant?.parasutId
+            ? `/api/parasut/contacts/${panelTenant?.parasutId}`
+            : null,
+        null,
+        {
+            revalidateOnFocus: false,
+        },
+    );
+
     const {
         data: invoices,
         error: invoicesError,
@@ -351,12 +362,14 @@ export default function GeneralTab({ t, tenant }: Props) {
     });
 
     async function onSubmit(values: PartnerFormValues) {
+        console.log(values);
         if (submitting) return;
         setSubmitting(true);
 
         const existingPartner = {
             name: tenant?.name,
             billingDate: values.billingDate?.toISOString(),
+            parasutId: values.parasutId,
         };
         if (panelTenant)
             fetch(`/api/admin/partner/${tenant?.id}`, {
@@ -476,9 +489,9 @@ export default function GeneralTab({ t, tenant }: Props) {
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex flex-row justify-between">
-                            <h2 className="flex-none font-medium text-xl">
+                            <p className="flex-none font-medium text-xl">
                                 {t("tenantInformation")}
-                            </h2>
+                            </p>
 
                             {panelTenant &&
                                 tenant.parent_id ==
@@ -488,8 +501,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         size="sm"
                                         className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                                         onClick={() => {
-                                            form.reset(panelTenant);
                                             setEdit(true);
+                                            form.setValue(
+                                                "billingDate",
+                                                new Date(
+                                                    panelTenant?.billingDate,
+                                                ),
+                                            );
+                                            form.setValue(
+                                                "parasutId",
+                                                panelTenant?.parasutId,
+                                            );
                                         }}
                                     >
                                         <span className="sr-only lg:not-sr-only">
@@ -543,14 +565,54 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 </div>
 
                                 {tenant.kind == "partner" ? (
-                                    <div>
-                                        <dt className="font-medium">
-                                            {t("upperPartner")}
-                                        </dt>
-                                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                            {panelTenant?.parent?.name || "-"}
-                                        </dd>
-                                    </div>
+                                    <>
+                                        <div>
+                                            <dt className="font-medium">
+                                                {t("upperPartner")}
+                                            </dt>
+                                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                                                {panelTenant?.parent?.name ||
+                                                    "-"}
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt className="font-medium">
+                                                {t("parasutName")}
+                                            </dt>
+                                            <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                                                {parasutCustomer?.attributes
+                                                    ?.name || "-"}
+                                            </dd>
+                                        </div>
+
+                                        <div>
+                                            <dt className="font-medium">
+                                                {t("parasutId")}
+                                            </dt>
+                                            {edit ? (
+                                                <FormField
+                                                    control={form.control}
+                                                    name="parasutId"
+                                                    render={({ field }) => (
+                                                        <FormItem>
+                                                            <FormControl>
+                                                                <Input
+                                                                    type="number"
+                                                                    {...field}
+                                                                />
+                                                            </FormControl>
+                                                        </FormItem>
+                                                    )}
+                                                />
+                                            ) : (
+                                                <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
+                                                    {panelTenant?.parasutId ||
+                                                        "-"}
+                                                </dd>
+                                            )}
+                                        </div>
+                                    </>
                                 ) : (
                                     <div>
                                         <dt className="font-medium">
@@ -660,17 +722,6 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     )}
                                 </div>
 
-                                {panelTenant?.parasutId && (
-                                    <div>
-                                        <dt className="font-medium">
-                                            {t("parasutId")}
-                                        </dt>
-                                        <dd className="col-span-1 md:col-span-2 font-light text-foreground mt-1 sm:mt-0">
-                                            {panelTenant?.parasutId}
-                                        </dd>
-                                    </div>
-                                )}
-
                                 <div>
                                     <dt className="font-medium">
                                         {t("createdAt")}
@@ -726,9 +777,8 @@ export default function GeneralTab({ t, tenant }: Props) {
                                 <CardFooter className="flex flex-row gap-2 justify-end">
                                     <Button
                                         variant="outline"
-                                        onClick={() => {
-                                            setEdit(false);
-                                        }}
+                                        type="button"
+                                        onClick={() => setEdit(false)}
                                     >
                                         {t("cancel")}
                                     </Button>

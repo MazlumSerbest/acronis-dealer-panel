@@ -134,6 +134,7 @@ export default function TenantsPage() {
                         mfa_status: item.mfa_status,
                         licensed: null,
                         billingDate: "",
+                        parasutId: "",
                         usages: item.usages,
                     };
 
@@ -150,6 +151,7 @@ export default function TenantsPage() {
                         );
                         newItem.billingDate = partner?.billingDate || undefined;
                         newItem.licensed = partner?.licensed || undefined;
+                        newItem.parasutId = partner?.parasutId || undefined;
                     }
 
                     return newItem;
@@ -291,7 +293,24 @@ export default function TenantsPage() {
 
                 return <BoolChip size="size-4" value={data} />;
             },
-            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+            filterFn: (row, id, value) => value == row.getValue(id),
+        },
+        {
+            accessorKey: "parasutId",
+            header: t("parasut"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("parasutId") ? true : false;
+
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded-sm bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : (
+                    <BoolChip size="size-4" value={data} />
+                );
+            },
+            filterFn: (row, id, value) => value == row.getValue(id) ? true : false,
         },
         {
             accessorKey: "billingDate",
@@ -573,6 +592,14 @@ export default function TenantsPage() {
                         {
                             column: "licensed",
                             title: t("licensed"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
+                            ],
+                        },
+                        {
+                            column: "parasutId",
+                            title: t("parasut"),
                             options: [
                                 { value: true, label: t("true") },
                                 { value: false, label: t("false") },
