@@ -117,7 +117,7 @@ type Props = {
 };
 
 const partnerFormSchema = z.object({
-    billingDate: z.date().optional(),
+    billingDate: z.date().optional().nullable(),
     parasutId: z.string().optional(),
 });
 
@@ -329,7 +329,12 @@ export default function GeneralTab({ t, tenant }: Props) {
         },
     );
 
-    const { data: parasutCustomer } = useSWR(
+    const {
+        data: parasutCustomer,
+        error: parasutCustomerError,
+        isLoading: parasutCustomerIsLoading,
+        mutate: parasutCustomerMutate,
+    } = useSWR(
         panelTenant?.parasutId
             ? `/api/parasut/contacts/${panelTenant?.parasutId}`
             : null,
@@ -368,7 +373,9 @@ export default function GeneralTab({ t, tenant }: Props) {
 
         const existingPartner = {
             name: tenant?.name,
-            billingDate: values.billingDate?.toISOString(),
+            billingDate: values.billingDate
+                ? values.billingDate?.toISOString()
+                : null,
             parasutId: values.parasutId,
         };
         if (panelTenant)
@@ -383,6 +390,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                             description: res.message,
                         });
                         panelTenantMutate();
+                        parasutCustomerMutate();
                         setEdit(false);
                     } else {
                         DestructiveToast({
@@ -502,12 +510,14 @@ export default function GeneralTab({ t, tenant }: Props) {
                                         className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                                         onClick={() => {
                                             setEdit(true);
-                                            form.setValue(
-                                                "billingDate",
-                                                new Date(
-                                                    panelTenant?.billingDate,
-                                                ),
-                                            );
+                                            panelTenant.billingDate
+                                                ? form.setValue(
+                                                      "billingDate",
+                                                      new Date(
+                                                          panelTenant?.billingDate,
+                                                      ),
+                                                  )
+                                                : null;
                                             form.setValue(
                                                 "parasutId",
                                                 panelTenant?.parasutId,

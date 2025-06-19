@@ -2,7 +2,7 @@ import { useTranslations } from "next-intl";
 
 import { Button } from "./ui/button";
 import { FormControl } from "./ui/form";
-import { LuCalendar } from "react-icons/lu";
+import { LuCalendar, LuX } from "react-icons/lu";
 import { Calendar } from "./ui/calendar";
 
 import { DateFormat } from "@/utils/date";
@@ -42,7 +42,15 @@ export default function DatePicker({
                                 {placeholder ? placeholder : tc("selectDate")}
                             </span>
                         )}
-                        <LuCalendar className="ml-auto size-4 opacity-50" />
+                        <div className="ml-auto flex items-center gap-2">
+                            {field?.value && (
+                                <LuX
+                                    className="size-4 opacity-50"
+                                    onClick={() => field.onChange(null)}
+                                />
+                            )}
+                            <LuCalendar className="size-4 opacity-50" />
+                        </div>
                     </Button>
                 </FormControl>
             </PopoverTrigger>
