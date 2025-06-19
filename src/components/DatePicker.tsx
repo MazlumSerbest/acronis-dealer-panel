@@ -31,7 +31,7 @@ export default function DatePicker({
                     <Button
                         variant={"outline"}
                         className={cn(
-                            "flex w-full pl-3 text-left font-normal",
+                            "flex w-full pl-3 text-left font-normal hover:bg-transparent hover:cursor-pointer focus-visible:outline-hidden focus-visible:ring-2 focus-visible:ring-blue-400 active:ring-2 active:ring-blue-400",
                             !field?.value && "text-muted-foreground",
                         )}
                     >
