@@ -176,6 +176,7 @@ export default function GeneralTab({ t, tenant }: Props) {
     const [totalLicenseCount, setTotalLicenseCount] = useState<number>(0);
 
     const [invoicesCurrentPage, setInvoicesCurrentPage] = useState(1);
+    const [invoicesStatus, setInvoicesStatus] = useState("");
     const [invoicesSort, setInvoicesSort] = useState("-issue_date");
 
     // #region Fetch Data
@@ -352,7 +353,7 @@ export default function GeneralTab({ t, tenant }: Props) {
         mutate: invoicesMutate,
     } = useSWR(
         panelTenant?.parasutId
-            ? `/api/parasut/salesInvoices/contact/${panelTenant?.parasutId}?currentPage=${invoicesCurrentPage}&paymentStatus=overdue,not_due&sort=${invoicesSort}`
+            ? `/api/parasut/salesInvoices/contact/${panelTenant?.parasutId}?currentPage=${invoicesCurrentPage}&paymentStatus=${invoicesStatus}&sort=${invoicesSort}`
             : null,
         null,
         {
@@ -1421,13 +1422,17 @@ export default function GeneralTab({ t, tenant }: Props) {
 
             {tenant.kind === "partner" && panelTenant?.parasutId && (
                 <>
-                    <div className="relative col-span-full">
-                        <h2 className="font-medium text-xl">{t("invoices")}</h2>
-                        <p className="text-sm text-muted-foreground">
-                            {t("invoicesCaption")}
-                        </p>
+                    <div className="col-span-full flex justify-between items-end">
+                        <div>
+                            <h2 className="font-medium text-xl">
+                                {t("invoices")}
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                                {t("invoicesCaption")}
+                            </p>
+                        </div>
 
-                        <div className="bottom-0 right-2 absolute ">
+                        <div className="flex flex-row items-center gap-4">
                             <Tooltip>
                                 <TooltipTrigger>
                                     <LuRefreshCcw
@@ -1444,6 +1449,41 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     <p>{t("refresh")}</p>
                                 </TooltipContent>
                             </Tooltip>
+
+                            <Select
+                                value={invoicesStatus}
+                                onValueChange={(status) => {
+                                    if (status === "all") setInvoicesStatus("");
+                                    else setInvoicesStatus(status);
+                                    setInvoicesCurrentPage(1);
+                                }}
+                            >
+                                <SelectTrigger className="w-40">
+                                    <SelectValue
+                                        placeholder={t("paymentStatus")}
+                                    />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="all">
+                                        {t("all")}
+                                    </SelectItem>
+                                    <SelectItem value="overdue">
+                                        <Badge variant="destructive">
+                                            {t("overdue")}
+                                        </Badge>
+                                    </SelectItem>
+                                    <SelectItem value="not_due">
+                                        <Badge className="bg-yellow-500 hover:bg-yellow-500/90">
+                                            {t("unpaid")}
+                                        </Badge>
+                                    </SelectItem>
+                                    <SelectItem value="paid">
+                                        <Badge className="bg-green-600 hover:bg-green-600/90">
+                                            {t("paid")}
+                                        </Badge>
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
 
