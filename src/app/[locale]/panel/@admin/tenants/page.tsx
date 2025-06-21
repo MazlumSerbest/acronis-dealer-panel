@@ -291,9 +291,16 @@ export default function TenantsPage() {
             cell: ({ row }) => {
                 const data: boolean = row.getValue("licensed");
 
-                return <BoolChip size="size-4" value={data} />;
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded-sm bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : (
+                    <BoolChip size="size-4" value={data} />
+                );
             },
-            filterFn: (row, id, value) => value == row.getValue(id),
+            filterFn: (row, id, value) =>
+                value.includes(row.getValue(id) ? true : false),
         },
         {
             accessorKey: "parasutId",
@@ -310,7 +317,8 @@ export default function TenantsPage() {
                     <BoolChip size="size-4" value={data} />
                 );
             },
-            filterFn: (row, id, value) => value == row.getValue(id) ? true : false,
+            filterFn: (row, id, value) =>
+                value.includes(row.getValue(id) ? true : false),
         },
         {
             accessorKey: "billingDate",
@@ -601,8 +609,8 @@ export default function TenantsPage() {
                             column: "parasutId",
                             title: t("parasut"),
                             options: [
-                                { value: true, label: t("true") },
-                                { value: false, label: t("false") },
+                                { value: true, label: t("available") },
+                                { value: false, label: t("unavailable") },
                             ],
                         },
                     ]}
