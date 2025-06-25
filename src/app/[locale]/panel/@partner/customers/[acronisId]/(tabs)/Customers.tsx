@@ -8,10 +8,14 @@ import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
 
-import { LuChevronsUpDown } from "react-icons/lu";
+import {
+    LuChevronsUpDown,
+    LuBuilding2,
+    LuFolderOpen,
+    LuShieldCheck,
+} from "react-icons/lu";
 import { formatBytes } from "@/utils/functions";
 import { cn } from "@/lib/utils";
-import useUserStore from "@/store/user";
 import useSWR from "swr";
 
 type Props = {
@@ -93,8 +97,22 @@ export default function CustomersTab({ t, tenant }: Props) {
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
+                const kind: string = row.getValue("kind");
 
-                return data || "-";
+                return (
+                    <div className="flex items-center gap-4">
+                        {kind === "partner" ? (
+                            <LuBuilding2 className="size-4" />
+                        ) : kind === "customer" ? (
+                            <LuShieldCheck className="size-4" />
+                        ) : kind === "folder" ? (
+                            <LuFolderOpen className="size-4" />
+                        ) : (
+                            <></>
+                        )}
+                        {data}
+                    </div>
+                );
             },
         },
         {
@@ -104,16 +122,9 @@ export default function CustomersTab({ t, tenant }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("kind");
 
-                return (
-                    <h6>
-                        {data
-                            ? data == "partner"
-                                ? t("partner")
-                                : t("customer")
-                            : "-"}
-                    </h6>
-                );
+                return t(data);
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "mfa_status",

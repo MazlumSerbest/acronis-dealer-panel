@@ -48,6 +48,9 @@ import {
     LuCheck,
     LuInfo,
     LuTriangleAlert,
+    LuBuilding2,
+    LuFolderOpen,
+    LuShieldCheck,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
@@ -174,7 +177,7 @@ export default function TenantsTab({ t, tenant }: Props) {
             return DestructiveToast({
                 title: t("errorTitle"),
                 description: tf("name.alreadyTaken"),
-                t: (key: string) => t(key)
+                t: (key: string) => t(key),
             });
         }
 
@@ -207,7 +210,7 @@ export default function TenantsTab({ t, tenant }: Props) {
                     DestructiveToast({
                         title: t("errorTitle"),
                         description: res.message,
-                        t: (key: string) => t(key)
+                        t: (key: string) => t(key),
                     });
                 }
             })
@@ -236,8 +239,22 @@ export default function TenantsTab({ t, tenant }: Props) {
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
+                const kind: string = row.getValue("kind");
 
-                return data || "-";
+                return (
+                    <div className="flex items-center gap-4">
+                        {kind === "partner" ? (
+                            <LuBuilding2 className="size-4" />
+                        ) : kind === "customer" ? (
+                            <LuShieldCheck className="size-4" />
+                        ) : kind === "folder" ? (
+                            <LuFolderOpen className="size-4" />
+                        ) : (
+                            <></>
+                        )}
+                        {data}
+                    </div>
+                );
             },
         },
         {
@@ -247,15 +264,7 @@ export default function TenantsTab({ t, tenant }: Props) {
             cell: ({ row }) => {
                 const data: string = row.getValue("kind");
 
-                return (
-                    <h6>
-                        {data
-                            ? data === "partner"
-                                ? t("partner")
-                                : t("customer")
-                            : "-"}
-                    </h6>
-                );
+                return t(data);
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },

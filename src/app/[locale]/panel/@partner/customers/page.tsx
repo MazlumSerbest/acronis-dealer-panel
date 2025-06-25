@@ -50,6 +50,9 @@ import {
     LuCheck,
     LuInfo,
     LuTriangleAlert,
+    LuBuilding2,
+    LuFolderOpen,
+    LuShieldCheck,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
@@ -245,8 +248,22 @@ export default function CustomersPage() {
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
+                const kind: string = row.getValue("kind");
 
-                return data || "-";
+                return (
+                    <div className="flex items-center gap-4">
+                        {kind === "partner" ? (
+                            <LuBuilding2 className="size-4" />
+                        ) : kind === "customer" ? (
+                            <LuShieldCheck className="size-4" />
+                        ) : kind === "folder" ? (
+                            <LuFolderOpen className="size-4" />
+                        ) : (
+                            <></>
+                        )}
+                        {data}
+                    </div>
+                );
             },
         },
         {
@@ -256,12 +273,9 @@ export default function CustomersPage() {
             cell: ({ row }) => {
                 const data: string = row.getValue("kind");
 
-                return data
-                    ? data == "partner"
-                        ? t("partner")
-                        : t("customer")
-                    : "-";
+                return t(data);
             },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "mfa_status",

@@ -67,6 +67,7 @@
         "partner": "Partner",
         "partnerId": "Partner ID",
         "customer": "Customer",
+        "folder": "Folder",
         "production": "Production",
         "trial": "Trial",
         "suspended": "suspended",
