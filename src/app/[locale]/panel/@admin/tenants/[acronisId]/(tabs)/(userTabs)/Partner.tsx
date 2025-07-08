@@ -98,7 +98,7 @@ export default function PartnerTab({ t, tenant }: Props) {
         error,
         isLoading,
         mutate,
-    } = useSWR(`/api/user?partnerAcronisId=${tenant.id}`, null, {
+    } = useSWR(`/api/admin/user?partnerAcronisId=${tenant.id}`, null, {
         revalidateOnFocus: false,
     });
 

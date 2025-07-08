@@ -265,7 +265,6 @@ export default function UsersPage() {
         },
         {
             accessorKey: "lastLogin",
-            // header: t("lastLogin"),
             enableHiding: false,
             enableGlobalFilter: false,
             header: ({ column }) => (
