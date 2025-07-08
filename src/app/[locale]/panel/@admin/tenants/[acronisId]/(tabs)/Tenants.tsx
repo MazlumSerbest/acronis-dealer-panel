@@ -135,7 +135,7 @@ export default function TenantsTab({ t, tenant }: Props) {
                     enabled: item.enabled,
                     mfa_status: item.mfa_status,
                     licensed:
-                        item.kind === "partner"
+                        item.kind === "partner" || item.kind === "folder"
                             ? partners.find(
                                   (p: Partner) => p.acronisId === item.id,
                               )?.licensed
@@ -244,11 +244,11 @@ export default function TenantsTab({ t, tenant }: Props) {
                 return (
                     <div className="flex items-center gap-4">
                         {kind === "partner" ? (
-                            <LuBuilding2 className="size-4" />
+                            <LuBuilding2 className="size-4 text-blue-400" />
                         ) : kind === "customer" ? (
-                            <LuShieldCheck className="size-4" />
+                            <LuShieldCheck className="size-4 text-blue-400" />
                         ) : kind === "folder" ? (
-                            <LuFolderOpen className="size-4" />
+                            <LuFolderOpen className="size-4 text-blue-400" />
                         ) : (
                             <></>
                         )}
