@@ -185,7 +185,6 @@ model Application {
 
 model Course {
   id               String    @id @default(cuid())
-  type             String    @default("standard")
   category         String
   name             String
   shortDescription String
@@ -193,12 +192,13 @@ model Course {
   duration         String?
   level            String?
   image            String?
-  link             String?
   active           Boolean   @default(true)
   createdBy        String
   createdAt        DateTime  @default(now())
   updatedBy        String?
   updatedAt        DateTime  @updatedAt
+  link             String?
+  type             String    @default("standard")
   chapters         Chapter[]
 }
 
