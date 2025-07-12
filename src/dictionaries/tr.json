@@ -380,7 +380,8 @@
         "notificationEmailsDescription": "Bildirim almak istediğiniz e-posta adreslerini girin. Birden fazla e-posta adresi virgül(,) ile ayırarak girin.",
         "standard": "Standart",
         "video": "Video",
-        "noCourses": "Bu kategoride şu anda kurs bulunmamaktadır"
+        "noCourses": "Bu kategoride şu anda kurs bulunmamaktadır",
+        "totalCourses": "Toplam {count} Kurs"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",

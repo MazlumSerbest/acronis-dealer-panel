@@ -380,7 +380,8 @@
         "notificationEmailsDescription": "Enter the email addresses you want to receive notifications. Separate multiple email addresses with a comma(,).",
         "standard": "Standard",
         "video": "Video",
-        "noCourses": "No courses on this category yet"
+        "noCourses": "No courses on this category yet",
+        "totalCourses": "Total {count} Courses"
     },
     "SignIn": {
         "signIn": "Welcome",

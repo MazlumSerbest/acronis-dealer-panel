@@ -2,6 +2,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
+import { AspectRatio } from "../ui/aspect-ratio";
 
 type Props = {
     id: string;
@@ -23,7 +24,7 @@ export default function CourseCard({
     const t = useTranslations("Components.CourseCard");
 
     return (
-        <div className="flex flex-col p-4 w-72 min-h-52 gap-4 border shadow-sm hover:shadow-md rounded-lg">
+        <AspectRatio ratio={4 / 3} className="flex flex-col p-4 gap-4 border shadow-sm hover:shadow-md rounded-lg">
             <div className="flex-1 flex flex-col gap-2">
                 <h4 className="text-lg font-semibold">{name}</h4>
                 <p className="flex-1 text-sm text-muted-foreground mb-2">
@@ -49,6 +50,6 @@ export default function CourseCard({
                     {type === "standard" ? t("startCourse") : t("watchVideo")}
                 </Link>
             </Button>
-        </div>
+        </AspectRatio>
     );
 }
