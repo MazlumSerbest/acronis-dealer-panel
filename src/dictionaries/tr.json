@@ -379,7 +379,8 @@
         "notificationEmails": "Bildirim E-postaları",
         "notificationEmailsDescription": "Bildirim almak istediğiniz e-posta adreslerini girin. Birden fazla e-posta adresi virgül(,) ile ayırarak girin.",
         "standard": "Standart",
-        "video": "Video"
+        "video": "Video",
+        "noCourses": "Bu kategoride şu anda kurs bulunmamaktadır"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",
