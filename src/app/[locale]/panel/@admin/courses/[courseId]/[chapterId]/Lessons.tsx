@@ -402,7 +402,7 @@ export default function Lessons({
                         {t("lessons")}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="">
+                <CardContent>
                     <DataTable
                         zebra
                         columns={columns}
@@ -431,7 +431,7 @@ export default function Lessons({
             </Card>
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="max-h-screen overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {isNew ? t("newLesson") : t("editLesson")}

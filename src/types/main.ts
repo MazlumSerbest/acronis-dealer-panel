@@ -103,6 +103,7 @@ type Application = Entity & {
 
 type Course = Entity & {
     active: boolean;
+    type: "standard" | "video";
     category: "panel" | "acronis";
     name: string;
     shortDescription: string;

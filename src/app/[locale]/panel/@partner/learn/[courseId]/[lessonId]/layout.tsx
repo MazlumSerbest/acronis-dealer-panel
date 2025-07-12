@@ -80,18 +80,34 @@ export default function CourseLayout({
             </div>
         );
     return (
-        <div className="flex-1 flex justify-center">
-            <div className="grid grid-cols-3 max-w-[1200px] w-full mt-6 gap-4">
+        <div className="xl:container flex-1 flex flex-col gap-4">
+            <div>
+                <Button
+                    size="sm"
+                    variant="link"
+                    className="text-sm text-foreground underline-foreground p-0"
+                    asChild
+                >
+                    <Link href={`/panel/learn/${courseId}`}>
+                        <LuChevronLeft className="size-4 mr-1" />
+                        {t("backToCourse")}
+                    </Link>
+                </Button>
+            </div>
+
+            <div className="grid grid-cols-3 max-w-[1200px] w-full gap-4">
                 <div className="flex flex-col col-span-3 lg:col-span-2 w-full gap-4">
                     {children}
                 </div>
-                <Card className="col-span-3 lg:col-span-1 w-full max-h-min overflow-auto">
+                <Card className="col-span-3 lg:col-span-1 w-full max-h-screen overflow-auto">
                     <CardHeader className="py-3">
                         <CardTitle className="text-xl">{course.name}</CardTitle>
                         <CardDescription className="text-sm">
                             {t("currentLesson")}
                         </CardDescription>
-                        <CardTitle className="text-sm">{currentLesson?.name}</CardTitle>
+                        <CardTitle className="text-sm">
+                            {currentLesson?.name}
+                        </CardTitle>
                         <div className="flex flex-row justify-between mt-4!">
                             <Button
                                 size="sm"

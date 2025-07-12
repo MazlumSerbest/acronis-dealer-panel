@@ -377,7 +377,9 @@
         "copy": "Copy",
         "refresh": "Refresh",
         "notificationEmails": "Notification Emails",
-        "notificationEmailsDescription": "Enter the email addresses you want to receive notifications. Separate multiple email addresses with a comma(,)."
+        "notificationEmailsDescription": "Enter the email addresses you want to receive notifications. Separate multiple email addresses with a comma(,).",
+        "standard": "Standard",
+        "video": "Video"
     },
     "SignIn": {
         "signIn": "Welcome",
@@ -590,6 +592,11 @@
             },
             "description": {
                 "required": "Description is required"
+            },
+            "link": {
+                "description": "This value is for youtube video link. You can copy the link from the share button of the video.",
+                "required": "Link is required",
+                "invalidType": "Must be a valid URL"
             }
         },
         "Chapter": {
@@ -782,6 +789,11 @@
             "pw_pack_adv_dlp": "Advanced Data Loss Prevention",
             "pw_pack_adv_backup_m365_seats": "Microsoft 365 Seats for Advanced Backup",
             "pw_pack_adv_security_m365_seats": "Microsoft 365 Seats for Advanced Security"
+        },
+        "CourseCard": {
+            "startCourse": "Start Course",
+            "watchVideo": "Watch Video",
+            "singleVideoCourse": "Single Video Course"
         },
         "search": "Search",
         "columns": "Columns",

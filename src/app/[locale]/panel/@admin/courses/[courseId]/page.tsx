@@ -20,14 +20,6 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-} from "@/components/ui/dialog";
-import {
     Form,
     FormControl,
     FormDescription,
@@ -86,12 +78,15 @@ const courseFormSchema = z.object({
     category: z.enum(["panel", "acronis"], {
         required_error: "Course.category.required",
     }),
-    duration: z.string({
-        required_error: "Course.duration.required",
-    }),
-    level: z.string({
-        required_error: "Course.level.required",
-    }),
+    duration: z.string().optional(),
+    level: z.string().optional(),
+    link: z.string().optional(),
+    // duration: z.string({
+    //     required_error: "Course.duration.required",
+    // }),
+    // level: z.string({
+    //     required_error: "Course.level.required",
+    // }),
     shortDescription: z
         .string({
             required_error: "Course.shortDescription.required",
@@ -115,7 +110,6 @@ export default function CourseDetail({
     const tf = useTranslations("FormMessages.Course");
     const router = useRouter();
 
-    const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
     const [deleteSubmitting, setDeleteSubmitting] = useState(false);
 
@@ -126,6 +120,12 @@ export default function CourseDetail({
             revalidateOnFocus: false,
             onSuccess: (d) => {
                 form.reset(d);
+                if (d.type === "standard") {
+                    form.setValue("link", undefined);
+                } else {
+                    form.setValue("duration", undefined);
+                    form.setValue("level", undefined);
+                }
             },
         },
     );
@@ -149,7 +149,6 @@ export default function CourseDetail({
                     toast({
                         description: res.message,
                     });
-                    setOpen(false);
                     form.reset({});
                     mutate();
                 } else {
@@ -426,57 +425,107 @@ export default function CourseDetail({
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="duration"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("duration")}
-                                        </dt>
-                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
-                                            <FormControl>
-                                                <Input
-                                                    className="max-w-full md:max-w-sm"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormError
-                                                error={
-                                                    form?.formState?.errors
-                                                        ?.duration
-                                                }
-                                            />
-                                        </dd>
-                                    </FormItem>
-                                )}
-                            />
+                            {data.type === "standard" ? (
+                                <>
+                                    <FormField
+                                        control={form.control}
+                                        name="duration"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                    {t("duration")}
+                                                </dt>
+                                                <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                                    <FormControl>
+                                                        <Input
+                                                            className="max-w-full md:max-w-sm"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormError
+                                                        error={
+                                                            form?.formState
+                                                                ?.errors
+                                                                ?.duration
+                                                        }
+                                                    />
+                                                </dd>
+                                            </FormItem>
+                                        )}
+                                    />
 
-                            <FormField
-                                control={form.control}
-                                name="level"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("level")}
-                                        </dt>
-                                        <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
-                                            <FormControl>
-                                                <Input
-                                                    className="max-w-full md:max-w-sm"
-                                                    {...field}
-                                                />
-                                            </FormControl>
-                                            <FormError
-                                                error={
-                                                    form?.formState?.errors
-                                                        ?.level
-                                                }
-                                            />
-                                        </dd>
-                                    </FormItem>
-                                )}
-                            />
+                                    <FormField
+                                        control={form.control}
+                                        name="level"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                    {t("level")}
+                                                </dt>
+                                                <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0">
+                                                    <FormControl>
+                                                        <Input
+                                                            className="max-w-full md:max-w-sm"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormError
+                                                        error={
+                                                            form?.formState
+                                                                ?.errors?.level
+                                                        }
+                                                    />
+                                                </dd>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <FormField
+                                        control={form.control}
+                                        name="link"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <dt className="font-medium my-auto after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                    {t("link")}
+                                                </dt>
+                                                <dd className="col-span-1 md:col-span-2 text-foreground mt-1 sm:mt-0 flex flex-col gap-2">
+                                                    <FormDescription>
+                                                        {tf("link.description")}
+                                                    </FormDescription>
+                                                    <FormControl>
+                                                        <Textarea
+                                                            rows={2}
+                                                            className="max-w-full md:max-w-sm"
+                                                            {...field}
+                                                        />
+                                                    </FormControl>
+                                                    <FormError
+                                                        error={
+                                                            form?.formState
+                                                                ?.errors?.link
+                                                        }
+                                                    />
+                                                    {form.getValues("link") && (
+                                                        <div className="max-w-full md:max-w-sm">
+                                                            <iframe
+                                                                className="max-w-96 min-h-[100px] rounded-xl mx-auto"
+                                                                src={form.getValues(
+                                                                    "link",
+                                                                )}
+                                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                                                referrerPolicy="strict-origin-when-cross-origin"
+                                                                allowFullScreen
+                                                            ></iframe>
+                                                        </div>
+                                                    )}
+                                                </dd>
+                                            </FormItem>
+                                        )}
+                                    />
+                                </>
+                            )}
 
                             <FormField
                                 control={form.control}
@@ -547,11 +596,13 @@ export default function CourseDetail({
                         </CardContent>
                     </Card>
 
-                    <Chapters
-                        courseId={params.courseId}
-                        chapters={data.chapters}
-                        mutate={mutate}
-                    />
+                    {data.type === "standard" && (
+                        <Chapters
+                            courseId={params.courseId}
+                            chapters={data.chapters}
+                            mutate={mutate}
+                        />
+                    )}
                 </div>
             </form>
         </Form>

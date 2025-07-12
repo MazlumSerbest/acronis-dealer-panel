@@ -185,13 +185,15 @@ model Application {
 
 model Course {
   id               String    @id @default(cuid())
+  type             String    @default("standard")
   category         String
   name             String
   shortDescription String
   description      String?
-  duration         String
-  level            String
+  duration         String?
+  level            String?
   image            String?
+  link             String?
   active           Boolean   @default(true)
   createdBy        String
   createdAt        DateTime  @default(now())

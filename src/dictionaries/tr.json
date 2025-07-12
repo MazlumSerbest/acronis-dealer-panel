@@ -17,7 +17,7 @@
             "invoices": "Faturalar",
             "news": "Haberler",
             "courses": "Kurslar",
-            "learn": "Öğren",
+            "learn": "Eğitimler",
             "potentialPartners": "Potansiyel Partnerler"
         },
         "yes": "Evet",
@@ -377,7 +377,9 @@
         "copy": "Kopyala",
         "refresh": "Yenile",
         "notificationEmails": "Bildirim E-postaları",
-        "notificationEmailsDescription": "Bildirim almak istediğiniz e-posta adreslerini girin. Birden fazla e-posta adresi virgül(,) ile ayırarak girin."
+        "notificationEmailsDescription": "Bildirim almak istediğiniz e-posta adreslerini girin. Birden fazla e-posta adresi virgül(,) ile ayırarak girin.",
+        "standard": "Standart",
+        "video": "Video"
     },
     "SignIn": {
         "signIn": "Hoşgeldiniz",
@@ -590,6 +592,11 @@
             },
             "description": {
                 "required": "Açıklama zorunludur"
+            },
+            "link": {
+                "description": "Bu değer youtube video bağlantısı içindir. Bağlantıyı videonun paylaşım butonundan kopyalayabilirsiniz.",
+                "required": "Bağlantı zorunludur",
+                "invalidType": "Geçerli bir URL olmalıdır"
             }
         },
         "Chapter": {
@@ -782,6 +789,11 @@
             "pw_pack_adv_dlp": "Gelişmiş Veri Kaybı Önleme",
             "pw_pack_adv_backup_m365_seats": "Gelişmiş yedekleme için Microsoft 365 bilgisayar lisansları",
             "pw_pack_adv_security_m365_seats": "Gelişmiş güvenlik için Microsoft 365 bilgisayar lisansları"
+        },
+        "CourseCard": {
+            "startCourse": "Kursa Başla",
+            "watchVideo": "Videoyu İzle",
+            "singleVideoCourse": "Tek Video Eğitimi"
         },
         "search": "Ara",
         "columns": "Sütunlar",

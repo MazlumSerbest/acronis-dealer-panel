@@ -13,13 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
     Dialog,
     DialogContent,
     DialogClose,
@@ -30,6 +23,7 @@ import {
 import {
     Form,
     FormControl,
+    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -41,17 +35,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 
 import { DataTable } from "@/components/table/DataTable";
 import BoolChip from "@/components/BoolChip";
@@ -59,14 +42,11 @@ import FormError from "@/components/FormError";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import DestructiveToast from "@/components/DestructiveToast";
 
-import {
-    LuChevronsUpDown,
-    LuLoaderCircle,
-    LuEllipsisVertical,
-} from "react-icons/lu";
+import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
 import { DateTimeFormat } from "@/utils/date";
 
 const courseFormSchema = z.object({
+    type: z.enum(["standard", "video"]),
     name: z
         .string({
             required_error: "Course.name.required",
@@ -87,22 +67,27 @@ const courseFormSchema = z.object({
     description: z.string({
         required_error: "Course.description.required",
     }),
-    duration: z.string({
-        required_error: "Course.duration.required",
-    }),
-    level: z.string({
-        required_error: "Course.level.required",
-    }),
+    duration: z.string().optional(),
+    level: z.string().optional(),
+    link: z.string().optional(),
+    // duration: z.string({
+    //     required_error: "Course.duration.required",
+    // }),
+    // level: z.string({
+    //     required_error: "Course.level.required",
+    // }),
 });
 
 type CourseFormValues = z.infer<typeof courseFormSchema>;
 
 export default function CoursesPage() {
     const t = useTranslations("General");
+    const tf = useTranslations("FormMessages.Course");
     const router = useRouter();
 
     const [open, setOpen] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const [courseType, setCourseType] = useState("standard");
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/course`,
@@ -115,6 +100,9 @@ export default function CoursesPage() {
     //#region Form
     const form = useForm<CourseFormValues>({
         resolver: zodResolver(courseFormSchema),
+        defaultValues: {
+            type: "standard",
+        },
     });
 
     function onSubmit(values: CourseFormValues) {
@@ -155,6 +143,17 @@ export default function CoursesPage() {
     };
 
     const columns: ColumnDef<any, any>[] = [
+        {
+            accessorKey: "type",
+            header: t("type"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("type");
+
+                return t(data) || "-";
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
         {
             accessorKey: "name",
             enableHiding: false,
@@ -262,6 +261,14 @@ export default function CoursesPage() {
                 visibleColumns={visibleColumns}
                 facetedFilters={[
                     {
+                        column: "type",
+                        title: t("type"),
+                        options: [
+                            { value: "standard", label: t("standard") },
+                            { value: "video", label: t("video") },
+                        ],
+                    },
+                    {
                         column: "category",
                         title: t("category"),
                         options: [
@@ -287,7 +294,7 @@ export default function CoursesPage() {
             />
 
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="max-h-screen overflow-auto">
                     <DialogHeader>
                         <DialogTitle>
                             {`${t("new")} ${t("course")}`}
@@ -300,6 +307,63 @@ export default function CoursesPage() {
                             autoComplete="off"
                             className="space-y-4"
                         >
+                            <FormField
+                                control={form.control}
+                                name="type"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                            {t("type")}
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Select
+                                                value={field.value}
+                                                onValueChange={(value) => {
+                                                    setCourseType(value);
+                                                    if (value === "standard") {
+                                                        form.setValue(
+                                                            "link",
+                                                            undefined,
+                                                        );
+                                                    } else {
+                                                        form.setValue(
+                                                            "duration",
+                                                            undefined,
+                                                        );
+                                                        form.setValue(
+                                                            "level",
+                                                            undefined,
+                                                        );
+                                                    }
+                                                    field.onChange(value);
+                                                }}
+                                            >
+                                                <SelectTrigger>
+                                                    <SelectValue
+                                                        placeholder={t(
+                                                            "select",
+                                                        )}
+                                                    />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="standard">
+                                                        {t("standard")}
+                                                    </SelectItem>
+                                                    <SelectItem value="video">
+                                                        {t("video")}
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
+                                        <FormError
+                                            error={
+                                                form?.formState?.errors?.type
+                                            }
+                                        />
+                                    </FormItem>
+                                )}
+                            />
+
                             <FormField
                                 control={form.control}
                                 name="name"
@@ -328,11 +392,11 @@ export default function CoursesPage() {
                                         <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
                                             {t("category")}
                                         </FormLabel>
-                                        <Select
-                                            value={field.value}
-                                            onValueChange={field.onChange}
-                                        >
-                                            <FormControl>
+                                        <FormControl>
+                                            <Select
+                                                value={field.value}
+                                                onValueChange={field.onChange}
+                                            >
                                                 <SelectTrigger>
                                                     <SelectValue
                                                         placeholder={t(
@@ -340,16 +404,16 @@ export default function CoursesPage() {
                                                         )}
                                                     />
                                                 </SelectTrigger>
-                                            </FormControl>
-                                            <SelectContent>
-                                                <SelectItem value="panel">
-                                                    {t("panel")}
-                                                </SelectItem>
-                                                <SelectItem value="acronis">
-                                                    {t("acronis")}
-                                                </SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                                <SelectContent>
+                                                    <SelectItem value="panel">
+                                                        {t("panel")}
+                                                    </SelectItem>
+                                                    <SelectItem value="acronis">
+                                                        {t("acronis")}
+                                                    </SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </FormControl>
                                         <FormError
                                             error={
                                                 form?.formState?.errors
@@ -360,46 +424,90 @@ export default function CoursesPage() {
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="duration"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("duration")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.duration
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            />
+                            {courseType === "standard" ? (
+                                <>
+                                    <FormField
+                                        control={form.control}
+                                        name="duration"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    {t("duration")}
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                                <FormError
+                                                    error={
+                                                        form?.formState?.errors
+                                                            ?.duration
+                                                    }
+                                                />
+                                            </FormItem>
+                                        )}
+                                    />
 
-                            <FormField
-                                control={form.control}
-                                name="level"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
-                                            {t("level")}
-                                        </FormLabel>
-                                        <FormControl>
-                                            <Input {...field} />
-                                        </FormControl>
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors?.level
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            />
+                                    <FormField
+                                        control={form.control}
+                                        name="level"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>
+                                                    {t("level")}
+                                                </FormLabel>
+                                                <FormControl>
+                                                    <Input {...field} />
+                                                </FormControl>
+                                                <FormError
+                                                    error={
+                                                        form?.formState?.errors
+                                                            ?.level
+                                                    }
+                                                />
+                                            </FormItem>
+                                        )}
+                                    />
+                                </>
+                            ) : (
+                                <>
+                                    <FormField
+                                        control={form.control}
+                                        name="link"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel className="after:content-['*'] after:ml-0.5 after:text-destructive">
+                                                    {t("link")}
+                                                </FormLabel>
+                                                <FormDescription>
+                                                    {tf("link.description")}
+                                                </FormDescription>
+                                                <FormControl>
+                                                    <Textarea
+                                                        {...field}
+                                                        rows={2}
+                                                    />
+                                                </FormControl>
+                                                <FormError
+                                                    error={
+                                                        form?.formState?.errors
+                                                            ?.link
+                                                    }
+                                                />
+                                            </FormItem>
+                                        )}
+                                    />
+
+                                    {form.getValues("link") && (
+                                        <iframe
+                                            className="max-w-96 min-h-[100px] rounded-xl mx-auto"
+                                            src={form.getValues("link")}
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                            referrerPolicy="strict-origin-when-cross-origin"
+                                            allowFullScreen
+                                        ></iframe>
+                                    )}
+                                </>
+                            )}
 
                             <FormField
                                 control={form.control}

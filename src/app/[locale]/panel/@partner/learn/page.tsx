@@ -28,82 +28,78 @@ export default function LearnPage() {
             </div>
         );
     return (
-        <div>
-            <div className="flex flex-col pt-6 gap-8">
-                <div>
-                    <h3 className="text-xl font-semibold">
-                        {t("partnerPanelCourses")}
-                    </h3>
-                    <p className="text-muted-foreground">
-                        {t("partnerPanelCoursesDescription")}
-                    </p>
-                    {isLoading ? (
-                        <div className="h-24">
-                            <Loader />
+        <div className="xl:container flex flex-col gap-8">
+            <div>
+                <h3 className="text-xl font-semibold">
+                    {t("partnerPanelCourses")}
+                </h3>
+                <p className="text-muted-foreground">
+                    {t("partnerPanelCoursesDescription")}
+                </p>
+                {isLoading ? (
+                    <div className="h-24">
+                        <Loader />
+                    </div>
+                ) : (
+                    <ScrollArea className="">
+                        <div className="flex w-max space-x-4 py-4">
+                            {courses
+                                ?.filter((c: Course) => c.category == "panel")
+                                .map((course: Course) => {
+                                    return (
+                                        <CourseCard
+                                            key={course.id}
+                                            type={course.type}
+                                            id={course.id || ""}
+                                            name={course.name}
+                                            description={
+                                                course.shortDescription
+                                            }
+                                            duration={course.duration}
+                                            level={course.level}
+                                        />
+                                    );
+                                })}
                         </div>
-                    ) : (
-                        <ScrollArea className="">
-                            <div className="flex w-max space-x-4 p-4">
-                                {courses
-                                    ?.filter(
-                                        (c: Course) => c.category == "panel",
-                                    )
-                                    .map((course: Course) => {
-                                        return (
-                                            <CourseCard
-                                                key={course.id}
-                                                id={course.id || ""}
-                                                name={course.name}
-                                                description={
-                                                    course.shortDescription
-                                                }
-                                                duration={course.duration}
-                                                level={course.level}
-                                            />
-                                        );
-                                    })}
-                            </div>
-                            <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
-                    )}
-                </div>
-                <div>
-                    <h3 className="text-xl font-semibold">
-                        {t("acronisCloudCourses")}
-                    </h3>
-                    <p className="text-muted-foreground">
-                        {t("acronisCloudCoursesDescription")}
-                    </p>
-                    {isLoading ? (
-                        <div className="h-24">
-                            <Loader />
+                        <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
+                )}
+            </div>
+            <div>
+                <h3 className="text-xl font-semibold">
+                    {t("acronisCloudCourses")}
+                </h3>
+                <p className="text-muted-foreground">
+                    {t("acronisCloudCoursesDescription")}
+                </p>
+                {isLoading ? (
+                    <div className="h-24">
+                        <Loader />
+                    </div>
+                ) : (
+                    <ScrollArea className="">
+                        <div className="flex w-max space-x-4 py-4">
+                            {courses
+                                ?.filter((c: Course) => c.category == "acronis")
+                                .map((course: Course) => {
+                                    return (
+                                        <CourseCard
+                                            key={course.id}
+                                            id={course.id || ""}
+                                            type={course.type}
+                                            name={course.name}
+                                            description={
+                                                course.shortDescription
+                                            }
+                                            duration={course.duration}
+                                            level={course.level}
+                                        />
+                                    );
+                                })}
                         </div>
-                    ) : (
-                        <ScrollArea className="">
-                            <div className="flex w-max space-x-4 p-4">
-                                {courses
-                                    ?.filter(
-                                        (c: Course) => c.category == "acronis",
-                                    )
-                                    .map((course: Course) => {
-                                        return (
-                                            <CourseCard
-                                                key={course.id}
-                                                id={course.id || ""}
-                                                name={course.name}
-                                                description={
-                                                    course.shortDescription
-                                                }
-                                                duration={course.duration}
-                                                level={course.level}
-                                            />
-                                        );
-                                    })}
-                            </div>
-                            <ScrollBar orientation="horizontal" />
-                        </ScrollArea>
-                    )}
-                </div>
+                        <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
+                )}
             </div>
         </div>
     );

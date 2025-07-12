@@ -20,7 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 import { useTranslations } from "next-intl";
-import { LuCirclePlay } from "react-icons/lu";
+import { LuChevronLeft, LuCirclePlay } from "react-icons/lu";
 import Loader from "@/components/loaders/Loader";
 
 export default function CourseDetail({
@@ -29,6 +29,7 @@ export default function CourseDetail({
     params: { courseId: string };
 }) {
     const t = useTranslations("General");
+    const tc = useTranslations("Components.CourseCard");
     const [chapterCount, setChapterCount] = useState(0);
     const [lessonCount, setLessonCount] = useState(0);
 
@@ -40,16 +41,20 @@ export default function CourseDetail({
     } = useSWR(`/api/course/${params.courseId}`, null, {
         revalidateOnFocus: false,
         onSuccess: (data) => {
-            let chapters = 0;
-            let lessons = 0;
-            data.chapters.forEach((c: Chapter) => {
-                if (c.active) {
-                    chapters++;
-                    lessons += c.lessons.filter((l: Lesson) => l.active).length;
-                }
-            });
-            setChapterCount(chapters);
-            setLessonCount(lessons);
+            if (data?.type === "standard") {
+                let chapters = 0;
+                let lessons = 0;
+                data?.chapters?.forEach((c: Chapter) => {
+                    if (c.active) {
+                        chapters++;
+                        lessons += c.lessons.filter(
+                            (l: Lesson) => l.active,
+                        ).length;
+                    }
+                });
+                setChapterCount(chapters);
+                setLessonCount(lessons);
+            }
         },
     });
     //#endregion
@@ -67,15 +72,29 @@ export default function CourseDetail({
             </div>
         );
     return (
-        <>
-            <div className="flex-1 flex justify-center">
-                <div className="grid grid-cols-3 max-w-[1200px] w-full mt-6 gap-4">
+        <div className="xl:container flex flex-col gap-4">
+            <div>
+                <Button
+                    size="sm"
+                    variant="link"
+                    className="text-sm text-foreground underline-foreground p-0"
+                    asChild
+                >
+                    <Link href={`/panel/learn`}>
+                        <LuChevronLeft className="size-4 mr-1" />
+                        {t("backToCourses")}
+                    </Link>
+                </Button>
+            </div>
+
+            {course?.type === "standard" ? (
+                <div className="grid grid-cols-3 max-w-[1200px] w-full gap-4">
                     <div className="flex flex-col col-span-3 lg:col-span-2 w-full gap-4">
                         <h2 className="text-2xl font-bold">{course.name}</h2>
-                        <p className="text-muted-foreground">
+                        <p className="text-muted-foreground px-2">
                             {course.shortDescription}
                         </p>
-                        <div className="flex flex-row justify-between text-muted-foreground">
+                        <div className="flex flex-row justify-between text-muted-foreground px-2">
                             <p>{course.duration}</p>
                             <p>{course.level}</p>
                         </div>
@@ -103,7 +122,10 @@ export default function CourseDetail({
                         <CardHeader className="items-center">
                             <CardTitle>{t("chapters")}</CardTitle>
                             <CardDescription className="text-sm">
-                                {t("infoCounts", { chapterCount, lessonCount })}
+                                {t("infoCounts", {
+                                    chapterCount,
+                                    lessonCount,
+                                })}
                             </CardDescription>
                         </CardHeader>
                         <Separator />
@@ -153,7 +175,51 @@ export default function CourseDetail({
                         </Accordion>
                     </Card>
                 </div>
-            </div>
-        </>
+            ) : (
+                <div className="grid grid-cols-3 gap-4">
+                    <iframe
+                        className="col-span-3 lg:col-span-2 w-full min-h-[450px] rounded-xl"
+                        src={course?.link}
+                        title={course?.name}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        referrerPolicy="strict-origin-when-cross-origin"
+                        allowFullScreen
+                    ></iframe>
+
+                    <Card className="col-span-3 lg:col-span-1">
+                        <CardHeader className="py-3">
+                            <CardTitle className="text-xl">
+                                {course?.name}
+                            </CardTitle>
+                            <CardDescription className="text-sm">
+                                {course.shortDescription}
+                            </CardDescription>
+                        </CardHeader>
+                        <Separator />
+                        <CardContent className="font-semibold text-md mt-4">
+                            {t("type") + ": "}
+                            <span className="text-muted-foreground font-normal">
+                                {tc("singleVideoCourse")}
+                            </span>
+                        </CardContent>
+                        <CardContent className="font-semibold text-md">
+                            {t("category") + ": "}
+                            <span className="text-muted-foreground font-normal">
+                                {t(course.category)}
+                            </span>
+                        </CardContent>
+                    </Card>
+
+                    <Card className="col-span-3 max-h-fit">
+                        <CardHeader>
+                            <CardTitle>{t("description")}</CardTitle>
+                        </CardHeader>
+                        <CardContent className="text-muted-foreground">
+                            {course?.description}
+                        </CardContent>
+                    </Card>
+                </div>
+            )}
+        </div>
     );
 }

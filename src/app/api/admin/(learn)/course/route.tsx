@@ -23,6 +23,7 @@ export const GET = auth(async (req: any) => {
             },
             select: {
                 id: true,
+                type: true,
                 category: true,
                 name: true,
                 shortDescription: true,
