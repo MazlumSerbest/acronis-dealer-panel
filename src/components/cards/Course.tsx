@@ -26,10 +26,10 @@ export default function CourseCard({
     return (
         <AspectRatio ratio={4 / 3} className="flex flex-col p-4 gap-4 border shadow-sm hover:shadow-md rounded-lg">
             <div className="flex-1 flex flex-col gap-2">
-                <h4 className="text-lg font-semibold">{name}</h4>
-                <p className="flex-1 text-sm text-muted-foreground mb-2">
+                <h4 className="flex-1 whitespace-pre-line text-lg font-semibold">{name}</h4>
+                {/* <p className="flex-1 text-sm text-muted-foreground mb-2 truncate">
                     {description}
-                </p>
+                </p> */}
                 {type === "standard" ? (
                     <div className="flex flex-row justify-between">
                         <p className="text-sm text-muted-foreground">

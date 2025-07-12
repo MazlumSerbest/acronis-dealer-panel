@@ -179,7 +179,7 @@ export default function CourseDetail({
                 <div className="grid grid-cols-3 gap-4">
                     <iframe
                         className="col-span-3 lg:col-span-2 w-full min-h-[450px] rounded-xl"
-                        src={course?.link}
+                        src={course?.link + "?autoplay=1"}
                         title={course?.name}
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                         referrerPolicy="strict-origin-when-cross-origin"

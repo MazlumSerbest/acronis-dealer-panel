@@ -65,7 +65,10 @@ export default function LearnPage() {
                             {panelCourses?.length > 0 ? (
                                 panelCourses.map((course: Course) => {
                                     return (
-                                        <CarouselItem className="sm:basis-1/2 lg:basis-1/3 xl:basis-26/100">
+                                        <CarouselItem
+                                            key={course.id}
+                                            className="sm:basis-1/2 lg:basis-1/3 xl:basis-26/100"
+                                        >
                                             <CourseCard
                                                 key={course.id}
                                                 id={course.id || ""}
@@ -132,7 +135,10 @@ export default function LearnPage() {
                             {acronisCourses?.length > 0 ? (
                                 acronisCourses.map((course: Course) => {
                                     return (
-                                        <CarouselItem className="sm:basis-1/2 lg:basis-1/3 xl:basis-26/100">
+                                        <CarouselItem
+                                            key={course.id}
+                                            className="sm:basis-1/2 lg:basis-1/3 xl:basis-26/100"
+                                        >
                                             <CourseCard
                                                 key={course.id}
                                                 id={course.id || ""}

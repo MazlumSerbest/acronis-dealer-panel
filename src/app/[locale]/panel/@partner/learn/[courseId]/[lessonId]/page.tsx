@@ -1,12 +1,7 @@
 "use client";
 import useSWR from "swr";
 
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import Loader from "@/components/loaders/Loader";
 import { useTranslations } from "next-intl";
@@ -19,13 +14,13 @@ export default function LessonPage({
     const t = useTranslations("General");
 
     //#region Fetch Data
-    const { data: lesson, error, isLoading } = useSWR(
-        `/api/lesson/${params.lessonId}`,
-        null,
-        {
-            revalidateOnFocus: false,
-        },
-    );
+    const {
+        data: lesson,
+        error,
+        isLoading,
+    } = useSWR(`/api/lesson/${params.lessonId}`, null, {
+        revalidateOnFocus: false,
+    });
     //#endregion
 
     if (error)
@@ -44,7 +39,7 @@ export default function LessonPage({
         <div className="flex flex-col gap-4">
             <iframe
                 className="w-full min-h-[450px] rounded-xl"
-                src={lesson?.link}
+                src={lesson?.link + "?autoplay=1"}
                 title={lesson?.name}
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
