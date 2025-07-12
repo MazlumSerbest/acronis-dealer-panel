@@ -194,6 +194,7 @@ export function DataTable<TData, TValue>({
 
                             {isFiltered && (
                                 <Button
+                                    type="button"
                                     variant="ghost"
                                     onClick={() => {
                                         table.resetGlobalFilter();
@@ -216,6 +217,7 @@ export function DataTable<TData, TValue>({
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
+                                    type="button"
                                     variant="outline"
                                     size="sm"
                                     className="h-8 gap-2 flex"
@@ -243,6 +245,7 @@ export function DataTable<TData, TValue>({
 
                     {onAddNew && (
                         <Button
+                            type="button"
                             size="sm"
                             className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
                             onClick={onAddNew}
