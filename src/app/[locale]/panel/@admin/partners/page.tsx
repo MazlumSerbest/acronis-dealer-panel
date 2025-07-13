@@ -54,7 +54,7 @@ const partnerFormSchema = z.object({
     acronisId: z.string().uuid().optional(),
     active: z.boolean(),
     licensed: z.boolean(),
-    parasutId: z.string().optional(),
+    parasutId: z.coerce.string().optional(),
 });
 
 type PartnerFormValues = z.infer<typeof partnerFormSchema>;

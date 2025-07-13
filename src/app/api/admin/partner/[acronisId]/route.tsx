@@ -66,9 +66,24 @@ export const PUT = auth(async (req: any, { params }: any) => {
         partner.updatedBy = req.auth.user.email;
 
         const updatedPartner = await prisma.partner.update({
-            data: partner,
+            data: {
+                ...partner,
+                children: {
+                    updateMany: {
+                        where: {
+                            licensed: !partner.licensed,
+                        },
+                        data: {
+                            licensed: partner.licensed,
+                        },
+                    },
+                },
+            },
             where: {
                 acronisId: params?.acronisId as string,
+            },
+            include: {
+                children: true,
             },
         });
 
