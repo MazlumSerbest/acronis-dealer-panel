@@ -70,7 +70,7 @@ export default function StorageCard({
                 className,
             )}
         >
-            <CardHeader className="items-center pb-0">
+            <CardHeader className="items-center pb-0 z-10">
                 <CardTitle
                     className={cn(quotaExceeded ? "text-destructive" : "")}
                 >
@@ -88,7 +88,7 @@ export default function StorageCard({
             <CardContent className="flex flex-1 items-center pb-0">
                 <ChartContainer
                     config={chartConfig}
-                    className="mx-auto aspect-square w-full max-w-[250px] -mt-4"
+                    className="mx-auto aspect-square w-full max-w-[250px] -mt-4 z-auto"
                 >
                     <RadialBarChart
                         data={chartData}
