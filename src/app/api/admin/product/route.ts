@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
+import { parseBytes } from "@/utils/functions";
 
 export const GET = auth(async (req: any) => {
     try {
@@ -31,6 +32,8 @@ export const GET = auth(async (req: any) => {
                 quota: true,
                 unit: true,
                 edition: true,
+                annual: true,
+                freeQuota: true,
                 usageName: true,
             },
             orderBy: {
@@ -79,6 +82,14 @@ export const POST = auth(async (req: any) => {
                 status: 400,
                 ok: false,
             });
+
+        if (!product.freeQuota && product.quota && product.unit) {
+            product.bytes = parseBytes(product.quota, product.unit);
+        } else {
+            product.quota = null;
+            product.unit = null;
+            product.bytes = null;
+        }
 
         const newProduct = await prisma.product.create({
             data: product,

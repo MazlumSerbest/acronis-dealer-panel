@@ -157,6 +157,8 @@
         "product": "Product",
         "code": "Code",
         "model": "Model",
+        "annual": "Annual",
+        "freeQuota": "Free Quota",
         "unit": "Unit",
         "MB": "MB",
         "GB": "GB",
@@ -532,6 +534,9 @@
             "active": {
                 "description": "This value is for the active status. If the product is active, the product can be seen on license creation."
             },
+            "annual": {
+                "description": "If this option is checked, the license end date will automatically be set to one year after the activation date. The end date cannot be manually set!"
+            },
             "name": {
                 "required": "Name is required",
                 "minLength": "Must be at least 3 characters long"
@@ -539,6 +544,9 @@
             "code": {
                 "required": "Code is required",
                 "minLength": "Must be at least 3 characters long"
+            },
+            "freeQuota": {
+                "description": "If this option is checked, the licenses created can have different quota amounts."
             },
             "model": {
                 "required": "Model is required"

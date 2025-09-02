@@ -81,7 +81,9 @@ const productFormSchema = z.object({
         .min(3, "Product.code.minLength"),
     model: z.enum(["perGB", "perWorkload"]),
     quota: z.coerce.number().optional(),
-    unit: z.enum(["GB", "TB", "piece"]).optional().nullable(),
+    unit: z.enum(["MB", "GB", "TB"]).optional().nullable(),
+    annual: z.boolean().optional(),
+    freeQuota: z.boolean().optional(),
 });
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
@@ -93,6 +95,7 @@ export default function ProductsPage() {
     const [open, setOpen] = useState(false);
     const [isNew, setIsNew] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [quotaDisabled, setQuotaDisabled] = useState(false);
 
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/product`,
@@ -108,6 +111,8 @@ export default function ProductsPage() {
         defaultValues: {
             active: true,
             model: "perGB",
+            annual: true,
+            freeQuota: false,
         },
     });
 
@@ -128,7 +133,12 @@ export default function ProductsPage() {
                         });
                         setOpen(false);
                         mutate();
-                        form.reset({ active: true, model: "perGB" });
+                        form.reset({
+                            active: true,
+                            model: "perGB",
+                            annual: true,
+                            freeQuota: false,
+                        });
                     } else {
                         DestructiveToast({
                             title: t("errorTitle"),
@@ -151,7 +161,11 @@ export default function ProductsPage() {
                         });
                         setOpen(false);
                         mutate();
-                        form.reset({ active: true, model: "perGB" });
+                        form.reset({
+                            active: true,
+                            model: "perGB",
+                            annual: true,
+                        });
                     } else {
                         DestructiveToast({
                             title: t("errorTitle"),
@@ -255,6 +269,28 @@ export default function ProductsPage() {
                 const data: string = row.getValue("model");
 
                 return t(data) || "-";
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "annual",
+            header: t("annual"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("annual");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "freeQuota",
+            header: t("freeQuota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("freeQuota");
+
+                return <BoolChip size="size-4" value={data} />;
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -457,9 +493,9 @@ export default function ProductsPage() {
                         column: "unit",
                         title: t("unit"),
                         options: [
+                            { value: "MB", label: t("MB") },
                             { value: "GB", label: t("GB") },
                             { value: "TB", label: t("TB") },
-                            { value: "piece", label: t("piece") },
                         ],
                     },
                     {
@@ -468,6 +504,22 @@ export default function ProductsPage() {
                         options: [
                             { value: "perGB", label: t("perGB") },
                             { value: "perWorkload", label: t("perWorkload") },
+                        ],
+                    },
+                    {
+                        column: "annual",
+                        title: t("annual"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
+                        ],
+                    },
+                    {
+                        column: "freeQuota",
+                        title: t("freeQuota"),
+                        options: [
+                            { value: true, label: t("true") },
+                            { value: false, label: t("false") },
                         ],
                     },
                     {
@@ -526,6 +578,27 @@ export default function ProductsPage() {
                                     )}
                                 />
                             )}
+
+                            <FormField
+                                control={form.control}
+                                name="annual"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>{t("annual")}</FormLabel>
+                                            <FormDescription>
+                                                {tf("annual.description")}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={field.onChange}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
 
                             <FormField
                                 control={form.control}
@@ -608,6 +681,33 @@ export default function ProductsPage() {
 
                             <FormField
                                 control={form.control}
+                                name="freeQuota"
+                                render={({ field }) => (
+                                    <FormItem className="flex flex-row items-center justify-between">
+                                        <div className="space-y-0.5">
+                                            <FormLabel>
+                                                {t("freeQuota")}
+                                            </FormLabel>
+                                            <FormDescription>
+                                                {tf("freeQuota.description")}
+                                            </FormDescription>
+                                        </div>
+                                        <FormControl>
+                                            <Switch
+                                                checked={field.value}
+                                                onCheckedChange={(value) => {
+                                                    field.onChange(value);
+                                                    setQuotaDisabled(value);
+                                                }}
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            />
+
+                            <FormField
+                                disabled={quotaDisabled}
+                                control={form.control}
                                 name="quota"
                                 render={({ field }) => (
                                     <FormItem>
@@ -631,6 +731,7 @@ export default function ProductsPage() {
                                     <FormItem>
                                         <FormLabel>{t("unit")}</FormLabel>
                                         <Select
+                                            disabled={quotaDisabled}
                                             value={field.value ?? undefined}
                                             onValueChange={field.onChange}
                                         >
@@ -646,17 +747,14 @@ export default function ProductsPage() {
                                             <SelectContent>
                                                 {/* <SelectItem>
                                                 </SelectItem> */}
-                                                {/* <SelectItem value="MB">
+                                                <SelectItem value="MB">
                                                     {t("MB")}
-                                                </SelectItem> */}
+                                                </SelectItem>
                                                 <SelectItem value="GB">
                                                     {t("GB")}
                                                 </SelectItem>
                                                 <SelectItem value="TB">
                                                     {t("TB")}
-                                                </SelectItem>
-                                                <SelectItem value="piece">
-                                                    {t("piece")}
                                                 </SelectItem>
                                             </SelectContent>
                                         </Select>

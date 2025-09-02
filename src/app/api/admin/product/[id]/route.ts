@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
+import { parseBytes } from "@/utils/functions";
 
 export const GET = auth(async (req: any, { params }: any) => {
     try {
@@ -31,6 +32,8 @@ export const GET = auth(async (req: any, { params }: any) => {
                 quota: true,
                 unit: true,
                 edition: true,
+                annual: true,
+                freeQuota: true,
             },
             where: {
                 id: params?.id as string,
@@ -81,6 +84,14 @@ export const PUT = auth(async (req: any, { params }: any) => {
                 ok: false,
             });
 
+        if (!product.freeQuota && product.quota && product.unit) {
+            product.bytes = parseBytes(product.quota, product.unit);
+        } else {
+            product.quota = null;
+            product.unit = null;
+            product.bytes = null;
+        }
+
         const updatedProduct = await prisma.product.update({
             data: product,
             where: {
@@ -123,7 +134,7 @@ export const DELETE = auth(async (req: any, { params }: any) => {
                 status: 401,
                 ok: false,
             });
-        
+
         const deletedProduct = await prisma.product.delete({
             where: {
                 id: params?.id as string,

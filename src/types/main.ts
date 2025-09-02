@@ -58,6 +58,7 @@ type License = Entity & {
     key: string;
     serialNo: string;
     expiresAt?: string;
+    endsAt?: string;
     activatedAt?: string;
     product?: Product;
 };
@@ -79,9 +80,11 @@ type Product = Entity & {
     name: string;
     model: "perGB" | "perWorkload";
     quota?: number;
-    unit?: "GB" | "TB" | "piece";
+    unit?: "MB" | "GB" | "TB";
     bytes?: bigint;
     edition?: "standart" | "advanced";
+    annual?: boolean;
+    freeQuota?: boolean;
 };
 
 type Application = Entity & {
