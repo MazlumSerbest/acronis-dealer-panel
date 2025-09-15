@@ -120,6 +120,8 @@ model License {
   assignedAt        DateTime?
   customerAcronisId String?
   partnerAcronisId  String?
+  endsAt            DateTime?
+  bytes             BigInt?
   customer          Customer?        @relation(fields: [customerAcronisId], references: [acronisId])
   partner           Partner?         @relation(fields: [partnerAcronisId], references: [acronisId])
   product           Product          @relation(fields: [productId], references: [id])
@@ -156,6 +158,8 @@ model Product {
   bytes     BigInt?
   edition   String?
   usageName String?
+  annual    Boolean   @default(true)
+  freeQuota Boolean   @default(false)
   licenses  License[]
 }
 
@@ -299,9 +303,10 @@ view v_License {
   productId              String?
   productName            String?
   productCode            String?
-  productQuota           Int?
-  productUnit            String?
+  bytes                  BigInt?
   productModel           String?
+  annual                 Boolean?
+  freeQuota              Boolean?
   partnerAcronisId       String?
   partnerName            String?
   partnerParentAcronisId String?
@@ -309,9 +314,9 @@ view v_License {
   customerName           String?
   serialNo               String?
   expiresAt              DateTime?
+  endsAt                 DateTime?
   assignedAt             DateTime?
   activatedAt            DateTime?
-  completionDate         DateTime? @db.Timestamp(6)
   createdAt              DateTime?
   createdBy              String?
   updatedAt              DateTime?
