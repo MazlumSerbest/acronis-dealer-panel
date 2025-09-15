@@ -51,13 +51,9 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        gte: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        lte: new Date(),
                     },
                 };
                 break;
@@ -67,20 +63,15 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        lt: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        gt: new Date(),
                     },
                 };
                 break;
             case "expired":
                 where = {
-                    // customerAcronisId: null,
-                    activatedAt: null,
+                    endsAt: null,
                     expiresAt: { lt: new Date() },
                 };
                 break;

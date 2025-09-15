@@ -63,6 +63,8 @@ export async function getProducts(forListBox?: boolean) {
             ?.map((p: Product) => ({
                 id: p.id,
                 name: p?.name,
+                annual: p.annual,
+                freeQuota: p.freeQuota,
             }));
     return products;
 }

@@ -21,7 +21,7 @@ export const PUT = auth(async (req: any) => {
         const values = await req.json();
         const kind = req.nextUrl.searchParams.get("kind");
         const from = req.nextUrl.searchParams.get("from");
-        let data;
+        let data: any;
 
         if (kind === "customer") {
             data = {
@@ -50,6 +50,7 @@ export const PUT = auth(async (req: any) => {
                     product: {
                         select: {
                             model: true,
+                            annual: true,
                         },
                     },
                 },
@@ -109,6 +110,12 @@ export const PUT = auth(async (req: any) => {
                     status: 400,
                     ok: false,
                 });
+
+            if (keyCheck?.product?.annual) {
+                data.endsAt = new Date(
+                    new Date().setFullYear(new Date().getFullYear() + 1),
+                );
+            }
         } else if (kind === "partner") {
             data = {
                 partnerAcronisId: values.partnerAcronisId,

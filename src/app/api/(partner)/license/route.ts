@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import { getTranslations } from "next-intl/server";
+import { formatBytes } from "@/utils/functions";
 
 export const GET = auth(async (req: any) => {
     try {
@@ -41,13 +42,9 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        gte: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        lte: new Date(),
                     },
                 };
                 break;
@@ -56,19 +53,15 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        lt: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        gt: new Date(),
                     },
                 };
                 break;
             case "expired":
                 where = {
-                    activatedAt: null,
+                    endsAt: null,
                     expiresAt: { lt: new Date() },
                 };
                 break;
@@ -90,7 +83,16 @@ export const GET = auth(async (req: any) => {
             },
         });
 
-        return NextResponse.json(data);
+        const newData = data.map((license) => {
+            return {
+                ...license,
+                bytes: license.bytes
+                    ? formatBytes(license.bytes.toString())
+                    : null,
+            };
+        });
+
+        return NextResponse.json(newData);
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,

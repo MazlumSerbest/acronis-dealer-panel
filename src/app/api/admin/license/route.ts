@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/utils/db";
 import {
-    generateCuid,
+    formatBytes,
     generateLicenseKey,
     generateShortId,
+    parseBytes,
 } from "@/utils/functions";
 import { getTranslations } from "next-intl/server";
 
@@ -56,13 +57,9 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        gte: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        lte: new Date(),
                     },
                 };
                 break;
@@ -72,20 +69,15 @@ export const GET = auth(async (req: any) => {
                     customerAcronisId: customerAcronisId
                         ? customerAcronisId
                         : { not: null },
-                    activatedAt: {
+                    endsAt: {
                         not: null,
-                        lt: new Date(
-                            new Date().setFullYear(
-                                new Date().getFullYear() - 1,
-                            ),
-                        ),
+                        gt: new Date(),
                     },
                 };
                 break;
             case "expired":
                 where = {
-                    // customerAcronisId: null,
-                    activatedAt: null,
+                    endsAt: null,
                     expiresAt: { lt: new Date() },
                 };
                 break;
@@ -107,7 +99,16 @@ export const GET = auth(async (req: any) => {
             },
         });
 
-        return NextResponse.json(data);
+        const newData = data.map((license) => {
+            return {
+                ...license,
+                bytes: license.bytes
+                    ? formatBytes(license.bytes.toString())
+                    : null,
+            };
+        });
+
+        return NextResponse.json(newData);
     } catch (error: any) {
         return NextResponse.json({
             message: error?.message,
@@ -161,13 +162,21 @@ export const POST = auth(async (req: any) => {
         const request = await req.json();
         let licenses = [];
 
+        if (request.quota && request.unit) {
+            request.bytes = parseBytes(request.quota, request.unit);
+        } else {
+            request.bytes = null;
+        }
+
         for (let i = 0; i < request.piece; i++) {
             licenses.push({
                 productId: request.productId,
                 serialNo: generateShortId(),
                 key: generateLicenseKey(),
                 expiresAt: request.expiresAt,
+                endsAt: request.endsAt,
                 createdBy: req.auth.user.email,
+                bytes: request.bytes,
             });
         }
 
