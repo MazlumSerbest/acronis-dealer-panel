@@ -175,6 +175,7 @@
         "expiredAt": "Expired At",
         "assignedAt": "Assigned At",
         "activatedAt": "Activated At",
+        "endsAt": "Ends At",
         "assignToCustomerDescription": "{length} license(s) will be assigned to the selected customer.",
         "assignToPartnerDescription": "{length} license(s) will be assigned to the selected partner.",
         "registrationNotFound": "There is no panel registry with this Acronis ID.",
@@ -576,6 +577,12 @@
             },
             "print": {
                 "description": "Check this value to print created licenses directly. If checked, make sure the printer and Browser Print program are open."
+            },
+            "expiresAt": {
+                "min": "End date cannot be before today"
+            },
+            "endsAt": {
+                "min": "End date cannot be before today"
             }
         },
         "Course": {

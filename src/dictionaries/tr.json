@@ -175,6 +175,7 @@
         "expiredAt": "Son Kullanma Tarihi Geçmiş",
         "assignedAt": "Atanma Tarihi",
         "activatedAt": "Aktivasyon Tarihi",
+        "endsAt": "Bitiş Tarihi",
         "assignToCustomerDescription": "{length} lisans seçilen müşteriye atanacak.",
         "assignToPartnerDescription": "{length} lisans seçilen partnere atanacak.",
         "registrationNotFound": "Bu Acronis ID ile panel kaydı bulunamadı.",
@@ -576,6 +577,12 @@
             },
             "print": {
                 "description": "Lisansları oluşturulduktan sonra direkt olarak yazdırmak için bu değeri işaretleyin. Eğer işaretlediyseniz yazıcı ve Browser Print programının açık olduğundan emin olun."
+            },
+            "expiresAt": {
+                "min": "Bitiş tarihi bugünden önce olamaz"
+            },
+            "endsAt": {
+                "min": "Bitiş tarihi bugünden önce olamaz"
             }
         },
         "Course": {
