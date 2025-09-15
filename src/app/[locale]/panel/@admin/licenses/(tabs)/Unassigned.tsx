@@ -57,6 +57,14 @@ import {
 } from "@/utils/documents";
 import { createLicenseAsPDF, createZPLAsPDF } from "@/utils/pdf";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
+import { formatBytes } from "@/utils/functions";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 const licenseFormSchema = z.object({
     productId: z.string({
@@ -68,8 +76,11 @@ const licenseFormSchema = z.object({
         })
         .min(1, "License.piece.minLength")
         .max(2000, "License.piece.maxLength"),
-    expiresAt: z.date().optional(),
+    expiresAt: z.date().min(new Date(), "License.expiresAt.min").optional(),
+    endsAt: z.date().min(new Date(), "License.endsAt.min").optional(),
     print: z.boolean().optional(),
+    quota: z.coerce.number().optional(),
+    unit: z.enum(["MB", "GB", "TB"]).optional().nullable(),
 });
 
 type LicenseFormValues = z.infer<typeof licenseFormSchema>;
@@ -98,6 +109,8 @@ export default function UnassignedTab() {
 
     const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
+    const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
     const { data, error, isLoading, mutate } = useSWR(
         `/api/admin/license?status=unassigned`,
         null,
@@ -110,10 +123,7 @@ export default function UnassignedTab() {
     const form = useForm<LicenseFormValues>({
         resolver: zodResolver(licenseFormSchema),
         defaultValues: {
-            piece: 100,
-            expiresAt: new Date(
-                new Date().setFullYear(new Date().getFullYear() + 2),
-            ),
+            piece: 1,
         },
     });
 
@@ -266,14 +276,13 @@ export default function UnassignedTab() {
             },
         },
         {
-            accessorKey: "productQuota",
+            accessorKey: "bytes",
             header: t("quota"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: number = row.getValue("productQuota");
-                const unit: string = row.original.productUnit;
+                const data: number = row.getValue("bytes");
 
-                return `${data} ${unit === "GB" ? unit : ""}`;
+                return data || "-";
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -285,6 +294,28 @@ export default function UnassignedTab() {
                 const data: string = row.getValue("productModel");
 
                 return t(data) || "-";
+            },
+        },
+        {
+            accessorKey: "endsAt",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    {t("endsAt")}
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("endsAt");
+
+                return DateFormat(data);
             },
         },
         {
@@ -395,14 +426,15 @@ export default function UnassignedTab() {
                 defaultSortDirection="desc"
                 facetedFilters={[
                     {
-                        column: "productQuota",
+                        column: "bytes",
                         title: t("quota"),
-                        options: [
-                            { value: 1, label: "1" },
-                            { value: 25, label: "25GB" },
-                            { value: 50, label: "50GB" },
-                            { value: 100, label: "100GB" },
-                        ],
+                        options: Array.from(
+                            new Set(data?.map((item: any) => item.bytes)),
+                            (bytes) => ({
+                                value: bytes as any,
+                                label: bytes as string,
+                            }),
+                        ),
                     },
                     {
                         column: "productModel",
@@ -490,6 +522,7 @@ export default function UnassignedTab() {
                 }}
                 onAddNew={() => {
                     setOpen(true);
+                    setSelectedProduct(null);
                     form.reset();
                 }}
             />
@@ -524,6 +557,17 @@ export default function UnassignedTab() {
                                                     "searchPlaceholder",
                                                 )}
                                                 emptyText={t("noResults")}
+                                                onChange={async () => {
+                                                    setSelectedProduct(
+                                                        products?.find(
+                                                            (p) =>
+                                                                p.id ===
+                                                                form.getValues(
+                                                                    "productId",
+                                                                ),
+                                                        ),
+                                                    );
+                                                }}
                                             />
                                         </FormControl>
                                         <FormError
@@ -556,22 +600,137 @@ export default function UnassignedTab() {
                                 )}
                             />
 
-                            <FormField
-                                control={form.control}
-                                name="expiresAt"
-                                render={({ field }) => (
-                                    <FormItem>
-                                        <FormLabel>{t("expiresAt")}</FormLabel>
-                                        <DatePicker field={field} />
-                                        <FormError
-                                            error={
-                                                form?.formState?.errors
-                                                    ?.expiresAt
-                                            }
-                                        />
-                                    </FormItem>
-                                )}
-                            />
+                            {selectedProduct && (
+                                <>
+                                    {selectedProduct?.freeQuota && (
+                                        <>
+                                            <FormField
+                                                control={form.control}
+                                                name="quota"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            {t("quota")}
+                                                        </FormLabel>
+                                                        <FormControl>
+                                                            <Input
+                                                                {...field}
+                                                                type="number"
+                                                            />
+                                                        </FormControl>
+                                                        <FormError
+                                                            error={
+                                                                form?.formState
+                                                                    ?.errors
+                                                                    ?.quota
+                                                            }
+                                                        />
+                                                    </FormItem>
+                                                )}
+                                            />
+
+                                            <FormField
+                                                control={form.control}
+                                                name="unit"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            {t("unit")}
+                                                        </FormLabel>
+                                                        <Select
+                                                            value={
+                                                                field.value ??
+                                                                undefined
+                                                            }
+                                                            onValueChange={
+                                                                field.onChange
+                                                            }
+                                                        >
+                                                            <FormControl>
+                                                                <SelectTrigger>
+                                                                    <SelectValue
+                                                                        placeholder={t(
+                                                                            "select",
+                                                                        )}
+                                                                    />
+                                                                </SelectTrigger>
+                                                            </FormControl>
+                                                            <SelectContent>
+                                                                <SelectItem value="MB">
+                                                                    {t("MB")}
+                                                                </SelectItem>
+                                                                <SelectItem value="GB">
+                                                                    {t("GB")}
+                                                                </SelectItem>
+                                                                <SelectItem value="TB">
+                                                                    {t("TB")}
+                                                                </SelectItem>
+                                                            </SelectContent>
+                                                        </Select>
+                                                        <FormError
+                                                            error={
+                                                                form?.formState
+                                                                    ?.errors
+                                                                    ?.unit
+                                                            }
+                                                        />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </>
+                                    )}
+                                    {!selectedProduct?.annual && (
+                                        <>
+                                            <FormField
+                                                control={form.control}
+                                                name="endsAt"
+                                                render={({ field }) => (
+                                                    <FormItem>
+                                                        <FormLabel>
+                                                            {t("endsAt")}
+                                                        </FormLabel>
+                                                        <DatePicker
+                                                            field={field}
+                                                            from={new Date()}
+                                                        />
+                                                        <FormError
+                                                            error={
+                                                                form?.formState
+                                                                    ?.errors
+                                                                    ?.endsAt
+                                                            }
+                                                        />
+                                                    </FormItem>
+                                                )}
+                                            />
+                                        </>
+                                    )}
+                                </>
+                            )}
+
+                            {selectedProduct?.annual && (
+                                <FormField
+                                    control={form.control}
+                                    name="expiresAt"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormLabel>
+                                                {t("expiresAt")}
+                                            </FormLabel>
+                                            <DatePicker
+                                                field={field}
+                                                from={new Date()}
+                                            />
+                                            <FormError
+                                                error={
+                                                    form?.formState?.errors
+                                                        ?.expiresAt
+                                                }
+                                            />
+                                        </FormItem>
+                                    )}
+                                />
+                            )}
 
                             <FormField
                                 control={form.control}
