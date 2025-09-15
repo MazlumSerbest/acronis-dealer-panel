@@ -745,8 +745,6 @@ export default function ProductsPage() {
                                                 </SelectTrigger>
                                             </FormControl>
                                             <SelectContent>
-                                                {/* <SelectItem>
-                                                </SelectItem> */}
                                                 <SelectItem value="MB">
                                                     {t("MB")}
                                                 </SelectItem>

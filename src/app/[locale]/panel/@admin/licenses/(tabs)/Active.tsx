@@ -82,14 +82,13 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "productQuota",
+            accessorKey: "bytes",
             header: t("quota"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: number = row.getValue("productQuota");
-                const unit: string = row.original.productUnit;
+                const data: number = row.getValue("bytes");
 
-                return `${data} ${unit === "GB" ? unit : ""}`;
+                return data || "-";
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -136,7 +135,7 @@ export default function ActiveTab() {
             },
         },
         {
-            accessorKey: "completionDate",
+            accessorKey: "endsAt",
             enableGlobalFilter: false,
             enableHiding: false,
             header: ({ column }) => (
@@ -147,12 +146,12 @@ export default function ActiveTab() {
                         column.toggleSorting(column.getIsSorted() === "asc")
                     }
                 >
-                    {t("completionDate")}
+                    {t("endsAt")}
                     <LuChevronsUpDown className="size-4 ml-2" />
                 </Button>
             ),
             cell: ({ row }) => {
-                const data: string = row.getValue("completionDate");
+                const data: string = row.getValue("endsAt");
 
                 return DateFormat(data);
             },
@@ -162,9 +161,9 @@ export default function ActiveTab() {
             header: t("remainingDays"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const completionDate: string = row.getValue("completionDate");
+                const endsAt: string = row.getValue("endsAt");
 
-                return calculateRemainingDays(completionDate);
+                return calculateRemainingDays(endsAt);
             },
         },
         {
@@ -248,14 +247,15 @@ export default function ActiveTab() {
             defaultSortDirection="asc"
             facetedFilters={[
                 {
-                    column: "productQuota",
+                    column: "bytes",
                     title: t("quota"),
-                    options: [
-                        { value: 1, label: "1" },
-                        { value: 25, label: "25GB" },
-                        { value: 50, label: "50GB" },
-                        { value: 100, label: "100GB" },
-                    ],
+                    options: Array.from(
+                        new Set(data?.map((item: any) => item.bytes)),
+                        (bytes) => ({
+                            value: bytes as any,
+                            label: bytes as string,
+                        }),
+                    ),
                 },
                 {
                     column: "productModel",

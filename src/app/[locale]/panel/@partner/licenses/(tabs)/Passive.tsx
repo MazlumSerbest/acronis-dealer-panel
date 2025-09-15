@@ -81,6 +81,9 @@ export default function PassiveTab() {
         null,
         {
             revalidateOnFocus: false,
+            onSuccess: (e) => {
+                console.log(e);
+            },
         },
     );
 
@@ -243,14 +246,13 @@ export default function PassiveTab() {
             },
         },
         {
-            accessorKey: "productQuota",
+            accessorKey: "bytes",
             header: t("quota"),
             enableGlobalFilter: false,
             cell: ({ row }) => {
-                const data: number = row.getValue("productQuota");
-                const unit: string = row.original.productUnit;
+                const data: number = row.getValue("bytes");
 
-                return `${data} ${unit === "GB" ? unit : ""}`;
+                return data || "-";
             },
             filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
@@ -272,6 +274,28 @@ export default function PassiveTab() {
                 const data: string = row.getValue("assignedAt");
 
                 return DateTimeFormat(data);
+            },
+        },
+        {
+            accessorKey: "endsAt",
+            enableGlobalFilter: false,
+            enableHiding: false,
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    className="-ml-4"
+                    onClick={() =>
+                        column.toggleSorting(column.getIsSorted() === "asc")
+                    }
+                >
+                    {t("endsAt")}
+                    <LuChevronsUpDown className="size-4 ml-2" />
+                </Button>
+            ),
+            cell: ({ row }) => {
+                const data: string = row.getValue("endsAt");
+
+                return DateFormat(data);
             },
         },
         {
@@ -384,14 +408,15 @@ export default function PassiveTab() {
                 defaultSortDirection="desc"
                 facetedFilters={[
                     {
-                        column: "productQuota",
+                        column: "bytes",
                         title: t("quota"),
-                        options: [
-                            { value: 1, label: "1" },
-                            { value: 25, label: "25GB" },
-                            { value: 50, label: "50GB" },
-                            { value: 100, label: "100GB" },
-                        ],
+                        options: Array.from(
+                            new Set(data?.map((item: any) => item.bytes)),
+                            (bytes) => ({
+                                value: bytes as any,
+                                label: bytes as string,
+                            }),
+                        ),
                     },
                     {
                         column: "productModel",
