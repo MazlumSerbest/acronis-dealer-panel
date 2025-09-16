@@ -40,6 +40,7 @@ import DatePicker from "@/components/DatePicker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
+import BoolChip from "@/components/BoolChip";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
@@ -57,7 +58,6 @@ import {
 } from "@/utils/documents";
 import { createLicenseAsPDF, createZPLAsPDF } from "@/utils/pdf";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
-import { formatBytes } from "@/utils/functions";
 import {
     Select,
     SelectContent,
@@ -339,6 +339,28 @@ export default function UnassignedTab() {
 
                 return DateFormat(data);
             },
+        },
+        {
+            accessorKey: "annual",
+            header: t("annual"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("annual");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "freeQuota",
+            header: t("freeQuota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("freeQuota");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",

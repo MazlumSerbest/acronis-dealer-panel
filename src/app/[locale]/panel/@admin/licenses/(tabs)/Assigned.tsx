@@ -11,6 +11,7 @@ import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
 import { LicenseHistorySheet } from "@/components/LicenseHistorySheet";
 import DestructiveToast from "@/components/DestructiveToast";
+import BoolChip from "@/components/BoolChip";
 
 import { DateFormat, DateTimeFormat } from "@/utils/date";
 import { createLicensePDFFromIds, createZPLFromIds } from "@/utils/documents";
@@ -203,6 +204,28 @@ export default function AssignedTab() {
 
                 return DateFormat(data);
             },
+        },
+        {
+            accessorKey: "annual",
+            header: t("annual"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("annual");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
+        },
+        {
+            accessorKey: "freeQuota",
+            header: t("freeQuota"),
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("freeQuota");
+
+                return <BoolChip size="size-4" value={data} />;
+            },
+            filterFn: (row, id, value) => value.includes(row.getValue(id)),
         },
         {
             accessorKey: "createdAt",
