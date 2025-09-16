@@ -43,7 +43,7 @@ export const GET = auth(async (req: any) => {
                         : { not: null },
                     endsAt: {
                         not: null,
-                        lte: new Date(),
+                        gte: new Date(),
                     },
                 };
                 break;
@@ -54,7 +54,7 @@ export const GET = auth(async (req: any) => {
                         : { not: null },
                     endsAt: {
                         not: null,
-                        gt: new Date(),
+                        lt: new Date(),
                     },
                 };
                 break;
