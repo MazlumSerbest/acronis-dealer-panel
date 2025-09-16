@@ -207,7 +207,7 @@ export default function CompletedTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
-            defaultSort="completionDate"
+            defaultSort="endsAt"
             defaultSortDirection="asc"
             facetedFilters={[
                 {

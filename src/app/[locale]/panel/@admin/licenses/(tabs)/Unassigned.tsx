@@ -466,6 +466,22 @@ export default function UnassignedTab() {
                             { value: "perGB", label: t("perGB") },
                         ],
                     },
+                    {
+                        column: "annual",
+                        title: t("annual"),
+                        options: [
+                            { value: true, label: t("yes") },
+                            { value: false, label: t("no") },
+                        ],
+                    },
+                    {
+                        column: "freeQuota",
+                        title: t("freeQuota"),
+                        options: [
+                            { value: true, label: t("yes") },
+                            { value: false, label: t("no") },
+                        ],
+                    },
                 ]}
                 actions={
                     selectedIds.length > 0 && [

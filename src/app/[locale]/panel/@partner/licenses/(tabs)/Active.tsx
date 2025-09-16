@@ -217,7 +217,7 @@ export default function ActiveTab() {
             columns={columns}
             data={data || []}
             visibleColumns={visibleColumns}
-            defaultSort="completionDate"
+            defaultSort="endsAt"
             defaultSortDirection="asc"
             facetedFilters={[
                 {

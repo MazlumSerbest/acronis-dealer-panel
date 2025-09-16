@@ -852,7 +852,7 @@
         "partial": "Kısmi",
         "active": "Aktif",
         "completed": "Tamamlanmış",
-        "expired": "Son Kullanma Süresi Geçmiş",
+        "expired": "Son Kullanma Tarihi Geçmiş",
         "status": "Durum",
         "passive": "Pasif"
     },
