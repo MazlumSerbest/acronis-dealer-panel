@@ -24,7 +24,9 @@ export default function LicensesTab({ t, tenant }: Props) {
     const tl = useTranslations("Licenses");
 
     const { data, error, isLoading } = useSWR(
-        `/api/${tenant.kind}/${tenant.id}`,
+        `/api/${tenant.kind === "customer" ? "customer" : "partner"}/${
+            tenant.id
+        }`,
         null,
         {
             revalidateOnFocus: false,

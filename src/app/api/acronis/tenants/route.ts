@@ -143,7 +143,7 @@ export const POST = auth(async (req: any) => {
                 ok: userRes.ok,
             });
 
-        if (tenant.kind === "partner") {
+        if (tenant.kind === "partner" || tenant.kind === "folder") {
             const partner: Partner = {
                 acronisId: createdTenant.id,
                 parentAcronisId: createdTenant.parent_id,
@@ -223,7 +223,7 @@ export const POST = auth(async (req: any) => {
         );
 
         let enableOfferingItemsRes;
-        if (tenant.kind === "partner") {
+        if (tenant.kind === "partner" || tenant.kind === "folder") {
             const offeringItems = {
                 offering_items: [
                     {
@@ -382,7 +382,7 @@ export const POST = auth(async (req: any) => {
         }
 
         let roles;
-        if (tenant.kind === "partner") {
+        if (tenant.kind === "partner" || tenant.kind === "folder") {
             roles = {
                 items: [
                     {
@@ -438,7 +438,10 @@ export const POST = auth(async (req: any) => {
                 status: 200,
                 ok: false,
             });
-        if (tenant.kind === "partner" && !enableOfferingItemsRes?.ok)
+        if (
+            (tenant.kind === "partner" || tenant.kind === "folder") &&
+            !enableOfferingItemsRes?.ok
+        )
             return NextResponse.json({
                 message: "Failed to enable offering items!",
                 status: 200,
@@ -450,7 +453,7 @@ export const POST = auth(async (req: any) => {
                 status: 200,
                 ok: false,
             });
-        if (tenant.kind === "partner") {
+        if (tenant.kind === "partner" || tenant.kind === "folder") {
             return NextResponse.json({
                 message: "Partner başarıyla kaydedildi!",
                 status: 200,

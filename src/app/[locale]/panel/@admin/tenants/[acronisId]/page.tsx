@@ -87,16 +87,18 @@ export default function TenantDetail({
                         <TabsTrigger value="general">
                             {t("general")}
                         </TabsTrigger>
-                        {data?.kind == "partner" && (
+                        {data?.kind === "partner" || data?.kind === "folder" ? (
                             <TabsTrigger value="tenants">
                                 {t("tenants")}
                             </TabsTrigger>
+                        ) : (
+                            <></>
                         )}
                         <TabsTrigger value="licenses">
                             {t("licenses")}
                         </TabsTrigger>
                         <TabsTrigger value="users">
-                            {data?.kind == "partner"
+                            {data?.kind === "partner" || data?.kind === "folder"
                                 ? t("users")
                                 : t("acronisUsers")}
                         </TabsTrigger>
@@ -105,10 +107,12 @@ export default function TenantDetail({
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>
-                    {data?.kind == "partner" && (
+                    {data?.kind === "partner" || data?.kind === "folder" ? (
                         <TabsContent value="tenants">
                             <TenantsTab t={t} tenant={data} />
                         </TabsContent>
+                    ) : (
+                        <></>
                     )}
                     <TabsContent value="licenses">
                         <LicensesTab t={t} tenant={data} />

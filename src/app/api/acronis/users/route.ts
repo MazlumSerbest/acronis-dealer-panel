@@ -150,7 +150,7 @@ export const POST = auth(async (req: any) => {
         );
 
         let roles;
-        if (user.kind === "partner") {
+        if (user.kind === "partner" || user.kind === "folder") {
             if (user.isPartnerAdmin) {
                 roles = {
                     items: [

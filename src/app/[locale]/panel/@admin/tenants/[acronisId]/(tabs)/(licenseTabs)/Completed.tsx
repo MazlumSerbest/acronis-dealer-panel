@@ -18,7 +18,11 @@ export default function CompletedTab({ tenant }: Props) {
     const t = useTranslations("General");
 
     const { data, error, isLoading } = useSWR(
-        `/api/license?status=completed&${tenant.kind}AcronisId=${tenant.id}`,
+        `/api/license?status=completed&${
+            tenant.kind === "customer"
+                ? "customerAcronisId"
+                : "partnerAcronisId"
+        }=${tenant.id}`,
         null,
         {
             revalidateOnFocus: false,

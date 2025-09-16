@@ -90,18 +90,20 @@ export default function CustomerDetail({
                             <TabsTrigger value="general">
                                 {t("general")}
                             </TabsTrigger>
-                            {data?.kind === "partner" && (
-                                <TabsTrigger value="customers">
-                                    {t("customers")}
-                                </TabsTrigger>
-                            )}
+                            {data?.kind === "partner" ||
+                                (data?.kind === "folder" && (
+                                    <TabsTrigger value="customers">
+                                        {t("customers")}
+                                    </TabsTrigger>
+                                ))}
                             {currentUser?.licensed && (
                                 <TabsTrigger value="licenses">
                                     {t("licenses")}
                                 </TabsTrigger>
                             )}
                             <TabsTrigger value="users">
-                                {data?.kind === "partner"
+                                {data?.kind === "partner" ||
+                                data?.kind === "folder"
                                     ? t("users")
                                     : t("acronisUsers")}
                             </TabsTrigger>
@@ -111,10 +113,12 @@ export default function CustomerDetail({
                     <TabsContent value="general">
                         <GeneralTab t={t} tenant={data} />
                     </TabsContent>
-                    {data?.kind === "partner" && (
+                    {data?.kind === "partner" || data?.kind === "folder" ? (
                         <TabsContent value="customers">
                             <CustomersTab t={t} tenant={data} />
                         </TabsContent>
+                    ) : (
+                        <></>
                     )}
                     {currentUser?.licensed && (
                         <TabsContent value="licenses">

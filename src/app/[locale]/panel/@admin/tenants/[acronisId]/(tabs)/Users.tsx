@@ -21,7 +21,7 @@ export default function UsersTab({ t, tenant }: Props) {
 
     return (
         <Tabs
-            value={tenant.kind !== "partner" ? "acronis" : status}
+            value={tenant.kind === "customer" ? "acronis" : status}
             defaultValue={"partner"}
             onValueChange={(value) =>
                 router.push(`${pathname}?tab=users&status=${value}`)
@@ -31,7 +31,7 @@ export default function UsersTab({ t, tenant }: Props) {
             <TabsList
                 className={cn(
                     "max-w-fit",
-                    tenant.kind !== "partner" ? "hidden" : "",
+                    tenant.kind === "customer" ? "hidden" : "",
                 )}
             >
                 <TabsTrigger value="partner">{tu("partner")}</TabsTrigger>
