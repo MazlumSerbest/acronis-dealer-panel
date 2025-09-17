@@ -6,7 +6,7 @@ SELECT
   pro.model,
   pro.quota,
   pro.unit,
-  pro.bytes,
+  COALESCE(pro.bytes, l.bytes) AS bytes,
   pro."usageName",
   par."acronisId" AS "partnerAcronisId",
   par."parentAcronisId" AS "partnerParentAcronisId",
@@ -25,5 +25,5 @@ FROM
 WHERE
   (
     (l."customerAcronisId" IS NOT NULL)
-    AND (l."activatedAt" >= (NOW() - '1 year' :: INTERVAL))
+    AND (l."endsAt" >= NOW())
   );

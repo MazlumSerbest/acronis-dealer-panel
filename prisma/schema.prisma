@@ -282,24 +282,53 @@ model Notification {
   @@unique([entityType, entityId, step, sentTo])
 }
 
-/// Views
-view v_ActiveLicenses {
-  id                     String    @id
-  expiresAt              DateTime?
-  activatedAt            DateTime?
-  code                   String?
-  model                  String?
-  quota                  Int?
-  unit                   String?
-  bytes                  BigInt?
-  usageName              String?
-  partnerAcronisId       String?
-  partnerParentAcronisId String?
-  customerAcronisId      String?
+view v_LicenseReminder {
+  licenseId    String?
+  serialNo     String?
+  customerId   String?
+  customerName String?
+  productName  String?
+  email        String?
+  endsAt       DateTime? @db.Timestamp(6)
+  daysLeft     Int?
+  step         Int?
+
+  @@ignore
+}
+
+view v_User {
+  id                 String    @unique
+  name               String?
+  email              String?
+  emailVerified      Boolean?
+  role               String?
+  active             Boolean?
+  language           String?
+  deleted            Boolean?
+  acronisTenantId    String?
+  partnerAcronisId   String?
+  createdAt          DateTime?
+  createdBy          String?
+  updatedAt          DateTime?
+  updatedBy          String?
+  notificationEmails String?
+  partnerName        String?
+  lastLogin          DateTime?
+}
+
+view v_CustomerBillingReminder {
+  customerId   String?
+  customerName String?
+  email        String?
+  billingDate  DateTime? @db.Timestamp(6)
+  daysLeft     Int?
+  step         Int?
+
+  @@ignore
 }
 
 view v_License {
-  id                     String    @id
+  id                     String    @unique
   productId              String?
   productName            String?
   productCode            String?
@@ -323,21 +352,23 @@ view v_License {
   updatedBy              String?
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view v_LicensedCustomers {
-  acronisId String?
-  name      String?
-  code      String?
-  model     String?
-  quota     Int?
-  unit      String?
-  bytes     BigInt?
-
-  @@ignore
+view v_ActiveLicenses {
+  id                     String    @unique
+  expiresAt              DateTime?
+  activatedAt            DateTime?
+  code                   String?
+  model                  String?
+  quota                  Int?
+  unit                   String?
+  bytes                  BigInt?
+  usageName              String?
+  partnerAcronisId       String?
+  partnerParentAcronisId String?
+  customerAcronisId      String?
 }
 
 view v_LicenseHistory {
-  id                       String    @id
+  id                       String    @unique
   action                   String?
   createdAt                DateTime?
   createdBy                String?
@@ -350,54 +381,18 @@ view v_LicenseHistory {
   customer                 String?
 }
 
-view v_User {
-  id                 String    @id
-  name               String?
-  email              String?
-  emailVerified      Boolean?
-  role               String?
-  active             Boolean?
-  language           String?
-  deleted            Boolean?
-  acronisTenantId    String?
-  partnerAcronisId   String?
-  createdAt          DateTime?
-  createdBy          String?
-  updatedAt          DateTime?
-  updatedBy          String?
-  notificationEmails String?
-  partnerName        String?
-  lastLogin          DateTime?
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view v_LicenseReminder {
-  licenseId    String?
-  serialNo     String?
-  customerId   String?
-  customerName String?
-  productName  String?
-  email        String?
-  expiresAt    DateTime? @db.Timestamp(6)
-  daysLeft     Int?
-  step         Int?
+view v_LicensedCustomers {
+  acronisId String?
+  name      String?
+  code      String?
+  model     String?
+  quota     Int?
+  unit      String?
+  bytes     BigInt?
 
   @@ignore
 }
 
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
-view v_CustomerBillingReminder {
-  customerId   String?
-  customerName String?
-  email        String?
-  billingDate  DateTime? @db.Timestamp(6)
-  daysLeft     Int?
-  step         Int?
-
-  @@ignore
-}
-
-/// The underlying view does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
 view v_PartnerBillingReminder {
   partnerId   String?
   partnerName String?

@@ -5,9 +5,9 @@ SELECT
   c.name AS "customerName",
   p.name AS "productName",
   COALESCE(u."notificationEmails", u.email) AS email,
-  (l."activatedAt" + '03:00:00' :: INTERVAL) AS "expiresAt",
+  (l."endsAt" + '03:00:00' :: INTERVAL) AS "endsAt",
   (
-    date((l."activatedAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
+    date((l."endsAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
   ) AS "daysLeft",
   s.step
 FROM
@@ -27,7 +27,7 @@ FROM
           )
           CROSS JOIN (
             SELECT
-              unnest(ARRAY [30, 15, 7, 1]) AS step
+              unnest(ARRAY [365, 15, 7, 1]) AS step
           ) s
         )
         LEFT JOIN "Customer" c ON ((c."acronisId" = l."customerAcronisId"))
@@ -46,7 +46,7 @@ WHERE
   (
     (
       (
-        date((l."activatedAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
+        date((l."endsAt" + '03:00:00' :: INTERVAL)) - CURRENT_DATE
       ) = s.step
     )
     AND (n.id IS NULL)
