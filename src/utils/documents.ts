@@ -9,12 +9,14 @@ export async function createZPLFromIds(ids: string[]) {
         },
         select: {
             product: {
-                select: { name: true },
+                select: { name: true, annual: true, bytes: true, model: true },
             },
+            endsAt: true,
             expiresAt: true,
             serialNo: true,
             key: true,
             productId: true,
+            bytes: true,
         },
         orderBy: {
             productId: "asc",
@@ -77,12 +79,14 @@ export async function createLicensePDFFromIds(ids: string[]) {
         },
         select: {
             product: {
-                select: { name: true, code: true },
+                select: { name: true, code: true, annual: true, bytes: true, model: true },
             },
+            endsAt: true,
             expiresAt: true,
             serialNo: true,
             key: true,
             productId: true,
+            bytes: true,
         },
         orderBy: {
             productId: "asc",

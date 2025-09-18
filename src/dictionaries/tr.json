@@ -552,8 +552,11 @@
             "model": {
                 "required": "Model zorunludur"
             },
+            "quota": {
+                "required": "Kota serbest kotalı olmayan ürünlerde zorunludur"
+            },
             "unit": {
-                "required": "Birim zorunludur"
+                "required": "Birim serbest kotalı olmayan ürünlerde zorunludur"
             }
         },
         "License": {

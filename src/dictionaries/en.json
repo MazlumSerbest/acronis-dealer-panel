@@ -552,8 +552,11 @@
             "model": {
                 "required": "Model is required"
             },
+            "quota": {
+                "required": "Quota is required for non-free quota products"
+            },
             "unit": {
-                "required": "Unit is required"
+                "required": "Unit is required for non-free quota products"
             }
         },
         "License": {

@@ -57,6 +57,7 @@ type License = Entity & {
     customerAcronisId?: string;
     key: string;
     serialNo: string;
+    bytes?: bigint;
     expiresAt?: string;
     endsAt?: string;
     activatedAt?: string;

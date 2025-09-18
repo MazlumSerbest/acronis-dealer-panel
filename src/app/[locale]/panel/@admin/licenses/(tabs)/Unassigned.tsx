@@ -41,6 +41,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import BoolChip from "@/components/BoolChip";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 import { DataTable } from "@/components/table/DataTable";
 import Skeleton, { TableSkeleton } from "@/components/loaders/Skeleton";
@@ -58,13 +65,6 @@ import {
 } from "@/utils/documents";
 import { createLicenseAsPDF, createZPLAsPDF } from "@/utils/pdf";
 import { LuChevronsUpDown, LuLoaderCircle } from "react-icons/lu";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
 
 const licenseFormSchema = z.object({
     productId: z.string({
@@ -774,7 +774,7 @@ export default function UnassignedTab() {
                                 control={form.control}
                                 name="print"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between">
+                                    <FormItem className="flex flex-row items-center justify-between gap-1">
                                         <div className="space-y-0.5">
                                             <FormLabel>
                                                 {t("sendToPrint")}

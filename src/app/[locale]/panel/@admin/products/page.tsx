@@ -120,6 +120,19 @@ export default function ProductsPage() {
         if (submitting) return;
         setSubmitting(true);
 
+        if (!values.freeQuota && (!values.quota || !values.unit)) {
+            form.setError("quota", {
+                type: "required",
+                message: tf("quota.required"),
+            });
+            form.setError("unit", {
+                type: "required",
+                message: tf("unit.required"),
+            });
+            setSubmitting(false);
+            return;
+        }
+
         if (isNew) {
             fetch("/api/admin/product", {
                 method: "POST",
@@ -557,7 +570,7 @@ export default function ProductsPage() {
                                     control={form.control}
                                     name="active"
                                     render={({ field }) => (
-                                        <FormItem className="flex flex-row items-center justify-between">
+                                        <FormItem className="flex flex-row items-center justify-between gap-1">
                                             <div className="space-y-0.5">
                                                 <FormLabel>
                                                     {t("active")}
@@ -583,7 +596,7 @@ export default function ProductsPage() {
                                 control={form.control}
                                 name="annual"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between">
+                                    <FormItem className="flex flex-row items-center justify-between gap-1">
                                         <div className="space-y-0.5">
                                             <FormLabel>{t("annual")}</FormLabel>
                                             <FormDescription>
@@ -683,7 +696,7 @@ export default function ProductsPage() {
                                 control={form.control}
                                 name="freeQuota"
                                 render={({ field }) => (
-                                    <FormItem className="flex flex-row items-center justify-between">
+                                    <FormItem className="flex flex-row items-center justify-between gap-1">
                                         <div className="space-y-0.5">
                                             <FormLabel>
                                                 {t("freeQuota")}

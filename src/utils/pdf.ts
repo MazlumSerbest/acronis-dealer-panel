@@ -1,7 +1,6 @@
 import { acronisServiceProvider, dcube } from "@/lib/logos";
-// @ts-ignore
-import html2pdf from "html2pdf.js";
 import { DateFormat } from "./date";
+import { formatBytes } from "./functions";
 
 export async function createZPLAsPDF(zpl: string) {
     if (!self) return;
@@ -62,13 +61,29 @@ export async function createLicenseAsPDF(licenses: License[]) {
                     <div style="grid-column: 2 / span 2; margin-left: 10px; border-left-width: 1px; border-color: rgba(96, 165, 250, 0.3);">
                         <div style="display: flex; flex-direction: column; align-items: center; text-align: center; justify-content: space-between; height: 100%; margin-top: -6px;">
                             <div>
-                                <h6 style="font-size: 12px; font-weight: bold; color: #60a5fa;">
+                                <h6 style="font-size: 12px; font-weight: bold; color: #60a5fa; padding-left: 4px">
                                     ${l?.product?.name}
                                 </h6>
-                                <h6 style="font-size: 10px; font-weight: bold; color: #60a5fa;">
-                                    1 Year
-                                </h6>
-                                <h6 style="font-size: 10px; font-weight: 600;">
+                                ${
+                                    l.product?.annual
+                                        ? `<h6 style="font-size: 10px; font-weight: bold; color: #60a5fa;">1 Year</h6>`
+                                        : ""
+                                }
+                                ${
+                                    l?.product?.bytes
+                                        ? `<h6 style="font-size: 12px; font-weight: 600;">${formatBytes(
+                                              l?.product?.bytes.toString(),
+                                          )}</h6>`
+                                        : ""
+                                }
+                                ${
+                                    l?.bytes
+                                        ? `<h6 style="font-size: 12px; font-weight: 600;">${formatBytes(
+                                              l?.bytes.toString(),
+                                          )}</h6>`
+                                        : ""
+                                }
+                                <h6 style="font-size: 7px; font-weight: 600;">
                                     ${l?.product?.code}
                                 </h6>
                             </div>
@@ -86,11 +101,22 @@ export async function createLicenseAsPDF(licenses: License[]) {
                                     S/N: ${l.serialNo}
                                 </h6>
                             </div>
-
+                            
                             <div>
-                                <h6 style="font-size: 6px; font-weight: 600;">
-                                    Expires At: ${DateFormat(l.expiresAt)}
-                                </h6>
+                                ${
+                                    l?.expiresAt
+                                        ? `<h6 style="font-size: 8px; font-weight: 600;">Expires At: ${DateFormat(
+                                              l.expiresAt,
+                                          )}</h6>`
+                                        : ""
+                                }
+                                ${
+                                    l?.endsAt
+                                        ? `<h6 style="font-size: 10px; font-weight: 600;">Ends At: ${DateFormat(
+                                              l.endsAt,
+                                          )}</h6>`
+                                        : ""
+                                }
                             </div>
                         </div>
                     </div>
