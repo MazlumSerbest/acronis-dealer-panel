@@ -81,9 +81,6 @@ export default function PassiveTab() {
         null,
         {
             revalidateOnFocus: false,
-            onSuccess: (e) => {
-                console.log(e);
-            },
         },
     );
 
@@ -429,25 +426,27 @@ export default function PassiveTab() {
                 ]}
                 actions={
                     selectedIds.length > 0 && [
-                        <DropdownMenuItem
-                            key="assignToCustomer"
-                            onClick={() => {
-                                if (selectedIds.length === 1) {
+                        selectedIds.length === 1 && (
+                            <DropdownMenuItem
+                                key="assignToCustomer"
+                                onClick={() => {
+                                    // if (selectedIds.length === 1) {
                                     assignToCustomerForm.reset();
                                     setOpenAssignToCustomer(true);
-                                } else {
-                                    DestructiveToast({
-                                        title: t("errorTitle"),
-                                        description: t(
-                                            "moreThanOneLicenseError",
-                                        ),
-                                        t,
-                                    });
-                                }
-                            }}
-                        >
-                            {t("assignToCustomer")}
-                        </DropdownMenuItem>,
+                                    // } else {
+                                    //     DestructiveToast({
+                                    //         title: t("errorTitle"),
+                                    //         description: t(
+                                    //             "moreThanOneLicenseError",
+                                    //         ),
+                                    //         t,
+                                    //     });
+                                    // }
+                                }}
+                            >
+                                {t("assignToCustomer")}
+                            </DropdownMenuItem>
+                        ),
                         partners && partners?.length > 0 && (
                             <DropdownMenuItem
                                 key="assignToPartner"
