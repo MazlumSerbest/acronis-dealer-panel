@@ -121,7 +121,7 @@ const partnerFormSchema = z.object({
     parasutId: z.string().optional(),
 });
 
-type PartnerFormValues = z.infer<typeof partnerFormSchema>;
+type PartnerFormValues = z.infer         <typeof partnerFormSchema>;
 
 const userFormSchema = z.object({
     name: z
@@ -924,7 +924,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                     </AlertDialog>
                                 )}
 
-                                {!panelTenant && tenant.kind == "partner" && (
+                                {!panelTenant && tenant.kind == "partner" ? (
                                     <AlertDialog
                                         open={openPartnerDialog}
                                         onOpenChange={setOpenPartnerDialog}
@@ -1040,6 +1040,17 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>
+                                ): (
+                                    <Button
+                                        disabled={submitting}
+                                        type="submit"
+                                        className="bg-blue-400 hover:bg-blue-400/90"
+                                    >
+                                        {t("create")}
+                                        {submitting && (
+                                            <LuLoaderCircle className="size-4 animate-spin ml-2" />
+                                        )}
+                                    </Button>
                                 )}
                             </CardFooter>
                         )}
