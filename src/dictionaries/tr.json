@@ -306,6 +306,8 @@
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Doğrulandı",
         "goToTenant": "Kiracıya Git",
+        "goToPartner": "Partnere Git",
+        "goToCustomer": "Müşteriye Git",
         "partners": "Partnerler",
         "quotaEdit": "Kotayı Düzenle",
         "deleteSelected": "Seçilenleri Sil",

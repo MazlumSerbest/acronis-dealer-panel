@@ -87,6 +87,16 @@ export const adminPaths: Path[] = [
         ),
     },
     {
+        path: "/panel/customers",
+        key: "customers",
+        icon: (
+            <LuHandshake
+                className="size-6 group-hover:text-blue-400"
+                aria-label="Customers Page"
+            />
+        ),
+    },
+    {
         path: "/panel/users",
         key: "users",
         icon: (

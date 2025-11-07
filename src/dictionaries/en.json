@@ -306,6 +306,8 @@
         "partnerAcronisId": "Partner Acronis ID",
         "verified": "Verified",
         "goToTenant": "Go to Tenant",
+        "goToPartner": "Go to Partner",
+        "goToCustomer": "Go to Customer",
         "partners": "Partners",
         "quotaEdit": "Quota Edit",
         "deleteSelected": "Delete Selected",
