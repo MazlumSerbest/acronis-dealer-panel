@@ -41,6 +41,8 @@ import {
     LuShieldCheck,
     LuShieldOff,
     LuShieldBan,
+    LuBuilding2,
+    LuFolderOpen,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 
@@ -362,45 +364,55 @@ export default function GeneralTab({ t, tenant }: Props) {
 
             <div className="col-span-full md:col-span-2">
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex flex-row justify-between">
-                            <h2 className="flex-none font-medium text-xl">
-                                {t("customerInformation")}
-                            </h2>
-                            {tenant.parent_id ==
-                                currentUser?.acronisTenantId && (
-                                <Button
-                                    disabled={edit}
-                                    size="sm"
-                                    className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                    onClick={() => {
-                                        form.reset(customer);
-                                        setEdit(true);
-                                    }}
-                                >
-                                    <span className="sr-only lg:not-sr-only">
-                                        {t("edit")}
-                                    </span>
-                                    <LuPencil className="size-4" />
-                                </Button>
-                            )}
-                        </CardTitle>
+                    <CardHeader className="flex flex-row items-center gap-3 md:gap-4">
+                        {tenant.kind === "partner" ? (
+                            <LuBuilding2 className="size-10 ml-2 text-blue-400/60" />
+                        ) : tenant.kind === "customer" ? (
+                            <LuShieldCheck className="size-10 ml-2 text-blue-400/60" />
+                        ) : tenant.kind === "folder" ? (
+                            <LuFolderOpen className="size-10 ml-2 text-blue-400/60" />
+                        ) : null}
 
-                        {edit ? (
-                            <CardDescription>
-                                {t("acronisCloudPlatformEditDescription")}
-                            </CardDescription>
-                        ) : (
-                            <CardDescription className="hover:underline">
-                                <Link
-                                    target="_blank"
-                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
-                                >
-                                    {t("showOnAcronis")}
-                                    <LuArrowUpRight className="ml-1 size-4 inline-block" />
-                                </Link>
-                            </CardDescription>
-                        )}
+                        <div className="flex-1">
+                            <CardTitle className="flex flex-row justify-between">
+                                <h2 className="flex-none font-medium text-xl">
+                                    {t("customerInformation")}
+                                </h2>
+                                {tenant.parent_id ==
+                                    currentUser?.acronisTenantId && (
+                                    <Button
+                                        disabled={edit}
+                                        size="sm"
+                                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                        onClick={() => {
+                                            form.reset(customer);
+                                            setEdit(true);
+                                        }}
+                                    >
+                                        <span className="sr-only lg:not-sr-only">
+                                            {t("edit")}
+                                        </span>
+                                        <LuPencil className="size-4" />
+                                    </Button>
+                                )}
+                            </CardTitle>
+
+                            {edit ? (
+                                <CardDescription>
+                                    {t("acronisCloudPlatformEditDescription")}
+                                </CardDescription>
+                            ) : (
+                                <CardDescription className="hover:underline">
+                                    <Link
+                                        target="_blank"
+                                        href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
+                                    >
+                                        {t("showOnAcronis")}
+                                        <LuArrowUpRight className="ml-1 size-4 inline-block" />
+                                    </Link>
+                                </CardDescription>
+                            )}
+                        </div>
                     </CardHeader>
                     {/* <Separator /> */}
 

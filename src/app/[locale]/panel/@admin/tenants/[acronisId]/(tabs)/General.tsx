@@ -94,6 +94,8 @@ import {
     LuShieldBan,
     LuRefreshCw,
     LuRefreshCcw,
+    LuBuilding2,
+    LuFolderOpen,
 } from "react-icons/lu";
 import {
     ChevronLeftIcon,
@@ -121,7 +123,7 @@ const partnerFormSchema = z.object({
     parasutId: z.string().optional(),
 });
 
-type PartnerFormValues = z.infer         <typeof partnerFormSchema>;
+type PartnerFormValues = z.infer<typeof partnerFormSchema>;
 
 const userFormSchema = z.object({
     name: z
@@ -499,55 +501,66 @@ export default function GeneralTab({ t, tenant }: Props) {
 
             <div className="col-span-full md:col-span-2">
                 <Card>
-                    <CardHeader>
-                        <CardTitle className="flex flex-row justify-between">
-                            <p className="flex-none font-medium text-xl">
-                                {t("tenantInformation")}
-                            </p>
+                    <CardHeader className="flex flex-row items-center gap-3 md:gap-4">
+                        {tenant.kind === "partner" ? (
+                            <LuBuilding2 className="size-10 ml-2 text-blue-400/60" />
+                        ) : tenant.kind === "customer" ? (
+                            <LuShieldCheck className="size-10 ml-2 text-blue-400/60" />
+                        ) : tenant.kind === "folder" ? (
+                            <LuFolderOpen className="size-10 ml-2 text-blue-400/60" />
+                        ) : null}
 
-                            {panelTenant &&
-                                tenant.parent_id ==
-                                    currentUser?.acronisTenantId && (
-                                    <Button
-                                        disabled={edit}
-                                        size="sm"
-                                        className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
-                                        onClick={() => {
-                                            setEdit(true);
-                                            panelTenant.billingDate
-                                                ? form.setValue(
-                                                      "billingDate",
-                                                      new Date(
-                                                          panelTenant?.billingDate,
-                                                      ),
-                                                  )
-                                                : null;
-                                            form.setValue(
-                                                "parasutId",
-                                                panelTenant?.parasutId,
-                                            );
-                                        }}
+                        <div className="flex-1">
+                            <CardTitle className="flex flex-row justify-between">
+                                <p className="flex-none font-medium text-xl">
+                                    {t("tenantInformation")}
+                                </p>
+
+                                {panelTenant &&
+                                    tenant.parent_id ==
+                                        currentUser?.acronisTenantId && (
+                                        <Button
+                                            disabled={edit}
+                                            size="sm"
+                                            className="flex gap-2 bg-blue-400 hover:bg-blue-400/90"
+                                            onClick={() => {
+                                                setEdit(true);
+                                                panelTenant.billingDate
+                                                    ? form.setValue(
+                                                          "billingDate",
+                                                          new Date(
+                                                              panelTenant?.billingDate,
+                                                          ),
+                                                      )
+                                                    : null;
+                                                form.setValue(
+                                                    "parasutId",
+                                                    panelTenant?.parasutId,
+                                                );
+                                            }}
+                                        >
+                                            <span className="sr-only lg:not-sr-only">
+                                                {t("edit")}
+                                            </span>
+                                            <LuPencil className="size-4" />
+                                        </Button>
+                                    )}
+                            </CardTitle>
+                            
+                            {edit ? (
+                                <></>
+                            ) : (
+                                <CardDescription className="hover:underline">
+                                    <Link
+                                        target="_blank"
+                                        href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
                                     >
-                                        <span className="sr-only lg:not-sr-only">
-                                            {t("edit")}
-                                        </span>
-                                        <LuPencil className="size-4" />
-                                    </Button>
-                                )}
-                        </CardTitle>
-                        {edit ? (
-                            <></>
-                        ) : (
-                            <CardDescription className="hover:underline">
-                                <Link
-                                    target="_blank"
-                                    href={`https://tr01-cloud.acronis.com/mc/app;group_id=${tenant?.parent_id}/clients;focused_tenant_uuid=${tenant?.id}`}
-                                >
-                                    {t("showOnAcronis")}
-                                    <LuArrowUpRight className="ml-1 size-4 inline-block" />
-                                </Link>
-                            </CardDescription>
-                        )}
+                                        {t("showOnAcronis")}
+                                        <LuArrowUpRight className="ml-1 size-4 inline-block" />
+                                    </Link>
+                                </CardDescription>
+                            )}
+                        </div>
                     </CardHeader>
 
                     <Form {...form}>
@@ -1040,7 +1053,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                                             </AlertDialogFooter>
                                         </AlertDialogContent>
                                     </AlertDialog>
-                                ): (
+                                ) : (
                                     <Button
                                         disabled={submitting}
                                         type="submit"
