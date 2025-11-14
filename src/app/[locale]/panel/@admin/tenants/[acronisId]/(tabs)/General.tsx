@@ -1504,7 +1504,7 @@ export default function GeneralTab({ t, tenant }: Props) {
                 {!usages ? (
                     <div className="col-span-3 mt-2">
                         <Skeleton>
-                            <DefaultSkeleton className="h-[10rem]" />
+                            <DefaultSkeleton className="h-40" />
                         </Skeleton>
                     </div>
                 ) : (

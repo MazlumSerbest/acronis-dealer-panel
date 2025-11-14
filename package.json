@@ -52,13 +52,8 @@
     "lodash": "^4.17.21",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.408.0",
-<<<<<<< Updated upstream
-    "next": "^14.2.32",
-    "next-auth": "^5.0.0-beta.30",
-=======
     "next": "^14.2.33",
-    "next-auth": "^5.0.0-beta.27",
->>>>>>> Stashed changes
+    "next-auth": "^5.0.0-beta.30",
     "next-intl": "^3.26.5",
     "next-themes": "^0.4.6",
     "nextjs-toploader": "^1.6.12",
