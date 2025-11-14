@@ -51,6 +51,16 @@ export default function CustomersPage() {
 
     const columns: ColumnDef<any, any>[] = [
         {
+            accessorKey: "acronisId",
+            header: t("acronisId"),
+            enableHiding: false,
+            cell: ({ row }) => {
+                const data: string = row.getValue("acronisId");
+
+                return data || "-";
+            },
+        },
+        {
             accessorKey: "name",
             enableHiding: false,
             header: ({ column }) => (
@@ -67,16 +77,6 @@ export default function CustomersPage() {
             ),
             cell: ({ row }) => {
                 const data: string = row.getValue("name");
-
-                return data || "-";
-            },
-        },
-        {
-            accessorKey: "acronisId",
-            header: t("acronisId"),
-            enableHiding: false,
-            cell: ({ row }) => {
-                const data: string = row.getValue("acronisId");
 
                 return data || "-";
             },
@@ -262,6 +262,8 @@ export default function CustomersPage() {
                 data={data}
                 visibleColumns={visibleColumns}
                 defaultPageSize={50}
+                defaultSort="createdAt"
+                defaultSortDirection="desc"
                 facetedFilters={[
                     {
                         column: "active",
