@@ -1,20 +1,17 @@
 import { useTranslations } from "next-intl";
 import { formatBytes } from "@/utils/functions";
-import {
-    Card,
-    CardContent,
-    CardHeader,
-    CardTitle,
-} from "../ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { cn } from "@/lib/utils";
 import {
     LuBox,
     LuDatabaseBackup,
+    LuDatabaseZap,
     LuHardDrive,
     LuInbox,
     LuMailbox,
     LuMonitor,
     LuServer,
+    LuSmartphone,
 } from "react-icons/lu";
 
 type Props = {
@@ -124,7 +121,29 @@ export default function UsageCard({
                                 "size-5",
                             )}
                         />
-                    ): (
+                    ) : title?.includes("mobile") ? (
+                        <LuSmartphone
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) : title?.includes("adv_") ? (
+                        <LuDatabaseZap
+                            className={cn(
+                                quotaExceeded
+                                    ? "text-destructive"
+                                    : quotaAlmostExceeded
+                                    ? "text-yellow-500"
+                                    : "text-muted-foreground",
+                                "size-5",
+                            )}
+                        />
+                    ) : (
                         <LuDatabaseBackup
                             className={cn(
                                 quotaExceeded
