@@ -3,7 +3,6 @@ import {
     LuUnplug,
     LuSettings,
     LuUserRound,
-    LuBriefcase,
     LuPackage,
     LuGraduationCap,
     LuHistory,
@@ -13,6 +12,8 @@ import {
     LuHandshake,
     LuShield,
     LuBinoculars,
+    LuShieldCheck,
+    LuBuilding2,
 } from "react-icons/lu";
 
 export const adminPaths: Path[] = [
@@ -80,7 +81,7 @@ export const adminPaths: Path[] = [
         path: "/panel/partners",
         key: "partners",
         icon: (
-            <LuBriefcase
+            <LuBuilding2
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Partners Page"
             />
@@ -90,7 +91,7 @@ export const adminPaths: Path[] = [
         path: "/panel/customers",
         key: "customers",
         icon: (
-            <LuHandshake
+            <LuShieldCheck
                 className="size-6 group-hover:text-blue-400"
                 aria-label="Customers Page"
             />
