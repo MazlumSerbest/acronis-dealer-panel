@@ -251,11 +251,11 @@ export default function TenantsPage() {
                 return (
                     <div className="flex items-center gap-4">
                         {kind === "partner" ? (
-                            <LuBuilding2 className="size-4 text-blue-400" />
+                            <LuBuilding2 className="size-4 min-w-4 text-blue-400" />
                         ) : kind === "customer" ? (
-                            <LuShieldCheck className="size-4 text-blue-400" />
+                            <LuShieldCheck className="size-4 min-w-4 text-blue-400" />
                         ) : kind === "folder" ? (
-                            <LuFolderOpen className="size-4 text-blue-400" />
+                            <LuFolderOpen className="size-4 min-w-4 text-blue-400" />
                         ) : (
                             <></>
                         )}
