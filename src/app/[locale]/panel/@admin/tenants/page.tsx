@@ -53,6 +53,9 @@ import {
     LuBuilding2,
     LuFolderOpen,
     LuShieldCheck,
+    LuServerCrash,
+    LuServerOff,
+    LuServer,
 } from "react-icons/lu";
 import useUserStore from "@/store/user";
 import { calculateRemainingDays, formatBytes } from "@/utils/functions";
@@ -139,6 +142,7 @@ export default function TenantsPage() {
                         billingDate: "",
                         parasutId: "",
                         usages: item.usages,
+                        overage: item.overage,
                     };
 
                     if (item.kind === "customer") {
@@ -148,7 +152,10 @@ export default function TenantsPage() {
                         );
                         newItem.billingDate =
                             customer?.billingDate || undefined;
-                    } else if (item.kind === "partner" || item.kind === "folder") {
+                    } else if (
+                        item.kind === "partner" ||
+                        item.kind === "folder"
+                    ) {
                         const partner = partners.find(
                             (partner: Partner) => partner.acronisId === item.id,
                         );
@@ -491,6 +498,26 @@ export default function TenantsPage() {
                     </div>
                 );
             },
+        },
+        {
+            accessorKey: "overage",
+            header: "",
+            enableGlobalFilter: false,
+            cell: ({ row }) => {
+                const data: boolean = row.getValue("overage");
+
+                return !updatedData ? (
+                    <Skeleton>
+                        <div className="rounded-sm bg-slate-200 w-full h-5"></div>
+                    </Skeleton>
+                ) : data ? (
+                    <LuServer className="size-4 text-destructive" />
+                ) : (
+                    <></>
+                );
+            },
+            filterFn: (row, id, value) =>
+                value.includes(row.getValue(id) ? true : false),
         },
     ];
     //#endregion

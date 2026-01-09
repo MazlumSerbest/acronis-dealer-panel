@@ -64,8 +64,8 @@ export const GET = auth(async (req: any, { params }: any) => {
 
         const usagesSearchParams = new URLSearchParams({
             tenants: tenantIds,
-            usage_names: "storage",
-            editions: "pck_per_workload,pck_per_gigabyte",
+            // usage_names: "storage",
+            // editions: "pck_per_workload,pck_per_gigabyte",
         });
 
         const usagesRes = await fetch(
@@ -100,8 +100,18 @@ export const GET = auth(async (req: any, { params }: any) => {
             );
             const perGBUsage = findUsage("pck_per_gigabyte", "pg_base_storage");
 
+            const findOverage = () =>
+                itemUsage?.some(
+                    (u: any) =>
+                        u.value &&
+                        u.offering_item?.quota &&
+                        u.offering_item?.quota?.value !== null &&
+                        u.value > u.offering_item.quota.value,
+                );
+
             return {
                 ...c,
+                overage: findOverage() || false,
                 usages: {
                     perWorkload: {
                         value: perWorkloadUsage?.value,
