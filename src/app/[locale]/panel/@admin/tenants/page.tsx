@@ -630,14 +630,14 @@ export default function TenantsPage() {
                                 { value: "disabled", label: t("disabled") },
                             ],
                         },
-                        {
-                            column: "enabled",
-                            title: t("enabled"),
-                            options: [
-                                { value: true, label: t("true") },
-                                { value: false, label: t("false") },
-                            ],
-                        },
+                        // {
+                        //     column: "enabled",
+                        //     title: t("enabled"),
+                        //     options: [
+                        //         { value: true, label: t("true") },
+                        //         { value: false, label: t("false") },
+                        //     ],
+                        // },
                         {
                             column: "licensed",
                             title: t("licensed"),
@@ -652,6 +652,14 @@ export default function TenantsPage() {
                             options: [
                                 { value: true, label: t("available") },
                                 { value: false, label: t("unavailable") },
+                            ],
+                        },
+                        {
+                            column: "overage",
+                            title: t("overage"),
+                            options: [
+                                { value: true, label: t("true") },
+                                { value: false, label: t("false") },
                             ],
                         },
                     ]}

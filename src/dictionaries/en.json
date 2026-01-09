@@ -63,6 +63,7 @@
         "address": "Address",
         "customerType": "Customer Type",
         "usage": "Usage",
+        "overage": "Overage",
         "emptyContent": "No results.",
         "partner": "Partner",
         "partnerId": "Partner ID",

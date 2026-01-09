@@ -63,6 +63,7 @@
         "address": "Adres",
         "customerType": "Müşteri Tipi",
         "usage": "Kullanım",
+        "overage": "Aşım",
         "emptyContent": "Sonuç bulunamadı.",
         "partner": "Partner",
         "partnerId": "Partner ID",
