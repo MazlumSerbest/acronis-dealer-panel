@@ -7,7 +7,6 @@ import {
     LuDatabaseBackup,
     LuDatabaseZap,
     LuHardDrive,
-    LuInbox,
     LuMailbox,
     LuMonitor,
     LuServer,
@@ -47,8 +46,8 @@ export default function UsageCard({
                 quotaExceeded
                     ? "border-destructive"
                     : quotaAlmostExceeded
-                    ? "border-yellow-500"
-                    : "",
+                      ? "border-yellow-500"
+                      : "",
                 "flex flex-col",
             )}
         >
@@ -58,8 +57,8 @@ export default function UsageCard({
                         quotaExceeded
                             ? "text-destructive"
                             : quotaAlmostExceeded
-                            ? "text-yellow-500"
-                            : "",
+                              ? "text-yellow-500"
+                              : "",
                         "text-sm font-medium",
                     )}
                 >
@@ -72,8 +71,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -83,8 +82,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -94,8 +93,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -105,8 +104,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -116,8 +115,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -127,8 +126,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -138,8 +137,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -149,8 +148,8 @@ export default function UsageCard({
                                 quotaExceeded
                                     ? "text-destructive"
                                     : quotaAlmostExceeded
-                                    ? "text-yellow-500"
-                                    : "text-muted-foreground",
+                                      ? "text-yellow-500"
+                                      : "text-muted-foreground",
                                 "size-5",
                             )}
                         />
@@ -163,8 +162,8 @@ export default function UsageCard({
                         quotaExceeded
                             ? "text-destructive"
                             : quotaAlmostExceeded
-                            ? "text-yellow-500"
-                            : "",
+                              ? "text-yellow-500"
+                              : "",
                         "text-2xl font-bold",
                     )}
                 >
